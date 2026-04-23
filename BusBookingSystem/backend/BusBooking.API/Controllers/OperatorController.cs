@@ -41,4 +41,11 @@ public class OperatorController : ControllerBase
     {
         return Ok(_service.GetAll());
     }
+    [Authorize(Roles = "ADMIN")]
+    [HttpPut("reject/{id}")]
+    public async Task<IActionResult> Reject(int id)
+    {
+        var result = await _service.RejectOperator(id);
+        return Ok(result);
+    }
 }

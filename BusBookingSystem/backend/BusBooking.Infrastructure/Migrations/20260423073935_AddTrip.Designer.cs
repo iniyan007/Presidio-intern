@@ -3,6 +3,7 @@ using System;
 using BusBooking.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BusBooking.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260423073935_AddTrip")]
+    partial class AddTrip
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,23 +33,11 @@ namespace BusBooking.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("BasePrice")
-                        .HasColumnType("numeric");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal>("PlatformFee")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("SeatId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("TotalPrice")
+                    b.Property<decimal>("TotalAmount")
                         .HasColumnType("numeric");
 
                     b.Property<int>("TripId")
@@ -57,7 +48,7 @@ namespace BusBooking.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TripId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
                 });
@@ -187,6 +178,35 @@ namespace BusBooking.Infrastructure.Migrations
                     b.ToTable("Routes");
                 });
 
+            modelBuilder.Entity("BusBooking.Domain.Entities.SeatLock", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpiryTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("LockedByUserId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SeatNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TripId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TripId", "SeatNumber")
+                        .IsUnique();
+
+                    b.ToTable("SeatLocks");
+                });
+
             modelBuilder.Entity("BusBooking.Domain.Entities.Trip", b =>
                 {
                     b.Property<int>("Id")
@@ -256,68 +276,15 @@ namespace BusBooking.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Seat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BusId")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsWindow")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("SeatNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusId");
-
-                    b.ToTable("Seats");
-                });
-
-            modelBuilder.Entity("SeatLock", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("LockedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("SeatId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TripId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TripId", "SeatId")
-                        .IsUnique();
-
-                    b.ToTable("SeatLocks");
-                });
-
             modelBuilder.Entity("BusBooking.Domain.Entities.Booking", b =>
                 {
-                    b.HasOne("BusBooking.Domain.Entities.Trip", "Trip")
+                    b.HasOne("BusBooking.Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("TripId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Trip");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BusBooking.Domain.Entities.Bus", b =>
@@ -370,17 +337,6 @@ namespace BusBooking.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("Seat", b =>
-                {
-                    b.HasOne("BusBooking.Domain.Entities.Bus", "Bus")
-                        .WithMany()
-                        .HasForeignKey("BusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bus");
                 });
 
             modelBuilder.Entity("BusBooking.Domain.Entities.Role", b =>

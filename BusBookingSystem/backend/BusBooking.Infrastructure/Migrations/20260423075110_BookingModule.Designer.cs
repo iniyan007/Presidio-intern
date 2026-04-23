@@ -3,6 +3,7 @@ using System;
 using BusBooking.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BusBooking.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260423075110_BookingModule")]
+    partial class BookingModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace BusBooking.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("BusBooking.Domain.Entities.Booking", b =>
+            modelBuilder.Entity("Booking", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,13 +33,10 @@ namespace BusBooking.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("BasePrice")
-                        .HasColumnType("numeric");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<decimal>("PlatformFee")
+                    b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
                     b.Property<int>("SeatId")
@@ -46,9 +46,6 @@ namespace BusBooking.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("numeric");
-
                     b.Property<int>("TripId")
                         .HasColumnType("integer");
 
@@ -56,8 +53,6 @@ namespace BusBooking.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TripId");
 
                     b.ToTable("Bookings");
                 });
@@ -307,17 +302,6 @@ namespace BusBooking.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("SeatLocks");
-                });
-
-            modelBuilder.Entity("BusBooking.Domain.Entities.Booking", b =>
-                {
-                    b.HasOne("BusBooking.Domain.Entities.Trip", "Trip")
-                        .WithMany()
-                        .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Trip");
                 });
 
             modelBuilder.Entity("BusBooking.Domain.Entities.Bus", b =>

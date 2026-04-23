@@ -48,4 +48,18 @@ public class OperatorService
     {
         return _context.Operators.ToList();
     }
+    public async Task<string> RejectOperator(int operatorId)
+    {
+        var op = _context.Operators.FirstOrDefault(o => o.Id == operatorId);
+
+        if (op == null)
+            return "Operator not found";
+
+        op.IsApproved = false;
+        op.IsActive = false;
+
+        await _context.SaveChangesAsync();
+
+        return "Operator rejected";
+    }
 }

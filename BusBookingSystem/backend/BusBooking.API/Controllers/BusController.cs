@@ -41,4 +41,12 @@ public class BusController : ControllerBase
     {
         return Ok(_service.GetAll());
     }
+
+    [Authorize(Roles = "ADMIN")]
+    [HttpPut("reject/{id}")]
+    public async Task<IActionResult> Reject(int id)
+    {
+        var result = await _service.RejectBus(id);
+        return Ok(result);
+    }
 }

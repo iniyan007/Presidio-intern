@@ -42,6 +42,8 @@ builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<RouteService>();
 builder.Services.AddScoped<OperatorService>();
 builder.Services.AddScoped<BusService>();
+builder.Services.AddScoped<TripService>();
+builder.Services.AddScoped<BookingService>();
 
 builder.Services.AddControllers();
 

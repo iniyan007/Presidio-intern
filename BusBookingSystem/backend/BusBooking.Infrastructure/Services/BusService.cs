@@ -49,10 +49,41 @@ public class BusService
     }
 
     // Get buses
-    public List<Bus> GetAll()
+    public List<object> GetAll()
     {
-        return _context.Buses
+        var buses = _context.Buses
             .Include(b => b.Operator)
             .ToList();
+
+        return buses.Select(b =>
+        {
+            var bookedSeats = _context.Bookings
+                .Where(x => x.Trip.BusId == b.Id && x.Status == "CONFIRMED")
+                .Count();
+
+            return new
+            {
+                b.Id,
+                b.Name,
+                b.TotalSeats,
+                BookedSeats = bookedSeats,
+                AvailableSeats = b.TotalSeats - bookedSeats,
+                b.Price
+            };
+        }).ToList<object>();
+    }
+    public async Task<string> RejectBus(int busId)
+    {
+        var bus = _context.Buses.FirstOrDefault(b => b.Id == busId);
+
+        if (bus == null)
+            return "Bus not found";
+
+        bus.IsApproved = false;
+        bus.IsActive = false;
+
+        await _context.SaveChangesAsync();
+
+        return "Bus rejected";
     }
 }

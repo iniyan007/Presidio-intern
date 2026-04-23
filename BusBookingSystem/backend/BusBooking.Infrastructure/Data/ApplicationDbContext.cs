@@ -17,6 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Route> Routes { get; set; }
     public DbSet<Trip> Trips { get; set; }
     public DbSet<Booking> Bookings { get; set; }
+    public DbSet<Seat> Seats { get; set; }
     public DbSet<SeatLock> SeatLocks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,7 +31,7 @@ public class ApplicationDbContext : DbContext
         );
 
         modelBuilder.Entity<SeatLock>()
-            .HasIndex(s => new { s.TripId, s.SeatNumber })
+            .HasIndex(s => new { s.TripId, s.SeatId })
             .IsUnique();
     }
 }
