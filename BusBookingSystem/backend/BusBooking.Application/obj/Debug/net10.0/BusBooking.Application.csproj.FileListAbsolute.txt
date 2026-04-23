@@ -1,0 +1,16 @@
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/bin/Debug/net10.0/BusBooking.Application.deps.json
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/bin/Debug/net10.0/BusBooking.Application.dll
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/bin/Debug/net10.0/BusBooking.Application.pdb
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/bin/Debug/net10.0/BusBooking.Domain.dll
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/bin/Debug/net10.0/BusBooking.Domain.pdb
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/obj/Debug/net10.0/BusBooking.Application.csproj.AssemblyReference.cache
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/obj/Debug/net10.0/BusBooking.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/obj/Debug/net10.0/BusBooking.Application.AssemblyInfoInputs.cache
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/obj/Debug/net10.0/BusBooking.Application.AssemblyInfo.cs
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/obj/Debug/net10.0/BusBooking.Application.csproj.CoreCompileInputs.cache
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/obj/Debug/net10.0/BusBooking.Application.sourcelink.json
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/obj/Debug/net10.0/BusBooki.BAC9D9F4.Up2Date
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/obj/Debug/net10.0/BusBooking.Application.dll
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/obj/Debug/net10.0/refint/BusBooking.Application.dll
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/obj/Debug/net10.0/BusBooking.Application.pdb
+/Users/iniyan/Intern/Presidio-intern/BusBookingSystem/backend/BusBooking.Application/obj/Debug/net10.0/ref/BusBooking.Application.dll
