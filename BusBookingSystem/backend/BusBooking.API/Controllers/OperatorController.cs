@@ -3,16 +3,19 @@ using Microsoft.AspNetCore.Authorization;
 using BusBooking.Infrastructure.Services;
 using BusBooking.Application.DTOs;
 using System.Security.Claims;
+using BusBooking.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
 public class OperatorController : ControllerBase
 {
     private readonly OperatorService _service;
-
-    public OperatorController(OperatorService service)
+    private readonly ApplicationDbContext _context; 
+    public OperatorController(OperatorService service,ApplicationDbContext context)
     {
         _service = service;
+        _context = context;
     }
 
     // 👤 USER → Register as operator
@@ -47,5 +50,25 @@ public class OperatorController : ControllerBase
     {
         var result = await _service.RejectOperator(id);
         return Ok(result);
+    }
+    [Authorize(Roles = "ADMIN")]
+    [HttpGet("pending")]
+    public IActionResult GetPendingOperators()
+    {
+        var operators = _context.Operators
+            .Include(o => o.User)
+            .Where(o => !o.IsApproved)
+            .Select(o => new
+            {
+                o.Id,
+                o.CompanyName,
+                o.ContactNumber,
+                o.OperatingLocation,
+                UserName = o.User.Name,
+                Email = o.User.Email
+            })
+            .ToList();
+
+        return Ok(operators);
     }
 }

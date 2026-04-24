@@ -3,6 +3,7 @@ using System;
 using BusBooking.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BusBooking.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260424041747_AddUserSeatRelation")]
+    partial class AddUserSeatRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,6 +42,9 @@ namespace BusBooking.Infrastructure.Migrations
                     b.Property<decimal>("PlatformFee")
                         .HasColumnType("numeric");
 
+                    b.Property<int>("SeatId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
@@ -54,35 +60,13 @@ namespace BusBooking.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SeatId");
+
                     b.HasIndex("TripId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
-                });
-
-            modelBuilder.Entity("BusBooking.Domain.Entities.BookingSeat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookingId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SeatId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SeatId");
-
-                    b.HasIndex("BookingId", "SeatId")
-                        .IsUnique();
-
-                    b.ToTable("BookingSeats");
                 });
 
             modelBuilder.Entity("BusBooking.Domain.Entities.Bus", b =>
@@ -334,6 +318,12 @@ namespace BusBooking.Infrastructure.Migrations
 
             modelBuilder.Entity("BusBooking.Domain.Entities.Booking", b =>
                 {
+                    b.HasOne("Seat", "Seat")
+                        .WithMany()
+                        .HasForeignKey("SeatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BusBooking.Domain.Entities.Trip", "Trip")
                         .WithMany()
                         .HasForeignKey("TripId")
@@ -346,28 +336,11 @@ namespace BusBooking.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Seat");
+
                     b.Navigation("Trip");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BusBooking.Domain.Entities.BookingSeat", b =>
-                {
-                    b.HasOne("BusBooking.Domain.Entities.Booking", "Booking")
-                        .WithMany("BookingSeats")
-                        .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Seat", "Seat")
-                        .WithMany()
-                        .HasForeignKey("SeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Booking");
-
-                    b.Navigation("Seat");
                 });
 
             modelBuilder.Entity("BusBooking.Domain.Entities.Bus", b =>
@@ -431,11 +404,6 @@ namespace BusBooking.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Bus");
-                });
-
-            modelBuilder.Entity("BusBooking.Domain.Entities.Booking", b =>
-                {
-                    b.Navigation("BookingSeats");
                 });
 
             modelBuilder.Entity("BusBooking.Domain.Entities.Role", b =>

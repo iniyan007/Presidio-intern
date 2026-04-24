@@ -7,11 +7,13 @@ public class TripService
 {
     private readonly ApplicationDbContext _context;
 
-    public TripService(ApplicationDbContext context)
+    private readonly EmailService _emailService;
+
+    public TripService(ApplicationDbContext context, EmailService emailService)
     {
         _context = context;
+        _emailService = emailService;
     }
-
     public async Task<string> CreateTrip(int userId, CreateTripRequest request)
     {
         // Check operator
@@ -69,17 +71,21 @@ public class TripService
         }).ToList<object>();
     }
 
-   public List<object> Search(string source, string destination)
+   public List<object> Search(string source, string destination, DateTime? date)
     {
-        var trips = _context.Trips
+        var query = _context.Trips
             .Include(t => t.Bus)
             .Include(t => t.Route)
             .Where(t => t.IsActive &&
-                t.Route.Source == source &&
-                t.Route.Destination == destination)
-            .ToList();
+                        t.Route.Source == source &&
+                        t.Route.Destination == destination);
 
-        return trips.Select(t =>
+        if (date.HasValue)
+        {
+            query = query.Where(t => t.DepartureTime.Date == date.Value.Date);
+        }
+
+        return query.ToList().Select(t =>
         {
             var basePrice = t.Bus.Price;
             var fee = Math.Round(basePrice * 0.04m);
@@ -88,8 +94,6 @@ public class TripService
             {
                 TripId = t.Id,
                 BusName = t.Bus.Name,
-                Source = t.Route.Source,
-                Destination = t.Route.Destination,
                 DepartureTime = t.DepartureTime,
 
                 BasePrice = basePrice,
@@ -140,10 +144,70 @@ public class TripService
         if (trip.Bus.OperatorId != op.Id)
             return "Unauthorized";
 
-        trip.IsActive = false;   // 🔥 soft delete
+        trip.IsActive = false;
+
+        // 🔥 GET AFFECTED BOOKINGS
+        var bookings = _context.Bookings
+            .Include(b => b.User)
+            .Include(b => b.Trip)
+            .ThenInclude(t => t.Route)
+            .Where(b =>
+                b.TripId == tripId &&
+                b.Status == "CONFIRMED" &&
+                b.Trip.DepartureTime > DateTime.UtcNow)
+            .ToList();
+
+        foreach (var booking in bookings)
+        {
+            booking.Status = "CANCELLED";
+
+            // 🔥 SEND EMAIL
+            await _emailService.SendEmail(
+                booking.User.Email,
+                "Trip Cancelled - Refund Initiated",
+                $"Dear {booking.User.Name},\n\n" +
+                $"Your trip from {booking.Trip.Route.Source} to {booking.Trip.Route.Destination} has been cancelled.\n" +
+                $"Your refund of ₹{booking.TotalPrice} will be processed shortly.\n\n" +
+                $"Thank you,\nBusBooking Team"
+            );
+        }
 
         await _context.SaveChangesAsync();
 
-        return "Trip deactivated";
+        return "Trip cancelled, users notified, refunds initiated";
+    }
+    public List<object> GetSeatAvailability(int tripId)
+    {
+        var busId = _context.Trips
+            .Where(t => t.Id == tripId)
+            .Select(t => t.BusId)
+            .FirstOrDefault();
+
+        var seats = _context.Seats
+            .Where(s => s.BusId == busId)
+            .ToList();
+
+        // 🔥 FIXED: use BookingSeats
+        var bookedSeats = _context.BookingSeats
+            .Where(bs => bs.Booking.TripId == tripId &&
+                        bs.Booking.Status == "CONFIRMED")
+            .Select(bs => bs.SeatId)
+            .ToList();
+
+        var lockedSeats = _context.SeatLocks
+            .Where(s => s.TripId == tripId &&
+                (DateTime.UtcNow - s.LockedAt).TotalMinutes < 5)
+            .Select(s => s.SeatId)
+            .ToList();
+
+        return seats.Select(s => new
+        {
+            SeatNumber = s.SeatNumber,
+            Status = bookedSeats.Contains(s.Id)
+                ? "BOOKED"
+                : lockedSeats.Contains(s.Id)
+                    ? "LOCKED"
+                    : "AVAILABLE"
+        }).ToList<object>();
     }
 }

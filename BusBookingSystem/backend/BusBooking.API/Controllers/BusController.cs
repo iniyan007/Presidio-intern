@@ -3,16 +3,19 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using BusBooking.Infrastructure.Services;
 using BusBooking.Application.DTOs;
+using BusBooking.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
 public class BusController : ControllerBase
 {
     private readonly BusService _service;
-
-    public BusController(BusService service)
+    private readonly ApplicationDbContext _context; 
+    public BusController(BusService service,ApplicationDbContext context)
     {
         _service = service;
+        _context = context;
     }
 
     // Operator adds bus
@@ -48,5 +51,24 @@ public class BusController : ControllerBase
     {
         var result = await _service.RejectBus(id);
         return Ok(result);
+    }
+    [Authorize(Roles = "ADMIN")]
+    [HttpGet("pending")]
+    public IActionResult GetPendingBuses()
+    {
+        var buses = _context.Buses
+            .Include(b => b.Operator)
+            .Where(b => !b.IsApproved)
+            .Select(b => new
+            {
+                b.Id,
+                b.Name,
+                b.TotalSeats,
+                b.Price,
+                OperatorName = b.Operator.CompanyName
+            })
+            .ToList();
+
+        return Ok(buses);
     }
 }

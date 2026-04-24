@@ -35,10 +35,12 @@ public class TripController : ControllerBase
 
     // Search trips
     [HttpGet("search")]
-    public IActionResult Search(string source, string destination)
+    public IActionResult Search(string source, string destination, DateTime? date)
     {
-        return Ok(_service.Search(source, destination));
+        var result = _service.Search(source, destination, date);
+        return Ok(result);
     }
+
     [Authorize(Roles = "OPERATOR")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, CreateTripRequest request)
@@ -56,5 +58,11 @@ public class TripController : ControllerBase
 
         var result = await _service.DeleteTrip(userId, id);
         return Ok(result);
-    }   
+    }
+    [HttpGet("seats")]
+    public IActionResult GetSeats(int tripId)
+    {
+        var result = _service.GetSeatAvailability(tripId);
+        return Ok(result);
+    }
 }

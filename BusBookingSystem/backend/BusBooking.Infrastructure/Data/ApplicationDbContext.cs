@@ -19,6 +19,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<Seat> Seats { get; set; }
     public DbSet<SeatLock> SeatLocks { get; set; }
+    public DbSet<BookingSeat> BookingSeats { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,6 +33,11 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<SeatLock>()
             .HasIndex(s => new { s.TripId, s.SeatId })
+            .IsUnique();
+
+        // ✅ OPTIONAL (GOOD PRACTICE)
+        modelBuilder.Entity<BookingSeat>()
+            .HasIndex(bs => new { bs.BookingId, bs.SeatId })
             .IsUnique();
     }
 }

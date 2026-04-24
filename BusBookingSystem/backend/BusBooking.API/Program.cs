@@ -44,6 +44,8 @@ builder.Services.AddScoped<OperatorService>();
 builder.Services.AddScoped<BusService>();
 builder.Services.AddScoped<TripService>();
 builder.Services.AddScoped<BookingService>();
+builder.Services.AddScoped<PaymentService>();
+builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddControllers();
 

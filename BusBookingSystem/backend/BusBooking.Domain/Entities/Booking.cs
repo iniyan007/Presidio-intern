@@ -7,14 +7,13 @@ public class Booking
 
     public int TripId { get; set; }
     public Trip Trip { get; set; }
+    public User User { get; set; }
+    public List<BookingSeat> BookingSeats { get; set; }
+    public decimal BasePrice { get; set; }     
+    public decimal PlatformFee { get; set; }   
+    public decimal TotalPrice { get; set; }     
 
-    public int SeatId { get; set; }
-
-    public decimal BasePrice { get; set; }
-    public decimal PlatformFee { get; set; }
-    public decimal TotalPrice { get; set; }
-
-    public string Status { get; set; }
+    public string Status { get; set; }= "PENDING";
 
     public DateTime CreatedAt { get; set; }
 }
