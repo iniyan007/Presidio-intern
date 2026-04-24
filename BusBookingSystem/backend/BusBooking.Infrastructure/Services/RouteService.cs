@@ -31,4 +31,27 @@ public class RouteService
     {
         return _context.Routes.ToList();
     }
+
+    public async Task<string> UpdateRoute(int id, CreateRouteRequest request)
+    {
+        var route = await _context.Routes.FindAsync(id);
+        if (route == null) return "Route not found";
+
+        route.Source = request.Source;
+        route.Destination = request.Destination;
+        await _context.SaveChangesAsync();
+        
+        return "Route updated successfully";
+    }
+
+    public async Task<string> DeleteRoute(int id)
+    {
+        var route = await _context.Routes.FindAsync(id);
+        if (route == null) return "Route not found";
+
+        _context.Routes.Remove(route);
+        await _context.SaveChangesAsync();
+        
+        return "Route deleted successfully";
+    }
 }

@@ -24,6 +24,7 @@ public class BusService
         var bus = new Bus
         {
             Name = request.Name,
+            BusNumber = request.BusNumber,
             TotalSeats = request.TotalSeats,
             Price = request.Price,
             OperatorId = op.Id,
@@ -31,6 +32,20 @@ public class BusService
         };
 
         _context.Buses.Add(bus);
+        await _context.SaveChangesAsync();
+
+        // Generate seats
+        var seats = new List<Seat>();
+        for (int i = 1; i <= request.TotalSeats; i++)
+        {
+            seats.Add(new Seat
+            {
+                BusId = bus.Id,
+                SeatNumber = $"{i}",
+                IsWindow = (i % 4 == 1 || i % 4 == 0)
+            });
+        }
+        _context.Seats.AddRange(seats);
         await _context.SaveChangesAsync();
 
         return "Bus added, waiting for admin approval";
@@ -65,10 +80,13 @@ public class BusService
             {
                 b.Id,
                 b.Name,
+                b.BusNumber,
                 b.TotalSeats,
                 BookedSeats = bookedSeats,
                 AvailableSeats = b.TotalSeats - bookedSeats,
-                b.Price
+                b.Price,
+                b.IsApproved,
+                OperatorName = b.Operator.CompanyName
             };
         }).ToList<object>();
     }
@@ -85,5 +103,35 @@ public class BusService
         await _context.SaveChangesAsync();
 
         return "Bus rejected";
+    }
+
+    public async Task<string> UpdateBus(int userId, int busId, CreateBusRequest request)
+    {
+        var op = _context.Operators.FirstOrDefault(o => o.UserId == userId && o.IsApproved);
+        if (op == null) return "Operator not approved";
+
+        var bus = _context.Buses.FirstOrDefault(b => b.Id == busId && b.OperatorId == op.Id);
+        if (bus == null) return "Bus not found";
+
+        bus.Name = request.Name;
+        bus.BusNumber = request.BusNumber;
+        bus.Price = request.Price;
+        // Not changing TotalSeats as it would break existing seat layouts
+        
+        await _context.SaveChangesAsync();
+        return "Bus updated successfully";
+    }
+
+    public async Task<string> DeleteBus(int userId, int busId)
+    {
+        var op = _context.Operators.FirstOrDefault(o => o.UserId == userId && o.IsApproved);
+        if (op == null) return "Operator not approved";
+
+        var bus = _context.Buses.FirstOrDefault(b => b.Id == busId && b.OperatorId == op.Id);
+        if (bus == null) return "Bus not found";
+
+        bus.IsActive = false;
+        await _context.SaveChangesAsync();
+        return "Bus deleted successfully";
     }
 }

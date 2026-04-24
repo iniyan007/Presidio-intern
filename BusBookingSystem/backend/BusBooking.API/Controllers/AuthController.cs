@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using BusBooking.Application.DTOs;
 using BusBooking.Infrastructure.Services;
 using BusBooking.API.Services;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -33,6 +35,28 @@ public class AuthController : ControllerBase
 
         var token = _jwtService.GenerateToken(user);
 
-        return Ok(new { token });
+        return Ok(new 
+        { 
+            token, 
+            user = new 
+            { 
+                id = user.Id, 
+                name = user.Name, 
+                email = user.Email, 
+                role = user.Role?.Name,
+                phone = user.Phone,
+                age = user.Age,
+                gender = user.Gender
+            } 
+        });
+    }
+
+    [Authorize]
+    [HttpPut("profile")]
+    public async Task<IActionResult> UpdateProfile(UpdateProfileRequest request)
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        var result = await _authService.UpdateProfile(userId, request);
+        return Ok(result);
     }
 }

@@ -1,6 +1,7 @@
 using BusBooking.Domain.Entities;
 using BusBooking.Infrastructure.Data;
 using BusBooking.Application.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 
 public class OperatorService
@@ -61,5 +62,30 @@ public class OperatorService
         await _context.SaveChangesAsync();
 
         return "Operator rejected";
+    }
+
+    public async Task<string> DisableOperator(int operatorId, TripService tripService)
+    {
+        var op = _context.Operators
+            .Include(o => o.User)
+            .FirstOrDefault(o => o.Id == operatorId);
+
+        if (op == null) return "Operator not found";
+
+        op.IsActive = false;
+
+        // Find all active trips for this operator
+        var trips = _context.Trips
+            .Include(t => t.Bus)
+            .Where(t => t.Bus.OperatorId == operatorId && t.IsActive)
+            .ToList();
+
+        foreach (var trip in trips)
+        {
+            await tripService.DeleteTrip(op.UserId, trip.Id); // This notifies users and refunds
+        }
+
+        await _context.SaveChangesAsync();
+        return "Operator disabled and all future trips cancelled";
     }
 }

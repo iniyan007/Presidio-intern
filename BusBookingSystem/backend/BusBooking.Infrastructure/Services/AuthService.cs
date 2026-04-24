@@ -27,6 +27,8 @@ public class AuthService
             Name = request.Name,
             Email = request.Email,
             Phone = request.Phone,
+            Age = request.Age,
+            Gender = request.Gender,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
             RoleId = 1 // USER
         };
@@ -47,5 +49,19 @@ public class AuthService
             return null;
 
         return user;
+    }
+
+    public async Task<string> UpdateProfile(int userId, UpdateProfileRequest request)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+        if (user == null) return "User not found";
+
+        user.Name = request.Name;
+        user.Phone = request.Phone;
+        user.Age = request.Age;
+        user.Gender = request.Gender;
+
+        await _context.SaveChangesAsync();
+        return "Profile updated successfully";
     }
 }

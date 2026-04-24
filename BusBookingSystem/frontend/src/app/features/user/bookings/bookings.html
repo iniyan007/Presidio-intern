@@ -1,0 +1,86 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  
+  <div class="mb-8 border-b border-gray-200 pb-6">
+    <h1 class="text-3xl font-black text-gray-900 tracking-tight">My Bookings</h1>
+    <p class="text-gray-500 mt-2 text-lg">Manage your upcoming and past trips.</p>
+  </div>
+
+  <div *ngIf="loading" class="flex justify-center items-center py-20">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+  </div>
+
+  <div *ngIf="!loading && bookings.length === 0" class="text-center py-20 bg-gray-50 rounded-3xl border border-gray-100">
+    <div class="w-20 h-20 bg-indigo-50 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-4">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+      </svg>
+    </div>
+    <h3 class="text-xl font-bold text-gray-900 mb-2">No bookings yet</h3>
+    <p class="text-gray-500">You haven't booked any trips. Ready for an adventure?</p>
+    <a href="/search" class="inline-block mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-xl shadow-lg transition-colors">Book a Bus</a>
+  </div>
+
+  <div *ngIf="!loading && bookings.length > 0" class="space-y-6">
+    <div *ngFor="let booking of bookings" class="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm flex flex-col md:flex-row justify-between gap-6 relative overflow-hidden group">
+      
+      <!-- Status Badge -->
+      <div class="absolute top-4 right-4">
+        <span [ngClass]="{
+          'bg-emerald-50 text-emerald-700': booking.status === 'CONFIRMED',
+          'bg-red-50 text-red-700': booking.status === 'CANCELLED'
+        }" class="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full">
+          {{ booking.status }}
+        </span>
+      </div>
+
+      <div class="flex-1">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-gray-900 text-lg">{{ booking.busName }}</h3>
+            <p class="text-xs text-gray-500">Booking ID: #{{ booking.id }}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+          <div>
+            <p class="text-xs text-gray-500 uppercase font-semibold mb-1">Route</p>
+            <p class="font-bold text-gray-900">{{ booking.source }} → {{ booking.destination }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 uppercase font-semibold mb-1">Date</p>
+            <p class="font-bold text-gray-900">{{ booking.departureTime | date:'mediumDate' }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 uppercase font-semibold mb-1">Time</p>
+            <p class="font-bold text-gray-900">{{ booking.departureTime | date:'shortTime' }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 uppercase font-semibold mb-1">Seats</p>
+            <p class="font-bold text-gray-900">{{ booking.seatNumbers }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-6 w-full md:w-auto mt-4 md:mt-0">
+        <div class="text-left md:text-right mb-0 md:mb-4">
+          <p class="text-xs text-gray-500 uppercase font-semibold mb-1">Total Paid</p>
+          <p class="text-2xl font-black text-indigo-600">₹{{ booking.totalPrice }}</p>
+        </div>
+        
+        <button *ngIf="canCancel(booking)" (click)="cancelBooking(booking.id)" class="text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-xl text-sm font-bold transition-colors">
+          Cancel Trip
+        </button>
+        
+        <div *ngIf="booking.status === 'CONFIRMED' && !canCancel(booking)" class="text-xs text-gray-400 bg-gray-50 px-3 py-2 rounded-lg text-center max-w-[120px]">
+          Cancellation unavailable (<24h)
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

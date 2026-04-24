@@ -30,6 +30,16 @@ public class TripService
         if (bus == null)
             return "Bus not found or not approved";
 
+        // Check if route matches operator locations
+        var route = _context.Routes.FirstOrDefault(r => r.Id == request.RouteId);
+        if (route == null) return "Route not found";
+
+        var locations = op.OperatingLocation?.Split(',').Select(l => l.Trim().ToLower()) ?? Enumerable.Empty<string>();
+        if (!locations.Contains(route.Source.ToLower()) && !locations.Contains(route.Destination.ToLower()))
+        {
+            return $"You can only assign trips to routes starting or ending in your operating locations: {op.OperatingLocation}";
+        }
+
         var trip = new Trip
         {
             BusId = request.BusId,
@@ -55,15 +65,19 @@ public class TripService
         {
             var basePrice = t.Bus.Price;
             var fee = Math.Round(basePrice * 0.04m);
+            
+            var bookedCount = _context.BookingSeats
+                .Count(bs => bs.Booking.TripId == t.Id && bs.Booking.Status == "CONFIRMED");
 
             return new
             {
                 TripId = t.Id,
                 BusName = t.Bus.Name,
+                BusNumber = t.Bus.BusNumber,
                 Source = t.Route.Source,
                 Destination = t.Route.Destination,
                 DepartureTime = t.DepartureTime,
-
+                AvailableSeats = t.Bus.TotalSeats - bookedCount,
                 BasePrice = basePrice,
                 PlatformFee = fee,
                 TotalPrice = basePrice + fee
@@ -82,20 +96,26 @@ public class TripService
 
         if (date.HasValue)
         {
-            query = query.Where(t => t.DepartureTime.Date == date.Value.Date);
+            var startOfDay = DateTime.SpecifyKind(date.Value.Date, DateTimeKind.Utc);
+            var endOfDay = startOfDay.AddDays(1);
+            query = query.Where(t => t.DepartureTime >= startOfDay && t.DepartureTime < endOfDay);
         }
 
         return query.ToList().Select(t =>
         {
             var basePrice = t.Bus.Price;
             var fee = Math.Round(basePrice * 0.04m);
+            
+            var bookedCount = _context.BookingSeats
+                .Count(bs => bs.Booking.TripId == t.Id && bs.Booking.Status == "CONFIRMED");
 
             return new
             {
                 TripId = t.Id,
                 BusName = t.Bus.Name,
+                BusNumber = t.Bus.BusNumber,
                 DepartureTime = t.DepartureTime,
-
+                AvailableSeats = t.Bus.TotalSeats - bookedCount,
                 BasePrice = basePrice,
                 PlatformFee = fee,
                 TotalPrice = basePrice + fee
@@ -202,6 +222,7 @@ public class TripService
 
         return seats.Select(s => new
         {
+            Id = s.Id,
             SeatNumber = s.SeatNumber,
             Status = bookedSeats.Contains(s.Id)
                 ? "BOOKED"

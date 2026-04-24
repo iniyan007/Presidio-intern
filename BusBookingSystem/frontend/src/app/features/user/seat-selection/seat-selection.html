@@ -1,0 +1,120 @@
+<div class="max-w-4xl mx-auto px-4 py-10">
+  <div *ngIf="loading" class="flex justify-center items-center py-20">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+  </div>
+
+  <div *ngIf="!loading && step === 1" class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+    <h2 class="text-2xl font-black text-gray-900 mb-6">Select Your Seats</h2>
+    
+    <div class="flex flex-col md:flex-row gap-10">
+      <!-- Legend -->
+      <div class="flex md:flex-col gap-4 mb-6 md:mb-0">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded border-2 border-gray-300 bg-white"></div>
+          <span class="text-sm text-gray-600 font-medium">Available</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded bg-indigo-600 shadow-md shadow-indigo-200"></div>
+          <span class="text-sm text-gray-600 font-medium">Selected</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded bg-gray-200 border-2 border-gray-300"></div>
+          <span class="text-sm text-gray-600 font-medium">Booked / Locked</span>
+        </div>
+      </div>
+
+      <!-- Bus Layout Grid -->
+      <div class="bg-gray-50 p-6 rounded-3xl border border-gray-200 shadow-inner flex-1 max-w-sm mx-auto">
+        <div class="flex justify-end mb-8 border-b-2 border-gray-200 pb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75" />
+          </svg>
+        </div>
+        
+        <!-- We will just flow the seats, tailwind grid with 4 columns -->
+        <!-- Since we don't have row/col info, we'll assume a standard 2-aisle-2 layout -->
+        <div class="grid grid-cols-4 gap-3">
+          <ng-container *ngFor="let seat of seats; let i = index">
+            <!-- Add aisle gap after every 2 seats if not last seat -->
+            <div *ngIf="i > 0 && i % 4 === 2" class="col-span-4 h-4"></div>
+            
+            <button 
+              (click)="toggleSeat(seat.id, seat.status)"
+              [disabled]="seat.status !== 'AVAILABLE'"
+              [class.bg-indigo-600]="isSelected(seat.id)"
+              [class.text-white]="isSelected(seat.id)"
+              [class.shadow-md]="isSelected(seat.id)"
+              [class.shadow-indigo-200]="isSelected(seat.id)"
+              [class.border-indigo-600]="isSelected(seat.id)"
+              [class.bg-white]="seat.status === 'AVAILABLE' && !isSelected(seat.id)"
+              [class.text-gray-700]="seat.status === 'AVAILABLE' && !isSelected(seat.id)"
+              [class.hover:border-indigo-400]="seat.status === 'AVAILABLE' && !isSelected(seat.id)"
+              [class.bg-gray-200]="seat.status !== 'AVAILABLE'"
+              [class.text-gray-400]="seat.status !== 'AVAILABLE'"
+              [class.cursor-not-allowed]="seat.status !== 'AVAILABLE'"
+              class="relative w-full aspect-square rounded-xl border-2 border-gray-300 font-bold text-sm flex items-center justify-center transition-all duration-200 group">
+              
+              {{ seat.seatNumber }}
+              
+              <div *ngIf="seat.status === 'LOCKED'" class="absolute -top-2 -right-2 text-orange-500 bg-orange-100 rounded-full p-0.5">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
+                  <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
+                </svg>
+              </div>
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 border-t border-gray-100 pt-6 flex justify-between items-center">
+      <div>
+        <p class="text-sm text-gray-500">Selected Seats</p>
+        <p class="text-xl font-bold text-gray-900">{{ selectedSeats.length > 0 ? selectedSeats.length : 'None' }}</p>
+      </div>
+      <button 
+        (click)="proceedToPayment()" 
+        [disabled]="selectedSeats.length === 0 || locking"
+        [class.opacity-50]="selectedSeats.length === 0 || locking"
+        class="bg-gray-900 hover:bg-indigo-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition-all duration-300 flex items-center gap-2">
+        <span *ngIf="locking" class="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
+        Proceed to Payment
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="step === 2" class="max-w-md mx-auto bg-white rounded-3xl shadow-xl border border-gray-100 p-8 text-center relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 to-violet-500"></div>
+    
+    <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-indigo-600">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+      </svg>
+    </div>
+    
+    <h2 class="text-2xl font-black text-gray-900 mb-2">Complete Payment</h2>
+    <p class="text-gray-500 mb-8 text-sm">Seats are locked for 5 minutes. Please complete your payment to confirm the booking.</p>
+    
+    <div class="bg-gray-50 rounded-2xl p-6 mb-8 text-left border border-gray-100">
+      <div class="flex justify-between mb-2">
+        <span class="text-gray-500">Selected Seats:</span>
+        <span class="font-bold text-gray-900">{{ selectedSeats.length }}</span>
+      </div>
+      <div class="flex justify-between font-bold text-lg mt-4 pt-4 border-t border-gray-200">
+        <span class="text-gray-900">Amount to Pay:</span>
+        <span class="text-indigo-600">Dynamic (Pay Gateway)</span>
+      </div>
+    </div>
+
+    <button 
+      (click)="confirmBooking()" 
+      [disabled]="booking"
+      class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg shadow-indigo-200 transition-all duration-300 flex items-center justify-center gap-2 mb-4">
+      <span *ngIf="booking" class="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></span>
+      Pay Now
+    </button>
+    <button (click)="cancelPayment()" [disabled]="booking" class="text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors">
+      Cancel & Go Back
+    </button>
+  </div>
+</div>

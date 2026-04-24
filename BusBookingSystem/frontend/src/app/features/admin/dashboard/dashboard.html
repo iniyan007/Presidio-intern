@@ -1,0 +1,76 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="mb-8 border-b border-gray-200 pb-6 flex justify-between items-center">
+    <div>
+      <h1 class="text-3xl font-black text-gray-900 tracking-tight">Admin Dashboard</h1>
+      <p class="text-gray-500 mt-2 text-lg">Platform overview and pending approvals.</p>
+    </div>
+    <div class="flex gap-4">
+      <a href="/admin/operators" class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-xl font-medium transition-colors text-sm">All Operators</a>
+      <a href="/admin/buses" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl font-medium transition-colors text-sm">All Buses</a>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+    <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+      <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-indigo-500/10 blur-2xl"></div>
+      <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Platform Revenue</p>
+      <h3 class="text-4xl font-black text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors">₹{{ totalRevenue }}</h3>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+    
+    <!-- Pending Operators -->
+    <div>
+      <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+        Pending Operator Approvals
+        <span class="bg-red-100 text-red-600 px-2 py-0.5 rounded-full text-xs font-bold">{{ pendingOperators.length }}</span>
+      </h2>
+      
+      <div *ngIf="pendingOperators.length === 0" class="text-center py-10 bg-gray-50 rounded-2xl border border-gray-100">
+        <p class="text-gray-500">No pending operator registrations.</p>
+      </div>
+
+      <div *ngIf="pendingOperators.length > 0" class="space-y-4">
+        <div *ngFor="let op of pendingOperators" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h3 class="font-bold text-gray-900">{{ op.companyName }}</h3>
+            <p class="text-sm text-gray-500">{{ op.userName }} • {{ op.email }}</p>
+            <p class="text-xs text-gray-400 mt-1">Location: {{ op.operatingLocation }}</p>
+          </div>
+          <div class="flex gap-2 w-full md:w-auto">
+            <button (click)="approveOperator(op.id)" class="flex-1 md:flex-none bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold py-2 px-4 rounded-xl transition-colors text-sm">Approve</button>
+            <button (click)="rejectOperator(op.id)" class="flex-1 md:flex-none bg-red-50 hover:bg-red-100 text-red-700 font-bold py-2 px-4 rounded-xl transition-colors text-sm">Reject</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Buses -->
+    <div>
+      <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+        Pending Bus Approvals
+        <span class="bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full text-xs font-bold">{{ pendingBuses.length }}</span>
+      </h2>
+      
+      <div *ngIf="pendingBuses.length === 0" class="text-center py-10 bg-gray-50 rounded-2xl border border-gray-100">
+        <p class="text-gray-500">No pending bus additions.</p>
+      </div>
+
+      <div *ngIf="pendingBuses.length > 0" class="space-y-4">
+        <div *ngFor="let bus of pendingBuses" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h3 class="font-bold text-gray-900">{{ bus.name }}</h3>
+            <p class="text-sm text-gray-500">Operator: {{ bus.operatorName }}</p>
+            <p class="text-xs text-gray-400 mt-1">{{ bus.totalSeats }} Seats • ₹{{ bus.price }} Base</p>
+          </div>
+          <div class="flex gap-2 w-full md:w-auto">
+            <button (click)="approveBus(bus.id)" class="flex-1 md:flex-none bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold py-2 px-4 rounded-xl transition-colors text-sm">Approve</button>
+            <button (click)="rejectBus(bus.id)" class="flex-1 md:flex-none bg-red-50 hover:bg-red-100 text-red-700 font-bold py-2 px-4 rounded-xl transition-colors text-sm">Reject</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -35,12 +35,12 @@ public class BookingController : ControllerBase
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-        var result = await _service.CreateBooking(userId, request.TripId, request.SeatIds);
+        var (message, bookingId) = await _service.CreateBooking(userId, request.TripId, request.SeatIds);
 
-        if (result.Contains("not") || result.Contains("already"))
-            return BadRequest(new { message = result });
+        if (message.Contains("not") || message.Contains("already"))
+            return BadRequest(new { message });
 
-        return Ok(new { message = result });
+        return Ok(new { message, bookingId });
     }
 
     [Authorize]

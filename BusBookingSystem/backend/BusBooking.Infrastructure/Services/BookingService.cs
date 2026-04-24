@@ -58,21 +58,21 @@ public class BookingService
         return "Seats locked successfully for 5 minutes";
     }
 
-   public async Task<string> CreateBooking(int userId, int tripId, List<int> seatIds)
+   public async Task<(string, int)> CreateBooking(int userId, int tripId, List<int> seatIds)
     {
         // 🔥 VALIDATION
         if (seatIds == null || seatIds.Count == 0)
-            return "No seats selected";
+            return ("No seats selected", 0);
 
         if (seatIds.Count != seatIds.Distinct().Count())
-            return "Duplicate seats selected";
+            return ("Duplicate seats selected", 0);
 
         var trip = _context.Trips
             .Include(t => t.Bus)
             .FirstOrDefault(t => t.Id == tripId);
 
         if (trip == null)
-            return "Trip not found";
+            return ("Trip not found", 0);
 
         // 🔥 CHECK ALL SEATS LOCKED
         foreach (var seatId in seatIds)
@@ -83,7 +83,7 @@ public class BookingService
                             bs.Booking.Status == "CONFIRMED");
 
             if (alreadyBooked)
-                return $"Seat {seatId} already booked";
+                return ($"Seat {seatId} already booked", 0);
             var lockSeat = _context.SeatLocks
                 .FirstOrDefault(s =>
                     s.SeatId == seatId &&
@@ -91,7 +91,7 @@ public class BookingService
                     s.UserId == userId);
 
             if (lockSeat == null)
-                return $"Seat {seatId} not locked";
+                return ($"Seat {seatId} not locked", 0);
         }
 
         // 🔥 PRICING
@@ -122,7 +122,7 @@ public class BookingService
         _context.Bookings.Add(booking);
         await _context.SaveChangesAsync();
 
-        return "Booking created. Proceed to payment";
+        return ("Booking created. Proceed to payment", booking.Id);
     }
     public async Task<string> CancelBooking(int userId, int bookingId)
     {
@@ -203,7 +203,7 @@ public class BookingService
             .Take(pageSize)
             .Select(b => new
             {
-                BookingId = b.Id,
+                Id = b.Id,
 
                 TripId = b.TripId,
                 BusName = b.Trip.Bus.Name,
@@ -220,7 +220,8 @@ public class BookingService
                     .Select(bs => bs.Seat.SeatNumber)
                     .ToList(),
 
-                TotalPrice = b.TotalPrice
+                TotalPrice = b.TotalPrice,
+                Status = b.Status
             })
             .ToList<object>();
     }
@@ -236,7 +237,7 @@ public class BookingService
             .Where(b => b.UserId == userId)
             .Select(b => new
             {
-                BookingId = b.Id,
+                Id = b.Id,
 
                 Source = b.Trip.Route.Source,
                 Destination = b.Trip.Route.Destination,

@@ -5,6 +5,7 @@ public class Bus
     public int Id { get; set; }
 
     public string Name { get; set; }
+    public string BusNumber { get; set; } // Unique identifier for the bus
 
     public int OperatorId { get; set; }
     public Operator Operator { get; set; }

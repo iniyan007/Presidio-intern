@@ -14,8 +14,8 @@ public class RouteController : ControllerBase
         _routeService = routeService;
     }
 
-    // 🧑‍💼 ADMIN ONLY
-    [Authorize(Roles = "ADMIN")]
+    // 🧑‍💼 OPERATOR and ADMIN
+    [Authorize(Roles = "OPERATOR,ADMIN")]
     [HttpPost]
     public async Task<IActionResult> CreateRoute(CreateRouteRequest request)
     {
@@ -30,5 +30,21 @@ public class RouteController : ControllerBase
     {
         var routes = _routeService.GetRoutes();
         return Ok(routes);
+    }
+
+    [Authorize(Roles = "OPERATOR,ADMIN")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateRoute(int id, CreateRouteRequest request)
+    {
+        var result = await _routeService.UpdateRoute(id, request);
+        return Ok(result);
+    }
+
+    [Authorize(Roles = "OPERATOR,ADMIN")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteRoute(int id)
+    {
+        var result = await _routeService.DeleteRoute(id);
+        return Ok(result);
     }
 }

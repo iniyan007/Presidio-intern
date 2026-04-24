@@ -71,4 +71,12 @@ public class OperatorController : ControllerBase
 
         return Ok(operators);
     }
+
+    [Authorize(Roles = "ADMIN")]
+    [HttpPut("disable/{id}")]
+    public async Task<IActionResult> Disable(int id, [FromServices] TripService tripService)
+    {
+        var result = await _service.DisableOperator(id, tripService);
+        return Ok(result);
+    }
 }

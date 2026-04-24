@@ -38,11 +38,39 @@ public class BusController : ControllerBase
         return Ok(result);
     }
 
-    // View buses
+    // View all buses (public)
     [HttpGet]
     public IActionResult GetAll()
     {
         return Ok(_service.GetAll());
+    }
+
+    // Operator views their own buses
+    [Authorize(Roles = "OPERATOR")]
+    [HttpGet("operator")]
+    public IActionResult GetOperatorBuses()
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        var op = _context.Operators
+            .FirstOrDefault(o => o.UserId == userId);
+
+        if (op == null)
+            return Ok(new List<object>());
+
+        var buses = _context.Buses
+            .Where(b => b.OperatorId == op.Id)
+            .Select(b => new
+            {
+                b.Id,
+                b.Name,
+                b.BusNumber,
+                b.TotalSeats,
+                b.Price,
+                b.IsApproved,
+                b.IsActive
+            }).ToList();
+
+        return Ok(buses);
     }
 
     [Authorize(Roles = "ADMIN")]
@@ -63,6 +91,7 @@ public class BusController : ControllerBase
             {
                 b.Id,
                 b.Name,
+                b.BusNumber,
                 b.TotalSeats,
                 b.Price,
                 OperatorName = b.Operator.CompanyName
@@ -70,5 +99,25 @@ public class BusController : ControllerBase
             .ToList();
 
         return Ok(buses);
+    }
+
+    // Operator updates bus
+    [Authorize(Roles = "OPERATOR")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateBus(int id, CreateBusRequest request)
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        var result = await _service.UpdateBus(userId, id, request);
+        return Ok(result);
+    }
+
+    // Operator deletes bus
+    [Authorize(Roles = "OPERATOR")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteBus(int id)
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        var result = await _service.DeleteBus(userId, id);
+        return Ok(result);
     }
 }

@@ -47,6 +47,17 @@ builder.Services.AddScoped<BookingService>();
 builder.Services.AddScoped<PaymentService>();
 builder.Services.AddScoped<EmailService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200", "http://localhost:4201")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
@@ -55,6 +66,7 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     Console.WriteLine("DB Connection: " + db.Database.GetDbConnection().ConnectionString);
 }
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
