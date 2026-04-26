@@ -1,0 +1,66 @@
+
+```gitignore
+## Build results
+bin/
+obj/
+out/
+
+## User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Visual Studio / VS Code / Rider
+.vs/
+.vscode/
+.idea/
+
+## NuGet
+*.nupkg
+packages/
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+
+## Logs
+*.log
+
+## Environment / Secrets
+appsettings.Development.json
+appsettings.Local.json
+.env
+.env.*
+
+## ASP.NET Core Scaffolding
+ScaffoldingReadMe.txt
+
+## Entity Framework
+*.dbmdl
+*.jfm
+
+## Publish Output
+publish/
+wwwroot/dist/
+
+## Node modules (if frontend inside same repo)
+node_modules/
+
+## OS generated files
+.DS_Store
+Thumbs.db
+
+## Test Results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+## JetBrains Rider
+_ReSharper*/
+*.DotSettings.user
+
+## Azure / Deployment
+*.PublishSettings
+```
