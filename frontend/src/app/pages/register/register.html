@@ -1,0 +1,59 @@
+<div class="container d-flex" style="align-items: center; justify-content: center; min-height: calc(100vh - 4rem); padding: 4rem 0;">
+  <div class="glass-card" style="width: 100%; max-width: 500px;">
+    <h2 style="text-align: center; margin-bottom: 2rem; color: var(--primary-color);">Create an Account</h2>
+    
+    <div *ngIf="error" class="alert alert-danger mb-4" style="color: var(--danger-color); background: #FEE2E2; padding: 0.75rem; border-radius: 0.375rem; font-size: 0.875rem;">
+      {{ error }}
+    </div>
+    <div *ngIf="success" class="alert alert-success mb-4" style="color: var(--success-color); background: #D1FAE5; padding: 0.75rem; border-radius: 0.375rem; font-size: 0.875rem;">
+      {{ success }}
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" formControlName="name" class="form-control" placeholder="John Doe">
+      </div>
+      <div class="d-flex gap-4">
+        <div class="form-group flex-1">
+          <label class="form-label">Age</label>
+          <input type="number" formControlName="age" class="form-control" placeholder="25">
+        </div>
+        <div class="form-group flex-1">
+          <label class="form-label">Gender</label>
+          <select formControlName="gender" class="form-control">
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" formControlName="email" class="form-control" placeholder="john@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mobile Number</label>
+        <input type="text" formControlName="mobileNumber" class="form-control" placeholder="+91">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select formControlName="role" class="form-control">
+          <option value="User">Passenger (User)</option>
+          <option value="Operator">Bus Operator</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" formControlName="password" class="form-control" placeholder="Create a password">
+      </div>
+      <button type="submit" [disabled]="registerForm.invalid || loading" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+        {{ loading ? 'Registering...' : 'Register' }}
+      </button>
+      <p style="text-align: center; margin-top: 1.5rem; font-size: 0.875rem;">
+        Already have an account? <a routerLink="/login" style="color: var(--primary-color); font-weight: 500; text-decoration: none;">Login</a>
+      </p>
+    </form>
+  </div>
+</div>

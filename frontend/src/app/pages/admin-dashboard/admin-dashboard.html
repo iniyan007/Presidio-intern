@@ -1,0 +1,145 @@
+<div class="container" style="padding: 2rem 0;">
+  <div class="d-flex justify-between align-center mb-4">
+    <h2 style="color: var(--primary-color);">Admin Dashboard</h2>
+  </div>
+
+  <div *ngIf="message" class="alert alert-success mb-4" style="background: #D1FAE5; color: var(--success-color); padding: 1rem; border-radius: 0.375rem;">
+    {{ message }}
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="d-flex gap-4 mb-4 flex-wrap">
+    <div class="glass-card flex-1 min-w-200" style="text-align: center; padding: 1.5rem;">
+      <h3 style="color: var(--text-secondary); font-size: 0.875rem;">Platform Revenue</h3>
+      <div style="font-size: 1.5rem; font-weight: 700; color: var(--success-color);">₹{{ stats.totalPlatformRevenue }}</div>
+    </div>
+    <div class="glass-card flex-1 min-w-200" style="text-align: center; padding: 1.5rem;">
+      <h3 style="color: var(--text-secondary); font-size: 0.875rem;">Pending Operators</h3>
+      <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning-color);">{{ stats.pendingOperators }}</div>
+    </div>
+    <div class="glass-card flex-1 min-w-200" style="text-align: center; padding: 1.5rem;">
+      <h3 style="color: var(--text-secondary); font-size: 0.875rem;">Pending Buses</h3>
+      <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning-color);">{{ stats.pendingBuses }}</div>
+    </div>
+    <div class="glass-card flex-1 min-w-200" style="text-align: center; padding: 1.5rem;">
+      <h3 style="color: var(--text-secondary); font-size: 0.875rem;">Total Bookings</h3>
+      <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color);">{{ stats.totalBookings }}</div>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="d-flex gap-4 mb-5" style="border-bottom: 2px solid rgba(0,0,0,0.1);">
+    <div [class.active-tab]="activeTab === 'operators'" 
+         (click)="activeTab = 'operators'" 
+         style="padding: 1rem 2rem; cursor: pointer; font-weight: 700; font-size: 1.125rem; transition: all 0.2s; border-bottom: 3px solid transparent;"
+         [style.border-bottom-color]="activeTab === 'operators' ? 'var(--primary-color)' : 'transparent'"
+         [style.color]="activeTab === 'operators' ? 'var(--primary-color)' : 'var(--text-secondary)'">
+      Manage Operators
+    </div>
+    <div [class.active-tab]="activeTab === 'buses'" 
+         (click)="activeTab = 'buses'" 
+         style="padding: 1rem 2rem; cursor: pointer; font-weight: 700; font-size: 1.125rem; transition: all 0.2s; border-bottom: 3px solid transparent;"
+         [style.border-bottom-color]="activeTab === 'buses' ? 'var(--primary-color)' : 'transparent'"
+         [style.color]="activeTab === 'buses' ? 'var(--primary-color)' : 'var(--text-secondary)'">
+      Manage Buses
+    </div>
+    <div [class.active-tab]="activeTab === 'routes'" 
+         (click)="activeTab = 'routes'" 
+         style="padding: 1rem 2rem; cursor: pointer; font-weight: 700; font-size: 1.125rem; transition: all 0.2s; border-bottom: 3px solid transparent;"
+         [style.border-bottom-color]="activeTab === 'routes' ? 'var(--primary-color)' : 'transparent'"
+         [style.color]="activeTab === 'routes' ? 'var(--primary-color)' : 'var(--text-secondary)'">
+      Manage Routes
+    </div>
+  </div>
+
+  <div style="width: 100%;">
+    <!-- Routes Section -->
+    <div *ngIf="activeTab === 'routes'" class="glass-card flex-1 min-w-300" style="padding: 1.5rem; max-width: 800px; margin: 0 auto;">
+      <h3 class="mb-4">Manage Routes</h3>
+      
+      <form [formGroup]="routeForm" (ngSubmit)="onSubmitRoute()" class="mb-4">
+        <div class="form-group">
+          <label class="form-label">Source</label>
+          <input type="text" formControlName="source" class="form-control" placeholder="Source City">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Destination</label>
+          <input type="text" formControlName="destination" class="form-control" placeholder="Destination City">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Distance (km)</label>
+          <input type="number" formControlName="distance" class="form-control">
+        </div>
+        <button type="submit" [disabled]="routeForm.invalid" class="btn btn-primary" style="width: 100%;">Create Route</button>
+      </form>
+
+      <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>From - To</th>
+              <th>Km</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let route of routes">
+              <td>{{ route.source }} - {{ route.destination }}</td>
+              <td>{{ route.distance }}</td>
+              <td>
+                <button (click)="deleteRoute(route.id)" class="btn-icon text-danger">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Manage Operators -->
+    <div *ngIf="activeTab === 'operators'" class="glass-card" style="padding: 1.5rem;">
+        <h3 class="mb-4">Manage Operators</h3>
+        <div *ngIf="operators.length === 0" style="padding: 1rem; text-align: center; color: var(--text-secondary);">
+          No operators found.
+        </div>
+        <div *ngFor="let op of operators" class="approval-item mb-3">
+          <div class="d-flex justify-between align-center">
+            <div>
+              <strong>{{ op.name }}</strong>
+              <span class="badge ml-2" [ngClass]="op.isApproved ? 'badge-success' : 'badge-warning'" style="margin-left: 0.5rem;">
+                {{ op.isApproved ? 'Approved' : 'Pending' }}
+              </span>
+              <div style="font-size: 0.8125rem; color: var(--text-secondary);">{{ op.email }} | {{ op.mobileNumber }}</div>
+            </div>
+            <div class="d-flex gap-2">
+              <button *ngIf="!op.isApproved" (click)="approveOperator(op.id)" class="btn btn-success btn-sm">Approve</button>
+              <button (click)="rejectOperator(op.id)" class="btn btn-outline-danger btn-sm">{{ op.isApproved ? 'Remove' : 'Reject' }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Manage Buses -->
+    <div *ngIf="activeTab === 'buses'" class="glass-card" style="padding: 1.5rem;">
+        <h3 class="mb-4">Manage Buses</h3>
+        <div *ngIf="buses.length === 0" style="padding: 1rem; text-align: center; color: var(--text-secondary);">
+          No buses found.
+        </div>
+        <div *ngFor="let bus of buses" class="approval-item mb-3">
+          <div class="d-flex justify-between align-center">
+            <div>
+              <strong>{{ bus.name }}</strong> ({{ bus.busNumber }})
+              <span class="badge ml-2" [ngClass]="bus.isApproved ? 'badge-success' : 'badge-warning'" style="margin-left: 0.5rem;">
+                {{ bus.isApproved ? 'Approved' : 'Pending' }}
+              </span>
+              <div style="font-size: 0.8125rem; color: var(--text-secondary);">Operator: {{ bus.operatorName }}</div>
+            </div>
+            <div class="d-flex gap-2">
+              <button *ngIf="!bus.isApproved" (click)="approveBus(bus.id)" class="btn btn-success btn-sm">Approve</button>
+              <button (click)="rejectBus(bus.id)" class="btn btn-outline-danger btn-sm">{{ bus.isApproved ? 'Remove' : 'Reject' }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </div>
+</div>

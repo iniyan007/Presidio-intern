@@ -1,0 +1,21 @@
+<nav class="navbar">
+  <div class="container navbar-content">
+    <div class="logo">
+      <a routerLink="/">BusBooking</a>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/" class="nav-link">Search</a>
+      
+      <ng-container *ngIf="(currentUser$ | async) === null">
+        <a routerLink="/login" class="nav-link">Login</a>
+        <a routerLink="/register" class="btn btn-primary">Register</a>
+      </ng-container>
+
+      <ng-container *ngIf="currentUser$ | async as user">
+        <a [routerLink]="user.role === 'Admin' ? '/admin/dashboard' : (user.role === 'Operator' ? '/operator/dashboard' : '/user/dashboard')" class="nav-link">Dashboard</a>
+        <div style="font-weight: 600; color: var(--text-primary); margin-left: 1rem;">Hi, {{ user.name }}</div>
+        <button (click)="logout()" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Logout</button>
+      </ng-container>
+    </div>
+  </div>
+</nav>

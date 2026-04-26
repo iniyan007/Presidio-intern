@@ -1,0 +1,104 @@
+<div class="hero-section">
+  <div class="container hero-content">
+    <h1 class="hero-title">Book Your Journey With Us</h1>
+    <p class="hero-subtitle">Premium buses, easy booking, safe travel.</p>
+    
+    <div class="glass-card search-box">
+      <form class="search-form d-flex gap-4 align-center" (ngSubmit)="search()">
+        <div class="form-group mb-0 flex-1">
+          <label class="form-label" style="color: var(--text-primary);">Source</label>
+          <input type="text" [(ngModel)]="source" name="source" class="form-control" placeholder="Leaving from...">
+        </div>
+        <div class="form-group mb-0 flex-1">
+          <label class="form-label" style="color: var(--text-primary);">Destination</label>
+          <input type="text" [(ngModel)]="destination" name="destination" class="form-control" placeholder="Going to...">
+        </div>
+        <div class="form-group mb-0 flex-1">
+          <label class="form-label" style="color: var(--text-primary);">Date</label>
+          <input type="date" [(ngModel)]="date" name="date" class="form-control">
+        </div>
+        <div class="form-group mb-0">
+          <label class="form-label">&nbsp;</label>
+          <button type="submit" class="btn btn-primary" style="height: 46px;">Search Buses</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="padding: 4rem 0;">
+  <div class="d-flex justify-between align-center mb-5">
+    <h2 style="margin: 0; color: var(--primary-color);">Available Trips</h2>
+    <div class="d-flex align-center gap-2">
+      <label style="font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap;">Sort By:</label>
+      <select [(ngModel)]="sortBy" (change)="sortTrips()" class="form-control" style="width: 200px; padding: 0.5rem 1rem;">
+        <option value="earliest">Earliest Departure</option>
+        <option value="price_low">Lowest Price</option>
+        <option value="price_high">Highest Price</option>
+        <option value="seats_high">Most Seats Available</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading" style="text-align: center; padding: 2rem;">
+    <div class="spinner"></div>
+    <p>Finding the best trips for you...</p>
+  </div>
+
+  <div *ngIf="!loading && trips.length === 0" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+    <h3>No trips found.</h3>
+    <p>Try searching for a different route or date.</p>
+  </div>
+
+  <div class="d-flex gap-4" style="flex-direction: column;">
+    <div *ngFor="let trip of trips" class="glass-card trip-card d-flex justify-between align-center" (click)="bookNow(trip.id)">
+      
+      <div class="d-flex gap-5 align-center flex-1">
+        <!-- Bus Info -->
+        <div style="min-width: 150px;">
+          <div style="font-weight: 700; color: var(--text-primary); font-size: 1.125rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🚌</span> {{ trip.busName }}
+          </div>
+          <small style="color: var(--text-secondary);">{{ trip.busNumber }}</small>
+        </div>
+        
+        <!-- Route Timeline -->
+        <div class="flex-1 px-4">
+          <div class="route-line mb-2">
+            <div class="route-dot"></div>
+            <div style="flex: 1; text-align: center;">
+              <span class="duration-badge">Express Route</span>
+            </div>
+            <div class="route-dot"></div>
+          </div>
+          <div class="d-flex justify-between" style="padding: 0 0.5rem;">
+            <div>
+              <div style="font-weight: 800; font-size: 1.25rem; color: var(--primary-color);">{{ trip.departureTime | date:'shortTime' }}</div>
+              <div style="font-weight: 600;">{{ trip.source }}</div>
+              <small style="color: var(--text-secondary);">{{ trip.departureTime | date:'EEE, MMM d' }}</small>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-weight: 800; font-size: 1.25rem; color: var(--primary-color);">{{ trip.arrivalTime | date:'shortTime' }}</div>
+              <div style="font-weight: 600;">{{ trip.destination }}</div>
+              <small style="color: var(--text-secondary);">{{ trip.arrivalTime | date:'EEE, MMM d' }}</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seat Info -->
+        <div style="min-width: 120px; text-align: center; border-left: 1px solid rgba(0,0,0,0.1); padding-left: 1rem;">
+          <div style="font-size: 1.5rem; font-weight: 800; color: var(--warning-color);">{{ trip.availableSeats }}</div>
+          <div style="font-weight: 600; color: var(--text-secondary); font-size: 0.875rem;">Seats Left</div>
+        </div>
+      </div>
+
+      <!-- Action Area -->
+      <div style="min-width: 200px; text-align: right; border-left: 1px dashed rgba(0,0,0,0.1); padding-left: 2rem; margin-left: 2rem;">
+        <div class="price-tag">₹{{ trip.totalPrice }}</div>
+        <small style="color: var(--text-secondary); display: block; margin-bottom: 1rem;">inc. platform fee</small>
+        <button class="btn btn-primary" style="width: 100%; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.4);">View Seats</button>
+      </div>
+
+    </div>
+  </div>
+</div>

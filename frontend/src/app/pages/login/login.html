@@ -1,0 +1,42 @@
+<!-- Pending Approval Modal Overlay -->
+<div *ngIf="pendingApproval" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-icon">⏳</div>
+    <h3>Awaiting Admin Approval</h3>
+    <p>
+      Your operator account has been registered successfully.<br>
+      Please wait while an admin reviews and approves your account.<br>
+      You will be able to login once approved.
+    </p>
+    <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" (click)="pendingApproval = false">
+      OK, I'll wait
+    </button>
+  </div>
+</div>
+
+<div class="container d-flex" style="align-items: center; justify-content: center; min-height: calc(100vh - 4rem);">
+  <div class="glass-card" style="width: 100%; max-width: 400px; margin-top: 4rem;">
+    <h2 style="text-align: center; margin-bottom: 2rem; color: var(--primary-color);">Welcome Back</h2>
+
+    <div *ngIf="error" style="color: #dc2626; background: #FEE2E2; padding: 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; margin-bottom: 1rem;">
+      {{ error }}
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" formControlName="email" class="form-control" placeholder="Enter your email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" formControlName="password" class="form-control" placeholder="Enter your password">
+      </div>
+      <button type="submit" [disabled]="loginForm.invalid || loading" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+        {{ loading ? 'Logging in...' : 'Login' }}
+      </button>
+      <p style="text-align: center; margin-top: 1.5rem; font-size: 0.875rem;">
+        Don't have an account? <a routerLink="/register" style="color: var(--primary-color); font-weight: 500; text-decoration: none;">Register</a>
+      </p>
+    </form>
+  </div>
+</div>

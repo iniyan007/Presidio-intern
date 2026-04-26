@@ -1,0 +1,137 @@
+<div class="container" style="padding: 2rem 0;">
+  <div class="d-flex justify-between align-center mb-4">
+    <h2 style="color: var(--primary-color);">My Dashboard</h2>
+    <a routerLink="/" class="btn btn-primary">Book a New Trip</a>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="d-flex gap-4 mb-5" style="border-bottom: 2px solid rgba(0,0,0,0.1);">
+    <div [class.active-tab]="activeTab === 'bookings'" 
+         (click)="activeTab = 'bookings'" 
+         style="padding: 1rem 2rem; cursor: pointer; font-weight: 700; font-size: 1.125rem; transition: all 0.2s; border-bottom: 3px solid transparent;"
+         [style.border-bottom-color]="activeTab === 'bookings' ? 'var(--primary-color)' : 'transparent'"
+         [style.color]="activeTab === 'bookings' ? 'var(--primary-color)' : 'var(--text-secondary)'">
+      My Bookings
+    </div>
+    <div [class.active-tab]="activeTab === 'profile'" 
+         (click)="activeTab = 'profile'" 
+         style="padding: 1rem 2rem; cursor: pointer; font-weight: 700; font-size: 1.125rem; transition: all 0.2s; border-bottom: 3px solid transparent;"
+         [style.border-bottom-color]="activeTab === 'profile' ? 'var(--primary-color)' : 'transparent'"
+         [style.color]="activeTab === 'profile' ? 'var(--primary-color)' : 'var(--text-secondary)'">
+      Profile Details
+    </div>
+  </div>
+
+  <div style="width: 100%;">
+    <!-- Profile Tab -->
+    <div *ngIf="activeTab === 'profile'" class="glass-card" style="padding: 2rem; max-width: 600px;">
+      <div class="d-flex justify-between align-center mb-4">
+        <h3 style="margin: 0;">Profile Details</h3>
+        <button class="btn btn-secondary btn-sm" (click)="toggleEdit()">
+          {{ isEditing ? 'Cancel' : 'Edit Profile' }}
+        </button>
+      </div>
+
+      <div *ngIf="message" class="mb-3" style="padding: 1rem; border-radius: 0.5rem; background: #dcfce7; color: #166534;">
+        {{ message }}
+      </div>
+
+      <!-- Display Mode -->
+      <div *ngIf="!isEditing">
+        <div style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+          <strong>Name:</strong> {{ user?.name }}
+        </div>
+        <div style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+          <strong>Email:</strong> {{ user?.email }}
+        </div>
+        <div style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+          <strong>Mobile:</strong> {{ user?.mobileNumber }}
+        </div>
+        <div style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+          <strong>Age:</strong> {{ user?.age }}
+        </div>
+        <div style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+          <strong>Gender:</strong> {{ user?.gender || 'N/A' }}
+        </div>
+        <div style="margin-top: 1rem;">
+          <span class="badge badge-success">Active Passenger</span>
+        </div>
+      </div>
+
+      <!-- Edit Mode -->
+      <form *ngIf="isEditing" [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()">
+        <div class="form-group mb-3">
+          <label>Name</label>
+          <input type="text" class="form-control" formControlName="name">
+        </div>
+        <div class="form-group mb-3">
+          <label>Email <small>(Cannot be changed)</small></label>
+          <input type="text" class="form-control" [value]="user?.email" disabled style="background-color: #f1f5f9;">
+        </div>
+        <div class="form-group mb-3">
+          <label>Mobile Number</label>
+          <input type="text" class="form-control" formControlName="mobileNumber">
+        </div>
+        <div class="form-group mb-3">
+          <label>Age</label>
+          <input type="number" class="form-control" formControlName="age">
+        </div>
+        <div class="form-group mb-4">
+          <label>Gender</label>
+          <select class="form-control" formControlName="gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%" [disabled]="profileForm.invalid">
+          Save Changes
+        </button>
+      </form>
+    </div>
+
+    <!-- Bookings Tab -->
+    <div *ngIf="activeTab === 'bookings'" class="glass-card" style="padding: 2rem;">
+      <h3 style="margin-bottom: 1.5rem;">My Bookings</h3>
+      
+      <div *ngIf="bookings.length === 0" style="text-align: center; padding: 3rem 1rem; color: var(--text-secondary);">
+        <p>You haven't booked any trips yet.</p>
+        <a routerLink="/" class="btn btn-secondary mt-4">Explore Trips</a>
+      </div>
+
+      <table *ngIf="bookings.length > 0" class="table">
+        <thead>
+          <tr>
+            <th>Booked On</th>
+            <th>Trip</th>
+            <th>Departure</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let booking of bookings">
+            <td>{{ booking.createdAt | date:'short' }}</td>
+            <td>{{ booking.trip.route.source }} to {{ booking.trip.route.destination }}</td>
+            <td>{{ booking.trip.departureTime | date:'short' }}</td>
+            <td>₹{{ booking.totalAmount }}</td>
+            <td>
+              <span class="badge" [ngClass]="{'badge-success': booking.status === 'Confirmed', 'badge-warning': booking.status === 'Pending'}">
+                {{ booking.status }}
+              </span>
+            </td>
+            <td>
+              <button *ngIf="booking.status === 'Confirmed'" 
+                      (click)="downloadTicket(booking)" 
+                      class="btn btn-primary btn-sm" 
+                      style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">
+                ⬇️ Ticket
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

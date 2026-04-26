@@ -1,0 +1,208 @@
+<div class="container" style="padding: 2rem 0;">
+  <!-- Stepper -->
+  <div class="stepper">
+    <div class="step" [class.active]="step >= 1">
+      <div class="step-circle">1</div>
+      <span>Select Seats</span>
+    </div>
+    <div class="step" [class.active]="step >= 2">
+      <div class="step-circle">2</div>
+      <span>Passenger Details</span>
+    </div>
+    <div class="step" [class.active]="step >= 3">
+      <div class="step-circle">3</div>
+      <span>Payment</span>
+    </div>
+    <div class="step" [class.active]="step >= 4">
+      <div class="step-circle">4</div>
+      <span>Confirmation</span>
+    </div>
+  </div>
+
+  <div *ngIf="!trip" style="text-align: center; padding: 3rem;">
+    <div class="spinner"></div>
+    <p>Loading trip details...</p>
+  </div>
+
+  <div *ngIf="trip && step === 1" class="d-flex gap-5">
+    <div class="glass-card flex-2" style="padding: 2rem;">
+      <h3 class="mb-4">Select Your Seats (2x2 Layout)</h3>
+      
+      <div class="bus-frame">
+        <div class="driver-cabin">
+          <div class="steering-wheel"><span>🧑‍✈️</span> Driver</div>
+        </div>
+        <div class="seat-container">
+          <div *ngFor="let row of seats" class="d-contents">
+            <div *ngFor="let seat of row.slice(0, 2)" 
+                 class="seat" 
+                 [class.booked]="seat.isBooked"
+                 [class.selected]="seat.isSelected"
+                 (click)="toggleSeat(seat)">
+              {{ seat.id }}
+            </div>
+            <div class="seat-aisle"></div>
+            <div *ngFor="let seat of row.slice(2, 4)" 
+                 class="seat" 
+                 [class.booked]="seat.isBooked"
+                 [class.selected]="seat.isSelected"
+                 (click)="toggleSeat(seat)">
+              {{ seat.id }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seat-legend">
+        <div class="legend-item"><div class="legend-box" style="background: white; border: 2px solid #e2e8f0;"></div> Available</div>
+        <div class="legend-item"><div class="legend-box" style="background: var(--primary-color);"></div> Selected</div>
+        <div class="legend-item"><div class="legend-box" style="background: #cbd5e1;"></div> Booked</div>
+      </div>
+    </div>
+
+    <div class="glass-card flex-1" style="padding: 1.5rem; height: fit-content;">
+      <h4 class="mb-4">Trip Summary</h4>
+      <div style="margin-bottom: 1.5rem;">
+        <div style="font-weight: 600;">{{ trip.route.source }} ➔ {{ trip.route.destination }}</div>
+        <div style="color: var(--text-secondary);">{{ trip.bus.name }} | {{ trip.bus.busNumber }}</div>
+        <small style="color: var(--text-secondary);">{{ trip.departureTime | date:'MMM d, h:mm a' }}</small>
+      </div>
+
+      <div class="mb-4" style="border-top: 1px solid rgba(0,0,0,0.1); padding-top: 1rem;">
+        <div class="d-flex justify-between mb-2">
+          <span>Seats Selected:</span>
+          <span style="font-weight: 600;">{{ selectedSeats.join(', ') || 'None' }}</span>
+        </div>
+        <div class="d-flex justify-between mb-2">
+          <span>Ticket Price (x{{ selectedSeats.length }}):</span>
+          <span style="font-weight: 600;">₹{{ trip.ticketPrice * selectedSeats.length }}</span>
+        </div>
+        <div class="d-flex justify-between mb-2">
+          <span>Platform Fee:</span>
+          <span style="font-weight: 600;">₹{{ trip.platformFee * selectedSeats.length }}</span>
+        </div>
+        <div class="d-flex justify-between" style="font-size: 1.25rem; font-weight: bold; color: var(--primary-color); margin-top: 1rem;">
+          <span>Total:</span>
+          <span>₹{{ trip.totalPrice * selectedSeats.length }}</span>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="width: 100%;" [disabled]="selectedSeats.length === 0" (click)="proceedToDetails()">
+        Continue to Passenger Details
+      </button>
+    </div>
+  </div>
+
+  <!-- Step 2: Passenger Details -->
+  <div *ngIf="trip && step === 2" class="max-width-800 mx-auto">
+    <div class="glass-card" style="padding: 2rem;">
+      <div class="d-flex justify-between align-center mb-4">
+        <h3 style="margin: 0;">Passenger Details</h3>
+        <div style="background: #fee2e2; color: #ef4444; padding: 0.5rem 1rem; border-radius: 2rem; font-weight: bold;">
+          🕒 Time Left: {{ formattedTime }}
+        </div>
+      </div>
+
+      <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+        <div formArrayName="passengers">
+          <div *ngFor="let p of passengers.controls; let i=index" [formGroupName]="i" class="mb-5" style="padding-bottom: 2rem; border-bottom: 1px solid rgba(0,0,0,0.1);">
+            <h5 class="mb-3">Passenger {{ i + 1 }} (Seat {{ selectedSeats[i] }})</h5>
+            <div class="d-flex gap-4">
+              <div class="form-group flex-2">
+                <label class="form-label">Full Name</label>
+                <input type="text" formControlName="name" class="form-control" placeholder="Enter name">
+              </div>
+              <div class="form-group flex-1">
+                <label class="form-label">Age</label>
+                <input type="number" formControlName="age" class="form-control" placeholder="Age">
+              </div>
+              <div class="form-group flex-1">
+                <label class="form-label">Gender</label>
+                <select formControlName="gender" class="form-control">
+                  <option value="">Select</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;" [disabled]="bookingForm.invalid">
+          Proceed to Payment
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Step 3: Payment Summary -->
+  <div *ngIf="trip && step === 3" class="max-width-800 mx-auto">
+    <div class="glass-card" style="padding: 2rem;">
+      <div class="d-flex justify-between align-center mb-4">
+        <h3 style="margin: 0;">Payment Details</h3>
+        <div style="background: #fee2e2; color: #ef4444; padding: 0.5rem 1rem; border-radius: 2rem; font-weight: bold;">
+          ⏳ Complete Payment In: {{ formattedPaymentTime }}
+        </div>
+      </div>
+
+      <div class="mb-5" style="background: rgba(255,255,255,0.5); padding: 1.5rem; border-radius: 0.5rem;">
+        <h4>Booking Summary</h4>
+        <div class="d-flex justify-between mt-3 mb-2">
+          <span>Route:</span>
+          <strong>{{ trip.route.source }} ➔ {{ trip.route.destination }}</strong>
+        </div>
+        <div class="d-flex justify-between mb-2">
+          <span>Bus:</span>
+          <strong>{{ trip.bus.name }} ({{ trip.bus.busNumber }})</strong>
+        </div>
+        <div class="d-flex justify-between mb-2">
+          <span>Seats:</span>
+          <strong>{{ selectedSeats.join(', ') }}</strong>
+        </div>
+        <hr style="margin: 1rem 0; border: 0; border-top: 1px solid rgba(0,0,0,0.1);">
+        <div class="d-flex justify-between" style="font-size: 1.5rem; color: var(--primary-color); font-weight: bold;">
+          <span>Total Amount to Pay:</span>
+          <span>₹{{ trip.totalPrice * selectedSeats.length }}</span>
+        </div>
+      </div>
+
+      <!-- Mock Credit Card Form -->
+      <div class="mb-4">
+        <div class="form-group">
+          <label class="form-label">Card Number</label>
+          <input type="text" class="form-control" placeholder="1234 5678 9101 1121" value="1234 5678 9101 1121">
+        </div>
+        <div class="d-flex gap-4">
+          <div class="form-group flex-1">
+            <label class="form-label">Expiry</label>
+            <input type="text" class="form-control" placeholder="MM/YY" value="12/25">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">CVV</label>
+            <input type="password" class="form-control" placeholder="123" value="123">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="width: 100%; font-size: 1.25rem; padding: 1rem;" (click)="processPayment()">
+        Pay ₹{{ trip.totalPrice * selectedSeats.length }} Now
+      </button>
+    </div>
+  </div>
+
+  <!-- Step 4: Confirmation -->
+  <div *ngIf="step === 4" class="max-width-800 mx-auto" style="text-align: center;">
+    <div class="glass-card" style="padding: 4rem 2rem;">
+      <div style="font-size: 5rem; color: var(--success-color); margin-bottom: 1rem;">🚌🎉</div>
+      <h2 class="mb-2" style="color: var(--success-color);">Booking Confirmed!</h2>
+      <h3 class="mb-4">Happy Journey!</h3>
+      <p class="mb-5" style="color: var(--text-secondary);">Your tickets have been successfully booked and your seats are officially reserved. You can view your ticket in the dashboard.</p>
+      
+      <div class="d-flex gap-3 justify-center">
+        <button class="btn btn-primary" routerLink="/user/dashboard">Go to My Bookings</button>
+        <button class="btn btn-secondary" routerLink="/">Book Another Trip</button>
+      </div>
+    </div>
+  </div>
+</div>
