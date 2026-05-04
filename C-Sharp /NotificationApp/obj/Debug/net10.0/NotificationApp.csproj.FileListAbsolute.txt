@@ -1,0 +1,15 @@
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/obj/Debug/net10.0/NotificationApp.GeneratedMSBuildEditorConfig.editorconfig
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/obj/Debug/net10.0/NotificationApp.AssemblyInfoInputs.cache
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/obj/Debug/net10.0/NotificationApp.AssemblyInfo.cs
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/obj/Debug/net10.0/NotificationApp.csproj.CoreCompileInputs.cache
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/obj/Debug/net10.0/NotificationApp.sourcelink.json
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/bin/Debug/net10.0/NotificationApp
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/bin/Debug/net10.0/NotificationApp.deps.json
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/bin/Debug/net10.0/NotificationApp.runtimeconfig.json
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/bin/Debug/net10.0/NotificationApp.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/bin/Debug/net10.0/NotificationApp.pdb
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/obj/Debug/net10.0/NotificationApp.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/obj/Debug/net10.0/refint/NotificationApp.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/obj/Debug/net10.0/NotificationApp.pdb
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/obj/Debug/net10.0/NotificationApp.genruntimeconfig.cache
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApp/obj/Debug/net10.0/ref/NotificationApp.dll
