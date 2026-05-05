@@ -1,0 +1,15 @@
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/bin/Debug/net10.0/OOPS-PRACTICE
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/bin/Debug/net10.0/OOPS-PRACTICE.deps.json
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/bin/Debug/net10.0/OOPS-PRACTICE.runtimeconfig.json
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/bin/Debug/net10.0/OOPS-PRACTICE.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/bin/Debug/net10.0/OOPS-PRACTICE.pdb
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/obj/Debug/net10.0/OOPS-PRACTICE.GeneratedMSBuildEditorConfig.editorconfig
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/obj/Debug/net10.0/OOPS-PRACTICE.AssemblyInfoInputs.cache
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/obj/Debug/net10.0/OOPS-PRACTICE.AssemblyInfo.cs
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/obj/Debug/net10.0/OOPS-PRACTICE.csproj.CoreCompileInputs.cache
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/obj/Debug/net10.0/OOPS-PRACTICE.sourcelink.json
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/obj/Debug/net10.0/OOPS-PRACTICE.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/obj/Debug/net10.0/refint/OOPS-PRACTICE.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/obj/Debug/net10.0/OOPS-PRACTICE.pdb
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/obj/Debug/net10.0/OOPS-PRACTICE.genruntimeconfig.cache
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/obj/Debug/net10.0/ref/OOPS-PRACTICE.dll
