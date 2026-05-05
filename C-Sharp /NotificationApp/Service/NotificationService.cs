@@ -6,35 +6,40 @@ namespace NotificationApp.Service
 {
     internal class NotificationService
     {
-        List<User> users = new List<User>();
-        public User CreateUser(string name, string email, string phoneNumber)
+        private readonly UserService userService;
+        public NotificationService(UserService userService)
         {
-            User user = new User(name, email, phoneNumber);
-            users.Add(user);
-            return user;
+            this.userService = userService;
         }
-        public void SendEmailNotification(User user, string message)
+        public void SendEmailNotificationService()
         {
             EmailNotification emailNotification = new EmailNotification();
-            emailNotification.SendMessage(user, message);
+            System.Console.WriteLine("Enter user name to send email notification");
+            string userNameForEmail = Console.ReadLine() ?? "";
+            User user = userService.GetUserByName(userNameForEmail);
+            if(user == null)
+            {
+                System.Console.WriteLine("User not found");
+                return;
+            }
+            System.Console.WriteLine("Enter message to send");
+            string messageForEmail = Console.ReadLine() ?? "";
+            emailNotification.SendMessage(user, messageForEmail);
         }
-        public void SendSMSNotification(User user, string message)
+        public void SendSMSNotificationService()
         {
             SMSNotification smsNotification = new SMSNotification();
-            smsNotification.SendMessage(user, message);
-        }
-        public User GetUserByName(string name)
-        {
-            User user = null;
-            foreach (var item in users)
+            System.Console.WriteLine("Enter user name to send sms notification");
+            string userNameForSMS = Console.ReadLine() ?? "";
+            User user = userService.GetUserByName(userNameForSMS);
+            if(user == null)
             {
-                if (item.Name == name)
-                {
-                    user = item;
-                    break;
-                }
+                System.Console.WriteLine("User not found");
+                return;
             }
-            return user;
+            System.Console.WriteLine("Enter message to send");
+            string messageForSMS = Console.ReadLine() ?? "";
+            smsNotification.SendMessage(user, messageForSMS);
         }
 
     }
