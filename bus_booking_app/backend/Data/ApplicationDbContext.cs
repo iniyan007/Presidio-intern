@@ -11,6 +11,9 @@ namespace backend.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Admin> Admins { get; set; }
+        public DbSet<Operator> Operators { get; set; }
         public DbSet<BusRoute> Routes { get; set; }
         public DbSet<Bus> Buses { get; set; }
         public DbSet<Trip> Trips { get; set; }
@@ -23,10 +26,16 @@ namespace backend.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // User -> Bus (Operator)
+            modelBuilder.Entity<User>()
+                .HasDiscriminator(u => u.Role)
+                .HasValue<Customer>("User")
+                .HasValue<Admin>("Admin")
+                .HasValue<Operator>("Operator");
+
+            // Operator -> Bus
             modelBuilder.Entity<Bus>()
                 .HasOne(b => b.Operator)
-                .WithMany(u => u.Buses)
+                .WithMany(o => o.Buses)
                 .HasForeignKey(b => b.OperatorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -65,10 +74,10 @@ namespace backend.Data
                 .HasForeignKey(e => e.TripId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // User -> Expense (Operator)
+            // Operator -> Expense
             modelBuilder.Entity<Expense>()
                 .HasOne(e => e.Operator)
-                .WithMany(u => u.Expenses)
+                .WithMany(o => o.Expenses)
                 .HasForeignKey(e => e.OperatorId)
                 .OnDelete(DeleteBehavior.Restrict);
 

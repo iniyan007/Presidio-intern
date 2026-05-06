@@ -1,26 +1,18 @@
+using backend.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using backend.Data;
-using backend.Models;
+using backend.Services;
 
 namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RouteController : ControllerBase
+    public partial class RouteController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IRouteService _routeService;
 
-        public RouteController(ApplicationDbContext context)
+        public RouteController(IRouteService routeService)
         {
-            _context = context;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetRoutes()
-        {
-            var routes = await _context.Routes.ToListAsync();
-            return Ok(routes);
+            _routeService = routeService;
         }
     }
 }

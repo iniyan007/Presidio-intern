@@ -10,7 +10,7 @@ namespace backend.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
-        public User Operator { get; set; } = null!;
+        public Operator Operator { get; set; } = null!;
         public Trip Trip { get; set; } = null!;
     }
 }

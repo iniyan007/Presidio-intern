@@ -1,4 +1,4 @@
-namespace backend.Services
+namespace backend.Interfaces
 {
     public interface IEmailService
     {

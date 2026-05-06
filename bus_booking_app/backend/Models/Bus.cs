@@ -11,7 +11,7 @@ namespace backend.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
-        public User Operator { get; set; } = null!;
+        public Operator Operator { get; set; } = null!;
         public ICollection<Trip> Trips { get; set; } = new List<Trip>();
     }
 }

@@ -1,3 +1,4 @@
+using backend.Interfaces;
 namespace backend.Services
 {
     public class ConsoleEmailService : IEmailService
