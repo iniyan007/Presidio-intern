@@ -1,0 +1,15 @@
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/word_guess_game.GeneratedMSBuildEditorConfig.editorconfig
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/word_guess_game.AssemblyInfoInputs.cache
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/word_guess_game.AssemblyInfo.cs
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/word_guess_game.csproj.CoreCompileInputs.cache
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/word_guess_game.sourcelink.json
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/bin/Debug/net10.0/word_guess_game
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/bin/Debug/net10.0/word_guess_game.deps.json
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/bin/Debug/net10.0/word_guess_game.runtimeconfig.json
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/bin/Debug/net10.0/word_guess_game.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/bin/Debug/net10.0/word_guess_game.pdb
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/word_guess_game.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/refint/word_guess_game.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/word_guess_game.pdb
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/word_guess_game.genruntimeconfig.cache
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/ref/word_guess_game.dll
