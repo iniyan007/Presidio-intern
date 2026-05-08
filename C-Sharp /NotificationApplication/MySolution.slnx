@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="BusinessLayer/BusinessLayer.csproj" />
+  <Project Path="DataAccessLayer/DataAccessLayer.csproj" />
+  <Project Path="Interfaces/Interfaces.csproj" />
+  <Project Path="NotificationSenders/NotificationSenders.csproj" />
+</Solution>
