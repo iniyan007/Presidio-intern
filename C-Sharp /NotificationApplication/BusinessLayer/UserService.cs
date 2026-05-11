@@ -15,17 +15,17 @@ namespace BusinessLayer
         }
         bool CheckUserExists(string Phone)
         {
-            User user = this.userRepository.GetUserByPhone(Phone);
+            User? user = this.userRepository.GetUserByPhone(Phone);
             if (!(user == null))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                System.Console.WriteLine("User Already Exists");
+                System.Console.WriteLine("User Already Exists with the same phone number");
                 Console.ResetColor();
                 return false;
             }
             return true;
         }
-        public User CreateUserService()
+        public User? CreateUserService()
         {
             System.Console.WriteLine("Enter user name");
             string name = Console.ReadLine() ?? "";
@@ -53,9 +53,9 @@ namespace BusinessLayer
             Console.WriteLine("--------------------------------------------------");
             return user;
         }
-        public User GetUserByNameService(string name)
+        public User? GetUserByNameService(string name)
         {
-            User user = userRepository.GetUserByName(name);
+            User? user = userRepository.GetUserByName(name);
             if (user == null)
             {
                 return null;
@@ -66,7 +66,7 @@ namespace BusinessLayer
         {
             Console.WriteLine("Enter user phone number to delete the user");
             string phone = Console.ReadLine() ?? "";
-            User user = userRepository.GetUserByPhone(phone);
+            User? user = userRepository.GetUserByPhone(phone);
             if (user == null)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -105,7 +105,7 @@ namespace BusinessLayer
         {
             Console.WriteLine("Enter Phone number to update the user");
             string phoneNumber = Console.ReadLine() ?? "";
-            User user = userRepository.GetUserByPhone(phoneNumber);
+            User? user = userRepository.GetUserByPhone(phoneNumber);
             if (user == null)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;

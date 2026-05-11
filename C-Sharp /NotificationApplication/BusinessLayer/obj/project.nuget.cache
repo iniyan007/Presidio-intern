@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "6XrbNPAR7TY=",
+  "dgSpecHash": "ExzS+FhlXSE=",
   "success": true,
   "projectFilePath": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /NotificationApplication/BusinessLayer/BusinessLayer.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/iniyan/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/microsoft.extensions.logging.abstractions/8.0.0/microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/npgsql/8.0.9/npgsql.8.0.9.nupkg.sha512"
+  ],
   "logs": []
 }

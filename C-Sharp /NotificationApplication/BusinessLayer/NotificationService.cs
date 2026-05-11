@@ -55,7 +55,7 @@ namespace BusinessLayer
             EmailNotification emailNotification = new EmailNotification();
             System.Console.WriteLine("Enter user name to send email notification");
             string userNameForEmail = Console.ReadLine() ?? "";
-            User user = userService.GetUserByNameService(userNameForEmail);
+            User? user = userService.GetUserByNameService(userNameForEmail);
             if(user == null)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -77,7 +77,7 @@ namespace BusinessLayer
             SMSNotification smsNotification = new SMSNotification();
             System.Console.WriteLine("Enter user name to send sms notification");
             string userNameForSMS = Console.ReadLine() ?? "";
-            User user = userService.GetUserByNameService(userNameForSMS);
+            User? user = userService.GetUserByNameService(userNameForSMS);
             if(user == null)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -98,7 +98,7 @@ namespace BusinessLayer
         {
             System.Console.WriteLine("Enter user name to get notification history");
             string userNameForHistory = Console.ReadLine() ?? "";
-            User user = userService.GetUserByNameService(userNameForHistory);
+            User? user = userService.GetUserByNameService(userNameForHistory);
             if(user == null)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
