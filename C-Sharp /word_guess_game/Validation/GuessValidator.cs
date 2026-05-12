@@ -1,10 +1,13 @@
-namespace word_guess_game
+using word_guess_game.Exceptions;
+
+namespace word_guess_game.Validation
 {
-    internal class GuessValidator
+    public class GuessValidator
     {
         public bool ValidateGuess(string guess, string wordToGuess)
         {
-            try{
+            try
+            {
                 if (string.IsNullOrEmpty(guess) || string.IsNullOrEmpty(wordToGuess))
                 {
                     throw new InvalidException("Guess and word to guess cannot be null or empty.");
@@ -14,29 +17,25 @@ namespace word_guess_game
                 {
                     throw new InvalidException("Guess must contain only letters.");
                 }
-
                 if (guess.Length != wordToGuess.Length)
                 {
-                    throw new InvalidException("Guess must be 5 letters long.");
-                    
+                    throw new InvalidException($"Guess must be {wordToGuess.Length} letters long.");
                 }
                 return true;
             }
-            catch(InvalidException ex)
+            catch (InvalidException ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(ex.Message);
                 Console.ResetColor();
                 return false;
-
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Unexpected error during validation: {ex.Message}");
                 Console.ResetColor();
                 return false;
-
             }
         }
     }
