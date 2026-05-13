@@ -2,13 +2,14 @@ using Models;
 using DataAccessLayer;
 using System.Text.RegularExpressions;
 using System.Linq.Expressions;
+using Interfaces;
 namespace BusinessLayer
 {
     public class UserService
     {
         Regex emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         Regex phoneRegex = new Regex(@"^\d{10}$");
-        UserRepository userRepository;
+        IUserRepository userRepository;
         public UserService()
         {
             this.userRepository = new UserRepository();

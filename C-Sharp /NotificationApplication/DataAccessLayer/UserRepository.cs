@@ -1,165 +1,65 @@
-using Models;
+using DataAccessLayer.Contexts;
 using Interfaces;
-using Npgsql;
+using Microsoft.EntityFrameworkCore;
+using Models;
 
 namespace DataAccessLayer
 {
     public class UserRepository : IUserRepository
     {
-        string connectionString =
-            "Host=localhost;Port=5432;Database=notification_app;Username=postgres;Password=iniyanavin";
-
-        NpgsqlConnection connection;
+        private readonly NotificationsContext _context;
 
         public UserRepository()
         {
-            connection = new NpgsqlConnection(connectionString);
+            _context = new NotificationsContext();
         }
 
         public User CreateUser(string name, string email, string phone)
         {
             User user = new User(name, email, phone);
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
-            string insertCmd =
-                $"insert into users(name,email,phone) " +
-                $"values('{user.Name}','{user.Email}','{user.Phone}')";
+            Console.WriteLine("User created successfully");
 
-            NpgsqlCommand command = new NpgsqlCommand(insertCmd, connection);
-            try
-            {
-                connection.Open();
-
-                int result = command.ExecuteNonQuery();
-                if(result > 0)
-                    Console.WriteLine("User created successfully");
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                connection?.Close();
-            }
             return user;
         }
 
         public User? GetUserByName(string name)
         {
-            User? user = null;
-            string selectCmd = $"select * from users where name='{name}'";
-            NpgsqlCommand command = new NpgsqlCommand(selectCmd, connection);
-            try
-            {
-                connection.Open();
-                NpgsqlDataReader reader = command.ExecuteReader();
-                if(reader.Read())
-                {
-                    user = new User
-                    {
-                        Id = Convert.ToInt32(reader[0]),
-                        Name = reader[1].ToString()??"",
-                        Email = reader[2].ToString()??"",
-                        Phone = reader[3].ToString()??""
-                    };
-                }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                connection?.Close();
-            }
-
-            return user;
+            return _context.Users
+                .FirstOrDefault(u => u.Name == name);
         }
+
         public User? GetUserByPhone(string phone)
         {
-            User? user = null;
-            string selectCmd = $"select * from users where phone='{phone}'";
-            NpgsqlCommand command = new NpgsqlCommand(selectCmd, connection);
-            try
-            {
-                connection.Open();
-                NpgsqlDataReader reader = command.ExecuteReader();
-                if(reader.Read())
-                {
-                    user = new User
-                    {
-                        Id = Convert.ToInt32(reader[0]),
-                        Name = reader[1].ToString()??"",
-                        Email = reader[2].ToString()??"",
-                        Phone = reader[3].ToString()??""
-                    };
-                }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                connection?.Close();
-            }
-            return user;
+            return _context.Users
+                .FirstOrDefault(u => u.Phone == phone);
         }
-        public User UpdateUser(User user,string newName,string newEmail,string newPhone)
+
+        public User UpdateUser(
+            User user,
+            string newName,
+            string newEmail,
+            string newPhone)
         {
-            string updateCmd =
-                $"update users set " +
-                $"name='{newName}', " +
-                $"email='{newEmail}', " +
-                $"phone='{newPhone}' " +
-                $"where id={user.Id}";
+            user.Name = newName;
+            user.Email = newEmail;
+            user.Phone = newPhone;
 
-            NpgsqlCommand command = new NpgsqlCommand(updateCmd, connection);
+            _context.Users.Update(user);
+            _context.SaveChanges();
 
-            try
-            {
-                connection.Open();
-                int result = command.ExecuteNonQuery();
-                if(result > 0)
-                {
-                    user.Name = newName;
-                    user.Email = newEmail;
-                    user.Phone = newPhone;
-                    Console.WriteLine("User updated successfully");
-                }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                connection?.Close();
-            }
+            Console.WriteLine("User updated successfully");
 
             return user;
         }
+
         public void DeleteUser(User user)
         {
-            string deleteCmd = $"delete from users where id={user.Id}";
-
-            NpgsqlCommand command = new NpgsqlCommand(deleteCmd, connection);
-
-            try
-            {
-                connection.Open();
-                int result = command.ExecuteNonQuery();
-                if(result > 0)
-                    Console.WriteLine("User deleted successfully");
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                connection?.Close();
-            }
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+            Console.WriteLine("User deleted successfully");
         }
     }
 }

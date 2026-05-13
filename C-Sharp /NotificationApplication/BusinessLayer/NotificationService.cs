@@ -10,7 +10,7 @@ namespace BusinessLayer
 {
     public class NotificationService
     {
-        private NotificationRepository notificationRepository;
+        private INotificationRepository notificationRepository;
         private readonly UserService userService;
         public NotificationService(UserService userService)
         {
@@ -69,7 +69,8 @@ namespace BusinessLayer
             {
                 messageForEmail = Console.ReadLine() ?? "";
             }
-            Notification notification = notificationRepository.SaveNotification("Email", user.Email, messageForEmail);
+            Notification email = new Email(user, messageForEmail);
+            Notification notification = notificationRepository.SaveNotification(email);
             emailNotification.SendMessage(notification);
         }
         public void SendSMSNotificationService()
@@ -91,7 +92,8 @@ namespace BusinessLayer
             {
                 messageForSMS = Console.ReadLine() ?? "";
             }
-            Notification notification = notificationRepository.SaveNotification("SMS", user.Phone, messageForSMS);
+            Notification sms = new Sms(user, messageForSMS);
+            Notification notification = notificationRepository.SaveNotification(sms);
             smsNotification.SendMessage(notification);
         }
         public void GetNotificationByUserService()

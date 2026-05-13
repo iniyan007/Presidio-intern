@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace Models
 {
     public class User
@@ -6,7 +12,11 @@ namespace Models
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
-        public User() { }
+        public ICollection<Notification>? Notifications { get; set; }
+        public User()
+        {
+            
+        }
         public User(string name, string email, string phone)
         {
             Name = name;
