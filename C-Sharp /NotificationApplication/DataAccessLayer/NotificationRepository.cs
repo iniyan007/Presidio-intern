@@ -1,23 +1,41 @@
+using DataAccessLayer.Contexts;
 using Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Models;
+
 namespace DataAccessLayer
 {
-    public class NotificationRepository : INotificationRepository 
+    public class NotificationRepository : INotificationRepository
     {
-        List<Notification> notifications = new List<Notification>();
-        public Notification SaveNotification(string notificationType, string to_address, string message)
+        private readonly NotificationsContext _context;
+
+        public NotificationRepository()
         {
-            Notification notification = new Notification(notificationType, to_address, message);
-            notifications.Add(notification);
+            _context = new NotificationsContext();
+        }
+
+        public Notification SaveNotification(Notification notification)
+        {
+            _context.Notification.Add(notification);
+            _context.SaveChanges();
+
+            Console.WriteLine("Notification saved successfully");
+
             return notification;
         }
+
         public List<Notification> GetAllNotifications()
         {
-            return notifications;
+            return _context.Notification.ToList();
         }
+
         public List<Notification> GetNotificationsByUser(string to_email, string to_phone)
         {
-            return notifications.Where(n => n.ToAddress == to_email || n.ToAddress == to_phone).ToList();
+            return _context.Notification
+                .Where(n =>
+                    n.ToAddress == to_email ||
+                    n.ToAddress == to_phone)
+                .ToList();
         }
     }
 }

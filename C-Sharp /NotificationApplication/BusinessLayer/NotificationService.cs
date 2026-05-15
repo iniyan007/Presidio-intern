@@ -10,7 +10,7 @@ namespace BusinessLayer
 {
     public class NotificationService
     {
-        private NotificationRepository notificationRepository;
+        private INotificationRepository notificationRepository;
         private readonly UserService userService;
         public NotificationService(UserService userService)
         {
@@ -55,7 +55,7 @@ namespace BusinessLayer
             EmailNotification emailNotification = new EmailNotification();
             System.Console.WriteLine("Enter user name to send email notification");
             string userNameForEmail = Console.ReadLine() ?? "";
-            User user = userService.GetUserByNameService(userNameForEmail);
+            User? user = userService.GetUserByNameService(userNameForEmail);
             if(user == null)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -69,7 +69,8 @@ namespace BusinessLayer
             {
                 messageForEmail = Console.ReadLine() ?? "";
             }
-            Notification notification = notificationRepository.SaveNotification("Email", user.Email, messageForEmail);
+            Notification email = new Email(user, messageForEmail);
+            Notification notification = notificationRepository.SaveNotification(email);
             emailNotification.SendMessage(notification);
         }
         public void SendSMSNotificationService()
@@ -77,7 +78,7 @@ namespace BusinessLayer
             SMSNotification smsNotification = new SMSNotification();
             System.Console.WriteLine("Enter user name to send sms notification");
             string userNameForSMS = Console.ReadLine() ?? "";
-            User user = userService.GetUserByNameService(userNameForSMS);
+            User? user = userService.GetUserByNameService(userNameForSMS);
             if(user == null)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -91,14 +92,15 @@ namespace BusinessLayer
             {
                 messageForSMS = Console.ReadLine() ?? "";
             }
-            Notification notification = notificationRepository.SaveNotification("SMS", user.Phone, messageForSMS);
+            Notification sms = new Sms(user, messageForSMS);
+            Notification notification = notificationRepository.SaveNotification(sms);
             smsNotification.SendMessage(notification);
         }
         public void GetNotificationByUserService()
         {
             System.Console.WriteLine("Enter user name to get notification history");
             string userNameForHistory = Console.ReadLine() ?? "";
-            User user = userService.GetUserByNameService(userNameForHistory);
+            User? user = userService.GetUserByNameService(userNameForHistory);
             if(user == null)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;

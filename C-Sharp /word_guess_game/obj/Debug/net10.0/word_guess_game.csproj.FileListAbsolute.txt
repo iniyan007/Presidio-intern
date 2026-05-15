@@ -13,3 +13,8 @@
 /Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/word_guess_game.pdb
 /Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/word_guess_game.genruntimeconfig.cache
 /Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/ref/word_guess_game.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/word_guess_game.csproj.AssemblyReference.cache
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/bin/Debug/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/bin/Debug/net10.0/Microsoft.Extensions.Logging.Abstractions.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/bin/Debug/net10.0/Npgsql.dll
+/Users/iniyan/Intern/Presidio-intern/C-Sharp /word_guess_game/obj/Debug/net10.0/word_gue.BDB6ED39.Up2Date
