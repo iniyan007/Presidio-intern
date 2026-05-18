@@ -8,4 +8,5 @@ public interface IFineService
     Task<List<FinePaymentDto>> GetFineHistoryAsync(int memberId);
     Task<(bool Success, string Message)> PayFineAsync(int memberId, decimal amount);
     Task<FineDto> GetFineSummaryAsync(int memberId);
+    Task<(bool Success, string Message)> PayFineForBorrowAsync(int memberId, int borrowId, decimal amount);
 }

@@ -44,10 +44,9 @@ public class MemberService : IMemberService
         return member is null ? null : MapToDto(member);
     }
 
-    public async Task<(bool Success, string Message)> AddMemberAsync(
+    public async Task<(bool Success, string Message, int MemberId)> AddMemberAsync(
         string name, string phone, string email, MembershipTypeEnum membershipType)
     {
-        // Validate inputs
         InputValidator.ValidateName(name);
         InputValidator.ValidatePhone(phone);
         InputValidator.ValidateEmail(email);
@@ -68,9 +67,8 @@ public class MemberService : IMemberService
             Status           = (int)MemberStatus.Active,
             JoinedDate       = DateOnly.FromDateTime(DateTime.Today)
         };
-
         await _memberRepo.AddAsync(member);
-        return (true, $"Member '{name}' added successfully.");
+        return (true, $"Member '{name}' added successfully.", member.Id);
     }
 
     public async Task<(bool Success, string Message)> UpdateMemberStatusAsync(int id, MemberStatus status)

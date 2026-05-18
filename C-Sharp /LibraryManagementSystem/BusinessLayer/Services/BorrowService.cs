@@ -42,35 +42,28 @@ public class BorrowService : IBorrowService
         await using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            // Step 1: Validate member exists
             var member = await _memberRepo.GetByIdAsync(memberId)
                 ?? throw new MemberNotFoundException(memberId);
 
-            // Step 2: Validate member is active
             if (member.Status == (int)MemberStatus.Inactive)
                 throw new InactiveMemberException(member.Name);
 
-            // Step 3: Validate unpaid fine
             var unpaidFine = await _fineRepo.GetTotalUnpaidFineAsync(memberId);
             if (unpaidFine > 500)
                 throw new UnpaidFineException(unpaidFine);
 
-            // Step 4: Check active borrowing count
             var activeBorrows = await _borrowRepo.GetActiveBorrowsByMemberIdAsync(memberId);
             if (activeBorrows.Count >= member.MembershipType.MaxBorrowings)
                 throw new BorrowLimitExceededException(member.MembershipType.MaxBorrowings);
 
-            // Step 5: Check duplicate active borrow
             var duplicate = await _borrowRepo.GetActiveBorrowByMemberAndBookAsync(memberId, bookId);
             if (duplicate is not null)
                 throw new DuplicateBorrowException();
 
-            // Step 6: Check book copy availability
             var availableCopy = await _bookRepo.GetAvailableCopyAsync(bookId);
             if (availableCopy is null)
                 throw new BookNotAvailableException(bookId);
 
-            // Step 7: Create borrowing record
             var borrow = new Borrow
             {
                 MemberId     = memberId,
@@ -83,7 +76,6 @@ public class BorrowService : IBorrowService
 
             await _borrowRepo.AddAsync(borrow);
 
-            // Step 8: Update book copy status
             availableCopy.Status = (int)CopyStatus.Borrowed;
             await _bookRepo.UpdateCopyAsync(availableCopy);
 
@@ -93,7 +85,7 @@ public class BorrowService : IBorrowService
         catch (LibraryException)
         {
             await transaction.RollbackAsync();
-            throw; // Let Presentation Layer handle it
+            throw; 
         }
         catch (Exception ex)
         {
@@ -169,7 +161,16 @@ public class BorrowService : IBorrowService
         var borrows = await _borrowRepo.GetOverdueBorrowsAsync();
         return borrows.Select(MapToDto).ToList();
     }
+    public async Task<List<BorrowDto>> GetActiveBorrowsByMemberAsync(int memberId)
+    {
+        InputValidator.ValidateId(memberId, "Member ID");
 
+        var member = await _memberRepo.GetByIdAsync(memberId)
+            ?? throw new MemberNotFoundException(memberId);
+
+        var borrows = await _borrowRepo.GetActiveBorrowsByMemberIdAsync(memberId);
+        return borrows.Select(MapToDto).ToList();
+    }
     public async Task<BorrowingSummaryDto?> GetMemberBorrowingSummaryAsync(int memberId)
     {
         var member = await _memberRepo.GetByIdAsync(memberId);
@@ -200,6 +201,8 @@ public class BorrowService : IBorrowService
         BookCopyId   = b.BookCopyId,
         BookTitle    = b.BookCopy?.Book?.Title ?? "-",
         BookAuthor   = b.BookCopy?.Book?.Author ?? "-",
+        CategoryName = b.BookCopy?.Book?.Category?.Name ?? "-",
+        CopyRemarks  = b.BookCopy?.Remarks ?? "No remarks",   
         DateOfBorrow = b.DateOfBorrow,
         DueDate      = b.DueDate,
         DateOfReturn = b.DateOfReturn,

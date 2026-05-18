@@ -1,16 +1,18 @@
 using BusinessLayer.Exceptions;
 using BusinessLayer.Interfaces;
 using DataAccessLayer.Enums;
+using PresentationLayer.Logging;  
 
 namespace PresentationLayer.Menus;
 
 public class MemberMenu
 {
     private readonly IMemberService _memberService;
-
-    public MemberMenu(IMemberService memberService)
+    private readonly IBorrowService _borrowService; 
+    public MemberMenu(IMemberService memberService, IBorrowService borrowService)
     {
         _memberService = memberService;
+        _borrowService = borrowService;  
     }
 
     public async Task ShowAsync()
@@ -25,6 +27,7 @@ public class MemberMenu
             Console.WriteLine("  4. Search by Phone");
             Console.WriteLine("  5. Update Member Status");
             Console.WriteLine("  6. Deactivate Member");
+            Console.WriteLine("  7. View Lendings");
             Console.WriteLine("  0. Back");
             Console.Write("\n  Choice: ");
 
@@ -36,6 +39,7 @@ public class MemberMenu
                 case "4": await SearchByPhoneAsync();    break;
                 case "5": await UpdateStatusAsync();     break;
                 case "6": await DeactivateMemberAsync(); break;
+                case "7": await ViewLendingsAsync();     break;
                 case "0": back = true;                   break;
                 default:
                     ConsoleHelper.PrintError("Invalid choice. Please enter a number between 0-6.");
@@ -68,8 +72,27 @@ public class MemberMenu
                 _   => throw new InvalidInputException("Membership Type", "Please enter 1, 2, or 3.")
             };
 
-            var (success, message) = await _memberService.AddMemberAsync(name, phone, email, membershipType);
-            if (success) ConsoleHelper.PrintSuccess(message);
+            var (success, message, memberId) = await _memberService.AddMemberAsync(name, phone, email, membershipType);
+
+            if (success)
+            {
+                ConsoleHelper.PrintSuccess(message);
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("  ┌─────────────────────────────────┐");
+                Console.WriteLine("  │       MEMBER CREATED            │");
+                Console.WriteLine("  ├─────────────────────────────────┤");
+                Console.WriteLine($"  │  Member ID   : {memberId,-18}│");
+                Console.WriteLine($"  │  Name        : {name,-18}│");
+                Console.WriteLine($"  │  Phone       : {phone,-18}│");
+                Console.WriteLine($"  │  Email       : {email,-18}│");
+                Console.WriteLine($"  │  Membership  : {membershipType,-18}│");
+                Console.WriteLine($"  │  Joined Date : {DateOnly.FromDateTime(DateTime.Today),-18}│");
+                Console.WriteLine("  └─────────────────────────────────┘");
+                Console.ResetColor();
+
+                FileLogger.LogSuccess($"Member Created — ID: {memberId} | Name: {name} | Phone: {phone} | Email: {email} | Type: {membershipType}");
+            }
         }
         catch (Exception ex)
         {
@@ -77,7 +100,6 @@ public class MemberMenu
         }
         ConsoleHelper.Pause();
     }
-
     private async Task ViewAllMembersAsync()
     {
         ConsoleHelper.PrintHeader("ALL MEMBERS");
@@ -176,6 +198,90 @@ public class MemberMenu
             var (success, message) = await _memberService.DeactivateMemberAsync(id);
 
             if (success) ConsoleHelper.PrintSuccess(message);
+        }
+        catch (Exception ex)
+        {
+            ConsoleHelper.HandleException(ex);
+        }
+        ConsoleHelper.Pause();
+    }
+    private async Task ViewLendingsAsync()
+    {
+        ConsoleHelper.PrintHeader("VIEW MEMBER LENDINGS");
+        try
+        {
+            var memberId = ConsoleHelper.ReadInt("Member ID");
+
+            // Show member details first
+            var member = await _memberService.GetMemberByIdAsync(memberId);
+            if (member is null)
+            {
+                ConsoleHelper.PrintError("Member not found.");
+                ConsoleHelper.Pause();
+                return;
+            }
+
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"  Member  : {member.Name}");
+            Console.WriteLine($"  Type    : {member.MembershipType}");
+            Console.WriteLine($"  Status  : {member.Status}");
+            Console.ResetColor();
+
+            // Get active borrows
+            var lendings = await _borrowService.GetActiveBorrowsByMemberAsync(memberId);
+
+            if (!lendings.Any())
+            {
+                ConsoleHelper.PrintInfo("No active lendings found for this member.");
+                ConsoleHelper.Pause();
+                return;
+            }
+
+            Console.WriteLine();
+            Console.WriteLine($"  Active Lendings ({lendings.Count}):");
+            Console.WriteLine();
+
+            foreach (var lending in lendings)
+            {
+                var status = lending.IsOverdue
+                    ? $"OVERDUE by {lending.OverdueDays} day(s)"
+                    : "On Time";
+
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"  ┌────────────────────────────────────────────────────┐");
+                Console.ResetColor();
+
+                Console.WriteLine($"  │  Borrow ID   : {lending.Id}");
+                Console.WriteLine($"  │  Copy ID     : {lending.BookCopyId}");
+                Console.WriteLine($"  │  Book Title  : {lending.BookTitle}");
+                Console.WriteLine($"  │  Author      : {lending.BookAuthor}");
+                Console.WriteLine($"  │  Category    : {lending.CategoryName}");
+                Console.WriteLine($"  │  Description : {lending.CopyRemarks}");
+                Console.WriteLine($"  │  Borrowed On : {lending.DateOfBorrow}");
+                Console.WriteLine($"  │  Due Date    : {lending.DueDate}");
+
+                if (lending.IsOverdue)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"  │  Status      : ⚠ {status}");
+                    Console.WriteLine($"  │  Fine        : ₹{lending.OverdueDays * 10}");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"  │  Status      : ✔ {status}");
+                    Console.ResetColor();
+                }
+
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"  └────────────────────────────────────────────────────┘");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                FileLogger.LogInfo($"Lending — Borrow ID: {lending.Id} | Copy ID: {lending.BookCopyId} | Book: {lending.BookTitle} | Due: {lending.DueDate} | Status: {status}");
+            }
         }
         catch (Exception ex)
         {

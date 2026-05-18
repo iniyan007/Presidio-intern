@@ -78,4 +78,25 @@ public class FineService : IFineService
             UnpaidFine = unpaid
         };
     }
+    public async Task<(bool Success, string Message)> PayFineForBorrowAsync(
+        int memberId, int borrowId, decimal amount)
+    {
+        InputValidator.ValidateId(memberId, "Member ID");
+        InputValidator.ValidateId(borrowId, "Borrow ID");
+        InputValidator.ValidateAmount(amount);
+
+        var member = await _memberRepo.GetByIdAsync(memberId)
+            ?? throw new MemberNotFoundException(memberId);
+
+        var payment = new FinePayment
+        {
+            MemberId    = memberId,
+            BorrowId    = borrowId,
+            AmountPaid  = amount,
+            PaymentDate = DateTime.Now
+        };
+
+        await _fineRepo.AddPaymentAsync(payment);
+        return (true, $"Fine of ₹{amount} recorded for Member '{member.Name}'.");
+    }
 }

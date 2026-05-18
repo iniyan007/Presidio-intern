@@ -8,14 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using PresentationLayer.Logging;
 using PresentationLayer.Menus;
 
-// ── Initialize Logger ─────────────────────────────────────────
 FileLogger.Initialize();
 FileLogger.Log("Application started.");
 
-// ── Connection String ─────────────────────────────────────────
 var connectionString = "Host=localhost;Port=5432;Database=LibraryApp;Username=postgres;Password=iniyanavin";
 
-// ── DI Container ──────────────────────────────────────────────
 var services = new ServiceCollection();
 
 services.AddDbContext<LibraryDbContext>(options =>
@@ -43,14 +40,12 @@ services.AddScoped<ReportMenu>();
 
 var provider = services.BuildServiceProvider();
 
-// ── Menus ─────────────────────────────────────────────────────
 var memberMenu = provider.GetRequiredService<MemberMenu>();
 var bookMenu   = provider.GetRequiredService<BookMenu>();
 var borrowMenu = provider.GetRequiredService<BorrowMenu>();
 var fineMenu   = provider.GetRequiredService<FineMenu>();
 var reportMenu = provider.GetRequiredService<ReportMenu>();
 
-// ── Main Menu Loop ────────────────────────────────────────────
 bool running = true;
 while (running)
 {
@@ -88,7 +83,6 @@ while (running)
     }
 }
 
-// ── Session End ───────────────────────────────────────────────
 FileLogger.LogSessionEnd();
 Console.WriteLine($"\nSession log saved to: {FileLogger.GetLogFilePath()}");
 Console.WriteLine("\nThank you for using Community Library System. Goodbye!");

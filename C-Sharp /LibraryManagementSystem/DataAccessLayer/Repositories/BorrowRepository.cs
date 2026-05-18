@@ -20,7 +20,7 @@ public class BorrowRepository : IBorrowRepository
         return await _context.Borrows
             .Include(b => b.Member)
             .Include(b => b.BookCopy)
-                .ThenInclude(bc => bc.Book)
+                .ThenInclude(bc => bc.Book).ThenInclude(book => book.Category)
             .ToListAsync();
     }
 
@@ -37,7 +37,7 @@ public class BorrowRepository : IBorrowRepository
     {
         return await _context.Borrows
             .Include(b => b.BookCopy)
-                .ThenInclude(bc => bc.Book)
+                .ThenInclude(bc => bc.Book).ThenInclude(book => book.Category)
             .Where(b => b.MemberId == memberId)
             .ToListAsync();
     }
@@ -46,7 +46,7 @@ public class BorrowRepository : IBorrowRepository
     {
         return await _context.Borrows
             .Include(b => b.BookCopy)
-                .ThenInclude(bc => bc.Book)
+                .ThenInclude(bc => bc.Book).ThenInclude(book => book.Category)
             .Where(b => b.MemberId == memberId &&
                         b.Status == (int)BorrowStatus.Borrowed)
             .ToListAsync();
@@ -67,7 +67,7 @@ public class BorrowRepository : IBorrowRepository
         return await _context.Borrows
             .Include(b => b.Member)
             .Include(b => b.BookCopy)
-                .ThenInclude(bc => bc.Book)
+                .ThenInclude(bc => bc.Book).ThenInclude(book => book.Category)
             .Where(b => b.Status == (int)BorrowStatus.Borrowed &&
                         b.DueDate < today)
             .ToListAsync();

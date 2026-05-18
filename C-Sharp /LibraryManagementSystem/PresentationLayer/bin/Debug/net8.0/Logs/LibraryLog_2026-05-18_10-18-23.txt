@@ -1,0 +1,50 @@
+╔══════════════════════════════════════════════════════════╗
+║           COMMUNITY LIBRARY SYSTEM - SESSION LOG         ║
+╠══════════════════════════════════════════════════════════╣
+║  Session Started : 2026-05-18 10:18:23               ║
+║  Log File        : LibraryLog_2026-05-18_10-18-23.txt    ║
+╚══════════════════════════════════════════════════════════╝
+
+[10:18:23] Application started.
+[10:18:27] Main Menu Choice: 6
+
+┌─────────────────────────────────────────┐
+│  REPORTS                                  │
+└─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┐
+│  MOST BORROWED BOOKS                      │
+└─────────────────────────────────────────┘
+[10:18:30]   INFO    : Rank 1 — Book: A Brief History of Time | Total: 2 | Active: 1 | Returned: 1
+[10:18:30]   INFO    : Rank 2 — Book: Clean Code | Total: 1 | Active: 1 | Returned: 0
+[10:18:30]   INFO    : Rank 3 — Book: The Great Gatsby | Total: 1 | Active: 1 | Returned: 0
+[10:18:30]   INFO    : Rank 4 — Book: The Pragmatic Programmer | Total: 1 | Active: 1 | Returned: 0
+[10:18:30]   INFO    : Rank 5 — Book: Of Mice and Men | Total: 1 | Active: 0 | Returned: 1
+[10:18:30]   INFO    : Showing top 5 most borrowed books.
+  ─                                                 
+
+┌─────────────────────────────────────────┐
+│  REPORTS                                  │
+└─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┐
+│  MEMBER BORROWING HISTORY                 │
+└─────────────────────────────────────────┘
+[10:18:58]   INPUT   : Member ID = 2
+[10:18:58]   INFO    : Active — ID: 2 | Book: A Brief History of Time | Due: 22/05/2026 | Status: On Time
+[10:18:58]   INFO    : Returned — ID: 1 | Book: Of Mice and Men | Returned: 17/05/2026 | Fine: None
+[10:18:58]   INFO    : Total Borrows  : 2
+[10:18:58]   INFO    : Active         : 1
+[10:18:58]   INFO    : Returned       : 1
+[10:18:58]   INFO    : Total Fines    : ₹0
+[10:18:58]   INFO    : History Summary — Member: Iniyan | Total: 2 | Active: 1 | Returned: 1 | Total Fine: ₹0
+  ─                                                 
+
+┌─────────────────────────────────────────┐
+│  REPORTS                                  │
+└─────────────────────────────────────────┘
+[10:19:42] Main Menu Choice: 7
+
+╔══════════════════════════════════════════════════════════╗
+║  Session Ended : 2026-05-18 10:19:42                ║
+╚══════════════════════════════════════════════════════════╝

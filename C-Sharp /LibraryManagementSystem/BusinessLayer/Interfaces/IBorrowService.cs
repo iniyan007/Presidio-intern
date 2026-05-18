@@ -11,4 +11,5 @@ public interface IBorrowService
     Task<List<BorrowDto>> GetActiveBorrowsAsync();
     Task<List<BorrowDto>> GetOverdueBorrowsAsync();
     Task<BorrowingSummaryDto?> GetMemberBorrowingSummaryAsync(int memberId);
+    Task<List<BorrowDto>> GetActiveBorrowsByMemberAsync(int memberId);
 }

@@ -1,0 +1,165 @@
+╔══════════════════════════════════════════════════════════╗
+║           COMMUNITY LIBRARY SYSTEM - SESSION LOG         ║
+╠══════════════════════════════════════════════════════════╣
+║  Session Started : 2026-05-17 21:30:52               ║
+║  Log File        : LibraryLog_2026-05-17_21-30-52.txt    ║
+╚══════════════════════════════════════════════════════════╝
+
+[21:30:52] Application started.
+[21:31:02] Main Menu Choice: 1
+
+┌─────────────────────────────────────────┐
+│  MEMBER MANAGEMENT                        │
+└─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┐
+│  ALL MEMBERS                              │
+└─────────────────────────────────────────┘
+  ─                                                 
+
+┌─────────────────────────────────────────┐
+│  MEMBER MANAGEMENT                        │
+└─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┐
+│  SEARCH BY EMAIL                          │
+└─────────────────────────────────────────┘
+[21:31:20]   INPUT   : Email = iniyan@gmail.com
+[21:31:21]   INFO    : ID            : 2
+[21:31:21]   INFO    : Name          : Iniyan
+[21:31:21]   INFO    : Phone         : 9876543210
+[21:31:21]   INFO    : Email         : iniyan@gmail.com
+[21:31:21]   INFO    : Membership    : Basic
+[21:31:21]   INFO    : Status        : Active
+[21:31:21]   INFO    : Max Borrowings: 2
+[21:31:21]   INFO    : Max Days      : 7
+[21:31:21]   INFO    : Joined Date   : 15/01/2024
+  ─                                                 
+
+┌─────────────────────────────────────────┐
+│  MEMBER MANAGEMENT                        │
+└─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┐
+│  SEARCH BY PHONE                          │
+└─────────────────────────────────────────┘
+[21:31:31]   INPUT   : Phone = 9876543210
+[21:31:31]   INFO    : ID            : 2
+[21:31:31]   INFO    : Name          : Iniyan
+[21:31:31]   INFO    : Phone         : 9876543210
+[21:31:31]   INFO    : Email         : iniyan@gmail.com
+[21:31:31]   INFO    : Membership    : Basic
+[21:31:31]   INFO    : Status        : Active
+[21:31:31]   INFO    : Max Borrowings: 2
+[21:31:31]   INFO    : Max Days      : 7
+[21:31:31]   INFO    : Joined Date   : 15/01/2024
+  ─                                                 
+
+┌─────────────────────────────────────────┐
+│  MEMBER MANAGEMENT                        │
+└─────────────────────────────────────────┘
+[21:31:48] Main Menu Choice: 4
+
+┌─────────────────────────────────────────┐
+│  RETURN BOOK                              │
+└─────────────────────────────────────────┘
+[21:31:49]   INPUT   : Member ID = 2
+[21:31:49]   INFO    : Borrow ID: 1 | Book: Of Mice and Men | Due: 22/05/2026 | On Time
+[21:31:49]   INFO    : Borrow ID: 2 | Book: A Brief History of Time | Due: 22/05/2026 | On Time
+[21:32:04]   INPUT   : Enter Borrow ID to Return = 1
+[21:32:04]   INFO    : Book Title : Of Mice and Men
+[21:32:04]   INFO    : Author     : John Steinbeck
+[21:32:04]   INFO    : Borrowed On: 15/05/2026
+[21:32:04]   INFO    : Due Date   : 22/05/2026
+[21:32:04]   INFO    : No fine. Book is being returned on time.
+[21:32:15]   INPUT   : Confirm Return = y
+[21:32:15] ✔ SUCCESS : Book returned successfully. No fine.
+  ─                                                 
+[21:32:20] Main Menu Choice: 4
+
+┌─────────────────────────────────────────┐
+│  RETURN BOOK                              │
+└─────────────────────────────────────────┘
+[21:32:22]   INPUT   : Member ID = 2
+[21:32:22]   INFO    : Borrow ID: 2 | Book: A Brief History of Time | Due: 22/05/2026 | On Time
+[21:32:26]   INPUT   : Enter Borrow ID to Return = 2
+[21:32:26]   INFO    : Book Title : A Brief History of Time
+[21:32:26]   INFO    : Author     : Stephen Hawking
+[21:32:26]   INFO    : Borrowed On: 15/05/2026
+[21:32:26]   INFO    : Due Date   : 22/05/2026
+[21:32:26]   INFO    : No fine. Book is being returned on time.
+[21:32:28]   INPUT   : Confirm Return = n
+[21:32:28]   INFO    : Return cancelled.
+  ─                                                 
+[21:32:33] Main Menu Choice: 6
+
+┌─────────────────────────────────────────┐
+│  REPORTS                                  │
+└─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┐
+│  CURRENTLY BORROWED BOOKS                 │
+└─────────────────────────────────────────┘
+  ─                                                 
+
+┌─────────────────────────────────────────┐
+│  REPORTS                                  │
+└─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┐
+│  OVERDUE BOOKS                            │
+└─────────────────────────────────────────┘
+[21:32:49]   INFO    : No overdue books at the moment.
+  ─                                                 
+
+┌─────────────────────────────────────────┐
+│  REPORTS                                  │
+└─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┐
+│  MEMBER BORROWING SUMMARY                 │
+└─────────────────────────────────────────┘
+[21:32:54]   INPUT   : Member ID = 2
+[21:32:54]   INFO    : Member         : Iniyan
+[21:32:54]   INFO    : Active Borrows : 1
+[21:32:54]   INFO    : Returned Books : 1
+[21:32:54]   INFO    : Unpaid Fine    : ₹0
+  ─                                                 
+
+┌─────────────────────────────────────────┐
+│  REPORTS                                  │
+└─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┐
+│  AVAILABLE BOOKS BY CATEGORY              │
+└─────────────────────────────────────────┘
+[21:33:06]   INPUT   : 
+  Category ID = 2
+  ─                                                 
+
+┌─────────────────────────────────────────┐
+│  REPORTS                                  │
+└─────────────────────────────────────────┘
+[21:33:15] Main Menu Choice: 2
+
+┌─────────────────────────────────────────┐
+│  BOOK MANAGEMENT                          │
+└─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┐
+│  UPDATE COPY STATUS                       │
+└─────────────────────────────────────────┘
+[21:33:45] ✘ ERROR   : Invalid number. Please enter a valid integer.
+[21:33:47]   INPUT   : Book Copy ID = 2
+[21:33:52]   INPUT   : Select status (1/2/3) = 9
+[21:33:52] ✘ ERROR   : Invalid input for 'Status': Please enter 1, 2, or 3.
+  ─                                                 
+
+┌─────────────────────────────────────────┐
+│  BOOK MANAGEMENT                          │
+└─────────────────────────────────────────┘
+[21:34:09] Main Menu Choice: 7
+
+╔══════════════════════════════════════════════════════════╗
+║  Session Ended : 2026-05-17 21:34:09                ║
+╚══════════════════════════════════════════════════════════╝
