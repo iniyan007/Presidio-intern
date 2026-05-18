@@ -269,7 +269,6 @@ public class ReportMenu
                 return;
             }
 
-            // Group by book title and count
             var mostBorrowed = allBorrows
                 .GroupBy(b => new { b.BookTitle, b.BookAuthor })
                 .Select(g => new

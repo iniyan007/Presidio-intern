@@ -65,7 +65,7 @@ public class FineService : IFineService
     }
     public async Task<FineDto> GetFineSummaryAsync(int memberId)
     {
-        var member     = await _memberRepo.GetByIdAsync(memberId);
+        var member     = await _memberRepo.GetByIdAsync(memberId) ?? throw new MemberNotFoundException(memberId);;
         var unpaid     = await _fineRepo.GetTotalUnpaidFineAsync(memberId);
         var paid       = await _fineRepo.GetTotalPaidFineAsync(memberId);
 
