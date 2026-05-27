@@ -27,6 +27,5 @@ public partial class PackageMedium
 
     public virtual Package Package { get; set; } = null!;
 
-    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public string TransientCategory { get; set; } = null!;
+    public TravelTourManagement.DataAccess.Enums.MediaCategory Category { get; set; }
 }

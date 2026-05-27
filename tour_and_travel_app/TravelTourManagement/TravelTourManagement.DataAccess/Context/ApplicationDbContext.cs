@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TravelTourManagement.DataAccess.Entities;
@@ -9,6 +9,13 @@ public partial class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext()
     {
+    }
+
+
+    private static string ToSnakeCase(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return text;
+        return string.Concat(System.Linq.Enumerable.Select(text, (x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString() : x.ToString())).ToLower();
     }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -73,20 +80,20 @@ public partial class ApplicationDbContext : DbContext
     {
         modelBuilder
             .HasPostgresEnum("booking_status", new[] { "pending", "confirmed", "cancelled", "completed", "refunded" })
-            .HasPostgresEnum("day_session", new[] { "morning", "afternoon", "evening", "full_day" })
             .HasPostgresEnum("document_status", new[] { "uploaded", "verified", "rejected" })
-            .HasPostgresEnum("inclusion_type", new[] { "included", "excluded", "optional" })
-            .HasPostgresEnum("meal_type", new[] { "breakfast", "lunch", "dinner", "all_inclusive", "none" })
-            .HasPostgresEnum("media_category", new[] { "hotel", "transport", "food", "destination", "activity", "cover" })
             .HasPostgresEnum("message_sender_role", new[] { "user", "packager" })
             .HasPostgresEnum("notification_type", new[] { "booking", "payment", "review", "approval", "system", "message" })
-            .HasPostgresEnum("package_status", new[] { "draft", "pending_review", "published", "archived" })
-            .HasPostgresEnum("package_type", new[] { "group", "private", "honeymoon", "family", "adventure", "pilgrimage" })
             .HasPostgresEnum("packager_status", new[] { "pending", "approved", "suspended", "deactivated" })
             .HasPostgresEnum("payment_status", new[] { "unpaid", "partial", "paid", "refunded", "failed" })
             .HasPostgresEnum("review_status", new[] { "pending", "published", "flagged", "removed" })
-            .HasPostgresEnum("transport_mode", new[] { "bus", "train", "flight", "car", "boat", "van", "walk", "other" })
             .HasPostgresEnum("user_role", new[] { "user", "admin", "packager" })
+            .HasPostgresEnum<TravelTourManagement.DataAccess.Enums.DaySession>("day_session")
+            .HasPostgresEnum<TravelTourManagement.DataAccess.Enums.InclusionType>("inclusion_type")
+            .HasPostgresEnum<TravelTourManagement.DataAccess.Enums.MealType>("meal_type")
+            .HasPostgresEnum<TravelTourManagement.DataAccess.Enums.MediaCategory>("media_category")
+            .HasPostgresEnum<TravelTourManagement.DataAccess.Enums.PackageStatus>("package_status")
+            .HasPostgresEnum<TravelTourManagement.DataAccess.Enums.PackageType>("package_type")
+            .HasPostgresEnum<TravelTourManagement.DataAccess.Enums.TransportMode>("transport_mode")
             .HasPostgresExtension("pg_trgm")
             .HasPostgresExtension("uuid-ossp");
 
@@ -282,6 +289,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.SequenceOrder)
                 .HasDefaultValue(1)
                 .HasColumnName("sequence_order");
+            entity.Property(e => e.DaySession).HasColumnName("session").ValueGeneratedNever();
 
             entity.HasOne(d => d.ItineraryDay).WithMany(p => p.ItineraryActivities)
                 .HasForeignKey(d => d.ItineraryDayId)
@@ -341,6 +349,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Venue)
                 .HasMaxLength(200)
                 .HasColumnName("venue");
+            entity.Property(e => e.MealType).HasColumnName("meal").ValueGeneratedNever();
 
             entity.HasOne(d => d.ItineraryDay).WithMany(p => p.ItineraryDayMeals)
                 .HasForeignKey(d => d.ItineraryDayId)
@@ -526,6 +535,8 @@ public partial class ApplicationDbContext : DbContext
                 .HasDefaultValueSql("now()")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("updated_at");
+            entity.Property(e => e.Type).HasColumnName("package_type").ValueGeneratedNever();
+            entity.Property(e => e.Status).HasColumnName("status").ValueGeneratedNever();
 
             entity.HasOne(d => d.Packager).WithMany(p => p.Packages)
                 .HasForeignKey(d => d.PackagerId)
@@ -607,6 +618,7 @@ public partial class ApplicationDbContext : DbContext
                 .HasDefaultValue(0)
                 .HasColumnName("display_order");
             entity.Property(e => e.PackageId).HasColumnName("package_id");
+            entity.Property(e => e.Type).HasColumnName("type").ValueGeneratedNever();
 
             entity.HasOne(d => d.Package).WithMany(p => p.PackageInclusions)
                 .HasForeignKey(d => d.PackageId)
@@ -615,6 +627,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<PackageMedium>(entity =>
         {
+            entity.Property(e => e.Category).HasColumnName("category").ValueGeneratedNever();
             entity.HasKey(e => e.Id).HasName("package_media_pkey");
 
             entity.ToTable("package_media");
@@ -726,6 +739,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.VehicleDescription)
                 .HasMaxLength(200)
                 .HasColumnName("vehicle_description");
+            entity.Property(e => e.TransportMode).HasColumnName("mode").ValueGeneratedNever();
 
             entity.HasOne(d => d.ItineraryDay).WithMany(p => p.PackageTransports)
                 .HasForeignKey(d => d.ItineraryDayId)

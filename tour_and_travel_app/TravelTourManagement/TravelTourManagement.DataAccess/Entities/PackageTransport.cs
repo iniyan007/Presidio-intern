@@ -21,12 +21,12 @@ public partial class PackageTransport
 
     public TimeOnly? DropTime { get; set; }
 
+
     public decimal? DistanceKm { get; set; }
 
     public string? Notes { get; set; }
 
     public virtual ItineraryDay ItineraryDay { get; set; } = null!;
 
-    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public string? TransientTransportMode { get; set; }
+    public TravelTourManagement.DataAccess.Enums.TransportMode TransportMode { get; set; }
 }

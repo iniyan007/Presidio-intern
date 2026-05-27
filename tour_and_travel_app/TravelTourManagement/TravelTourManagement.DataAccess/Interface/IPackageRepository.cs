@@ -44,7 +44,7 @@ public interface IPackageRepository : IRepository<Package, Guid>
 
     Task<Package> CreatePackageWithDetailsAsync(
         Package package,
-        string packageType,
-        string packageStatus,
         CancellationToken cancellationToken = default);
+
+    Task AddPackageMediaAsync(PackageMedium media, CancellationToken cancellationToken = default);
 }

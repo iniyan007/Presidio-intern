@@ -59,9 +59,7 @@ public partial class Package
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
-    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public string TransientType { get; set; } = null!;
+    public TravelTourManagement.DataAccess.Enums.PackageType Type { get; set; }
 
-    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public string TransientStatus { get; set; } = null!;
+    public TravelTourManagement.DataAccess.Enums.PackageStatus Status { get; set; }
 }

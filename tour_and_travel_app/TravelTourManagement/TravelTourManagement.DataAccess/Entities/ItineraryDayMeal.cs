@@ -11,12 +11,12 @@ public partial class ItineraryDayMeal
 
     public string? Venue { get; set; }
 
+
     public string? Description { get; set; }
 
     public bool IsIncluded { get; set; }
 
     public virtual ItineraryDay ItineraryDay { get; set; } = null!;
 
-    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public string? TransientMealType { get; set; }
+    public TravelTourManagement.DataAccess.Enums.MealType MealType { get; set; }
 }

@@ -15,6 +15,5 @@ public partial class PackageInclusion
 
     public virtual Package Package { get; set; } = null!;
 
-    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public string TransientInclusionType { get; set; } = null!;
+    public TravelTourManagement.DataAccess.Enums.InclusionType Type { get; set; }
 }

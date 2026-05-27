@@ -21,12 +21,12 @@ public partial class ItineraryActivity
 
     public int? DurationMinutes { get; set; }
 
+
     public bool IsOptional { get; set; }
 
     public decimal ExtraCost { get; set; }
 
     public virtual ItineraryDay ItineraryDay { get; set; } = null!;
 
-    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public string? TransientDaySession { get; set; }
+    public TravelTourManagement.DataAccess.Enums.DaySession DaySession { get; set; }
 }

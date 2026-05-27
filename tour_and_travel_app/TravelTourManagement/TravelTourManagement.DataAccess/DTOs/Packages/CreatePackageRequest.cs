@@ -91,8 +91,8 @@ public record CreatePackageAccommodationRequest(
     string? HotelAddress,
     short? StarRating,
     string? RoomType,
-    TimeOnly? CheckInTime,
-    TimeOnly? CheckOutTime,
+    string? CheckInTime,
+    string? CheckOutTime,
     string? Amenities,
     string? Notes
 );
@@ -102,8 +102,8 @@ public record CreatePackageTransportRequest(
     string? VehicleDescription,
     [Required] string PickupPoint,
     [Required] string DropPoint,
-    TimeOnly? PickupTime,
-    TimeOnly? DropTime,
+    string? PickupTime,
+    string? DropTime,
     decimal? DistanceKm,
     string? Notes,
     string? TransportMode // Postgres Enum: transport_mode ('bus', 'flight', etc.)
