@@ -1,0 +1,16 @@
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/bin/Debug/net8.0/TravelTourManagement.Business.deps.json
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/bin/Debug/net8.0/TravelTourManagement.Business.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/bin/Debug/net8.0/TravelTourManagement.Business.pdb
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/bin/Debug/net8.0/TravelTourManagement.DataAccess.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/bin/Debug/net8.0/TravelTourManagement.DataAccess.pdb
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/Debug/net8.0/TravelTourManagement.Business.csproj.AssemblyReference.cache
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/Debug/net8.0/TravelTourManagement.Business.GeneratedMSBuildEditorConfig.editorconfig
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/Debug/net8.0/TravelTourManagement.Business.AssemblyInfoInputs.cache
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/Debug/net8.0/TravelTourManagement.Business.AssemblyInfo.cs
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/Debug/net8.0/TravelTourManagement.Business.csproj.CoreCompileInputs.cache
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/Debug/net8.0/TravelTourManagement.Business.sourcelink.json
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/Debug/net8.0/TravelTo.C8FCD68F.Up2Date
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/Debug/net8.0/TravelTourManagement.Business.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/Debug/net8.0/refint/TravelTourManagement.Business.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/Debug/net8.0/TravelTourManagement.Business.pdb
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/Debug/net8.0/ref/TravelTourManagement.Business.dll

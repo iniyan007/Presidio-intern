@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../buildMultiTargeting/TravelTourManagement.API.props" />
+</Project>

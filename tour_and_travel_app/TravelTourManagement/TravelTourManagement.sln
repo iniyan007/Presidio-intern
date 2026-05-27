@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelTourManagement.API", "TravelTourManagement.API\TravelTourManagement.API.csproj", "{DCC962BA-DF78-489C-B1A8-C0B3D79EFAC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelTourManagement.Business", "TravelTourManagement.Business\TravelTourManagement.Business.csproj", "{D1A82E65-6492-48C2-AE26-C2DA504A9186}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelTourManagement.DataAccess", "TravelTourManagement.DataAccess\TravelTourManagement.DataAccess.csproj", "{17164D19-CC1D-45FA-810E-EF4AC78D49A1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DCC962BA-DF78-489C-B1A8-C0B3D79EFAC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCC962BA-DF78-489C-B1A8-C0B3D79EFAC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCC962BA-DF78-489C-B1A8-C0B3D79EFAC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCC962BA-DF78-489C-B1A8-C0B3D79EFAC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1A82E65-6492-48C2-AE26-C2DA504A9186}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1A82E65-6492-48C2-AE26-C2DA504A9186}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1A82E65-6492-48C2-AE26-C2DA504A9186}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1A82E65-6492-48C2-AE26-C2DA504A9186}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17164D19-CC1D-45FA-810E-EF4AC78D49A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17164D19-CC1D-45FA-810E-EF4AC78D49A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17164D19-CC1D-45FA-810E-EF4AC78D49A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17164D19-CC1D-45FA-810E-EF4AC78D49A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
