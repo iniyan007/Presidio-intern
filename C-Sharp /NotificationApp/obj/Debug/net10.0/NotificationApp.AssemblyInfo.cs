@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NotificationApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f0ce56ba5d40fe1dfa3c44e086309de19da6dd6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7af136f70db7cf7e8cd978879ca02ab9afe2c061")]
 [assembly: System.Reflection.AssemblyProductAttribute("NotificationApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NotificationApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

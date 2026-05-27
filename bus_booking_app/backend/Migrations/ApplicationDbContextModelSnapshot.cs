@@ -17,7 +17,7 @@ namespace backend.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.7")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -289,9 +289,6 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("MobileNumber")
                         .IsRequired()
                         .HasColumnType("text");
@@ -306,7 +303,8 @@ namespace backend.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 
@@ -314,6 +312,34 @@ namespace backend.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+
+                    b.HasDiscriminator<string>("Role").HasValue("User");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("backend.Models.Admin", b =>
+                {
+                    b.HasBaseType("backend.Models.User");
+
+                    b.HasDiscriminator().HasValue("Admin");
+                });
+
+            modelBuilder.Entity("backend.Models.Customer", b =>
+                {
+                    b.HasBaseType("backend.Models.User");
+
+                    b.HasDiscriminator().HasValue("User");
+                });
+
+            modelBuilder.Entity("backend.Models.Operator", b =>
+                {
+                    b.HasBaseType("backend.Models.User");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("boolean");
+
+                    b.HasDiscriminator().HasValue("Operator");
                 });
 
             modelBuilder.Entity("backend.Models.Booking", b =>
@@ -348,7 +374,7 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Bus", b =>
                 {
-                    b.HasOne("backend.Models.User", "Operator")
+                    b.HasOne("backend.Models.Operator", "Operator")
                         .WithMany("Buses")
                         .HasForeignKey("OperatorId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -359,7 +385,7 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Expense", b =>
                 {
-                    b.HasOne("backend.Models.User", "Operator")
+                    b.HasOne("backend.Models.Operator", "Operator")
                         .WithMany("Expenses")
                         .HasForeignKey("OperatorId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -433,7 +459,10 @@ namespace backend.Migrations
             modelBuilder.Entity("backend.Models.User", b =>
                 {
                     b.Navigation("Bookings");
+                });
 
+            modelBuilder.Entity("backend.Models.Operator", b =>
+                {
                     b.Navigation("Buses");
 
                     b.Navigation("Expenses");
