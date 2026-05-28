@@ -7,6 +7,7 @@ public record PackageSummaryResponse(
     Guid PackagerId,
     string PackagerName,
     string Title,
+    string PackageType,
     string Destination,
     string Country,
     int DurationDays,

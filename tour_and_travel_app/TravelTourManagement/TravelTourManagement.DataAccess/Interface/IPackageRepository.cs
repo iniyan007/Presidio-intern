@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TravelTourManagement.DataAccess.Entities;
 
 namespace TravelTourManagement.DataAccess.Interface;
+using TravelTourManagement.DataAccess.DTOs.Packages;
 
 /// <summary>
 /// Repository contract for the <see cref="Package"/> entity.
@@ -33,7 +34,11 @@ public interface IPackageRepository : IRepository<Package, Guid>
     /// </summary>
     Task<Package?> GetWithFullDetailsAsync(Guid packageId, CancellationToken cancellationToken = default);
 
+    
     Task<IReadOnlyList<Package>> GetAllPublishedWithFullDetailsAsync(CancellationToken cancellationToken = default);
+
+    Task<(IReadOnlyList<Package> Packages, int TotalCount)> SearchPackagesAsync(PackageSearchRequest request, CancellationToken cancellationToken = default);
+
 
     /// <summary>
     /// Returns packages available for booking within the given travel date range

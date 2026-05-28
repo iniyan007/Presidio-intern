@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "hN6aR2sr7rg=",
+  "dgSpecHash": "6I8pgMRkY1E=",
   "success": true,
   "projectFilePath": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/TravelTourManagement.API.csproj",
   "expectedPackageFiles": [
@@ -50,6 +50,9 @@
     "/Users/iniyan/.nuget/packages/mono.texttemplating/2.2.1/mono.texttemplating.2.2.1.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/npgsql/8.0.6/npgsql.8.0.6.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/npgsql.entityframeworkcore.postgresql/8.0.11/npgsql.entityframeworkcore.postgresql.8.0.11.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/quartz/3.18.1/quartz.3.18.1.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/quartz.extensions.dependencyinjection/3.18.1/quartz.extensions.dependencyinjection.3.18.1.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/quartz.extensions.hosting/3.18.1/quartz.extensions.hosting.3.18.1.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/swashbuckle.aspnetcore/6.6.2/swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/swashbuckle.aspnetcore.swagger/6.6.2/swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.6.2/swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512",

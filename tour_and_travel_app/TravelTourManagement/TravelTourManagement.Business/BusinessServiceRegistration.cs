@@ -28,7 +28,7 @@ public static class BusinessServiceRegistration
         services.AddScoped<IBookingService, BookingService>();
         services.AddScoped<IPaymentService, PaymentService>();
         
-        services.AddHostedService<BookingTimeoutService>();
+        
 
         return services;
     }

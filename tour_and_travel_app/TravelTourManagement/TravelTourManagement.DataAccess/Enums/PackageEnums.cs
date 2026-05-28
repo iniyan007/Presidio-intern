@@ -17,7 +17,8 @@ public enum PackageStatus
     Draft,
     PendingReview,
     Published,
-    Archived
+    Archived,
+    Completed
 }
 
 public enum InclusionType

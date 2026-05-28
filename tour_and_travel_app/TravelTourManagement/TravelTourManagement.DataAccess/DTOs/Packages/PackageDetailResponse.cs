@@ -8,6 +8,7 @@ public record PackageDetailResponse(
     Guid PackagerId,
     string PackagerName,
     string Title,
+    string PackageType,
     string? Description,
     string Destination,
     string Country,

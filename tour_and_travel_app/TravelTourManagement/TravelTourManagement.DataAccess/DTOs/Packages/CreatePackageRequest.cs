@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace TravelTourManagement.DataAccess.DTOs.Packages;
 
@@ -10,10 +11,10 @@ public record CreatePackageRequest(
     [Required] [MaxLength(200)] string Destination,
     [Required] [MaxLength(100)] string Country,
     [MaxLength(100)] string? City,
-    [Required] int DurationDays,
-    int DurationNights,
-    [Required] int MaxCapacity,
-    int? MinAge,
+    [Required] [Range(1, 365, ErrorMessage = "DurationDays must be between 1 and 365")] int DurationDays,
+    [Range(0, 365, ErrorMessage = "DurationNights must be between 0 and 365")] int DurationNights,
+    [Required] [Range(1, 1000, ErrorMessage = "MaxCapacity must be between 1 and 1000")] int MaxCapacity,
+    [Range(0, 120, ErrorMessage = "MinAge must be between 0 and 120")] int? MinAge,
     string? CancellationPolicy,
     [Required] string Type, // Postgres Enum: package_type ('group', 'private', etc.)
     [Required] string Status, // Postgres Enum: package_status ('draft', 'published', etc.)
@@ -23,7 +24,56 @@ public record CreatePackageRequest(
     List<CreatePackageMediaRequest> Media,
     List<CreatePackagePricingRequest> SeasonalPricing,
     List<CreateItineraryDayRequest> Itinerary
-);
+) : IValidatableObject
+{
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        var results = new List<ValidationResult>();
+
+        // International Package Validation Rules
+        // Flexible Dates Package Rules
+        bool isFlexibleDatePackage = string.Equals(Type, "Honeymoon", StringComparison.OrdinalIgnoreCase) ||
+                                     string.Equals(Type, "Private", StringComparison.OrdinalIgnoreCase) ||
+                                     string.Equals(Type, "Family", StringComparison.OrdinalIgnoreCase);
+
+        if (SeasonalPricing != null)
+        {
+            foreach (var pricing in SeasonalPricing)
+            {
+                if (!isFlexibleDatePackage && (!pricing.StartDate.HasValue || !pricing.EndDate.HasValue))
+                {
+                    results.Add(new ValidationResult("StartDate and EndDate are required unless the package type is Honeymoon, Private, or Family.", new[] { nameof(SeasonalPricing) }));
+                }
+            }
+        }
+
+        if (!string.Equals(Country, "India", StringComparison.OrdinalIgnoreCase))
+        {
+            if (SeasonalPricing != null && SeasonalPricing.Any())
+            {
+                // Only validate if StartDate is provided (e.g. for non-Honeymoon, or Honeymoon with explicit dates)
+                var validStartDates = SeasonalPricing.Where(p => p.StartDate.HasValue).Select(p => p.StartDate!.Value).ToList();
+                if (validStartDates.Any())
+                {
+                    var earliestStartDate = validStartDates.Min();
+                    var tenMonthsFromNow = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(10));
+                    
+                    if (earliestStartDate < tenMonthsFromNow)
+                    {
+                        results.Add(new ValidationResult("For international packages, the start date (earliest seasonal pricing) must be at least 10 months ahead of the current date.", new[] { nameof(SeasonalPricing) }));
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(CancellationPolicy) || !CancellationPolicy.Contains("3 months", StringComparison.OrdinalIgnoreCase))
+            {
+                results.Add(new ValidationResult("For international packages, the Cancellation Policy must state that cancellation is only allowed before 3 months from the date of departure.", new[] { nameof(CancellationPolicy) }));
+            }
+        }
+
+        return results;
+    }
+}
 
 public record CreatePackageHighlightRequest(
     [Required] string HighlightText,
@@ -47,12 +97,12 @@ public record CreatePackageMediaRequest(
 
 public record CreatePackagePricingRequest(
     [Required] string SeasonName,
-    [Required] DateOnly StartDate,
-    [Required] DateOnly EndDate,
-    [Required] decimal BasePrice,
-    decimal ChildPrice,
-    decimal DiscountPercent,
-    [Required] int AvailableSlots,
+    DateOnly? StartDate,
+    DateOnly? EndDate,
+    [Required] [Range(0.01, 10000000, ErrorMessage = "BasePrice must be strictly positive.")] decimal BasePrice,
+    [Range(0, 10000000, ErrorMessage = "ChildPrice must be non-negative.")] decimal ChildPrice,
+    [Range(0, 100, ErrorMessage = "DiscountPercent must be between 0 and 100")] decimal DiscountPercent,
+    [Required] [Range(1, 10000, ErrorMessage = "AvailableSlots must be strictly positive.")] int AvailableSlots,
     bool IsActive
 );
 

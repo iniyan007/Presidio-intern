@@ -1,3 +1,5 @@
+using TravelTourManagement.DataAccess.DTOs;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +16,16 @@ public class PackageService : IPackageService
 {
     private readonly IPackageRepository _packageRepository;
     private readonly IPackagerRepository _packagerRepository;
+    private readonly IBookingRepository _bookingRepository;
 
-    public PackageService(IPackageRepository packageRepository, IPackagerRepository packagerRepository)
+    public PackageService(IPackageRepository packageRepository, IPackagerRepository packagerRepository, IBookingRepository bookingRepository)
     {
         _packageRepository = packageRepository;
         _packagerRepository = packagerRepository;
+        _bookingRepository = bookingRepository;
     }
 
-    public async Task<Guid> CreatePackageAsync(Guid userId, CreatePackageRequest request, CancellationToken cancellationToken = default)
+    public async Task<Guid> CreatePackageAsync(Guid userId, CreatePackageRequest request, List<IFormFile>? mediaFiles = null, CancellationToken cancellationToken = default)
     {
         var packager = await _packagerRepository.GetByUserIdAsync(userId, cancellationToken);
         if (packager == null || packager.ApprovedAt == null || packager.DeactivatedAt != null)
@@ -61,21 +65,12 @@ public class PackageService : IPackageService
                 DisplayOrder = i.DisplayOrder,
                 Type = Enum.Parse<TravelTourManagement.DataAccess.Enums.InclusionType>(i.InclusionType, true)
             }).ToList() ?? new(),
-            PackageMedia = request.Media?.Select(m => new PackageMedium
-            {
-                FilePath = m.FilePath,
-                FileName = m.FileName,
-                Caption = m.Caption,
-                DisplayOrder = m.DisplayOrder,
-                IsPrimary = m.IsPrimary,
-                Category = Enum.Parse<TravelTourManagement.DataAccess.Enums.MediaCategory>(m.Category, true),
-                UploadedAt = DateTime.UtcNow
-            }).ToList() ?? new(),
+            PackageMedia = new List<PackageMedium>(),
             PackageSeasonalPricings = request.SeasonalPricing?.Select(p => new PackageSeasonalPricing
             {
                 SeasonName = p.SeasonName,
-                StartDate = p.StartDate,
-                EndDate = p.EndDate,
+                StartDate = p.StartDate ?? DateOnly.FromDateTime(DateTime.UtcNow),
+                EndDate = p.EndDate ?? DateOnly.FromDateTime(DateTime.UtcNow.AddYears(10)),
                 BasePrice = p.BasePrice,
                 ChildPrice = p.ChildPrice,
                 DiscountPercent = p.DiscountPercent,
@@ -226,6 +221,7 @@ public class PackageService : IPackageService
             package.PackagerId,
             package.Packager?.CompanyName ?? "Unknown",
             package.Title,
+            package.Type.ToString(),
             package.Destination,
             package.Country,
             package.DurationDays,
@@ -246,6 +242,7 @@ public class PackageService : IPackageService
             package.Packager?.CompanyName ?? "Unknown",
             package.Title,
             package.Description,
+            package.Type.ToString(),
             package.Destination,
             package.Country,
             package.City,
@@ -311,4 +308,56 @@ public class PackageService : IPackageService
             )).ToList()
         );
     }
+
+    public async Task<PackageRevenueResponse> GetPackageRevenueAsync(Guid userId, string role, Guid packageId, CancellationToken cancellationToken = default)
+    {
+        var package = await _packageRepository.GetByIdAsync(packageId, cancellationToken);
+        if (package == null)
+            throw new KeyNotFoundException("Package not found.");
+
+        if (role == "Packager")
+        {
+            var packager = await _packagerRepository.GetByUserIdAsync(userId, cancellationToken);
+            if (packager == null || package.PackagerId != packager.Id)
+            {
+                throw new UnauthorizedAccessException("You do not have permission to view revenue for this package.");
+            }
+        }
+
+        var allBookings = await _bookingRepository.GetByPackageIdAsync(packageId, cancellationToken);
+        var bookings = allBookings
+            .Where(b => b.Status == TravelTourManagement.DataAccess.Enums.BookingStatus.Confirmed || b.Status == TravelTourManagement.DataAccess.Enums.BookingStatus.Completed)
+            .ToList();
+
+        decimal revenue = 0;
+        string revenueType = "";
+
+        if (role == "Admin")
+        {
+            revenue = bookings.Sum(b => b.PlatformFeeAmount);
+            revenueType = "Platform Fee";
+        }
+        else if (role == "Packager")
+        {
+            revenue = bookings.Sum(b => b.PackagerBaseAmount);
+            revenueType = "Packager Earnings";
+        }
+
+        return new PackageRevenueResponse
+        {
+            PackageId = packageId,
+            PackageTitle = package.Title,
+            Revenue = revenue,
+            RevenueType = revenueType,
+            TotalConfirmedBookings = bookings.Count
+        };
+    }
+
+    public async Task<PagedResponse<PackageSummaryResponse>> SearchPackagesAsync(PackageSearchRequest request, CancellationToken cancellationToken = default)
+    {
+        var (packages, totalCount) = await _packageRepository.SearchPackagesAsync(request, cancellationToken);
+        var summaryResponses = packages.Select(MapToPackageSummaryResponse).ToList();
+        return new PagedResponse<PackageSummaryResponse>(summaryResponses, totalCount, request.PageNumber, request.PageSize);
+    }
+
 }

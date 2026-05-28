@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TravelTourManagement.Business.Interface;
 using TravelTourManagement.DataAccess.DTOs.Bookings;
+using System.Linq;
 
 namespace TravelTourManagement.API.Controllers;
 
@@ -22,67 +23,46 @@ public class BookingsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin,Traveler")] // Usually travelers book packages
-    public async Task<IActionResult> CreateBooking([FromForm] CreateBookingRequest request)
+    [Authorize(Roles = "Admin,Traveler")]
+    public async Task<IActionResult> CreateBooking([FromForm] CreateBookingCombinedRequest request)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-        {
-            return Unauthorized("User ID not found in token.");
-        }
+            throw new UnauthorizedAccessException("User ID not found in token.");
 
+        CreateBookingRequest bookingData;
         try
         {
-            var response = await _bookingService.CreateBookingAsync(userId, request);
-            return Ok(response);
+            bookingData = System.Text.Json.JsonSerializer.Deserialize<CreateBookingRequest>(request.BookingData, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+            
+            // Manual validation
+            var context = new System.ComponentModel.DataAnnotations.ValidationContext(bookingData, serviceProvider: null, items: null);
+            var results = new System.Collections.Generic.List<System.ComponentModel.DataAnnotations.ValidationResult>();
+            bool isValid = System.ComponentModel.DataAnnotations.Validator.TryValidateObject(bookingData, context, results, true);
+            if (!isValid)
+            {
+                return BadRequest(results);
+            }
         }
-        catch (InvalidOperationException ex)
+        catch (System.Text.Json.JsonException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return BadRequest(new { message = "Invalid JSON in BookingData.", details = ex.Message });
         }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Unauthorized(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An unexpected error occurred.", details = ex.Message });
-        }
+
+        var response = await _bookingService.CreateBookingAsync(userId, bookingData, request.DocumentFiles);
+        return Ok(response);
     }
 
     [HttpPost("{id}/pay")]
     [Authorize(Roles = "Admin,Traveler")]
     public async Task<IActionResult> ProcessPayment(Guid id, [FromBody] ProcessPaymentRequest request)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-        {
-            return Unauthorized("User ID not found in token.");
-        }
+            throw new UnauthorizedAccessException("User ID not found in token.");
 
-        try
-        {
-            var response = await _paymentService.ProcessPaymentAsync(userId, id, request);
-            return Ok(response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Unauthorized(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An unexpected error occurred.", details = ex.Message });
-        }
+        var response = await _paymentService.ProcessPaymentAsync(userId, id, request);
+        return Ok(response);
     }
 
     [HttpPut("{id}/verify")]
@@ -91,30 +71,13 @@ public class BookingsController : ControllerBase
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-        {
-            return Unauthorized("User ID not found in token.");
-        }
+            throw new UnauthorizedAccessException("User ID not found in token.");
 
-        try
-        {
-            var response = await _bookingService.VerifyBookingAsync(userId, id);
-            var primaryTraveler = response.Travelers?.FirstOrDefault(t => t.IsPrimary) ?? response.Travelers?.FirstOrDefault();
-            string fullName = primaryTraveler != null ? primaryTraveler.FullName : "the user";
-            
-            return Ok(new { message = $"The booking is confirmed for {fullName}." });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Unauthorized(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An unexpected error occurred.", details = ex.Message });
-        }
+        var response = await _bookingService.VerifyBookingAsync(userId, id);
+        var primaryTraveler = response.Travelers?.FirstOrDefault(t => t.IsPrimary) ?? response.Travelers?.FirstOrDefault();
+        string fullName = primaryTraveler != null ? primaryTraveler.FullName : "the user";
+        
+        return Ok(new { message = $"The booking is confirmed for {fullName}." });
     }
 
     [HttpGet("package/{packageId}")]
@@ -123,28 +86,10 @@ public class BookingsController : ControllerBase
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-        {
-            return Unauthorized("User ID not found in token.");
-        }
+            throw new UnauthorizedAccessException("User ID not found in token.");
 
         var userRole = User.FindFirst(ClaimTypes.Role)?.Value ?? "";
-
-        try
-        {
-            var response = await _bookingService.GetBookingsByPackageIdAsync(userId, userRole, packageId);
-            return Ok(response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Unauthorized(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An unexpected error occurred.", details = ex.Message });
-        }
+        var response = await _bookingService.GetBookingsByPackageIdAsync(userId, userRole, packageId);
+        return Ok(response);
     }
 }

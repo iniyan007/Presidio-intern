@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using TravelTourManagement.Business.Interface;
 using TravelTourManagement.DataAccess.DTOs.Bookings;
+using Microsoft.AspNetCore.Http;
 using TravelTourManagement.DataAccess.Entities;
 using TravelTourManagement.DataAccess.Interface;
 
@@ -29,7 +30,7 @@ public class BookingService : IBookingService
         _userRepository = userRepository;
     }
 
-    public async Task<BookingResponse> CreateBookingAsync(Guid userId, CreateBookingRequest request, CancellationToken cancellationToken = default)
+    public async Task<BookingResponse> CreateBookingAsync(Guid userId, CreateBookingRequest request, List<IFormFile>? documentFiles = null, CancellationToken cancellationToken = default)
     {
         var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
         if (user == null)
@@ -42,6 +43,17 @@ public class BookingService : IBookingService
         var pricing = await _seasonalPricingRepository.GetByIdAsync(request.SeasonalPricingId, cancellationToken);
         if (pricing == null || pricing.PackageId != package.Id || !pricing.IsActive)
             throw new InvalidOperationException("Pricing tier is not valid or active.");
+
+        if (package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Honeymoon ||
+            package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Private ||
+            package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Family)
+        {
+            var oneMonthFromNow = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(1));
+            if (request.TravelDate < oneMonthFromNow)
+            {
+                throw new System.ComponentModel.DataAnnotations.ValidationException($"{package.Type} packages must be booked at least 1 month in advance.");
+            }
+        }
 
         
         
@@ -134,44 +146,52 @@ public class BookingService : IBookingService
                 string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "travel_documents");
                 if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
-                if (t.AadharCardFile != null && t.AadharCardFile.Length > 0)
+                if (!string.IsNullOrEmpty(t.AadharCardFileName) && documentFiles != null)
                 {
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + t.AadharCardFile.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    var file = documentFiles.FirstOrDefault(f => f.FileName == t.AadharCardFileName);
+                    if (file != null && file.Length > 0)
                     {
-                        t.AadharCardFile.CopyTo(fileStream); 
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            file.CopyTo(fileStream); 
+                        }
+                        traveler.TravelDocuments.Add(new TravelDocument
+                        {
+                            DocumentType = "Aadhar Card",
+                            FileName = uniqueFileName,
+                            OriginalFilename = file.FileName,
+                            FilePath = $"/uploads/travel_documents/{uniqueFileName}",
+                            FileSizeBytes = file.Length,
+                            MimeType = file.ContentType,
+                            UploadedAt = DateTime.UtcNow
+                        });
                     }
-                    traveler.TravelDocuments.Add(new TravelDocument
-                    {
-                        DocumentType = "Aadhar Card",
-                        FileName = uniqueFileName,
-                        OriginalFilename = t.AadharCardFile.FileName,
-                        FilePath = $"/uploads/travel_documents/{uniqueFileName}",
-                        FileSizeBytes = t.AadharCardFile.Length,
-                        MimeType = t.AadharCardFile.ContentType,
-                        UploadedAt = DateTime.UtcNow
-                    });
                 }
 
-                if (t.PassportFile != null && t.PassportFile.Length > 0)
+                if (!string.IsNullOrEmpty(t.PassportFileName) && documentFiles != null)
                 {
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + t.PassportFile.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    var file = documentFiles.FirstOrDefault(f => f.FileName == t.PassportFileName);
+                    if (file != null && file.Length > 0)
                     {
-                        t.PassportFile.CopyTo(fileStream);
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+                        traveler.TravelDocuments.Add(new TravelDocument
+                        {
+                            DocumentType = "Passport",
+                            FileName = uniqueFileName,
+                            OriginalFilename = file.FileName,
+                            FilePath = $"/uploads/travel_documents/{uniqueFileName}",
+                            FileSizeBytes = file.Length,
+                            MimeType = file.ContentType,
+                            UploadedAt = DateTime.UtcNow
+                        });
                     }
-                    traveler.TravelDocuments.Add(new TravelDocument
-                    {
-                        DocumentType = "Passport",
-                        FileName = uniqueFileName,
-                        OriginalFilename = t.PassportFile.FileName,
-                        FilePath = $"/uploads/travel_documents/{uniqueFileName}",
-                        FileSizeBytes = t.PassportFile.Length,
-                        MimeType = t.PassportFile.ContentType,
-                        UploadedAt = DateTime.UtcNow
-                    });
                 }
 
                 return traveler;

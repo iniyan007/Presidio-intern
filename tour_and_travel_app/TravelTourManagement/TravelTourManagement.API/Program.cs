@@ -5,6 +5,8 @@ using System.Security.Claims;
 using TravelTourManagement.Business;
 using TravelTourManagement.Business.Configuration;
 using TravelTourManagement.DataAccess;
+using Quartz;
+using TravelTourManagement.Business.Services;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -13,6 +15,27 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<TravelTourManagement.API.Filters.RequireEmailVerificationFilter>();
+    options.Filters.Add<TravelTourManagement.API.Filters.GlobalExceptionFilter>();
+})
+.ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState
+            .Where(e => e.Value.Errors.Count > 0)
+            .SelectMany(kvp => kvp.Value.Errors.Select(e => new { Field = kvp.Key, Error = e.ErrorMessage }))
+            .ToList();
+
+        var response = new 
+        {
+            success = false,
+            message = "Validation failed.",
+            details = errors,
+            errorCode = "VALIDATION_ERROR"
+        };
+
+        return new Microsoft.AspNetCore.Mvc.BadRequestObjectResult(response);
+    };
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -49,6 +72,30 @@ builder.Services.AddDataAccessServices(builder.Configuration);
 
 // Register Business Services
 builder.Services.AddBusinessServices(builder.Configuration);
+
+// Add Quartz services
+builder.Services.AddQuartz(q =>
+{
+    var bookingJobKey = new JobKey("BookingTimeoutJob");
+    q.AddJob<BookingTimeoutJob>(opts => opts.WithIdentity(bookingJobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(bookingJobKey)
+        .WithIdentity("BookingTimeoutJob-trigger")
+        .WithCronSchedule("0 * * ? * *") // Runs every minute
+    );
+
+    var completionJobKey = new JobKey("PackageCompletionJob");
+    q.AddJob<PackageCompletionJob>(opts => opts.WithIdentity(completionJobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(completionJobKey)
+        .WithIdentity("PackageCompletionJob-trigger")
+        .WithCronSchedule("0 0 0 ? * *") // Runs every day at midnight
+    );
+});
+
+// Add Quartz hosted service
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
 
 // Add JWT Authentication
 var jwtOptionsSection = builder.Configuration.GetSection(JwtOptions.SectionName);

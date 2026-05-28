@@ -11,18 +11,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace TravelTourManagement.API.Controllers;
 
-public class UploadPackageMediaRequest
-{
-    [Required]
-    public IFormFile File { get; set; } = null!;
-    [Required]
-    public string Category { get; set; } = null!;
-    [Required]
-    public bool IsPrimary { get; set; }
-    public int DisplayOrder { get; set; }
-    public string? Caption { get; set; }
-}
-
 [Route("api/[controller]")]
 [ApiController]
 public class PackagesController : ControllerBase
@@ -33,120 +21,62 @@ public class PackagesController : ControllerBase
     {
         _packageService = packageService;
     }
+    
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAllPublishedPackages()
+    public async Task<IActionResult> SearchPackages([FromQuery] PackageSearchRequest request)
     {
-        try
-        {
-            var packages = await _packageService.GetAllPublishedPackagesAsync();
-            return Ok(packages);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An error occurred while retrieving packages.", details = ex.Message });
-        }
+        var result = await _packageService.SearchPackagesAsync(request);
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin,Traveler,Packager")]
     public async Task<IActionResult> GetPublishedPackageById(Guid id)
     {
-        try
-        {
-            var package = await _packageService.GetPublishedPackageByIdAsync(id);
-            return Ok(package);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An error occurred while retrieving the package.", details = ex.Message });
-        }
+        var package = await _packageService.GetPublishedPackageByIdAsync(id);
+        return Ok(package);
     }
-
 
     [HttpPost]
     [Authorize(Roles = "Packager")]
-    public async Task<IActionResult> CreatePackage([FromBody] CreatePackageRequest request)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-        {
-            return Unauthorized("User ID not found in token.");
-        }
-
-        try
-        {
-            var packageId = await _packageService.CreatePackageAsync(userId, request);
-            return CreatedAtAction(nameof(CreatePackage), new { id = packageId }, new { id = packageId, message = "Package created successfully." });
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Forbid(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An error occurred while creating the package.", details = ex.Message });
-        }
-    }
-
-    [HttpPost("{id}/media")]
-    [Authorize(Roles = "Packager")]
-    public async Task<IActionResult> UploadPackageMedia(Guid id, [FromForm] UploadPackageMediaRequest request)
+    public async Task<IActionResult> CreatePackage([FromForm] CreatePackageCombinedRequest request)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-        {
-            return Unauthorized("User ID not found in token.");
-        }
+            throw new UnauthorizedAccessException("User ID not found in token.");
 
-        if (request.File == null || request.File.Length == 0)
-        {
-            return BadRequest("No file uploaded.");
-        }
-
-        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-        var extension = System.IO.Path.GetExtension(request.File.FileName).ToLowerInvariant();
-        if (!System.Linq.Enumerable.Contains(allowedExtensions, extension))
-        {
-            return BadRequest("Invalid file type. Only JPG, JPEG, and PNG are allowed.");
-        }
-
-        if (request.File.Length > 5 * 1024 * 1024)
-        {
-            return BadRequest("File size exceeds 5MB limit.");
-        }
-
+        CreatePackageRequest packageData;
         try
         {
-            using var stream = request.File.OpenReadStream();
-            var fileName = await _packageService.UploadPackageMediaAsync(userId, id, stream, request.File.FileName, request.File.ContentType, request.Category, request.IsPrimary, request.DisplayOrder, request.Caption);
-            return Ok(new { message = "Package media uploaded successfully.", fileName = fileName });
+            packageData = System.Text.Json.JsonSerializer.Deserialize<CreatePackageRequest>(request.PackageData, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+            
+            // Manual validation
+            var context = new ValidationContext(packageData, serviceProvider: null, items: null);
+            var results = new List<ValidationResult>();
+            bool isValid = Validator.TryValidateObject(packageData, context, results, true);
+            if (!isValid)
+            {
+                return BadRequest(results);
+            }
         }
-        catch (UnauthorizedAccessException ex)
+        catch (System.Text.Json.JsonException ex)
         {
-            return Forbid(ex.Message);
+            return BadRequest(new { message = "Invalid JSON in PackageData.", details = ex.Message });
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An error occurred while uploading package media.", details = ex.Message });
-        }
+
+        var packageId = await _packageService.CreatePackageAsync(userId, packageData, request.MediaFiles);
+        return CreatedAtAction(nameof(CreatePackage), new { id = packageId }, new { id = packageId, message = "Package created successfully." });
     }
+
+
 
     [HttpGet("media/{fileName}")]
     [AllowAnonymous]
     public IActionResult GetPackageMedia(string fileName)
     {
         if (fileName.Contains("..") || fileName.Contains("/") || fileName.Contains("\\"))
-            return BadRequest("Invalid file name.");
+            throw new ArgumentException("Invalid file name.");
 
         var currentDirectory = System.IO.Directory.GetCurrentDirectory(); 
         var solutionDirectory = System.IO.Directory.GetParent(currentDirectory)?.FullName ?? currentDirectory;
@@ -172,26 +102,25 @@ public class PackagesController : ControllerBase
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-        {
-            return Unauthorized("User ID not found in token.");
-        }
+            throw new UnauthorizedAccessException("User ID not found in token.");
 
-        try
-        {
-            await _packageService.DeletePackageAsync(userId, id);
-            return Ok(new { message = "Package deleted successfully." });
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Forbid(ex.Message);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An error occurred while deleting the package.", details = ex.Message });
-        }
+        await _packageService.DeletePackageAsync(userId, id);
+        return Ok(new { message = "Package deleted successfully." });
+    }
+
+    [HttpGet("{id}/revenue")]
+    [Authorize(Roles = "Admin,Packager")]
+    public async Task<IActionResult> GetPackageRevenue(Guid id)
+    {
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("User ID not found in token.");
+
+        var role = User.FindFirst(ClaimTypes.Role)?.Value;
+        if (string.IsNullOrEmpty(role))
+            throw new UnauthorizedAccessException("Role not found in token.");
+
+        var result = await _packageService.GetPackageRevenueAsync(userId, role, id);
+        return Ok(result);
     }
 }
