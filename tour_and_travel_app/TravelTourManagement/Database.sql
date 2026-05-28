@@ -407,6 +407,8 @@ CREATE TABLE bookings (
         CONSTRAINT chk_booking_adults CHECK (adult_count > 0),
     child_count          INTEGER        NOT NULL DEFAULT 0
         CONSTRAINT chk_booking_children CHECK (child_count >= 0),
+    infant_count         INTEGER        NOT NULL DEFAULT 0
+        CONSTRAINT chk_booking_infants CHECK (infant_count >= 0),
 
     -- Price breakdown (snapshotted at booking time)
     packager_base_amount NUMERIC(12,2)  NOT NULL
@@ -458,6 +460,10 @@ CREATE TABLE booking_travelers (
     passport_number VARCHAR(50),
     date_of_birth   DATE,
     nationality     VARCHAR(100),
+    age             INTEGER,
+    gender          VARCHAR(20),
+    meal_preference VARCHAR(50),
+    aadhar_card_number VARCHAR(50),
     is_primary      BOOLEAN      NOT NULL DEFAULT FALSE
 );
 

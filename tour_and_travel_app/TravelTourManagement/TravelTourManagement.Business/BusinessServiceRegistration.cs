@@ -25,6 +25,10 @@ public static class BusinessServiceRegistration
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IOtpService, OtpService>();
         services.AddScoped<IPackageService, PackageService>();
+        services.AddScoped<IBookingService, BookingService>();
+        services.AddScoped<IPaymentService, PaymentService>();
+        
+        services.AddHostedService<BookingTimeoutService>();
 
         return services;
     }

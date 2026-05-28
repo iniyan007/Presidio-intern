@@ -10,6 +10,7 @@ public record BookingResponse(
     string BookingReference,
     int AdultCount,
     int ChildCount,
+    int InfantCount,
     decimal TotalAmount,
     decimal PaidAmount,
     string PaymentStatus, // derived: Unpaid, Partial, Paid
@@ -28,5 +29,18 @@ public record BookingTravelerResponse(
     string? PassportNumber,
     DateOnly? DateOfBirth,
     string? Nationality,
-    bool IsPrimary
+    int? Age,
+    string? Gender,
+    string? MealPreference,
+    string? AadharCardNumber,
+    bool IsPrimary,
+    List<TravelDocumentResponse> Documents
+);
+
+public record TravelDocumentResponse(
+    Guid Id,
+    string DocumentType,
+    string FilePath,
+    string FileName,
+    DateTime UploadedAt
 );

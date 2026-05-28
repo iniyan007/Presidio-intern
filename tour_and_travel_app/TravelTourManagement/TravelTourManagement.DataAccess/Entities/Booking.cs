@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace TravelTourManagement.DataAccess.Entities;
@@ -18,6 +18,8 @@ public partial class Booking
     public int AdultCount { get; set; }
 
     public int ChildCount { get; set; }
+
+    public int InfantCount { get; set; }
 
     public decimal PackagerBaseAmount { get; set; }
 
@@ -40,6 +42,10 @@ public partial class Booking
     public DateTime BookedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }
+
+    public TravelTourManagement.DataAccess.Enums.BookingStatus Status { get; set; }
+
+    public TravelTourManagement.DataAccess.Enums.PaymentStatus PaymentStatus { get; set; }
 
     public DateTime? CancelledAt { get; set; }
 

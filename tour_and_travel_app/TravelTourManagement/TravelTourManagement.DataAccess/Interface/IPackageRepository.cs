@@ -33,6 +33,8 @@ public interface IPackageRepository : IRepository<Package, Guid>
     /// </summary>
     Task<Package?> GetWithFullDetailsAsync(Guid packageId, CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<Package>> GetAllPublishedWithFullDetailsAsync(CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Returns packages available for booking within the given travel date range
     /// (i.e. at least one active seasonal pricing slot covers the range).

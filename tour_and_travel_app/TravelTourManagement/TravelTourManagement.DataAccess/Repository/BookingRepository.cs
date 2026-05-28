@@ -38,6 +38,8 @@ public class BookingRepository : GenericRepository<Booking, Guid>, IBookingRepos
         Guid packageId,
         CancellationToken cancellationToken = default)
         => await _dbSet
+            .Include(b => b.BookingTravelers)
+                .ThenInclude(t => t.TravelDocuments)
             .Where(b => b.PackageId == packageId)
             .OrderByDescending(b => b.BookedAt)
             .ToListAsync(cancellationToken);
@@ -51,6 +53,7 @@ public class BookingRepository : GenericRepository<Booking, Guid>, IBookingRepos
             .Include(b => b.Payments)
             .Include(b => b.TravelDocuments)
             .Include(b => b.Package)
+                .ThenInclude(p => p.Packager)
             .FirstOrDefaultAsync(b => b.Id == bookingId, cancellationToken);
 
     /// <inheritdoc />
@@ -68,4 +71,12 @@ public class BookingRepository : GenericRepository<Booking, Guid>, IBookingRepos
         string bookingReference,
         CancellationToken cancellationToken = default)
         => await _dbSet.AnyAsync(b => b.BookingReference == bookingReference, cancellationToken);
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<Booking>> GetExpiredPendingBookingsAsync(
+        DateTime cutoffTime,
+        CancellationToken cancellationToken = default)
+        => await _dbSet
+            .Where(b => b.Status == TravelTourManagement.DataAccess.Enums.BookingStatus.Pending && b.BookedAt < cutoffTime)
+            .ToListAsync(cancellationToken);
 }

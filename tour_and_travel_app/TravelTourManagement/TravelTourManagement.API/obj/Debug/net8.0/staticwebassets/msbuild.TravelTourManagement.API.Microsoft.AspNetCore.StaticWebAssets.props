@@ -1,0 +1,36 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\3579d315-667b-464d-9f99-807efc34ab3d_iniyan_cm_Assignment_LibraryAPI.pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>TravelTourManagement.API</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TravelTourManagement.API</BasePath>
+      <RelativePath>uploads/travel_documents/3579d315-667b-464d-9f99-807efc34ab3d_iniyan_cm_Assignment_LibraryAPI.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\3579d315-667b-464d-9f99-807efc34ab3d_iniyan_cm_Assignment_LibraryAPI.pdf))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\c82d40a8-6785-48f4-a664-70f91719ae2f_iniyan_cm_joins_and_SPs_Assignment3.pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>TravelTourManagement.API</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TravelTourManagement.API</BasePath>
+      <RelativePath>uploads/travel_documents/c82d40a8-6785-48f4-a664-70f91719ae2f_iniyan_cm_joins_and_SPs_Assignment3.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\c82d40a8-6785-48f4-a664-70f91719ae2f_iniyan_cm_joins_and_SPs_Assignment3.pdf))</OriginalItemSpec>
+    </StaticWebAsset>
+  </ItemGroup>
+</Project>

@@ -62,9 +62,15 @@ public class AuthService : IAuthService
             : "Traveler";
 
         var token = _jwtProvider.GenerateToken(createdUser.Id, createdUser.Email, role, createdUser.IsEmailVerified);
+        var refreshToken = _jwtProvider.GenerateRefreshToken();
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        await _userRepository.UpdateAsync(user, cancellationToken);
+
 
         return new AuthResponse(
             token,
+            refreshToken,
             new UserResponse(
                 createdUser.Id,
                 createdUser.FullName,
@@ -114,9 +120,15 @@ public class AuthService : IAuthService
         await _userRepository.UpdateLastLoginAsync(user.Id, DateTime.UtcNow, cancellationToken);
 
         var token = _jwtProvider.GenerateToken(user.Id, user.Email, role, user.IsEmailVerified);
+        var refreshToken = _jwtProvider.GenerateRefreshToken();
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        await _userRepository.UpdateAsync(user, cancellationToken);
+
 
         return new AuthResponse(
             token,
+            refreshToken,
             new UserResponse(
                 user.Id,
                 user.FullName,
@@ -191,9 +203,15 @@ public class AuthService : IAuthService
         }
 
         var token = _jwtProvider.GenerateToken(user.Id, user.Email, role, user.IsEmailVerified);
+        var refreshToken = _jwtProvider.GenerateRefreshToken();
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        await _userRepository.UpdateAsync(user, cancellationToken);
+
 
         return new AuthResponse(
             token,
+            refreshToken,
             new UserResponse(
                 user.Id,
                 user.FullName,
@@ -206,4 +224,59 @@ public class AuthService : IAuthService
             )
         );
     }
+
+    public async Task<AuthResponse> RefreshTokenAsync(RefreshTokenRequest request, CancellationToken cancellationToken = default)
+    {
+        var principal = _jwtProvider.GetPrincipalFromExpiredToken(request.Token);
+        if (principal == null)
+            throw new UnauthorizedAccessException("Invalid access token or refresh token.");
+
+        var userIdString = principal.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("Invalid token claims.");
+
+        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        if (user == null || user.RefreshToken != request.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+        {
+            throw new UnauthorizedAccessException("Invalid or expired refresh token.");
+        }
+
+        // Determine Role
+        string role = "Traveler";
+        if (user.Email.Equals(_adminEmail, StringComparison.OrdinalIgnoreCase))
+        {
+            role = "Admin";
+        }
+        else 
+        {
+            var packager = await _packagerRepository.GetByUserIdAsync(user.Id, cancellationToken);
+            if (packager != null && packager.ApprovedAt != null && packager.DeactivatedAt == null)
+            {
+                role = "Packager";
+            }
+        }
+
+        var newAccessToken = _jwtProvider.GenerateToken(user.Id, user.Email, role, user.IsEmailVerified);
+        var newRefreshToken = _jwtProvider.GenerateRefreshToken();
+
+        user.RefreshToken = newRefreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        await _userRepository.UpdateAsync(user, cancellationToken);
+
+        return new AuthResponse(
+            newAccessToken,
+            newRefreshToken,
+            new UserResponse(
+                user.Id,
+                user.FullName,
+                user.Email,
+                user.Phone,
+                user.ProfilePicture,
+                user.IsActive,
+                user.IsEmailVerified,
+                role == "Packager"
+            )
+        );
+    }
 }
+

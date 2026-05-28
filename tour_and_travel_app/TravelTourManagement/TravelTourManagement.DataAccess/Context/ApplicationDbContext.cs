@@ -181,6 +181,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.ChildCount)
                 .HasDefaultValue(0)
                 .HasColumnName("child_count");
+            entity.Property(e => e.InfantCount)
+                .HasDefaultValue(0)
+                .HasColumnName("infant_count");
             entity.Property(e => e.PackageId).HasColumnName("package_id");
             entity.Property(e => e.PackagerBaseAmount)
                 .HasPrecision(12, 2)
@@ -209,6 +212,12 @@ public partial class ApplicationDbContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("updated_at");
             entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.Property(e => e.Status)
+                .HasColumnName("status");
+                
+            entity.Property(e => e.PaymentStatus)
+                .HasColumnName("payment_status");
 
             entity.HasOne(d => d.Package).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.PackageId)
@@ -241,8 +250,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.DateOfBirth).HasColumnName("date_of_birth");
             entity.Property(e => e.FullName)
                 .HasMaxLength(150)
-                .HasColumnName("full_name");
-            entity.Property(e => e.IsPrimary)
+                .HasColumnName("full_name");            entity.Property(e => e.IsPrimary)
                 .HasDefaultValue(false)
                 .HasColumnName("is_primary");
             entity.Property(e => e.Nationality)
@@ -651,8 +659,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.FilePath)
                 .HasMaxLength(500)
                 .HasColumnName("file_path");
-            entity.Property(e => e.FileSizeBytes).HasColumnName("file_size_bytes");
-            entity.Property(e => e.IsPrimary)
+            entity.Property(e => e.FileSizeBytes).HasColumnName("file_size_bytes");            entity.Property(e => e.IsPrimary)
                 .HasDefaultValue(false)
                 .HasColumnName("is_primary");
             entity.Property(e => e.MimeType)

@@ -65,6 +65,13 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
         CancellationToken cancellationToken = default)
         => await _dbSet
             .Include(p => p.ItineraryDays)
+                .ThenInclude(d => d.ItineraryActivities)
+            .Include(p => p.ItineraryDays)
+                .ThenInclude(d => d.ItineraryDayMeals)
+            .Include(p => p.ItineraryDays)
+                .ThenInclude(d => d.PackageAccommodations)
+            .Include(p => p.ItineraryDays)
+                .ThenInclude(d => d.PackageTransports)
             .Include(p => p.PackageHighlights)
             .Include(p => p.PackageInclusions)
             .Include(p => p.PackageMedia)
@@ -72,6 +79,26 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
             .Include(p => p.Packager)
             .Include(p => p.Reviews)
             .FirstOrDefaultAsync(p => p.Id == packageId, cancellationToken);
+
+    public async Task<IReadOnlyList<Package>> GetAllPublishedWithFullDetailsAsync(
+        CancellationToken cancellationToken = default)
+        => await _dbSet
+            .Where(p => p.Status == TravelTourManagement.DataAccess.Enums.PackageStatus.Published)
+            .Include(p => p.ItineraryDays)
+                .ThenInclude(d => d.ItineraryActivities)
+            .Include(p => p.ItineraryDays)
+                .ThenInclude(d => d.ItineraryDayMeals)
+            .Include(p => p.ItineraryDays)
+                .ThenInclude(d => d.PackageAccommodations)
+            .Include(p => p.ItineraryDays)
+                .ThenInclude(d => d.PackageTransports)
+            .Include(p => p.PackageHighlights)
+            .Include(p => p.PackageInclusions)
+            .Include(p => p.PackageMedia)
+            .Include(p => p.PackageSeasonalPricings)
+            .Include(p => p.Packager)
+            .Include(p => p.Reviews)
+            .ToListAsync(cancellationToken);
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<Package>> GetAvailableByDateRangeAsync(

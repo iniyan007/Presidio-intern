@@ -43,4 +43,9 @@ public interface IBookingRepository : IRepository<Booking, Guid>
     /// Used during booking reference generation to guarantee uniqueness.
     /// </summary>
     Task<bool> ReferenceExistsAsync(string bookingReference, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Returns all bookings that are in a Pending state and were booked before the cutoff time.
+    /// </summary>
+    Task<IReadOnlyList<Booking>> GetExpiredPendingBookingsAsync(DateTime cutoffTime, CancellationToken cancellationToken = default);
 }

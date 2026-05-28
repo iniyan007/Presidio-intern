@@ -128,3 +128,8 @@
 /Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 /Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
 /Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/Microsoft.Extensions.Diagnostics.Abstractions.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Abstractions.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/Microsoft.Extensions.Hosting.Abstractions.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/System.Diagnostics.DiagnosticSource.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/TravelTourManagement.API.staticwebassets.runtime.json

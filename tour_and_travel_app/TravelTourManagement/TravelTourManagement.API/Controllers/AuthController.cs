@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelTourManagement.Business.Services;
 using TravelTourManagement.DataAccess.DTOs.Users;
+using System;
+using System.Threading.Tasks;
 
 namespace TravelTourManagement.API.Controllers;
 
@@ -122,6 +124,25 @@ public class AuthController : ControllerBase
         catch (Exception ex)
         {
             return StatusCode(500, new { message = "An error occurred.", details = ex.Message });
+        }
+    }
+
+    [HttpPost("refresh-token")]
+    [AllowAnonymous]
+    public async Task<IActionResult> RefreshToken([FromBody] TravelTourManagement.DataAccess.DTOs.Users.RefreshTokenRequest request)
+    {
+        try
+        {
+            var response = await _authService.RefreshTokenAsync(request);
+            return Ok(response);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred during token refresh.", details = ex.Message });
         }
     }
 }

@@ -1,10 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "IEW77NGRifE=",
+  "dgSpecHash": "FkuU/FMCINM=",
   "success": true,
   "projectFilePath": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/TravelTourManagement.Business.csproj",
   "expectedPackageFiles": [
     "/Users/iniyan/.nuget/packages/bcrypt.net-next/4.2.0/bcrypt.net-next.4.2.0.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/microsoft.aspnetcore.hosting.abstractions/2.3.10/microsoft.aspnetcore.hosting.abstractions.2.3.10.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/microsoft.aspnetcore.hosting.server.abstractions/2.3.9/microsoft.aspnetcore.hosting.server.abstractions.2.3.9.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/microsoft.aspnetcore.http.abstractions/2.3.9/microsoft.aspnetcore.http.abstractions.2.3.9.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/microsoft.aspnetcore.http.features/5.0.17/microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.entityframeworkcore/8.0.11/microsoft.entityframeworkcore.8.0.11.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.entityframeworkcore.abstractions/8.0.11/microsoft.entityframeworkcore.abstractions.8.0.11.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.entityframeworkcore.analyzers/8.0.11/microsoft.entityframeworkcore.analyzers.8.0.11.nupkg.sha512",
@@ -16,8 +20,11 @@
     "/Users/iniyan/.nuget/packages/microsoft.extensions.configuration.binder/10.0.8/microsoft.extensions.configuration.binder.10.0.8.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.extensions.dependencyinjection/8.0.1/microsoft.extensions.dependencyinjection.8.0.1.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/10.0.8/microsoft.extensions.dependencyinjection.abstractions.10.0.8.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/microsoft.extensions.diagnostics.abstractions/10.0.8/microsoft.extensions.diagnostics.abstractions.10.0.8.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/microsoft.extensions.fileproviders.abstractions/10.0.8/microsoft.extensions.fileproviders.abstractions.10.0.8.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/microsoft.extensions.hosting.abstractions/10.0.8/microsoft.extensions.hosting.abstractions.10.0.8.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.extensions.logging/8.0.1/microsoft.extensions.logging.8.0.1.nupkg.sha512",
-    "/Users/iniyan/.nuget/packages/microsoft.extensions.logging.abstractions/8.0.2/microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/microsoft.extensions.logging.abstractions/10.0.8/microsoft.extensions.logging.abstractions.10.0.8.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.extensions.options/10.0.8/microsoft.extensions.options.10.0.8.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.extensions.options.configurationextensions/10.0.8/microsoft.extensions.options.configurationextensions.10.0.8.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.extensions.primitives/10.0.8/microsoft.extensions.primitives.10.0.8.nupkg.sha512",
@@ -27,7 +34,10 @@
     "/Users/iniyan/.nuget/packages/microsoft.identitymodel.tokens/8.18.0/microsoft.identitymodel.tokens.8.18.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/npgsql/8.0.6/npgsql.8.0.6.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/npgsql.entityframeworkcore.postgresql/8.0.11/npgsql.entityframeworkcore.postgresql.8.0.11.nupkg.sha512",
-    "/Users/iniyan/.nuget/packages/system.identitymodel.tokens.jwt/8.18.0/system.identitymodel.tokens.jwt.8.18.0.nupkg.sha512"
+    "/Users/iniyan/.nuget/packages/system.diagnostics.diagnosticsource/10.0.8/system.diagnostics.diagnosticsource.10.0.8.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/system.identitymodel.tokens.jwt/8.18.0/system.identitymodel.tokens.jwt.8.18.0.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/system.io.pipelines/5.0.2/system.io.pipelines.5.0.2.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/system.text.encodings.web/8.0.0/system.text.encodings.web.8.0.0.nupkg.sha512"
   ],
   "logs": []
 }

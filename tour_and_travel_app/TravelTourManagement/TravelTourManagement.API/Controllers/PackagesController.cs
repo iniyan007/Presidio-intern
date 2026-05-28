@@ -33,6 +33,40 @@ public class PackagesController : ControllerBase
     {
         _packageService = packageService;
     }
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAllPublishedPackages()
+    {
+        try
+        {
+            var packages = await _packageService.GetAllPublishedPackagesAsync();
+            return Ok(packages);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred while retrieving packages.", details = ex.Message });
+        }
+    }
+
+    [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,Traveler,Packager")]
+    public async Task<IActionResult> GetPublishedPackageById(Guid id)
+    {
+        try
+        {
+            var package = await _packageService.GetPublishedPackageByIdAsync(id);
+            return Ok(package);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred while retrieving the package.", details = ex.Message });
+        }
+    }
+
 
     [HttpPost]
     [Authorize(Roles = "Packager")]

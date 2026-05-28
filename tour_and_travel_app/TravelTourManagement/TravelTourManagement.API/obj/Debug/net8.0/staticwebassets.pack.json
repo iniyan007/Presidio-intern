@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/wwwroot/uploads/travel_documents/3579d315-667b-464d-9f99-807efc34ab3d_iniyan_cm_Assignment_LibraryAPI.pdf",
+      "PackagePath": "staticwebassets/uploads/travel_documents/3579d315-667b-464d-9f99-807efc34ab3d_iniyan_cm_Assignment_LibraryAPI.pdf"
+    },
+    {
+      "Id": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/wwwroot/uploads/travel_documents/c82d40a8-6785-48f4-a664-70f91719ae2f_iniyan_cm_joins_and_SPs_Assignment3.pdf",
+      "PackagePath": "staticwebassets/uploads/travel_documents/c82d40a8-6785-48f4-a664-70f91719ae2f_iniyan_cm_joins_and_SPs_Assignment3.pdf"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.TravelTourManagement.API.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.TravelTourManagement.API.props",
+      "PackagePath": "build\\TravelTourManagement.API.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.TravelTourManagement.API.props",
+      "PackagePath": "buildMultiTargeting\\TravelTourManagement.API.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.TravelTourManagement.API.props",
+      "PackagePath": "buildTransitive\\TravelTourManagement.API.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

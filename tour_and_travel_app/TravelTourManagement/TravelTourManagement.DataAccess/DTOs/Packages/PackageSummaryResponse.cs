@@ -14,5 +14,6 @@ public record PackageSummaryResponse(
     decimal AvgRating,
     int TotalReviews,
     string? PrimaryImageUrl,
-    decimal StartingPrice
+    decimal StartingPrice,
+    int PendingSeats
 );

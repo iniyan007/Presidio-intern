@@ -23,6 +23,9 @@ public static class DataAccessServiceRegistration
         NpgsqlConnection.GlobalTypeMapper.MapEnum<MealType>("meal_type");
         NpgsqlConnection.GlobalTypeMapper.MapEnum<TransportMode>("transport_mode");
         NpgsqlConnection.GlobalTypeMapper.MapEnum<DaySession>("day_session");
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<BookingStatus>("booking_status");
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<PaymentStatus>("payment_status");
+
 #pragma warning restore CS0618
 
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(configuration.GetConnectionString("DefaultConnection"));
@@ -34,6 +37,9 @@ public static class DataAccessServiceRegistration
         dataSourceBuilder.MapEnum<MealType>("meal_type");
         dataSourceBuilder.MapEnum<TransportMode>("transport_mode");
         dataSourceBuilder.MapEnum<DaySession>("day_session");
+        dataSourceBuilder.MapEnum<BookingStatus>("booking_status");
+        dataSourceBuilder.MapEnum<PaymentStatus>("payment_status");
+
         var dataSource = dataSourceBuilder.Build();
 
         // Configure DbContext with PostgreSQL
