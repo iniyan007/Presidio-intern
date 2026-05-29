@@ -17,12 +17,14 @@ public class PackageService : IPackageService
     private readonly IPackageRepository _packageRepository;
     private readonly IPackagerRepository _packagerRepository;
     private readonly IBookingRepository _bookingRepository;
+    private readonly AutoMapper.IMapper _mapper;
 
-    public PackageService(IPackageRepository packageRepository, IPackagerRepository packagerRepository, IBookingRepository bookingRepository)
+    public PackageService(IPackageRepository packageRepository, IPackagerRepository packagerRepository, IBookingRepository bookingRepository, AutoMapper.IMapper mapper)
     {
         _packageRepository = packageRepository;
         _packagerRepository = packagerRepository;
         _bookingRepository = bookingRepository;
+        _mapper = mapper;
     }
 
     public async Task<Guid> CreatePackageAsync(Guid userId, CreatePackageRequest request, List<IFormFile>? mediaFiles = null, CancellationToken cancellationToken = default)
@@ -33,101 +35,9 @@ public class PackageService : IPackageService
             throw new UnauthorizedAccessException("Only approved packagers can create packages.");
         }
 
-        var package = new Package
-        {
-            PackagerId = packager.Id,
-            Title = request.Title,
-            Description = request.Description,
-            Destination = request.Destination,
-            Country = request.Country,
-            City = request.City,
-            DurationDays = request.DurationDays,
-            DurationNights = request.DurationNights,
-            MaxCapacity = request.MaxCapacity,
-            MinAge = request.MinAge,
-            CancellationPolicy = request.CancellationPolicy,
-            IsFeatured = false,
-            CurrentBookings = 0,
-            AvgRating = 0,
-            TotalReviews = 0,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
-            Type = Enum.Parse<TravelTourManagement.DataAccess.Enums.PackageType>(request.Type, true),
-            Status = Enum.Parse<TravelTourManagement.DataAccess.Enums.PackageStatus>(request.Status, true),
-            PackageHighlights = request.Highlights?.Select(h => new PackageHighlight
-            {
-                HighlightText = h.HighlightText,
-                DisplayOrder = h.DisplayOrder
-            }).ToList() ?? new(),
-            PackageInclusions = request.Inclusions?.Select(i => new PackageInclusion
-            {
-                Description = i.Description,
-                DisplayOrder = i.DisplayOrder,
-                Type = Enum.Parse<TravelTourManagement.DataAccess.Enums.InclusionType>(i.InclusionType, true)
-            }).ToList() ?? new(),
-            PackageMedia = new List<PackageMedium>(),
-            PackageSeasonalPricings = request.SeasonalPricing?.Select(p => new PackageSeasonalPricing
-            {
-                SeasonName = p.SeasonName,
-                StartDate = p.StartDate ?? DateOnly.FromDateTime(DateTime.UtcNow),
-                EndDate = p.EndDate ?? DateOnly.FromDateTime(DateTime.UtcNow.AddYears(10)),
-                BasePrice = p.BasePrice,
-                ChildPrice = p.ChildPrice,
-                DiscountPercent = p.DiscountPercent,
-                AvailableSlots = p.AvailableSlots,
-                IsActive = p.IsActive
-            }).ToList() ?? new(),
-            ItineraryDays = request.Itinerary?.Select(day => new ItineraryDay
-            {
-                DayNumber = day.DayNumber,
-                Title = day.Title,
-                Description = day.Description,
-                Location = day.Location,
-                CreatedAt = DateTime.UtcNow,
-                ItineraryActivities = day.Activities?.Select(a => new ItineraryActivity
-                {
-                    SequenceOrder = a.SequenceOrder,
-                    ActivityTitle = a.ActivityTitle,
-                    Description = a.Description,
-                    ActivityType = a.ActivityType,
-                    Location = a.Location,
-                    DurationMinutes = a.DurationMinutes,
-                    IsOptional = a.IsOptional,
-                    ExtraCost = a.ExtraCost,
-                    DaySession = Enum.Parse<TravelTourManagement.DataAccess.Enums.DaySession>(a.DaySession, true)
-                }).ToList() ?? new(),
-                ItineraryDayMeals = day.Meals?.Select(m => new ItineraryDayMeal
-                {
-                    Venue = m.Venue,
-                    Description = m.Description,
-                    IsIncluded = m.IsIncluded,
-                    MealType = Enum.Parse<TravelTourManagement.DataAccess.Enums.MealType>(m.MealType, true)
-                }).ToList() ?? new(),
-                PackageAccommodations = day.Accommodations?.Select(a => new PackageAccommodation
-                {
-                    HotelName = a.HotelName,
-                    HotelAddress = a.HotelAddress,
-                    StarRating = a.StarRating,
-                    RoomType = a.RoomType,
-                    CheckInTime = string.IsNullOrEmpty(a.CheckInTime) ? (TimeOnly?)null : TimeOnly.Parse(a.CheckInTime),
-                    CheckOutTime = string.IsNullOrEmpty(a.CheckOutTime) ? (TimeOnly?)null : TimeOnly.Parse(a.CheckOutTime),
-                    Amenities = a.Amenities,
-                    Notes = a.Notes
-                }).ToList() ?? new(),
-                PackageTransports = day.Transports?.Select(t => new PackageTransport
-                {
-                    SegmentOrder = t.SegmentOrder,
-                    VehicleDescription = t.VehicleDescription,
-                    PickupPoint = t.PickupPoint,
-                    DropPoint = t.DropPoint,
-                    PickupTime = string.IsNullOrEmpty(t.PickupTime) ? (TimeOnly?)null : TimeOnly.Parse(t.PickupTime),
-                    DropTime = string.IsNullOrEmpty(t.DropTime) ? (TimeOnly?)null : TimeOnly.Parse(t.DropTime),
-                    DistanceKm = t.DistanceKm,
-                    Notes = t.Notes,
-                    TransportMode = Enum.Parse<TravelTourManagement.DataAccess.Enums.TransportMode>(t.TransportMode, true)
-                }).ToList() ?? new()
-            }).ToList() ?? new()
-        };
+        var package = _mapper.Map<Package>(request);
+        package.PackagerId = packager.Id;
+        package.PackageMedia = new List<PackageMedium>();
 
         var createdPackage = await _packageRepository.CreatePackageWithDetailsAsync(package, cancellationToken);
         return createdPackage.Id;
@@ -198,7 +108,7 @@ public class PackageService : IPackageService
     public async Task<IEnumerable<PackageSummaryResponse>> GetAllPublishedPackagesAsync(CancellationToken cancellationToken = default)
     {
         var packages = await _packageRepository.GetAllPublishedWithFullDetailsAsync(cancellationToken);
-        return packages.Select(MapToPackageSummaryResponse);
+        return _mapper.Map<IEnumerable<PackageSummaryResponse>>(packages);
     }
 
     public async Task<PackageDetailResponse> GetPublishedPackageByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -207,106 +117,7 @@ public class PackageService : IPackageService
         if (package == null || package.Status != TravelTourManagement.DataAccess.Enums.PackageStatus.Published)
             throw new KeyNotFoundException("Published package not found.");
 
-        return MapToPackageDetailResponse(package);
-    }
-
-    private static PackageSummaryResponse MapToPackageSummaryResponse(Package package)
-    {
-        var primaryImage = package.PackageMedia?.FirstOrDefault(m => m.IsPrimary)?.FilePath;
-        var startingPrice = package.PackageSeasonalPricings?.Where(p => p.IsActive).OrderBy(p => p.BasePrice).FirstOrDefault()?.BasePrice ?? 0;
-        var pendingSeats = package.MaxCapacity - package.CurrentBookings;
-
-        return new PackageSummaryResponse(
-            package.Id,
-            package.PackagerId,
-            package.Packager?.CompanyName ?? "Unknown",
-            package.Title,
-            package.Type.ToString(),
-            package.Destination,
-            package.Country,
-            package.DurationDays,
-            package.DurationNights,
-            package.AvgRating,
-            package.TotalReviews,
-            primaryImage,
-            startingPrice,
-            pendingSeats
-        );
-    }
-
-    private static PackageDetailResponse MapToPackageDetailResponse(Package package)
-    {
-        return new PackageDetailResponse(
-            package.Id,
-            package.PackagerId,
-            package.Packager?.CompanyName ?? "Unknown",
-            package.Title,
-            package.Description,
-            package.Type.ToString(),
-            package.Destination,
-            package.Country,
-            package.City,
-            package.DurationDays,
-            package.DurationNights,
-            package.MaxCapacity,
-            package.CurrentBookings,
-            package.MinAge,
-            package.CancellationPolicy,
-            package.IsFeatured,
-            package.AvgRating,
-            package.TotalReviews,
-            package.PackageHighlights.OrderBy(h => h.DisplayOrder).Select(h => h.HighlightText).ToList(),
-            package.PackageInclusions.Where(i => i.Type == TravelTourManagement.DataAccess.Enums.InclusionType.Included).Select(i => i.Description).ToList(),
-            package.PackageInclusions.Where(i => i.Type == TravelTourManagement.DataAccess.Enums.InclusionType.Excluded).Select(i => i.Description).ToList(),
-            package.PackageMedia.OrderBy(m => m.DisplayOrder).Select(m => new PackageMediaDto(m.Id, m.FilePath, m.Caption, m.IsPrimary, m.DisplayOrder)).ToList(),
-            package.PackageSeasonalPricings.Select(p => new PackageSeasonalPricingDto(p.Id, p.SeasonName, p.StartDate, p.EndDate, p.BasePrice, p.ChildPrice, p.DiscountPercent, p.AvailableSlots, p.IsActive)).ToList(),
-            package.ItineraryDays.OrderBy(d => d.DayNumber).Select(d => new ItineraryDayDto(
-                d.Id,
-                d.DayNumber,
-                d.Title,
-                d.Description,
-                d.Location,
-                d.ItineraryActivities.OrderBy(a => a.SequenceOrder).Select(a => new ItineraryActivityDto(
-                    a.Id,
-                    a.SequenceOrder,
-                    a.ActivityTitle,
-                    a.Description,
-                    a.ActivityType,
-                    a.Location,
-                    a.DurationMinutes,
-                    a.IsOptional,
-                    a.ExtraCost
-                )).ToList(),
-                d.ItineraryDayMeals.Select(m => new ItineraryMealDto(
-                    m.Id,
-                    m.Description,
-                    m.Venue,
-                    m.IsIncluded
-                )).ToList(),
-                d.PackageAccommodations.Select(a => new ItineraryAccommodationDto(
-                    a.Id,
-                    a.HotelName,
-                    a.HotelAddress,
-                    a.RoomType,
-                    a.StarRating,
-                    a.CheckInTime.HasValue ? a.CheckInTime.Value.ToTimeSpan() : null,
-                    a.CheckOutTime.HasValue ? a.CheckOutTime.Value.ToTimeSpan() : null,
-                    a.Amenities,
-                    a.Notes
-                )).ToList(),
-                d.PackageTransports.OrderBy(t => t.SegmentOrder).Select(t => new ItineraryTransportDto(
-                    t.Id,
-                    t.SegmentOrder,
-                    t.VehicleDescription,
-                    t.PickupPoint,
-                    t.DropPoint,
-                    t.PickupTime.HasValue ? t.PickupTime.Value.ToTimeSpan() : null,
-                    t.DropTime.HasValue ? t.DropTime.Value.ToTimeSpan() : null,
-                    t.DistanceKm,
-                    t.Notes
-                )).ToList()
-            )).ToList()
-        );
+        return _mapper.Map<PackageDetailResponse>(package);
     }
 
     public async Task<PackageRevenueResponse> GetPackageRevenueAsync(Guid userId, string role, Guid packageId, CancellationToken cancellationToken = default)
@@ -356,7 +167,7 @@ public class PackageService : IPackageService
     public async Task<PagedResponse<PackageSummaryResponse>> SearchPackagesAsync(PackageSearchRequest request, CancellationToken cancellationToken = default)
     {
         var (packages, totalCount) = await _packageRepository.SearchPackagesAsync(request, cancellationToken);
-        var summaryResponses = packages.Select(MapToPackageSummaryResponse).ToList();
+        var summaryResponses = _mapper.Map<List<PackageSummaryResponse>>(packages);
         return new PagedResponse<PackageSummaryResponse>(summaryResponses, totalCount, request.PageNumber, request.PageSize);
     }
 

@@ -8,6 +8,7 @@ using TravelTourManagement.DataAccess.DTOs.Bookings;
 using Microsoft.AspNetCore.Http;
 using TravelTourManagement.DataAccess.Entities;
 using TravelTourManagement.DataAccess.Interface;
+using AutoMapper;
 
 namespace TravelTourManagement.Business.Services;
 
@@ -17,8 +18,12 @@ public class BookingService : IBookingService
     private readonly IPackageRepository _packageRepository;
     private readonly IRepository<PackageSeasonalPricing, Guid> _seasonalPricingRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IPlatformConfigService _platformConfigService;
+    private readonly IMapper _mapper;
 
     public BookingService(
+        IPlatformConfigService platformConfigService,
+        IMapper mapper,
         IBookingRepository bookingRepository,
         IPackageRepository packageRepository,
         IRepository<PackageSeasonalPricing, Guid> seasonalPricingRepository,
@@ -28,6 +33,8 @@ public class BookingService : IBookingService
         _packageRepository = packageRepository;
         _seasonalPricingRepository = seasonalPricingRepository;
         _userRepository = userRepository;
+        _platformConfigService = platformConfigService;
+        _mapper = mapper;
     }
 
     public async Task<BookingResponse> CreateBookingAsync(Guid userId, CreateBookingRequest request, List<IFormFile>? documentFiles = null, CancellationToken cancellationToken = default)
@@ -100,10 +107,10 @@ public class BookingService : IBookingService
             baseAmount -= baseAmount * (pricing.DiscountPercent / 100m);
         }
 
-        // Assuming a standard 5% platform fee and 10% tax for now
-        decimal platformFeePercent = 5.0m;
+        var platformConfig = await _platformConfigService.GetConfigAsync(cancellationToken);
+        decimal platformFeePercent = platformConfig.PlatformFeePercent;
         decimal platformFeeAmount = baseAmount * (platformFeePercent / 100m);
-        decimal taxAmount = (baseAmount + platformFeeAmount) * 0.10m;
+        decimal taxAmount = (baseAmount + platformFeeAmount) * (platformConfig.GstPercent / 100m);
         decimal totalAmount = baseAmount + platformFeeAmount + taxAmount;
 
         var booking = new Booking
@@ -217,37 +224,7 @@ public class BookingService : IBookingService
         package.CurrentBookings += totalTravelers;
         await _packageRepository.UpdateAsync(package, cancellationToken);
 
-        return new BookingResponse(
-            booking.Id,
-            booking.UserId,
-            booking.PackageId,
-            booking.BookingReference,
-            booking.AdultCount,
-            booking.ChildCount,
-            booking.InfantCount,
-            booking.TotalAmount,
-            booking.PaidAmount,
-            booking.PaymentStatus.ToString(),
-            booking.TravelDate,
-            booking.ReturnDate,
-            booking.SpecialRequests,
-            booking.BookedAt,
-            booking.CancelledAt,
-            booking.CancellationReason,
-            booking.BookingTravelers.Select(t => new BookingTravelerResponse(
-                t.Id,
-                t.FullName,
-                t.PassportNumber,
-                t.DateOfBirth,
-                t.Nationality,
-                t.Age,
-                t.Gender,
-                t.MealPreference,
-                t.AadharCardNumber,
-                t.IsPrimary,
-                t.TravelDocuments?.Select(d => new TravelDocumentResponse(d.Id, d.DocumentType, d.FilePath, d.FileName, d.UploadedAt)).ToList() ?? new List<TravelDocumentResponse>()
-            )).ToList()
-        );
+        return _mapper.Map<BookingResponse>(booking);
     }
 
     public async Task<BookingResponse> VerifyBookingAsync(Guid packagerUserId, Guid bookingId, CancellationToken cancellationToken = default)
@@ -267,37 +244,7 @@ public class BookingService : IBookingService
 
         await _bookingRepository.UpdateAsync(booking, cancellationToken);
 
-        return new BookingResponse(
-            booking.Id,
-            booking.UserId,
-            booking.PackageId,
-            booking.BookingReference,
-            booking.AdultCount,
-            booking.ChildCount,
-            booking.InfantCount,
-            booking.TotalAmount,
-            booking.PaidAmount,
-            booking.PaymentStatus.ToString(),
-            booking.TravelDate,
-            booking.ReturnDate,
-            booking.SpecialRequests,
-            booking.BookedAt,
-            booking.CancelledAt,
-            booking.CancellationReason,
-            booking.BookingTravelers.Select(t => new BookingTravelerResponse(
-                t.Id,
-                t.FullName,
-                t.PassportNumber,
-                t.DateOfBirth,
-                t.Nationality,
-                t.Age,
-                t.Gender,
-                t.MealPreference,
-                t.AadharCardNumber,
-                t.IsPrimary,
-                t.TravelDocuments?.Select(d => new TravelDocumentResponse(d.Id, d.DocumentType, d.FilePath, d.FileName, d.UploadedAt)).ToList() ?? new List<TravelDocumentResponse>()
-            )).ToList()
-        );
+        return _mapper.Map<BookingResponse>(booking);
     }
 
     public async Task<IReadOnlyList<BookingResponse>> GetBookingsByPackageIdAsync(Guid userId, string userRole, Guid packageId, CancellationToken cancellationToken = default)
@@ -312,36 +259,6 @@ public class BookingService : IBookingService
 
         var bookings = await _bookingRepository.GetByPackageIdAsync(packageId, cancellationToken);
 
-        return bookings.Select(booking => new BookingResponse(
-            booking.Id,
-            booking.UserId,
-            booking.PackageId,
-            booking.BookingReference,
-            booking.AdultCount,
-            booking.ChildCount,
-            booking.InfantCount,
-            booking.TotalAmount,
-            booking.PaidAmount,
-            booking.PaymentStatus.ToString(),
-            booking.TravelDate,
-            booking.ReturnDate,
-            booking.SpecialRequests,
-            booking.BookedAt,
-            booking.CancelledAt,
-            booking.CancellationReason,
-            booking.BookingTravelers.Select(t => new BookingTravelerResponse(
-                t.Id,
-                t.FullName,
-                t.PassportNumber,
-                t.DateOfBirth,
-                t.Nationality,
-                t.Age,
-                t.Gender,
-                t.MealPreference,
-                t.AadharCardNumber,
-                t.IsPrimary,
-                t.TravelDocuments?.Select(d => new TravelDocumentResponse(d.Id, d.DocumentType, d.FilePath, d.FileName, d.UploadedAt)).ToList() ?? new List<TravelDocumentResponse>()
-            )).ToList()
-        )).ToList();
+        return _mapper.Map<IReadOnlyList<BookingResponse>>(bookings);
     }
 }

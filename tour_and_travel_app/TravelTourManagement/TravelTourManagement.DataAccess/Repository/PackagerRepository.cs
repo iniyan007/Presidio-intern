@@ -55,6 +55,34 @@ public class PackagerRepository : GenericRepository<Packager, Guid>, IPackagerRe
             .FirstOrDefaultAsync(pk => pk.Id == packagerId, cancellationToken);
 
     /// <inheritdoc />
+    public async Task<(IReadOnlyList<Packager> Packagers, int TotalCount)> SearchPublicPackagersAsync(
+        string? searchTerm, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet
+            .Where(pk => pk.ApprovedAt != null && pk.DeactivatedAt == null)
+            .Include(pk => pk.Packages)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var term = searchTerm.ToLower();
+            query = query.Where(pk => pk.CompanyName.ToLower().Contains(term) || (pk.Description != null && pk.Description.ToLower().Contains(term)));
+        }
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var packagers = await query
+            .OrderByDescending(pk => pk.AvgRating)
+            .ThenBy(pk => pk.CompanyName)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return (packagers, totalCount);
+    }
+
+
+    /// <inheritdoc />
     public async Task<bool> ExistsByUserIdAsync(
         Guid userId,
         CancellationToken cancellationToken = default)

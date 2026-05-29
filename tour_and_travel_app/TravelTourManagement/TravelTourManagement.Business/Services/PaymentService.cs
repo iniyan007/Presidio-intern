@@ -7,6 +7,7 @@ using TravelTourManagement.DataAccess.DTOs.Bookings;
 using TravelTourManagement.DataAccess.Entities;
 using TravelTourManagement.DataAccess.Enums;
 using TravelTourManagement.DataAccess.Interface;
+using AutoMapper;
 
 namespace TravelTourManagement.Business.Services;
 
@@ -14,11 +15,13 @@ public class PaymentService : IPaymentService
 {
     private readonly IBookingRepository _bookingRepository;
     private readonly IRepository<Payment, Guid> _paymentRepository;
+    private readonly IMapper _mapper;
 
-    public PaymentService(IBookingRepository bookingRepository, IRepository<Payment, Guid> paymentRepository)
+    public PaymentService(IBookingRepository bookingRepository, IRepository<Payment, Guid> paymentRepository, IMapper mapper)
     {
         _bookingRepository = bookingRepository;
         _paymentRepository = paymentRepository;
+        _mapper = mapper;
     }
 
     public async Task<BookingResponse> ProcessPaymentAsync(Guid userId, Guid bookingId, ProcessPaymentRequest request, CancellationToken cancellationToken = default)
@@ -45,8 +48,9 @@ public class PaymentService : IPaymentService
             BookingId = booking.Id,
             TransactionId = request.TransactionId,
             Amount = request.Amount,
-            Currency = "USD",
+            Currency = "INR",
             PaymentMethod = request.PaymentMethod,
+            Status = PaymentStatus.Paid,
             GatewayResponse = "Simulated Success",
             PaidAt = DateTime.UtcNow
         };
@@ -61,36 +65,6 @@ public class PaymentService : IPaymentService
 
         await _bookingRepository.UpdateAsync(booking, cancellationToken);
 
-        return new BookingResponse(
-            booking.Id,
-            booking.UserId,
-            booking.PackageId,
-            booking.BookingReference,
-            booking.AdultCount,
-            booking.ChildCount,
-            booking.InfantCount,
-            booking.TotalAmount,
-            booking.PaidAmount,
-            booking.PaymentStatus.ToString(),
-            booking.TravelDate,
-            booking.ReturnDate,
-            booking.SpecialRequests,
-            booking.BookedAt,
-            booking.CancelledAt,
-            booking.CancellationReason,
-            booking.BookingTravelers.Select(t => new BookingTravelerResponse(
-                t.Id,
-                t.FullName,
-                t.PassportNumber,
-                t.DateOfBirth,
-                t.Nationality,
-                t.Age,
-                t.Gender,
-                t.MealPreference,
-                t.AadharCardNumber,
-                t.IsPrimary,
-                t.TravelDocuments?.Select(d => new TravelDocumentResponse(d.Id, d.DocumentType, d.FilePath, d.FileName, d.UploadedAt)).ToList() ?? new List<TravelDocumentResponse>()
-            )).ToList()
-        );
+        return _mapper.Map<BookingResponse>(booking);
     }
 }

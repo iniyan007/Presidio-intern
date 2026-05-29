@@ -256,6 +256,10 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Nationality)
                 .HasMaxLength(100)
                 .HasColumnName("nationality");
+            entity.Property(e => e.Age).HasColumnName("age");
+            entity.Property(e => e.Gender).HasColumnName("gender").HasMaxLength(20);
+            entity.Property(e => e.MealPreference).HasColumnName("meal_preference").HasMaxLength(50);
+            entity.Property(e => e.AadharCardNumber).HasColumnName("aadhar_card_number").HasMaxLength(50);
             entity.Property(e => e.PassportNumber)
                 .HasMaxLength(50)
                 .HasColumnName("passport_number");
@@ -856,6 +860,8 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.RefundedAt)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("refunded_at");
+            entity.Property(e => e.Status)
+                .HasColumnName("status");
             entity.Property(e => e.TransactionId)
                 .HasMaxLength(200)
                 .HasColumnName("transaction_id");

@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "6I8pgMRkY1E=",
+  "dgSpecHash": "UjVPWqVzfu0=",
   "success": true,
   "projectFilePath": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/TravelTourManagement.API.csproj",
   "expectedPackageFiles": [
+    "/Users/iniyan/.nuget/packages/automapper/16.1.1/automapper.16.1.1.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/bcrypt.net-next/4.2.0/bcrypt.net-next.4.2.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/8.0.0/microsoft.aspnetcore.authentication.jwtbearer.8.0.0.nupkg.sha512",

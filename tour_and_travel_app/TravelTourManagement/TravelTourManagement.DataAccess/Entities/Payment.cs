@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace TravelTourManagement.DataAccess.Entities;
@@ -24,6 +24,8 @@ public partial class Payment
     public DateTime? RefundedAt { get; set; }
 
     public decimal? RefundAmount { get; set; }
+
+    public TravelTourManagement.DataAccess.Enums.PaymentStatus Status { get; set; }
 
     public virtual Booking Booking { get; set; } = null!;
 }

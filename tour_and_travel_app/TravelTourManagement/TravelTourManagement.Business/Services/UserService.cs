@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 using TravelTourManagement.Business.Interface;
 using TravelTourManagement.DataAccess.DTOs.Users;
 using TravelTourManagement.DataAccess.Interface;
+using AutoMapper;
 
 namespace TravelTourManagement.Business.Services;
 
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
     private readonly string _uploadDirectory;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
+        _mapper = mapper;
         
         // Define path in DataAccess layer (as requested by user)
         var currentDirectory = Directory.GetCurrentDirectory(); 
@@ -35,16 +38,7 @@ public class UserService : IUserService
         if (user == null)
             throw new KeyNotFoundException("User not found.");
 
-        return new UserResponse(
-            user.Id,
-            user.FullName,
-            user.Email,
-            user.Phone,
-            user.ProfilePicture,
-            user.IsActive,
-            user.IsEmailVerified,
-            user.PackagerUser != null && user.PackagerUser.ApprovedAt != null && user.PackagerUser.DeactivatedAt == null
-        );
+        return _mapper.Map<UserResponse>(user);
     }
 
     public async Task<UserResponse> UpdateProfileAsync(Guid userId, UpdateProfileRequest request, CancellationToken cancellationToken = default)
@@ -59,16 +53,7 @@ public class UserService : IUserService
 
         await _userRepository.UpdateAsync(user, cancellationToken);
 
-        return new UserResponse(
-            user.Id,
-            user.FullName,
-            user.Email,
-            user.Phone,
-            user.ProfilePicture,
-            user.IsActive,
-            user.IsEmailVerified,
-            user.PackagerUser != null && user.PackagerUser.ApprovedAt != null && user.PackagerUser.DeactivatedAt == null
-        );
+        return _mapper.Map<UserResponse>(user);
     }
 
     public async Task<UserResponse> UploadProfilePictureAsync(Guid userId, Stream fileStream, string fileName, string contentType, CancellationToken cancellationToken = default)
@@ -103,16 +88,7 @@ public class UserService : IUserService
 
         await _userRepository.UpdateAsync(user, cancellationToken);
 
-        return new UserResponse(
-            user.Id,
-            user.FullName,
-            user.Email,
-            user.Phone,
-            user.ProfilePicture,
-            user.IsActive,
-            user.IsEmailVerified,
-            user.PackagerUser != null && user.PackagerUser.ApprovedAt != null && user.PackagerUser.DeactivatedAt == null
-        );
+        return _mapper.Map<UserResponse>(user);
     }
 
     public async Task<UserResponse> RemoveProfilePictureAsync(Guid userId, CancellationToken cancellationToken = default)
@@ -133,15 +109,6 @@ public class UserService : IUserService
             await _userRepository.UpdateAsync(user, cancellationToken);
         }
 
-        return new UserResponse(
-            user.Id,
-            user.FullName,
-            user.Email,
-            user.Phone,
-            user.ProfilePicture,
-            user.IsActive,
-            user.IsEmailVerified,
-            user.PackagerUser != null && user.PackagerUser.ApprovedAt != null && user.PackagerUser.DeactivatedAt == null
-        );
+        return _mapper.Map<UserResponse>(user);
     }
 }

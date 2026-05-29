@@ -26,9 +26,11 @@ public static class BusinessServiceRegistration
         services.AddScoped<IOtpService, OtpService>();
         services.AddScoped<IPackageService, PackageService>();
         services.AddScoped<IBookingService, BookingService>();
+        services.AddScoped<IPlatformConfigService, PlatformConfigService>();
         services.AddScoped<IPaymentService, PaymentService>();
-        
-        
+
+        // Register AutoMapper
+        services.AddAutoMapper(config => config.AddMaps(typeof(BusinessServiceRegistration).Assembly));
 
         return services;
     }

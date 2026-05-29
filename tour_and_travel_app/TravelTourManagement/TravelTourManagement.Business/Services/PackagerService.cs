@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TravelTourManagement.DataAccess.DTOs.Packagers;
 using TravelTourManagement.DataAccess.Entities;
 using TravelTourManagement.DataAccess.Interface;
+using AutoMapper;
 
 namespace TravelTourManagement.Business.Services;
 
@@ -13,11 +14,13 @@ public class PackagerService : IPackagerService
 {
     private readonly IPackagerRepository _packagerRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
 
-    public PackagerService(IPackagerRepository packagerRepository, IUserRepository userRepository)
+    public PackagerService(IPackagerRepository packagerRepository, IUserRepository userRepository, IMapper mapper)
     {
         _packagerRepository = packagerRepository;
         _userRepository = userRepository;
+        _mapper = mapper;
     }
 
     public async Task<PackagerResponse> ApplyToBecomePackagerAsync(Guid userId, ApplyPackagerRequest request, CancellationToken cancellationToken = default)
@@ -43,7 +46,7 @@ public class PackagerService : IPackagerService
         };
 
         var createdPackager = await _packagerRepository.AddAsync(packager, cancellationToken);
-        return MapToResponse(createdPackager);
+        return _mapper.Map<PackagerResponse>(createdPackager);
     }
 
     public async Task<PackagerResponse> ApprovePackagerAsync(Guid packagerId, Guid adminUserId, CancellationToken cancellationToken = default)
@@ -71,7 +74,7 @@ public class PackagerService : IPackagerService
 
         await _packagerRepository.UpdateAsync(packager, cancellationToken);
         await _packagerRepository.UpdateStatusRawAsync(packagerId, "approved", cancellationToken);
-        return MapToResponse(packager);
+        return _mapper.Map<PackagerResponse>(packager);
     }
 
     public async Task<PackagerResponse> RejectPackagerAsync(Guid packagerId, Guid adminUserId, string reason, CancellationToken cancellationToken = default)
@@ -99,13 +102,13 @@ public class PackagerService : IPackagerService
 
         await _packagerRepository.UpdateAsync(packager, cancellationToken);
         await _packagerRepository.UpdateStatusRawAsync(packagerId, "deactivated", cancellationToken);
-        return MapToResponse(packager);
+        return _mapper.Map<PackagerResponse>(packager);
     }
 
     public async Task<IEnumerable<PackagerResponse>> GetPendingPackagersAsync(CancellationToken cancellationToken = default)
     {
         var pendingPackagers = await _packagerRepository.GetPendingApprovalAsync(cancellationToken);
-        return pendingPackagers.Select(MapToResponse);
+        return _mapper.Map<IEnumerable<PackagerResponse>>(pendingPackagers);
     }
 
     public async Task<PackagerResponse> GetMyPackagerStatusAsync(Guid userId, CancellationToken cancellationToken = default)
@@ -115,35 +118,16 @@ public class PackagerService : IPackagerService
         {
             throw new KeyNotFoundException("No packager application found for this user.");
         }
-        return MapToResponse(packager);
+        return _mapper.Map<PackagerResponse>(packager);
     }
 
-    private static PackagerResponse MapToResponse(Packager pk)
+    public async Task<TravelTourManagement.DataAccess.DTOs.PagedResponse<PublicPackagerResponse>> GetPublicPackagersAsync(PackagerSearchRequest request, CancellationToken cancellationToken = default)
     {
-        string status = "Pending";
-        if (pk.DeactivatedAt != null)
-        {
-            status = pk.ApprovedAt == null ? "Rejected" : "Deactivated";
-        }
-        else if (pk.ApprovedAt != null)
-        {
-            status = "Approved";
-        }
+        var (packagers, totalCount) = await _packagerRepository.SearchPublicPackagersAsync(request.SearchTerm, request.PageNumber, request.PageSize, cancellationToken);
+        
+        var responseItems = _mapper.Map<List<PublicPackagerResponse>>(packagers);
 
-        return new PackagerResponse(
-            pk.Id,
-            pk.UserId,
-            pk.CompanyName,
-            pk.BusinessLicenseNo,
-            pk.Description,
-            pk.ContactEmail,
-            pk.ContactPhone,
-            pk.WebsiteUrl,
-            status,
-            pk.DeactivationReason,
-            pk.AvgRating,
-            pk.TotalReviews,
-            pk.CreatedAt
-        );
+        return new TravelTourManagement.DataAccess.DTOs.PagedResponse<PublicPackagerResponse>(responseItems, totalCount, request.PageNumber, request.PageSize);
     }
+
 }

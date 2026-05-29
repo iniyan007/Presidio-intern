@@ -42,4 +42,12 @@ public class PackagersController : ControllerBase
         var response = await _packagerService.GetMyPackagerStatusAsync(userId);
         return Ok(response);
     }
+
+    [HttpGet("public")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetPublicPackagers([FromQuery] PackagerSearchRequest request)
+    {
+        var response = await _packagerService.GetPublicPackagersAsync(request);
+        return Ok(response);
+    }
 }

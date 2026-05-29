@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "fcYFVndwl3g=",
+  "dgSpecHash": "Ke25iCZJYYE=",
   "success": true,
   "projectFilePath": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/TravelTourManagement.Business.csproj",
   "expectedPackageFiles": [
+    "/Users/iniyan/.nuget/packages/automapper/16.1.1/automapper.16.1.1.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/bcrypt.net-next/4.2.0/bcrypt.net-next.4.2.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.aspnetcore.hosting.abstractions/2.3.10/microsoft.aspnetcore.hosting.abstractions.2.3.10.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.aspnetcore.hosting.server.abstractions/2.3.9/microsoft.aspnetcore.hosting.server.abstractions.2.3.9.nupkg.sha512",

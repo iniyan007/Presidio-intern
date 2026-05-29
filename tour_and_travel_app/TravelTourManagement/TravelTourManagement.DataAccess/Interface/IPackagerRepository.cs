@@ -30,6 +30,12 @@ public interface IPackagerRepository : IRepository<Packager, Guid>
     Task<Packager?> GetWithPackagesAsync(Guid packagerId, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Queries public packagers with pagination and search.
+    /// </summary>
+    Task<(IReadOnlyList<Packager> Packagers, int TotalCount)> SearchPublicPackagersAsync(string? searchTerm, int pageNumber, int pageSize, CancellationToken cancellationToken = default);
+
+
+    /// <summary>
     /// Returns <c>true</c> if a packager profile already exists for the given user.
     /// </summary>
     Task<bool> ExistsByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
