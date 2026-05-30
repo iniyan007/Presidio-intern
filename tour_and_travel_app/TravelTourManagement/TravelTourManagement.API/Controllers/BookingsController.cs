@@ -24,7 +24,7 @@ public class BookingsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Admin,Traveler")]
-    public async Task<IActionResult> CreateBooking([FromForm] CreateBookingCombinedRequest request)
+    public async Task<IActionResult> CreateBooking([FromForm] CreateBookingCombinedRequest request, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
@@ -49,31 +49,31 @@ public class BookingsController : ControllerBase
             return BadRequest(new { message = "Invalid JSON in BookingData.", details = ex.Message });
         }
 
-        var response = await _bookingService.CreateBookingAsync(userId, bookingData, request.DocumentFiles);
+        var response = await _bookingService.CreateBookingAsync(userId, bookingData, request.DocumentFiles, cancellationToken);
         return Ok(response);
     }
 
     [HttpPost("{id}/pay")]
     [Authorize(Roles = "Admin,Traveler")]
-    public async Task<IActionResult> ProcessPayment(Guid id, [FromBody] ProcessPaymentRequest request)
+    public async Task<IActionResult> ProcessPayment(Guid id, [FromBody] ProcessPaymentRequest request, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             throw new UnauthorizedAccessException("User ID not found in token.");
 
-        var response = await _paymentService.ProcessPaymentAsync(userId, id, request);
+        var response = await _paymentService.ProcessPaymentAsync(userId, id, request, cancellationToken);
         return Ok(response);
     }
 
     [HttpPut("{id}/verify")]
     [Authorize(Roles = "Admin,Packager")]
-    public async Task<IActionResult> VerifyBooking(Guid id)
+    public async Task<IActionResult> VerifyBooking(Guid id, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             throw new UnauthorizedAccessException("User ID not found in token.");
 
-        var response = await _bookingService.VerifyBookingAsync(userId, id);
+        var response = await _bookingService.VerifyBookingAsync(userId, id, cancellationToken);
         var primaryTraveler = response.Travelers?.FirstOrDefault(t => t.IsPrimary) ?? response.Travelers?.FirstOrDefault();
         string fullName = primaryTraveler != null ? primaryTraveler.FullName : "the user";
         
@@ -82,38 +82,38 @@ public class BookingsController : ControllerBase
 
     [HttpGet("package/{packageId}")]
     [Authorize(Roles = "Admin,Packager")]
-    public async Task<IActionResult> GetBookingsByPackageId(Guid packageId)
+    public async Task<IActionResult> GetBookingsByPackageId(Guid packageId, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             throw new UnauthorizedAccessException("User ID not found in token.");
 
         var userRole = User.FindFirst(ClaimTypes.Role)?.Value ?? "";
-        var response = await _bookingService.GetBookingsByPackageIdAsync(userId, userRole, packageId);
+        var response = await _bookingService.GetBookingsByPackageIdAsync(userId, userRole, packageId, cancellationToken);
         return Ok(response);
     }
 
     [HttpPut("documents/{documentId}/verify")]
     [Authorize(Roles = "Packager")]
-    public async Task<IActionResult> VerifyDocument(Guid documentId, [FromBody] VerifyDocumentRequest request)
+    public async Task<IActionResult> VerifyDocument(Guid documentId, [FromBody] VerifyDocumentRequest request, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             throw new UnauthorizedAccessException("User ID not found in token.");
 
-        var response = await _bookingService.VerifyDocumentAsync(userId, documentId, request);
+        var response = await _bookingService.VerifyDocumentAsync(userId, documentId, request, cancellationToken);
         return Ok(response);
     }
 
     [HttpPut("documents/{documentId}/reupload")]
     [Authorize(Roles = "Traveler,Admin")]
-    public async Task<IActionResult> ReuploadDocument(Guid documentId, IFormFile file)
+    public async Task<IActionResult> ReuploadDocument(Guid documentId, IFormFile file, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             throw new UnauthorizedAccessException("User ID not found in token.");
 
-        var response = await _bookingService.ReuploadDocumentAsync(userId, documentId, file);
+        var response = await _bookingService.ReuploadDocumentAsync(userId, documentId, file, cancellationToken);
         return Ok(response);
     }
 }

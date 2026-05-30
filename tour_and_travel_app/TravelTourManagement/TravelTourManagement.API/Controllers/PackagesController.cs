@@ -24,23 +24,23 @@ public class PackagesController : ControllerBase
     
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> SearchPackages([FromQuery] PackageSearchRequest request)
+    public async Task<IActionResult> SearchPackages([FromQuery] PackageSearchRequest request, CancellationToken cancellationToken)
     {
-        var result = await _packageService.SearchPackagesAsync(request);
+        var result = await _packageService.SearchPackagesAsync(request, cancellationToken);
         return Ok(result);
     }
 
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin,Traveler,Packager")]
-    public async Task<IActionResult> GetPublishedPackageById(Guid id)
+    public async Task<IActionResult> GetPublishedPackageById(Guid id, CancellationToken cancellationToken)
     {
-        var package = await _packageService.GetPublishedPackageByIdAsync(id);
+        var package = await _packageService.GetPublishedPackageByIdAsync(id, cancellationToken);
         return Ok(package);
     }
 
     [HttpPost]
     [Authorize(Roles = "Packager")]
-    public async Task<IActionResult> CreatePackage([FromForm] CreatePackageCombinedRequest request)
+    public async Task<IActionResult> CreatePackage([FromForm] CreatePackageCombinedRequest request, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
@@ -65,7 +65,7 @@ public class PackagesController : ControllerBase
             return BadRequest(new { message = "Invalid JSON in PackageData.", details = ex.Message });
         }
 
-        var packageId = await _packageService.CreatePackageAsync(userId, packageData, request.MediaFiles);
+        var packageId = await _packageService.CreatePackageAsync(userId, packageData, request.MediaFiles, cancellationToken);
         return CreatedAtAction(nameof(CreatePackage), new { id = packageId }, new { id = packageId, message = "Package created successfully." });
     }
 
@@ -98,19 +98,19 @@ public class PackagesController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "Packager")]
-    public async Task<IActionResult> DeletePackage(Guid id)
+    public async Task<IActionResult> DeletePackage(Guid id, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             throw new UnauthorizedAccessException("User ID not found in token.");
 
-        await _packageService.DeletePackageAsync(userId, id);
+        await _packageService.DeletePackageAsync(userId, id, cancellationToken);
         return Ok(new { message = "Package deleted successfully." });
     }
 
     [HttpGet("{id}/revenue")]
     [Authorize(Roles = "Admin,Packager")]
-    public async Task<IActionResult> GetPackageRevenue(Guid id)
+    public async Task<IActionResult> GetPackageRevenue(Guid id, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
@@ -120,7 +120,7 @@ public class PackagesController : ControllerBase
         if (string.IsNullOrEmpty(role))
             throw new UnauthorizedAccessException("Role not found in token.");
 
-        var result = await _packageService.GetPackageRevenueAsync(userId, role, id);
+        var result = await _packageService.GetPackageRevenueAsync(userId, role, id, cancellationToken);
         return Ok(result);
     }
 }

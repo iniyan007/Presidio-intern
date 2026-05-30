@@ -21,21 +21,21 @@ public class PlatformConfigController : ControllerBase
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetConfig()
+    public async Task<IActionResult> GetConfig(CancellationToken cancellationToken)
     {
-        var response = await _platformConfigService.GetConfigAsync();
+        var response = await _platformConfigService.GetConfigAsync(cancellationToken);
         return Ok(response);
     }
 
     [HttpPut]
     [Authorize(Roles = "admin")]
-    public async Task<IActionResult> UpdateConfig([FromBody] UpdatePlatformConfigRequest request)
+    public async Task<IActionResult> UpdateConfig([FromBody] UpdatePlatformConfigRequest request, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var adminUserId))
             return Unauthorized("User ID not found in token.");
 
-        var response = await _platformConfigService.UpdateConfigAsync(adminUserId, request);
+        var response = await _platformConfigService.UpdateConfigAsync(adminUserId, request, cancellationToken);
         return Ok(response);
     }
 }

@@ -18,7 +18,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpPost("packagers/{id:guid}/approve")]
-    public async Task<IActionResult> ApprovePackager(Guid id)
+    public async Task<IActionResult> ApprovePackager(Guid id, CancellationToken cancellationToken)
     {
         var adminUserIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(adminUserIdString) || !Guid.TryParse(adminUserIdString, out var adminUserId))
@@ -28,7 +28,7 @@ public class AdminController : ControllerBase
 
         try
         {
-            var response = await _packagerService.ApprovePackagerAsync(id, adminUserId);
+            var response = await _packagerService.ApprovePackagerAsync(id, adminUserId, cancellationToken);
             return Ok(response);
         }
         catch (KeyNotFoundException ex)
@@ -46,7 +46,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpPost("packagers/{id:guid}/reject")]
-    public async Task<IActionResult> RejectPackager(Guid id, [FromBody] TravelTourManagement.DataAccess.DTOs.Packagers.RejectPackagerRequest request)
+    public async Task<IActionResult> RejectPackager(Guid id, [FromBody] TravelTourManagement.DataAccess.DTOs.Packagers.RejectPackagerRequest request, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
         {
@@ -61,7 +61,7 @@ public class AdminController : ControllerBase
 
         try
         {
-            var response = await _packagerService.RejectPackagerAsync(id, adminUserId, request.Reason);
+            var response = await _packagerService.RejectPackagerAsync(id, adminUserId, request.Reason, cancellationToken);
             return Ok(response);
         }
         catch (KeyNotFoundException ex)
@@ -79,11 +79,11 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet("packagers/pending")]
-    public async Task<IActionResult> GetPendingPackagers()
+    public async Task<IActionResult> GetPendingPackagers(CancellationToken cancellationToken)
     {
         try
         {
-            var response = await _packagerService.GetPendingPackagersAsync();
+            var response = await _packagerService.GetPendingPackagersAsync(cancellationToken);
             return Ok(response);
         }
         catch (Exception ex)

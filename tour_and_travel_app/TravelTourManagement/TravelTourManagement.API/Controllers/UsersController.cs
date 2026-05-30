@@ -27,31 +27,31 @@ public class UsersController : ControllerBase
 
     [HttpGet("profile")]
     [Authorize]
-    public async Task<IActionResult> GetProfile()
+    public async Task<IActionResult> GetProfile(CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             throw new UnauthorizedAccessException("User ID not found in token.");
 
-        var response = await _userService.GetProfileAsync(userId);
+        var response = await _userService.GetProfileAsync(userId, cancellationToken);
         return Ok(response);
     }
 
     [HttpPut("profile")]
     [Authorize]
-    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             throw new UnauthorizedAccessException("User ID not found in token.");
 
-        var response = await _userService.UpdateProfileAsync(userId, request);
+        var response = await _userService.UpdateProfileAsync(userId, request, cancellationToken);
         return Ok(response);
     }
 
     [HttpPost("profile/picture")]
     [Authorize]
-    public async Task<IActionResult> UploadProfilePicture(Microsoft.AspNetCore.Http.IFormFile profilePicture)
+    public async Task<IActionResult> UploadProfilePicture(Microsoft.AspNetCore.Http.IFormFile profilePicture, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
@@ -69,19 +69,19 @@ public class UsersController : ControllerBase
             throw new ArgumentException("File size exceeds 5MB limit.");
 
         using var stream = profilePicture.OpenReadStream();
-        var response = await _userService.UploadProfilePictureAsync(userId, stream, profilePicture.FileName, profilePicture.ContentType);
+        var response = await _userService.UploadProfilePictureAsync(userId, stream, profilePicture.FileName, profilePicture.ContentType, cancellationToken);
         return Ok(response);
     }
 
     [HttpDelete("profile/picture")]
     [Authorize]
-    public async Task<IActionResult> RemoveProfilePicture()
+    public async Task<IActionResult> RemoveProfilePicture(CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             throw new UnauthorizedAccessException("User ID not found in token.");
 
-        var response = await _userService.RemoveProfilePictureAsync(userId);
+        var response = await _userService.RemoveProfilePictureAsync(userId, cancellationToken);
         return Ok(response);
     }
 
