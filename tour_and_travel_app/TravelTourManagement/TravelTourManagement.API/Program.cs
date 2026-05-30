@@ -77,12 +77,7 @@ builder.Services.AddBusinessServices(builder.Configuration);
 builder.Services.AddQuartz(q =>
 {
     var bookingJobKey = new JobKey("BookingTimeoutJob");
-    q.AddJob<BookingTimeoutJob>(opts => opts.WithIdentity(bookingJobKey));
-    q.AddTrigger(opts => opts
-        .ForJob(bookingJobKey)
-        .WithIdentity("BookingTimeoutJob-trigger")
-        .WithCronSchedule("0 * * ? * *") // Runs every minute
-    );
+    q.AddJob<BookingTimeoutJob>(opts => opts.WithIdentity(bookingJobKey).StoreDurably()); // Store durably since it will be triggered dynamically
 
     var completionJobKey = new JobKey("PackageCompletionJob");
     q.AddJob<PackageCompletionJob>(opts => opts.WithIdentity(completionJobKey));

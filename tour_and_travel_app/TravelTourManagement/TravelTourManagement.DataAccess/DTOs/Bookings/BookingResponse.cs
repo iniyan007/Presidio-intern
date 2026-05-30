@@ -42,5 +42,7 @@ public record TravelDocumentResponse(
     string DocumentType,
     string FilePath,
     string FileName,
-    DateTime UploadedAt
+    DateTime UploadedAt,
+    string Status,
+    string? RejectionReason
 );

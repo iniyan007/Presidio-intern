@@ -8,6 +8,7 @@ using TravelTourManagement.DataAccess.DTOs.Bookings;
 using Microsoft.AspNetCore.Http;
 using TravelTourManagement.DataAccess.Entities;
 using TravelTourManagement.DataAccess.Interface;
+using Quartz;
 using AutoMapper;
 
 namespace TravelTourManagement.Business.Services;
@@ -20,6 +21,8 @@ public class BookingService : IBookingService
     private readonly IUserRepository _userRepository;
     private readonly IPlatformConfigService _platformConfigService;
     private readonly IMapper _mapper;
+    private readonly ISchedulerFactory _schedulerFactory;
+    private readonly IRepository<TravelDocument, Guid> _documentRepository;
 
     public BookingService(
         IPlatformConfigService platformConfigService,
@@ -27,7 +30,9 @@ public class BookingService : IBookingService
         IBookingRepository bookingRepository,
         IPackageRepository packageRepository,
         IRepository<PackageSeasonalPricing, Guid> seasonalPricingRepository,
-        IUserRepository userRepository)
+        IUserRepository userRepository,
+        IRepository<TravelDocument, Guid> documentRepository,
+        ISchedulerFactory schedulerFactory)
     {
         _bookingRepository = bookingRepository;
         _packageRepository = packageRepository;
@@ -35,6 +40,8 @@ public class BookingService : IBookingService
         _userRepository = userRepository;
         _platformConfigService = platformConfigService;
         _mapper = mapper;
+        _schedulerFactory = schedulerFactory;
+        _documentRepository = documentRepository;
     }
 
     public async Task<BookingResponse> CreateBookingAsync(Guid userId, CreateBookingRequest request, List<IFormFile>? documentFiles = null, CancellationToken cancellationToken = default)
@@ -84,12 +91,14 @@ public class BookingService : IBookingService
             else adultCount++;
         }
 
-        // Check availability
+        // Check availability (Infants do not consume seats)
         var totalTravelers = adultCount + childCount + request.InfantCount;
-        if (totalTravelers > pricing.AvailableSlots)
-            throw new InvalidOperationException($"Not enough slots available. Requested: {totalTravelers}, Available: {pricing.AvailableSlots}");
+        var seatConsumingTravelers = adultCount + childCount;
         
-        if (package.CurrentBookings + totalTravelers > package.MaxCapacity)
+        if (seatConsumingTravelers > pricing.AvailableSlots)
+            throw new InvalidOperationException($"Not enough slots available. Requested: {seatConsumingTravelers}, Available: {pricing.AvailableSlots}");
+        
+        if (package.CurrentBookings + seatConsumingTravelers > package.MaxCapacity)
             throw new InvalidOperationException("Package max capacity exceeded.");
 
         // Generate Booking Reference
@@ -217,12 +226,23 @@ public class BookingService : IBookingService
         await _bookingRepository.AddAsync(booking, cancellationToken);
 
 
-        // Update slots
-        pricing.AvailableSlots -= totalTravelers;
+        // Update slots (only for seat-consuming travelers)
+        pricing.AvailableSlots -= seatConsumingTravelers;
         await _seasonalPricingRepository.UpdateAsync(pricing, cancellationToken);
 
-        package.CurrentBookings += totalTravelers;
+        package.CurrentBookings += seatConsumingTravelers;
         await _packageRepository.UpdateAsync(package, cancellationToken);
+
+        // Schedule Quartz Job to cancel booking if payment is not completed within 5 minutes
+        var scheduler = await _schedulerFactory.GetScheduler(cancellationToken);
+        var jobKey = new JobKey("BookingTimeoutJob");
+        var trigger = TriggerBuilder.Create()
+            .ForJob(jobKey)
+            .StartAt(DateTimeOffset.UtcNow.AddMinutes(5)) // Run in exactly 5 minutes
+            .UsingJobData("BookingId", booking.Id.ToString())
+            .Build();
+
+        await scheduler.ScheduleJob(trigger, cancellationToken);
 
         return _mapper.Map<BookingResponse>(booking);
     }
@@ -238,6 +258,12 @@ public class BookingService : IBookingService
 
         if (booking.Status != TravelTourManagement.DataAccess.Enums.BookingStatus.DocumentUnderReview)
             throw new InvalidOperationException($"Booking is not in DocumentUnderReview state. Current status: {booking.Status}");
+
+        var unverifiedDocuments = booking.TravelDocuments?.Where(d => d.Status != TravelTourManagement.DataAccess.Enums.DocumentStatus.Verified).ToList();
+        if (unverifiedDocuments != null && unverifiedDocuments.Any())
+        {
+            throw new InvalidOperationException("Cannot confirm booking until all travel documents are verified.");
+        }
 
         booking.Status = TravelTourManagement.DataAccess.Enums.BookingStatus.Confirmed;
         booking.UpdatedAt = DateTime.UtcNow;
@@ -260,5 +286,121 @@ public class BookingService : IBookingService
         var bookings = await _bookingRepository.GetByPackageIdAsync(packageId, cancellationToken);
 
         return _mapper.Map<IReadOnlyList<BookingResponse>>(bookings);
+    }
+
+    public async Task<TravelDocumentResponse> VerifyDocumentAsync(Guid packagerUserId, Guid documentId, VerifyDocumentRequest request, CancellationToken cancellationToken = default)
+    {
+        var document = await _documentRepository.GetByIdAsync(documentId, cancellationToken);
+        if (document == null)
+            throw new KeyNotFoundException("Document not found.");
+
+        var booking = await _bookingRepository.GetByIdAsync(document.BookingId, cancellationToken);
+        if (booking == null)
+            throw new KeyNotFoundException("Associated booking not found.");
+
+        var package = await _packageRepository.GetWithFullDetailsAsync(booking.PackageId, cancellationToken);
+        if (package == null)
+            throw new KeyNotFoundException("Associated package not found.");
+
+        if (package.Packager.UserId != packagerUserId)
+            throw new UnauthorizedAccessException("You are not authorized to verify documents for this package.");
+
+        if (request.IsVerified)
+        {
+            document.Status = TravelTourManagement.DataAccess.Enums.DocumentStatus.Verified;
+            document.VerifiedAt = DateTime.UtcNow;
+            document.VerifiedBy = packagerUserId;
+            document.RejectionReason = null;
+        }
+        else
+        {
+            document.Status = TravelTourManagement.DataAccess.Enums.DocumentStatus.Rejected;
+            document.VerifiedAt = DateTime.UtcNow;
+            document.VerifiedBy = packagerUserId;
+            document.RejectionReason = request.RejectionReason;
+        }
+
+        await _documentRepository.UpdateAsync(document, cancellationToken);
+
+        // Check if all documents for this booking are now verified
+        var fullBooking = await _bookingRepository.GetWithFullDetailsAsync(booking.Id, cancellationToken);
+        if (fullBooking != null && fullBooking.Status == TravelTourManagement.DataAccess.Enums.BookingStatus.DocumentUnderReview)
+        {
+            var unverifiedDocs = fullBooking.TravelDocuments?.Where(d => d.Status != TravelTourManagement.DataAccess.Enums.DocumentStatus.Verified).ToList();
+            if (unverifiedDocs == null || !unverifiedDocs.Any())
+            {
+                // All documents are verified, auto-confirm the booking
+                fullBooking.Status = TravelTourManagement.DataAccess.Enums.BookingStatus.Confirmed;
+                fullBooking.UpdatedAt = DateTime.UtcNow;
+                await _bookingRepository.UpdateAsync(fullBooking, cancellationToken);
+            }
+        }
+
+        return _mapper.Map<TravelDocumentResponse>(document);
+    }
+
+    public async Task<TravelDocumentResponse> ReuploadDocumentAsync(Guid userId, Guid documentId, IFormFile file, CancellationToken cancellationToken = default)
+    {
+        var document = await _documentRepository.GetByIdAsync(documentId, cancellationToken);
+        if (document == null)
+            throw new KeyNotFoundException("Document not found.");
+
+        var booking = await _bookingRepository.GetByIdAsync(document.BookingId, cancellationToken);
+        if (booking == null)
+            throw new KeyNotFoundException("Associated booking not found.");
+
+        if (booking.UserId != userId)
+            throw new UnauthorizedAccessException("You are not authorized to update this document.");
+
+        if (file == null || file.Length == 0)
+            throw new ArgumentException("Invalid file.");
+
+        // Delete old file
+        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "travel_documents");
+        string oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", document.FilePath.TrimStart('/'));
+        if (File.Exists(oldFilePath))
+        {
+            File.Delete(oldFilePath);
+        }
+
+        if (!Directory.Exists(uploadsFolder))
+            Directory.CreateDirectory(uploadsFolder);
+
+        string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+        string newFilePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+        using (var stream = new FileStream(newFilePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream, cancellationToken);
+        }
+
+        document.FileName = uniqueFileName;
+        document.FilePath = $"/uploads/travel_documents/{uniqueFileName}";
+        document.OriginalFilename = file.FileName;
+        document.FileSizeBytes = file.Length;
+        document.MimeType = file.ContentType;
+        document.UploadedAt = DateTime.UtcNow;
+        document.Status = TravelTourManagement.DataAccess.Enums.DocumentStatus.Uploaded;
+        document.VerifiedAt = null;
+        document.VerifiedBy = null;
+        document.RejectionReason = null;
+
+        await _documentRepository.UpdateAsync(document, cancellationToken);
+
+        // Check if all documents for this booking are now verified
+        var fullBooking = await _bookingRepository.GetWithFullDetailsAsync(booking.Id, cancellationToken);
+        if (fullBooking != null && fullBooking.Status == TravelTourManagement.DataAccess.Enums.BookingStatus.DocumentUnderReview)
+        {
+            var unverifiedDocs = fullBooking.TravelDocuments?.Where(d => d.Status != TravelTourManagement.DataAccess.Enums.DocumentStatus.Verified).ToList();
+            if (unverifiedDocs == null || !unverifiedDocs.Any())
+            {
+                // All documents are verified, auto-confirm the booking
+                fullBooking.Status = TravelTourManagement.DataAccess.Enums.BookingStatus.Confirmed;
+                fullBooking.UpdatedAt = DateTime.UtcNow;
+                await _bookingRepository.UpdateAsync(fullBooking, cancellationToken);
+            }
+        }
+
+        return _mapper.Map<TravelDocumentResponse>(document);
     }
 }

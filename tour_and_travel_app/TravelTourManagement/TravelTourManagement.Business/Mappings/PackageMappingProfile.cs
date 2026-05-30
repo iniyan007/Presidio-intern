@@ -85,7 +85,7 @@ public class PackageMappingProfile : Profile
 
         // 2. Entity -> DTO (Package Summary)
         CreateMap<Package, PackageSummaryResponse>()
-            .ConstructUsing(src => new PackageSummaryResponse(
+            .ConstructUsing((src, ctx) => new PackageSummaryResponse(
                 src.Id,
                 src.PackagerId,
                 src.Packager != null ? src.Packager.CompanyName : "Unknown",
@@ -104,13 +104,14 @@ public class PackageMappingProfile : Profile
 
         // 3. Entity -> DTO (Package Detail)
         CreateMap<Package, PackageDetailResponse>()
-            .ConstructUsing(src => new PackageDetailResponse(
+            .ForMember(dest => dest.ItineraryDays, opt => opt.Ignore())
+            .ConstructUsing((src, ctx) => new PackageDetailResponse(
                 src.Id,
                 src.PackagerId,
                 src.Packager != null ? src.Packager.CompanyName : "Unknown",
                 src.Title,
-                src.Description,
                 src.Type.ToString(),
+                src.Description,
                 src.Destination,
                 src.Country,
                 src.City,
@@ -123,18 +124,18 @@ public class PackageMappingProfile : Profile
                 src.IsFeatured,
                 src.AvgRating,
                 src.TotalReviews,
-                src.PackageHighlights.OrderBy(h => h.DisplayOrder).Select(h => h.HighlightText).ToList(),
-                src.PackageInclusions.Where(i => i.Type == TravelTourManagement.DataAccess.Enums.InclusionType.Included).Select(i => i.Description).ToList(),
-                src.PackageInclusions.Where(i => i.Type == TravelTourManagement.DataAccess.Enums.InclusionType.Excluded).Select(i => i.Description).ToList(),
-                src.PackageMedia.OrderBy(m => m.DisplayOrder).Select(m => new PackageMediaDto(m.Id, m.FilePath, m.Caption, m.IsPrimary, m.DisplayOrder)).ToList(),
-                src.PackageSeasonalPricings.Select(p => new PackageSeasonalPricingDto(p.Id, p.SeasonName, p.StartDate, p.EndDate, p.BasePrice, p.ChildPrice, p.DiscountPercent, p.AvailableSlots, p.IsActive)).ToList(),
-                src.ItineraryDays.OrderBy(d => d.DayNumber).Select(d => new ItineraryDayDto(
+                (src.PackageHighlights ?? Enumerable.Empty<PackageHighlight>()).OrderBy(h => h.DisplayOrder).Select(h => h.HighlightText).ToList(),
+                (src.PackageInclusions ?? Enumerable.Empty<PackageInclusion>()).Where(i => i.Type == TravelTourManagement.DataAccess.Enums.InclusionType.Included).Select(i => i.Description).ToList(),
+                (src.PackageInclusions ?? Enumerable.Empty<PackageInclusion>()).Where(i => i.Type == TravelTourManagement.DataAccess.Enums.InclusionType.Excluded).Select(i => i.Description).ToList(),
+                (src.PackageMedia ?? Enumerable.Empty<PackageMedium>()).OrderBy(m => m.DisplayOrder).Select(m => new PackageMediaDto(m.Id, m.FilePath, m.Caption, m.IsPrimary, m.DisplayOrder)).ToList(),
+                (src.PackageSeasonalPricings ?? Enumerable.Empty<PackageSeasonalPricing>()).Select(p => new PackageSeasonalPricingDto(p.Id, p.SeasonName, p.StartDate, p.EndDate, p.BasePrice, p.ChildPrice, p.DiscountPercent, p.AvailableSlots, p.IsActive)).ToList(),
+                (src.ItineraryDays ?? Enumerable.Empty<ItineraryDay>()).OrderBy(d => d.DayNumber).Select(d => new ItineraryDayDto(
                     d.Id,
                     d.DayNumber,
                     d.Title,
                     d.Description,
                     d.Location,
-                    d.ItineraryActivities.OrderBy(a => a.SequenceOrder).Select(a => new ItineraryActivityDto(
+                    (d.ItineraryActivities ?? Enumerable.Empty<ItineraryActivity>()).OrderBy(a => a.SequenceOrder).Select(a => new ItineraryActivityDto(
                         a.Id,
                         a.SequenceOrder,
                         a.ActivityTitle,
@@ -145,13 +146,13 @@ public class PackageMappingProfile : Profile
                         a.IsOptional,
                         a.ExtraCost
                     )).ToList(),
-                    d.ItineraryDayMeals.Select(m => new ItineraryMealDto(
+                    (d.ItineraryDayMeals ?? Enumerable.Empty<ItineraryDayMeal>()).Select(m => new ItineraryMealDto(
                         m.Id,
                         m.Description,
                         m.Venue,
                         m.IsIncluded
                     )).ToList(),
-                    d.PackageAccommodations.Select(a => new ItineraryAccommodationDto(
+                    (d.PackageAccommodations ?? Enumerable.Empty<PackageAccommodation>()).Select(a => new ItineraryAccommodationDto(
                         a.Id,
                         a.HotelName,
                         a.HotelAddress,
@@ -162,7 +163,7 @@ public class PackageMappingProfile : Profile
                         a.Amenities,
                         a.Notes
                     )).ToList(),
-                    d.PackageTransports.OrderBy(t => t.SegmentOrder).Select(t => new ItineraryTransportDto(
+                    (d.PackageTransports ?? Enumerable.Empty<PackageTransport>()).OrderBy(t => t.SegmentOrder).Select(t => new ItineraryTransportDto(
                         t.Id,
                         t.SegmentOrder,
                         t.VehicleDescription,

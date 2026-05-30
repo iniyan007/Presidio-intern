@@ -73,8 +73,7 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<VPackagerRevenueSummary> VPackagerRevenueSummaries { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-      => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=traveldb;Username=postgres;Password=iniyanavin");
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -1024,6 +1023,10 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.OriginalFilename)
                 .HasMaxLength(255)
                 .HasColumnName("original_filename");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.RejectionReason)
+                .HasMaxLength(500)
+                .HasColumnName("rejection_reason");
             entity.Property(e => e.TravelerId).HasColumnName("traveler_id");
             entity.Property(e => e.UploadedAt)
                 .HasDefaultValueSql("now()")

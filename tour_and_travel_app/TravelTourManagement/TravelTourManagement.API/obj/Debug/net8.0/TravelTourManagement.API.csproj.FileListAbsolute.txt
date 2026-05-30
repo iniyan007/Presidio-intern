@@ -137,3 +137,7 @@
 /Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/Quartz.Extensions.DependencyInjection.dll
 /Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/Quartz.Extensions.Hosting.dll
 /Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/AutoMapper.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/Microsoft.Extensions.Caching.Abstractions.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/Pipelines.Sockets.Unofficial.dll
+/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/bin/Debug/net8.0/StackExchange.Redis.dll

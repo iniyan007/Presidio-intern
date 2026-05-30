@@ -15,18 +15,6 @@ public static class DataAccessServiceRegistration
     public static IServiceCollection AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)
     {
 
-#pragma warning disable CS0618 // Type or member is obsolete
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<PackageType>("package_type");
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<PackageStatus>("package_status");
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<InclusionType>("inclusion_type");
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<MediaCategory>("media_category");
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<MealType>("meal_type");
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<TransportMode>("transport_mode");
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<DaySession>("day_session");
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<BookingStatus>("booking_status");
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<PaymentStatus>("payment_status");
-
-#pragma warning restore CS0618
 
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(configuration.GetConnectionString("DefaultConnection"));
 
@@ -39,6 +27,9 @@ public static class DataAccessServiceRegistration
         dataSourceBuilder.MapEnum<DaySession>("day_session");
         dataSourceBuilder.MapEnum<BookingStatus>("booking_status");
         dataSourceBuilder.MapEnum<PaymentStatus>("payment_status");
+        dataSourceBuilder.MapEnum<DocumentStatus>("document_status");
+        
+        dataSourceBuilder.EnableUnmappedTypes();
 
         var dataSource = dataSourceBuilder.Build();
 

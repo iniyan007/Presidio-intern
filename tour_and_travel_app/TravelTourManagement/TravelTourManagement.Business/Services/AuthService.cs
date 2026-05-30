@@ -161,7 +161,7 @@ public class AuthService : IAuthService
         var isValid = await _otpService.VerifyOtpAsync(email, otp);
         if (!isValid)
         {
-            throw new UnauthorizedAccessException("Invalid or expired OTP.");
+            throw new ArgumentException("Invalid or expired OTP.");
         }
 
         user.IsEmailVerified = true;

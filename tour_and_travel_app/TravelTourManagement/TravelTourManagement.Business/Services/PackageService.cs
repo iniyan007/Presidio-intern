@@ -1,6 +1,7 @@
 using TravelTourManagement.DataAccess.DTOs;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -38,6 +39,49 @@ public class PackageService : IPackageService
         var package = _mapper.Map<Package>(request);
         package.PackagerId = packager.Id;
         package.PackageMedia = new List<PackageMedium>();
+
+        if (request.Media != null && mediaFiles != null)
+        {
+            var currentDirectory = Directory.GetCurrentDirectory(); 
+            var solutionDirectory = Directory.GetParent(currentDirectory)?.FullName ?? currentDirectory;
+            var uploadDirectory = Path.Combine(solutionDirectory, "TravelTourManagement.DataAccess", "Uploads", "Packages");
+            
+            if (!Directory.Exists(uploadDirectory))
+            {
+                Directory.CreateDirectory(uploadDirectory);
+            }
+
+            foreach (var mediaReq in request.Media)
+            {
+                var file = mediaFiles.FirstOrDefault(f => f.FileName == mediaReq.FileName);
+                if (file != null && file.Length > 0)
+                {
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                    string filePath = Path.Combine(uploadDirectory, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream, cancellationToken);
+                    }
+
+                    if (Enum.TryParse<TravelTourManagement.DataAccess.Enums.MediaCategory>(mediaReq.Category, true, out var category))
+                    {
+                        package.PackageMedia.Add(new PackageMedium
+                        {
+                            FileName = uniqueFileName,
+                            FilePath = $"/api/Packages/media/{uniqueFileName}",
+                            Caption = mediaReq.Caption,
+                            IsPrimary = mediaReq.IsPrimary,
+                            Category = category,
+                            DisplayOrder = mediaReq.DisplayOrder,
+                            FileSizeBytes = file.Length,
+                            MimeType = file.ContentType,
+                            UploadedAt = DateTime.UtcNow
+                        });
+                    }
+                }
+            }
+        }
 
         var createdPackage = await _packageRepository.CreatePackageWithDetailsAsync(package, cancellationToken);
         return createdPackage.Id;

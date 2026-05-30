@@ -92,4 +92,28 @@ public class BookingsController : ControllerBase
         var response = await _bookingService.GetBookingsByPackageIdAsync(userId, userRole, packageId);
         return Ok(response);
     }
+
+    [HttpPut("documents/{documentId}/verify")]
+    [Authorize(Roles = "Packager")]
+    public async Task<IActionResult> VerifyDocument(Guid documentId, [FromBody] VerifyDocumentRequest request)
+    {
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("User ID not found in token.");
+
+        var response = await _bookingService.VerifyDocumentAsync(userId, documentId, request);
+        return Ok(response);
+    }
+
+    [HttpPut("documents/{documentId}/reupload")]
+    [Authorize(Roles = "Traveler,Admin")]
+    public async Task<IActionResult> ReuploadDocument(Guid documentId, IFormFile file)
+    {
+        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("User ID not found in token.");
+
+        var response = await _bookingService.ReuploadDocumentAsync(userId, documentId, file);
+        return Ok(response);
+    }
 }

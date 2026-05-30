@@ -9,7 +9,15 @@ public class UserProfile : Profile
     public UserProfile()
     {
         CreateMap<User, UserResponse>()
-            .ForMember(dest => dest.IsPackager, opt => opt.MapFrom(src => 
-                src.PackagerUser != null && src.PackagerUser.ApprovedAt != null && src.PackagerUser.DeactivatedAt == null));
+            .ConstructUsing((src, ctx) => new UserResponse(
+                src.Id,
+                src.FullName,
+                src.Email,
+                src.Phone,
+                src.ProfilePicture,
+                src.IsActive,
+                src.IsEmailVerified,
+                src.PackagerUser != null && src.PackagerUser.ApprovedAt != null && src.PackagerUser.DeactivatedAt == null
+            ));
     }
 }

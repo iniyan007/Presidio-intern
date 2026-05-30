@@ -19,6 +19,21 @@ public static class BusinessServiceRegistration
 
         // Register Services
         services.AddMemoryCache();
+
+        var redisConnectionString = configuration.GetConnectionString("Redis");
+        if (!string.IsNullOrEmpty(redisConnectionString))
+        {
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = redisConnectionString;
+                options.InstanceName = "TravelTour_";
+            });
+        }
+        else
+        {
+            services.AddDistributedMemoryCache();
+        }
+
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPackagerService, PackagerService>();
         services.AddScoped<IUserService, UserService>();

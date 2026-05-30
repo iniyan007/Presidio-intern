@@ -19,6 +19,10 @@ public partial class TravelDocument
 
     public string? OriginalFilename { get; set; }
 
+    public TravelTourManagement.DataAccess.Enums.DocumentStatus Status { get; set; } = TravelTourManagement.DataAccess.Enums.DocumentStatus.Uploaded;
+
+    public string? RejectionReason { get; set; }
+
     public long? FileSizeBytes { get; set; }
 
     public string? MimeType { get; set; }

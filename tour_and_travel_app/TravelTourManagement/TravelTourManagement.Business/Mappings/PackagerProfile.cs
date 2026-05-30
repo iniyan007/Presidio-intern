@@ -10,11 +10,23 @@ public class PackagerProfile : Profile
     public PackagerProfile()
     {
         CreateMap<Packager, PackagerResponse>()
-            .ForMember(dest => dest.ApprovalStatus, opt => opt.MapFrom(src => 
+            .ConstructUsing((src, ctx) => new PackagerResponse(
+                src.Id,
+                src.UserId,
+                src.CompanyName,
+                src.BusinessLicenseNo,
+                src.Description,
+                src.ContactEmail,
+                src.ContactPhone,
+                src.WebsiteUrl,
                 src.DeactivatedAt != null 
                     ? (src.ApprovedAt == null ? "Rejected" : "Deactivated")
-                    : (src.ApprovedAt != null ? "Approved" : "Pending")))
-            .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.DeactivationReason));
+                    : (src.ApprovedAt != null ? "Approved" : "Pending"),
+                src.DeactivationReason,
+                src.AvgRating,
+                src.TotalReviews,
+                src.CreatedAt
+            ));
 
         CreateMap<Packager, PublicPackagerResponse>()
             .ForMember(dest => dest.TotalPackagesContributed, opt => opt.MapFrom(src => 

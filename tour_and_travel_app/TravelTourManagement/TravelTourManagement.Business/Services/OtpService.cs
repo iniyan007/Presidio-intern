@@ -1,46 +1,48 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 using TravelTourManagement.Business.Interface;
 
 namespace TravelTourManagement.Business.Services;
 
 public class OtpService : IOtpService
 {
-    private readonly IMemoryCache _memoryCache;
+    private readonly IDistributedCache _cache;
     private static readonly TimeSpan OtpExpiration = TimeSpan.FromMinutes(10);
 
-    public OtpService(IMemoryCache memoryCache)
+    public OtpService(IDistributedCache cache)
     {
-        _memoryCache = memoryCache;
+        _cache = cache;
     }
 
-    public Task<string> GenerateAndStoreOtpAsync(string email)
+    public async Task<string> GenerateAndStoreOtpAsync(string email)
     {
         // Generate a 6-digit random number
         var otp = new Random().Next(100000, 999999).ToString();
         var cacheKey = GetCacheKey(email);
 
-        _memoryCache.Set(cacheKey, otp, OtpExpiration);
+        await _cache.SetStringAsync(cacheKey, otp, new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = OtpExpiration });
 
-        return Task.FromResult(otp);
+        return otp;
     }
 
-    public Task<bool> VerifyOtpAsync(string email, string otp)
+    public async Task<bool> VerifyOtpAsync(string email, string otp)
     {
         var cacheKey = GetCacheKey(email);
 
-        if (_memoryCache.TryGetValue(cacheKey, out string? cachedOtp))
+        var cachedOtp = await _cache.GetStringAsync(cacheKey);
+
+        if (!string.IsNullOrEmpty(cachedOtp))
         {
             if (cachedOtp == otp)
             {
                 // OTP is valid, remove it to prevent reuse
-                _memoryCache.Remove(cacheKey);
-                return Task.FromResult(true);
+                await _cache.RemoveAsync(cacheKey);
+                return true;
             }
         }
 
-        return Task.FromResult(false);
+        return false;
     }
 
     private static string GetCacheKey(string email) => $"OTP_{email.ToLowerInvariant()}";
