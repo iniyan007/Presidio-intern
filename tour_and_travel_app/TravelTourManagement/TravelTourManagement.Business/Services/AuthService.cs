@@ -242,5 +242,63 @@ public class AuthService : IAuthService
             _mapper.Map<UserResponse>(user) 
         );
     }
+
+    public async Task ForgotPasswordAsync(string email, CancellationToken cancellationToken = default)
+    {
+        var user = await _userRepository.GetByEmailAsync(email, cancellationToken);
+        if (user == null)
+        {
+            // To prevent email enumeration, we do not throw an error if the email is not found.
+            return;
+        }
+
+        var otp = await _otpService.GenerateAndStoreOtpAsync(email);
+        
+        var body = $"Hello {user.FullName},\n\nYour password reset OTP is: {otp}\n\nThis code will expire in 10 minutes.";
+        await _emailService.SendEmailAsync(user.Email, "Password Reset OTP", body, cancellationToken);
+    }
+
+    public async Task<string> VerifyResetOtpAsync(VerifyResetOtpRequest request, CancellationToken cancellationToken = default)
+    {
+        var user = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
+        if (user == null)
+        {
+            throw new ArgumentException("Invalid or expired OTP.");
+        }
+
+        var isValid = await _otpService.VerifyOtpAsync(request.Email, request.Otp);
+        if (!isValid)
+        {
+            throw new ArgumentException("Invalid or expired OTP.");
+        }
+
+        // Generate a temporary reset token that expires in 15 minutes
+        var resetToken = await _otpService.GenerateAndStoreResetTokenAsync(request.Email);
+        return resetToken;
+    }
+
+    public async Task ResetPasswordAsync(ResetPasswordRequest request, CancellationToken cancellationToken = default)
+    {
+        var user = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
+        if (user == null)
+        {
+            throw new ArgumentException("Invalid reset token.");
+        }
+
+        var isValid = await _otpService.VerifyResetTokenAsync(request.Email, request.ResetToken);
+        if (!isValid)
+        {
+            throw new ArgumentException("Invalid or expired reset token.");
+        }
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _userRepository.UpdateAsync(user, cancellationToken);
+        
+        // Explicitly clean up any remaining OTPs and the Reset Token after a successful reset
+        await _otpService.DeleteResetTokenAsync(request.Email);
+        await _otpService.DeleteOtpAsync(request.Email);
+    }
 }
 

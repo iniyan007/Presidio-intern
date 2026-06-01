@@ -64,4 +64,42 @@ public class AuthController : ControllerBase
         var response = await _authService.RefreshTokenAsync(request, cancellationToken);
         return Ok(response);
     }
+
+    [HttpPost("forgot-password")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request, CancellationToken cancellationToken)
+    {
+        await _authService.ForgotPasswordAsync(request.Email, cancellationToken);
+        return Ok(new { message = "If that email address is in our database, we will send you an email to reset your password." });
+    }
+
+    [HttpPost("verify-reset-otp")]
+    [AllowAnonymous]
+    public async Task<IActionResult> VerifyResetOtp([FromBody] VerifyResetOtpRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var resetToken = await _authService.VerifyResetOtpAsync(request, cancellationToken);
+            return Ok(new { message = "OTP verified successfully.", resetToken = resetToken });
+        }
+        catch (System.ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("reset-password")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _authService.ResetPasswordAsync(request, cancellationToken);
+            return Ok(new { message = "Password reset successfully." });
+        }
+        catch (System.ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }
