@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using TravelTourManagement.Business.Services;
 using TravelTourManagement.DataAccess.DTOs.Users;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace TravelTourManagement.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[EnableRateLimiting("Auth")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;

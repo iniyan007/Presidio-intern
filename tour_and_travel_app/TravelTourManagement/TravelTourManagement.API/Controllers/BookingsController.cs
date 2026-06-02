@@ -24,6 +24,7 @@ public class BookingsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Admin,Traveler")]
+    [TypeFilter(typeof(TravelTourManagement.API.Filters.IdempotentAttribute))]
     public async Task<IActionResult> CreateBooking([FromForm] CreateBookingCombinedRequest request, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -78,6 +79,18 @@ public class BookingsController : ControllerBase
         string fullName = primaryTraveler != null ? primaryTraveler.FullName : "the user";
         
         return Ok(new { message = $"The booking is confirmed for {fullName}." });
+    }
+
+    [HttpGet("my-bookings")]
+    [Authorize(Roles = "Traveler,Admin")]
+    public async Task<IActionResult> GetMyBookings(CancellationToken cancellationToken)
+    {
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("User ID not found in token.");
+
+        var response = await _bookingService.GetMyBookingsAsync(userId, cancellationToken);
+        return Ok(response);
     }
 
     [HttpGet("package/{packageId}")]

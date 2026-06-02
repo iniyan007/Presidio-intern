@@ -273,6 +273,12 @@ public class BookingService : IBookingService
         return _mapper.Map<BookingResponse>(booking);
     }
 
+    public async Task<IReadOnlyList<BookingResponse>> GetMyBookingsAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        var bookings = await _bookingRepository.GetByUserIdAsync(userId, cancellationToken);
+        return _mapper.Map<IReadOnlyList<BookingResponse>>(bookings);
+    }
+
     public async Task<IReadOnlyList<BookingResponse>> GetBookingsByPackageIdAsync(Guid userId, string userRole, Guid packageId, CancellationToken cancellationToken = default)
     {
         var package = await _packageRepository.GetWithFullDetailsAsync(packageId, cancellationToken);

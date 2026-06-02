@@ -40,6 +40,7 @@ public class PackagesController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Packager")]
+    [TypeFilter(typeof(TravelTourManagement.API.Filters.IdempotentAttribute))]
     public async Task<IActionResult> CreatePackage([FromForm] CreatePackageCombinedRequest request, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

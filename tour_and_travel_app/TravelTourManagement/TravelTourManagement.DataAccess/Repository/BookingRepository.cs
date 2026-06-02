@@ -29,6 +29,9 @@ public class BookingRepository : GenericRepository<Booking, Guid>, IBookingRepos
         Guid userId,
         CancellationToken cancellationToken = default)
         => await _dbSet
+            .Include(b => b.BookingTravelers)
+                .ThenInclude(t => t.TravelDocuments)
+            .Include(b => b.Package)
             .Where(b => b.UserId == userId)
             .OrderByDescending(b => b.BookedAt)
             .ToListAsync(cancellationToken);
