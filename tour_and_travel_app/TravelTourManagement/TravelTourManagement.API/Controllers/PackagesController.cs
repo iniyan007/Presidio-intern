@@ -109,6 +109,53 @@ public class PackagesController : ControllerBase
         return Ok(new { message = "Package deleted successfully." });
     }
 
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Packager")]
+    public async Task<IActionResult> UpdatePackageDetails(Guid id, [FromBody] UpdatePackageDetailsRequest request, CancellationToken cancellationToken)
+    {
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("User ID not found in token.");
+
+        try
+        {
+            await _packageService.UpdatePackageDetailsAsync(userId, id, request, cancellationToken);
+            return Ok(new { success = true, message = "Package details updated successfully." });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Forbid();
+        }
+    }
+
+    [HttpPost("{id}/republish")]
+    [Authorize(Roles = "Packager")]
+    [TypeFilter(typeof(TravelTourManagement.API.Filters.IdempotentAttribute))]
+    public async Task<IActionResult> RepublishPackage(Guid id, [FromBody] RepublishPackageRequest request, CancellationToken cancellationToken)
+    {
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("User ID not found in token.");
+
+        try
+        {
+            await _packageService.RepublishPackageAsync(userId, id, request, cancellationToken);
+            return Ok(new { success = true, message = "Package republished with new dates successfully." });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Forbid();
+        }
+    }
+
     [HttpGet("{id}/revenue")]
     [Authorize(Roles = "Admin,Packager")]
     public async Task<IActionResult> GetPackageRevenue(Guid id, CancellationToken cancellationToken)

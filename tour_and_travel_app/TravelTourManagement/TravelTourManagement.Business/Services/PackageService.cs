@@ -10,6 +10,7 @@ using TravelTourManagement.Business.Interface;
 using TravelTourManagement.DataAccess.DTOs.Packages;
 using TravelTourManagement.DataAccess.Entities;
 using TravelTourManagement.DataAccess.Interface;
+using TravelTourManagement.DataAccess.Enums;
 
 namespace TravelTourManagement.Business.Services;
 
@@ -206,6 +207,78 @@ public class PackageService : IPackageService
             RevenueType = revenueType,
             TotalConfirmedBookings = bookings.Count
         };
+    }
+
+    public async Task UpdatePackageDetailsAsync(Guid userId, Guid packageId, UpdatePackageDetailsRequest request, CancellationToken cancellationToken = default)
+    {
+        var packager = await _packagerRepository.GetByUserIdAsync(userId, cancellationToken);
+        if (packager == null)
+            throw new UnauthorizedAccessException("Packager profile not found.");
+
+        var package = await _packageRepository.GetByIdAsync(packageId, cancellationToken);
+        if (package == null)
+            throw new KeyNotFoundException("Package not found.");
+
+        if (package.PackagerId != packager.Id)
+            throw new UnauthorizedAccessException("You do not own this package.");
+
+        package.Title = request.Title;
+        package.Description = request.Description;
+        package.Destination = request.Destination;
+        package.Country = request.Country;
+        package.City = request.City;
+        package.DurationDays = request.DurationDays;
+        package.DurationNights = request.DurationNights;
+        package.MaxCapacity = request.MaxCapacity;
+        package.MinAge = request.MinAge;
+        package.CancellationPolicy = request.CancellationPolicy;
+        package.UpdatedAt = DateTime.UtcNow;
+
+        await _packageRepository.UpdateAsync(package, cancellationToken);
+    }
+
+    public async Task RepublishPackageAsync(Guid userId, Guid packageId, RepublishPackageRequest request, CancellationToken cancellationToken = default)
+    {
+        var packager = await _packagerRepository.GetByUserIdAsync(userId, cancellationToken);
+        if (packager == null)
+            throw new UnauthorizedAccessException("Packager profile not found.");
+
+        var package = await _packageRepository.GetByIdAsync(packageId, cancellationToken);
+        if (package == null)
+            throw new KeyNotFoundException("Package not found.");
+
+        if (package.PackagerId != packager.Id)
+            throw new UnauthorizedAccessException("You do not own this package.");
+
+        // Clear existing pricing logic or add new? The user requested to ADD new dates to the EXISTING package to preserve reviews.
+        // We will map the new SeasonalPricing items and add them.
+        foreach (var pricingReq in request.SeasonalPricing)
+        {
+            var pricing = new PackageSeasonalPricing
+            {
+                Id = Guid.NewGuid(),
+                PackageId = package.Id,
+                SeasonName = pricingReq.SeasonName,
+                StartDate = pricingReq.StartDate ?? DateOnly.FromDateTime(DateTime.UtcNow),
+                EndDate = pricingReq.EndDate ?? DateOnly.FromDateTime(DateTime.UtcNow.AddYears(1)),
+                BasePrice = pricingReq.BasePrice,
+                ChildPrice = pricingReq.ChildPrice,
+                DiscountPercent = pricingReq.DiscountPercent,
+                AvailableSlots = pricingReq.AvailableSlots,
+                IsActive = pricingReq.IsActive
+            };
+            package.PackageSeasonalPricings.Add(pricing);
+        }
+
+        // If package was archived or completed, set it back to Published or PendingReview depending on business rules.
+        // We'll set it back to Published to make it immediately active (since it was previously approved).
+        if (package.Status == PackageStatus.Archived || package.Status == PackageStatus.Completed)
+        {
+            package.Status = PackageStatus.Published;
+        }
+
+        package.UpdatedAt = DateTime.UtcNow;
+        await _packageRepository.UpdateAsync(package, cancellationToken);
     }
 
     public async Task<PagedResponse<PackageSummaryResponse>> SearchPackagesAsync(PackageSearchRequest request, CancellationToken cancellationToken = default)
