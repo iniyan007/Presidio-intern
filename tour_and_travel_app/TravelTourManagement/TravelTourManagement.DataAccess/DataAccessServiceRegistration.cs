@@ -28,6 +28,7 @@ public static class DataAccessServiceRegistration
         dataSourceBuilder.MapEnum<BookingStatus>("booking_status");
         dataSourceBuilder.MapEnum<PaymentStatus>("payment_status");
         dataSourceBuilder.MapEnum<DocumentStatus>("document_status");
+        dataSourceBuilder.MapEnum<NotificationType>("notification_type");
         
         dataSourceBuilder.EnableUnmappedTypes();
 

@@ -7,6 +7,7 @@ using TravelTourManagement.DataAccess.DTOs.Packagers;
 using TravelTourManagement.DataAccess.Entities;
 using TravelTourManagement.DataAccess.Interface;
 using AutoMapper;
+using TravelTourManagement.Business.Interface;
 
 namespace TravelTourManagement.Business.Services;
 
@@ -15,12 +16,14 @@ public class PackagerService : IPackagerService
     private readonly IPackagerRepository _packagerRepository;
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly INotificationService _notificationService;
 
-    public PackagerService(IPackagerRepository packagerRepository, IUserRepository userRepository, IMapper mapper)
+    public PackagerService(IPackagerRepository packagerRepository, IUserRepository userRepository, IMapper mapper, INotificationService notificationService)
     {
         _packagerRepository = packagerRepository;
         _userRepository = userRepository;
         _mapper = mapper;
+        _notificationService = notificationService;
     }
 
     public async Task<PackagerResponse> ApplyToBecomePackagerAsync(Guid userId, ApplyPackagerRequest request, CancellationToken cancellationToken = default)
@@ -74,6 +77,15 @@ public class PackagerService : IPackagerService
 
         await _packagerRepository.UpdateAsync(packager, cancellationToken);
         await _packagerRepository.UpdateStatusRawAsync(packagerId, "approved", cancellationToken);
+
+        await _notificationService.SendNotificationAsync(
+            packager.UserId,
+            "Packager Application Approved",
+            "Congratulations! Your application to become a Packager has been approved. You can now start creating and publishing packages.",
+            packager.Id,
+            TravelTourManagement.DataAccess.Enums.NotificationType.approval,
+            cancellationToken);
+
         return _mapper.Map<PackagerResponse>(packager);
     }
 
@@ -102,6 +114,15 @@ public class PackagerService : IPackagerService
 
         await _packagerRepository.UpdateAsync(packager, cancellationToken);
         await _packagerRepository.UpdateStatusRawAsync(packagerId, "deactivated", cancellationToken);
+
+        await _notificationService.SendNotificationAsync(
+            packager.UserId,
+            "Packager Application Rejected",
+            $"Your application to become a Packager was rejected. Reason: {reason}",
+            packager.Id,
+            TravelTourManagement.DataAccess.Enums.NotificationType.approval,
+            cancellationToken);
+
         return _mapper.Map<PackagerResponse>(packager);
     }
 

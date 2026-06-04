@@ -46,6 +46,7 @@ public static class BusinessServiceRegistration
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped<IPdfService, PdfService>();
         services.AddScoped<IWishlistService, WishlistService>();
+        services.AddScoped<INotificationService, NotificationService>();
 
         // Register AutoMapper
         services.AddAutoMapper(config => config.AddMaps(typeof(BusinessServiceRegistration).Assembly));

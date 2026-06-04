@@ -25,6 +25,7 @@ public class BookingService : IBookingService
     private readonly ISchedulerFactory _schedulerFactory;
     private readonly IRepository<TravelDocument, Guid> _documentRepository;
     private readonly IPdfService _pdfService;
+    private readonly INotificationService _notificationService;
 
     public BookingService(
         IPlatformConfigService platformConfigService,
@@ -35,7 +36,8 @@ public class BookingService : IBookingService
         IUserRepository userRepository,
         IRepository<TravelDocument, Guid> documentRepository,
         ISchedulerFactory schedulerFactory,
-        IPdfService pdfService)
+        IPdfService pdfService,
+        INotificationService notificationService)
     {
         _bookingRepository = bookingRepository;
         _packageRepository = packageRepository;
@@ -46,6 +48,7 @@ public class BookingService : IBookingService
         _schedulerFactory = schedulerFactory;
         _documentRepository = documentRepository;
         _pdfService = pdfService;
+        _notificationService = notificationService;
     }
 
     public async Task<byte[]> DownloadBookingTicketAsync(Guid userId, Guid bookingId, CancellationToken cancellationToken = default)
@@ -105,6 +108,14 @@ public class BookingService : IBookingService
         // We will just let the Status handle the cancellation state.
         
         await _bookingRepository.UpdateAsync(booking, cancellationToken);
+
+        await _notificationService.SendNotificationAsync(
+            booking.UserId, 
+            "Booking Cancelled", 
+            $"Your booking {booking.BookingReference} has been cancelled successfully.", 
+            booking.Id, 
+            TravelTourManagement.DataAccess.Enums.NotificationType.booking,
+            cancellationToken);
     }
 
     public async Task<BookingResponse> CreateBookingAsync(Guid userId, CreateBookingRequest request, List<IFormFile>? documentFiles = null, CancellationToken cancellationToken = default)
@@ -307,6 +318,14 @@ public class BookingService : IBookingService
 
         await scheduler.ScheduleJob(trigger, cancellationToken);
 
+        await _notificationService.SendNotificationAsync(
+            userId, 
+            "Booking Request Submitted", 
+            $"Your booking request for {package.Title} has been successfully submitted! Reference: {booking.BookingReference}", 
+            booking.Id, 
+            TravelTourManagement.DataAccess.Enums.NotificationType.booking,
+            cancellationToken);
+
         return _mapper.Map<BookingResponse>(booking);
     }
 
@@ -332,6 +351,14 @@ public class BookingService : IBookingService
         booking.UpdatedAt = DateTime.UtcNow;
 
         await _bookingRepository.UpdateAsync(booking, cancellationToken);
+
+        await _notificationService.SendNotificationAsync(
+            booking.UserId, 
+            "Booking Confirmed", 
+            $"Great news! Your booking {booking.BookingReference} has been confirmed by the packager Check My Bookings to download your ticket!.", 
+            booking.Id, 
+            TravelTourManagement.DataAccess.Enums.NotificationType.booking,
+            cancellationToken);
 
         return _mapper.Map<BookingResponse>(booking);
     }
@@ -403,6 +430,27 @@ public class BookingService : IBookingService
                 fullBooking.UpdatedAt = DateTime.UtcNow;
                 await _bookingRepository.UpdateAsync(fullBooking, cancellationToken);
             }
+        }
+
+        if (request.IsVerified)
+        {
+            await _notificationService.SendNotificationAsync(
+                booking.UserId,
+                "Document Verified",
+                $"Your travel document ({document.DocumentType}) has been verified successfully.",
+                booking.Id,
+                TravelTourManagement.DataAccess.Enums.NotificationType.booking,
+                cancellationToken);
+        }
+        else
+        {
+            await _notificationService.SendNotificationAsync(
+                booking.UserId,
+                "Document Rejected",
+                $"Your travel document ({document.DocumentType}) has been rejected. Reason: {request.RejectionReason}",
+                booking.Id,
+                TravelTourManagement.DataAccess.Enums.NotificationType.booking,
+                cancellationToken);
         }
 
         return _mapper.Map<TravelDocumentResponse>(document);

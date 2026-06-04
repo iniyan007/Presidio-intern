@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace TravelTourManagement.DataAccess.Entities;
@@ -12,6 +12,8 @@ public partial class Notification
     public string Title { get; set; } = null!;
 
     public string Message { get; set; } = null!;
+
+    public TravelTourManagement.DataAccess.Enums.NotificationType Type { get; set; }
 
     public Guid? ReferenceId { get; set; }
 

@@ -76,6 +76,10 @@ builder.Services.AddDataAccessServices(builder.Configuration);
 // Register Business Services
 builder.Services.AddBusinessServices(builder.Configuration);
 
+// Add SignalR and its dispatcher
+builder.Services.AddSignalR();
+builder.Services.AddScoped<TravelTourManagement.Business.Interface.INotificationDispatcher, TravelTourManagement.API.Services.SignalRNotificationDispatcher>();
+
 // Add Quartz services
 builder.Services.AddQuartz(q =>
 {
@@ -116,6 +120,20 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtOptions.Audience,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
         RoleClaimType = ClaimTypes.Role
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/notifications"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
     };
 });
 
@@ -165,5 +183,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<TravelTourManagement.API.Hubs.NotificationHub>("/hubs/notifications");
 
 app.Run();

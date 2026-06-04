@@ -83,7 +83,7 @@ public partial class ApplicationDbContext : DbContext
             .HasPostgresEnum("booking_status", new[] { "pending", "confirmed", "cancelled", "completed", "refunded" })
             .HasPostgresEnum("document_status", new[] { "uploaded", "verified", "rejected" })
             .HasPostgresEnum("message_sender_role", new[] { "user", "packager" })
-            .HasPostgresEnum("notification_type", new[] { "booking", "payment", "review", "approval", "system", "message" })
+            .HasPostgresEnum<TravelTourManagement.DataAccess.Enums.NotificationType>("notification_type")
             .HasPostgresEnum("packager_status", new[] { "pending", "approved", "suspended", "deactivated" })
             .HasPostgresEnum("payment_status", new[] { "unpaid", "partial", "paid", "refunded", "failed" })
             .HasPostgresEnum("review_status", new[] { "pending", "published", "flagged", "removed" })
@@ -472,6 +472,8 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Title)
                 .HasMaxLength(200)
                 .HasColumnName("title");
+            entity.Property(e => e.Type)
+                .HasColumnName("type");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.Notifications)

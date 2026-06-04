@@ -18,19 +18,22 @@ public class ReviewService : IReviewService
     private readonly IPackageRepository _packageRepository;
     private readonly IPackagerRepository _packagerRepository;
     private readonly IMapper _mapper;
+    private readonly INotificationService _notificationService;
 
     public ReviewService(
         IReviewRepository reviewRepository,
         IBookingRepository bookingRepository,
         IPackageRepository packageRepository,
         IPackagerRepository packagerRepository,
-        IMapper mapper)
+        IMapper mapper,
+        INotificationService notificationService)
     {
         _reviewRepository = reviewRepository;
         _bookingRepository = bookingRepository;
         _packageRepository = packageRepository;
         _packagerRepository = packagerRepository;
         _mapper = mapper;
+        _notificationService = notificationService;
     }
 
     public async Task<ReviewResponse> CreateReviewAsync(Guid userId, CreateReviewRequest request, CancellationToken cancellationToken = default)
@@ -101,6 +104,14 @@ public class ReviewService : IReviewService
             packagerEntity.AvgRating = newAvg;
             packagerEntity.TotalReviews = newTotal;
             await _packagerRepository.UpdateAsync(packagerEntity, cancellationToken);
+
+            await _notificationService.SendNotificationAsync(
+                packagerEntity.UserId,
+                "New Review Received",
+                $"You received a new {review.OverallRating}-star review for your package.",
+                review.Id,
+                TravelTourManagement.DataAccess.Enums.NotificationType.review,
+                cancellationToken);
         }
 
         // We fetch the complete entity to get User info mapped properly

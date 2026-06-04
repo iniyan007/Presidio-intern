@@ -16,12 +16,14 @@ public class PaymentService : IPaymentService
     private readonly IBookingRepository _bookingRepository;
     private readonly IRepository<Payment, Guid> _paymentRepository;
     private readonly IMapper _mapper;
+    private readonly INotificationService _notificationService;
 
-    public PaymentService(IBookingRepository bookingRepository, IRepository<Payment, Guid> paymentRepository, IMapper mapper)
+    public PaymentService(IBookingRepository bookingRepository, IRepository<Payment, Guid> paymentRepository, IMapper mapper, INotificationService notificationService)
     {
         _bookingRepository = bookingRepository;
         _paymentRepository = paymentRepository;
         _mapper = mapper;
+        _notificationService = notificationService;
     }
 
     public async Task<BookingResponse> ProcessPaymentAsync(Guid userId, Guid bookingId, ProcessPaymentRequest request, CancellationToken cancellationToken = default)
@@ -64,6 +66,27 @@ public class PaymentService : IPaymentService
         booking.UpdatedAt = DateTime.UtcNow;
 
         await _bookingRepository.UpdateAsync(booking, cancellationToken);
+
+        // Notify Traveler
+        await _notificationService.SendNotificationAsync(
+            booking.UserId,
+            "Payment Successful",
+            $"Your payment of {request.Amount:C} for booking {booking.BookingReference} was successful.",
+            booking.Id,
+            TravelTourManagement.DataAccess.Enums.NotificationType.payment,
+            cancellationToken);
+
+        // Notify Packager
+        if (booking.Package != null && booking.Package.Packager != null)
+        {
+            await _notificationService.SendNotificationAsync(
+                booking.Package.Packager.UserId,
+                "New Booking Payment",
+                $"A payment of {request.Amount:C} was received for booking {booking.BookingReference}, Review thier documents to confirm their booking!",
+                booking.Id,
+                TravelTourManagement.DataAccess.Enums.NotificationType.payment,
+                cancellationToken);
+        }
 
         return _mapper.Map<BookingResponse>(booking);
     }

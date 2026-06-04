@@ -181,7 +181,7 @@ public class AuthService : IAuthService
             if (packager != null && packager.ApprovedAt != null && packager.DeactivatedAt == null)
             {
                 role = "Packager";
-                            }
+            }
         }
 
         var token = _jwtProvider.GenerateToken(user.Id, user.Email, role, user.IsEmailVerified);
