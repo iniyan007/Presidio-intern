@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "RBCbRGZWTNw=",
+  "dgSpecHash": "Sg1ihiSQ6/M=",
   "success": true,
   "projectFilePath": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/TravelTourManagement.API.csproj",
   "expectedPackageFiles": [
@@ -56,6 +56,7 @@
     "/Users/iniyan/.nuget/packages/quartz/3.18.1/quartz.3.18.1.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/quartz.extensions.dependencyinjection/3.18.1/quartz.extensions.dependencyinjection.3.18.1.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/quartz.extensions.hosting/3.18.1/quartz.extensions.hosting.3.18.1.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/questpdf/2026.5.0/questpdf.2026.5.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/stackexchange.redis/2.7.27/stackexchange.redis.2.7.27.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/swashbuckle.aspnetcore/6.6.2/swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/swashbuckle.aspnetcore.swagger/6.6.2/swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",

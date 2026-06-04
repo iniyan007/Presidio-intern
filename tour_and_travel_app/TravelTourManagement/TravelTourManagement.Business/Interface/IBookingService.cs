@@ -9,6 +9,8 @@ namespace TravelTourManagement.Business.Interface;
 public interface IBookingService
 {
     Task<BookingResponse> CreateBookingAsync(Guid userId, CreateBookingRequest request, List<IFormFile>? documentFiles = null, CancellationToken cancellationToken = default);
+    Task CancelBookingAsync(Guid userId, Guid bookingId, CancelBookingRequest request, CancellationToken cancellationToken = default);
+    Task<byte[]> DownloadBookingTicketAsync(Guid userId, Guid bookingId, CancellationToken cancellationToken = default);
     Task<BookingResponse> VerifyBookingAsync(Guid packagerUserId, Guid bookingId, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<BookingResponse>> GetBookingsByPackageIdAsync(Guid userId, string userRole, Guid packageId, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<BookingResponse>> GetMyBookingsAsync(Guid userId, CancellationToken cancellationToken = default);

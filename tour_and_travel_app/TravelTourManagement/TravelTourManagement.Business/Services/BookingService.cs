@@ -10,6 +10,7 @@ using TravelTourManagement.DataAccess.Entities;
 using TravelTourManagement.DataAccess.Interface;
 using Quartz;
 using AutoMapper;
+using TravelTourManagement.DataAccess.Enums;
 
 namespace TravelTourManagement.Business.Services;
 
@@ -23,6 +24,7 @@ public class BookingService : IBookingService
     private readonly IMapper _mapper;
     private readonly ISchedulerFactory _schedulerFactory;
     private readonly IRepository<TravelDocument, Guid> _documentRepository;
+    private readonly IPdfService _pdfService;
 
     public BookingService(
         IPlatformConfigService platformConfigService,
@@ -32,7 +34,8 @@ public class BookingService : IBookingService
         IRepository<PackageSeasonalPricing, Guid> seasonalPricingRepository,
         IUserRepository userRepository,
         IRepository<TravelDocument, Guid> documentRepository,
-        ISchedulerFactory schedulerFactory)
+        ISchedulerFactory schedulerFactory,
+        IPdfService pdfService)
     {
         _bookingRepository = bookingRepository;
         _packageRepository = packageRepository;
@@ -42,6 +45,66 @@ public class BookingService : IBookingService
         _mapper = mapper;
         _schedulerFactory = schedulerFactory;
         _documentRepository = documentRepository;
+        _pdfService = pdfService;
+    }
+
+    public async Task<byte[]> DownloadBookingTicketAsync(Guid userId, Guid bookingId, CancellationToken cancellationToken = default)
+    {
+        var booking = await _bookingRepository.GetWithFullDetailsAsync(bookingId, cancellationToken);
+        if (booking == null)
+            throw new KeyNotFoundException("Booking not found.");
+
+        if (booking.UserId != userId)
+            throw new UnauthorizedAccessException("You do not own this booking.");
+
+        if (booking.Status != BookingStatus.Confirmed && booking.Status != BookingStatus.Completed)
+            throw new InvalidOperationException("Ticket can only be downloaded for confirmed bookings.");
+
+        return _pdfService.GenerateBookingTicketPdf(booking);
+    }
+
+    public async Task CancelBookingAsync(Guid userId, Guid bookingId, CancelBookingRequest request, CancellationToken cancellationToken = default)
+    {
+        var booking = await _bookingRepository.GetByIdAsync(bookingId, cancellationToken);
+        if (booking == null)
+            throw new KeyNotFoundException("Booking not found.");
+
+        if (booking.UserId != userId)
+            throw new UnauthorizedAccessException("You do not own this booking.");
+
+        if (booking.Status == BookingStatus.Cancelled || booking.Status == BookingStatus.Completed || booking.Status == BookingStatus.Refunded)
+            throw new InvalidOperationException($"Booking cannot be cancelled because its current status is {booking.Status}.");
+
+        // Calculate seat-consuming travelers
+        var seatConsumingTravelers = booking.AdultCount + booking.ChildCount;
+
+        // Restore slots in SeasonalPricing
+        var pricing = await _seasonalPricingRepository.GetByIdAsync(booking.SeasonalPricingId, cancellationToken);
+        if (pricing != null)
+        {
+            pricing.AvailableSlots += seatConsumingTravelers;
+            await _seasonalPricingRepository.UpdateAsync(pricing, cancellationToken);
+        }
+
+        // Restore slots in Package
+        var package = await _packageRepository.GetByIdAsync(booking.PackageId, cancellationToken);
+        if (package != null)
+        {
+            package.CurrentBookings -= seatConsumingTravelers;
+            // Prevent negative bookings just in case
+            if (package.CurrentBookings < 0) package.CurrentBookings = 0;
+            await _packageRepository.UpdateAsync(package, cancellationToken);
+        }
+
+        // Update Booking Status
+        booking.Status = BookingStatus.Cancelled;
+        booking.CancelledAt = DateTime.UtcNow;
+        booking.CancellationReason = request.CancellationReason;
+
+        // Note: We leave PaymentStatus alone, or mark it as Refunded if Paid.
+        // We will just let the Status handle the cancellation state.
+        
+        await _bookingRepository.UpdateAsync(booking, cancellationToken);
     }
 
     public async Task<BookingResponse> CreateBookingAsync(Guid userId, CreateBookingRequest request, List<IFormFile>? documentFiles = null, CancellationToken cancellationToken = default)

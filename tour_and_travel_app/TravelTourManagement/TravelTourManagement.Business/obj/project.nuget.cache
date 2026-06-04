@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "1BENQ6Lg994=",
+  "dgSpecHash": "JHKQPaX2NN8=",
   "success": true,
   "projectFilePath": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/TravelTourManagement.Business.csproj",
   "expectedPackageFiles": [
@@ -38,6 +38,7 @@
     "/Users/iniyan/.nuget/packages/npgsql.entityframeworkcore.postgresql/8.0.11/npgsql.entityframeworkcore.postgresql.8.0.11.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/pipelines.sockets.unofficial/2.2.8/pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/quartz/3.18.1/quartz.3.18.1.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/questpdf/2026.5.0/questpdf.2026.5.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/stackexchange.redis/2.7.27/stackexchange.redis.2.7.27.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/system.diagnostics.diagnosticsource/10.0.8/system.diagnostics.diagnosticsource.10.0.8.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/system.identitymodel.tokens.jwt/8.18.0/system.identitymodel.tokens.jwt.8.18.0.nupkg.sha512",

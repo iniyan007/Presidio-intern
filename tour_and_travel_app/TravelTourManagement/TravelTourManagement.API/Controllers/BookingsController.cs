@@ -129,4 +129,59 @@ public class BookingsController : ControllerBase
         var response = await _bookingService.ReuploadDocumentAsync(userId, documentId, file, cancellationToken);
         return Ok(response);
     }
+
+    [HttpPost("{id}/cancel")]
+    [Authorize(Roles = "Traveler,Admin")]
+    [TypeFilter(typeof(TravelTourManagement.API.Filters.IdempotentAttribute))]
+    public async Task<IActionResult> CancelBooking(Guid id, [FromBody] TravelTourManagement.DataAccess.DTOs.Bookings.CancelBookingRequest request, CancellationToken cancellationToken)
+    {
+        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("User ID not found in token.");
+
+        try
+        {
+            await _bookingService.CancelBookingAsync(userId, id, request, cancellationToken);
+            return Ok(new { success = true, message = "Booking cancelled successfully. The amount will be refunded based on the cancellation policy." });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Forbid();
+        }
+        catch (System.Collections.Generic.KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+    }
+
+    [HttpGet("{id}/ticket")]
+    [Authorize(Roles = "Traveler,Admin")]
+    public async Task<IActionResult> DownloadTicket(Guid id, CancellationToken cancellationToken)
+    {
+        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("User ID not found in token.");
+
+        try
+        {
+            var pdfBytes = await _bookingService.DownloadBookingTicketAsync(userId, id, cancellationToken);
+            return File(pdfBytes, "application/pdf", $"BookingTicket-{id}.pdf");
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+        catch (System.Collections.Generic.KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
 }
