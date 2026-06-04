@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace TravelTourManagement.DataAccess.Entities;
@@ -10,6 +10,8 @@ public partial class Message
     public Guid ThreadId { get; set; }
 
     public Guid SenderId { get; set; }
+
+    public TravelTourManagement.DataAccess.Enums.MessageSenderRole SenderRole { get; set; }
 
     public string Body { get; set; } = null!;
 

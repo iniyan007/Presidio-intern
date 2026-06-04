@@ -29,6 +29,7 @@ public static class DataAccessServiceRegistration
         dataSourceBuilder.MapEnum<PaymentStatus>("payment_status");
         dataSourceBuilder.MapEnum<DocumentStatus>("document_status");
         dataSourceBuilder.MapEnum<NotificationType>("notification_type");
+        dataSourceBuilder.MapEnum<MessageSenderRole>("message_sender_role");
         
         dataSourceBuilder.EnableUnmappedTypes();
 

@@ -79,6 +79,7 @@ builder.Services.AddBusinessServices(builder.Configuration);
 // Add SignalR and its dispatcher
 builder.Services.AddSignalR();
 builder.Services.AddScoped<TravelTourManagement.Business.Interface.INotificationDispatcher, TravelTourManagement.API.Services.SignalRNotificationDispatcher>();
+builder.Services.AddScoped<TravelTourManagement.Business.Interface.IMessageDispatcher, TravelTourManagement.API.Services.SignalRMessageDispatcher>();
 
 // Add Quartz services
 builder.Services.AddQuartz(q =>
@@ -128,7 +129,8 @@ builder.Services.AddAuthentication(options =>
         {
             var accessToken = context.Request.Query["access_token"];
             var path = context.HttpContext.Request.Path;
-            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/notifications"))
+            if (!string.IsNullOrEmpty(accessToken) && 
+                (path.StartsWithSegments("/hubs/notifications") || path.StartsWithSegments("/hubs/chat")))
             {
                 context.Token = accessToken;
             }
@@ -184,5 +186,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<TravelTourManagement.API.Hubs.NotificationHub>("/hubs/notifications");
+app.MapHub<TravelTourManagement.API.Hubs.ChatHub>("/hubs/chat");
 
 app.Run();

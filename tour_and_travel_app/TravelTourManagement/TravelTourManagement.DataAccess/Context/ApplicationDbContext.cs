@@ -82,7 +82,7 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder
             .HasPostgresEnum("booking_status", new[] { "pending", "confirmed", "cancelled", "completed", "refunded" })
             .HasPostgresEnum("document_status", new[] { "uploaded", "verified", "rejected" })
-            .HasPostgresEnum("message_sender_role", new[] { "user", "packager" })
+            .HasPostgresEnum<TravelTourManagement.DataAccess.Enums.MessageSenderRole>("message_sender_role")
             .HasPostgresEnum<TravelTourManagement.DataAccess.Enums.NotificationType>("notification_type")
             .HasPostgresEnum("packager_status", new[] { "pending", "approved", "suspended", "deactivated" })
             .HasPostgresEnum("payment_status", new[] { "unpaid", "partial", "paid", "refunded", "failed" })
@@ -389,6 +389,8 @@ public partial class ApplicationDbContext : DbContext
                 .HasDefaultValue(false)
                 .HasColumnName("is_read");
             entity.Property(e => e.SenderId).HasColumnName("sender_id");
+            entity.Property(e => e.SenderRole)
+                .HasColumnName("sender_role");
             entity.Property(e => e.SentAt)
                 .HasDefaultValueSql("now()")
                 .HasColumnType("timestamp without time zone")
