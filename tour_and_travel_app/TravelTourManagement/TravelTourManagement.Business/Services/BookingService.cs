@@ -11,6 +11,8 @@ using TravelTourManagement.DataAccess.Interface;
 using Quartz;
 using AutoMapper;
 using TravelTourManagement.DataAccess.Enums;
+using TravelTourManagement.DataAccess.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace TravelTourManagement.Business.Services;
 
@@ -26,6 +28,7 @@ public class BookingService : IBookingService
     private readonly IRepository<TravelDocument, Guid> _documentRepository;
     private readonly IPdfService _pdfService;
     private readonly INotificationService _notificationService;
+    private readonly ApplicationDbContext _context;
 
     public BookingService(
         IPlatformConfigService platformConfigService,
@@ -37,7 +40,8 @@ public class BookingService : IBookingService
         IRepository<TravelDocument, Guid> documentRepository,
         ISchedulerFactory schedulerFactory,
         IPdfService pdfService,
-        INotificationService notificationService)
+        INotificationService notificationService,
+        ApplicationDbContext context)
     {
         _bookingRepository = bookingRepository;
         _packageRepository = packageRepository;
@@ -49,6 +53,7 @@ public class BookingService : IBookingService
         _documentRepository = documentRepository;
         _pdfService = pdfService;
         _notificationService = notificationService;
+        _context = context;
     }
 
     public async Task<byte[]> DownloadBookingTicketAsync(Guid userId, Guid bookingId, CancellationToken cancellationToken = default)
@@ -68,9 +73,15 @@ public class BookingService : IBookingService
 
     public async Task CancelBookingAsync(Guid userId, Guid bookingId, CancelBookingRequest request, CancellationToken cancellationToken = default)
     {
-        var booking = await _bookingRepository.GetByIdAsync(bookingId, cancellationToken);
-        if (booking == null)
-            throw new KeyNotFoundException("Booking not found.");
+        var strategy = _context.Database.CreateExecutionStrategy();
+        await strategy.ExecuteAsync(async () =>
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable, cancellationToken);
+            try
+            {
+                var booking = await _bookingRepository.GetByIdAsync(bookingId, cancellationToken);
+                if (booking == null)
+                    throw new KeyNotFoundException("Booking not found.");
 
         if (booking.UserId != userId)
             throw new UnauthorizedAccessException("You do not own this booking.");
@@ -116,13 +127,33 @@ public class BookingService : IBookingService
             booking.Id, 
             TravelTourManagement.DataAccess.Enums.NotificationType.booking,
             cancellationToken);
+
+                await transaction.CommitAsync(cancellationToken);
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex) when (ex.InnerException is Npgsql.PostgresException pgEx && (pgEx.SqlState == "40001" || pgEx.SqlState == "40P01"))
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw new InvalidOperationException("Due to high traffic, this record was just updated. Please try cancelling again.");
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 
     public async Task<BookingResponse> CreateBookingAsync(Guid userId, CreateBookingRequest request, List<IFormFile>? documentFiles = null, CancellationToken cancellationToken = default)
     {
-        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
-        if (user == null)
-            throw new UnauthorizedAccessException("User not found.");
+        var strategy = _context.Database.CreateExecutionStrategy();
+        return await strategy.ExecuteAsync(async () => 
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable, cancellationToken);
+            try
+            {
+                var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+                if (user == null)
+                    throw new UnauthorizedAccessException("User not found.");
 
         var package = await _packageRepository.GetByIdAsync(request.PackageId, cancellationToken);
         if (package == null || package.Status != TravelTourManagement.DataAccess.Enums.PackageStatus.Published)
@@ -326,7 +357,20 @@ public class BookingService : IBookingService
             TravelTourManagement.DataAccess.Enums.NotificationType.booking,
             cancellationToken);
 
+        await transaction.CommitAsync(cancellationToken);
         return _mapper.Map<BookingResponse>(booking);
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex) when (ex.InnerException is Npgsql.PostgresException pgEx && (pgEx.SqlState == "40001" || pgEx.SqlState == "40P01"))
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw new InvalidOperationException("Due to high traffic, this package was just updated. Please try booking again.");
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 
     public async Task<BookingResponse> VerifyBookingAsync(Guid packagerUserId, Guid bookingId, CancellationToken cancellationToken = default)

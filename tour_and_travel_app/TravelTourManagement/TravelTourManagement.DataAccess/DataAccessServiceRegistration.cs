@@ -37,7 +37,10 @@ public static class DataAccessServiceRegistration
 
         // Configure DbContext with PostgreSQL
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(dataSource));
+            options.UseNpgsql(dataSource, builder => 
+            {
+                builder.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(5), errorCodesToAdd: null);
+            }));
 
         // Register Repositories
         services.AddScoped(typeof(IRepository<,>), typeof(GenericRepository<,>));
