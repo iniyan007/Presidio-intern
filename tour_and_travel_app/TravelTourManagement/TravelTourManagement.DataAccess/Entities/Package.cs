@@ -59,6 +59,8 @@ public partial class Package
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
+    public virtual ICollection<Wishlist> Wishlists { get; set; } = new List<Wishlist>();
+
     public TravelTourManagement.DataAccess.Enums.PackageType Type { get; set; }
 
     public TravelTourManagement.DataAccess.Enums.PackageStatus Status { get; set; }

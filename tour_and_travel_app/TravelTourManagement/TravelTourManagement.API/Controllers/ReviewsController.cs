@@ -44,19 +44,8 @@ public class ReviewsController : ControllerBase
         // Let's rely on the Request body being populated correctly, but force the bookingId to match the route.
         var finalRequest = request with { BookingId = bookingId };
 
-        try
-        {
-            var review = await _reviewService.CreateReviewAsync(userId, finalRequest, cancellationToken);
-            return Ok(new { success = true, message = "Review submitted successfully.", data = review });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(new { success = false, message = ex.Message });
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { success = false, message = ex.Message });
-        }
+        var review = await _reviewService.CreateReviewAsync(userId, finalRequest, cancellationToken);
+        return Ok(new { success = true, message = "Review submitted successfully.", data = review });
     }
 
     /// <summary>

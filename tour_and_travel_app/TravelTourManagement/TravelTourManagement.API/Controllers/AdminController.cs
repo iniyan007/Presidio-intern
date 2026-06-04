@@ -26,23 +26,8 @@ public class AdminController : ControllerBase
             return Unauthorized("Admin User ID not found in token.");
         }
 
-        try
-        {
-            var response = await _packagerService.ApprovePackagerAsync(id, adminUserId, cancellationToken);
-            return Ok(response);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An error occurred while approving the packager.", details = ex.Message });
-        }
+        var response = await _packagerService.ApprovePackagerAsync(id, adminUserId, cancellationToken);
+        return Ok(response);
     }
 
     [HttpPost("packagers/{id:guid}/reject")]
@@ -59,36 +44,14 @@ public class AdminController : ControllerBase
             return Unauthorized("Admin User ID not found in token.");
         }
 
-        try
-        {
-            var response = await _packagerService.RejectPackagerAsync(id, adminUserId, request.Reason, cancellationToken);
-            return Ok(response);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An error occurred while rejecting the packager.", details = ex.Message });
-        }
+        var response = await _packagerService.RejectPackagerAsync(id, adminUserId, request.Reason, cancellationToken);
+        return Ok(response);
     }
 
     [HttpGet("packagers/pending")]
     public async Task<IActionResult> GetPendingPackagers(CancellationToken cancellationToken)
     {
-        try
-        {
-            var response = await _packagerService.GetPendingPackagersAsync(cancellationToken);
-            return Ok(response);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An error occurred while fetching pending packagers.", details = ex.Message });
-        }
+        var response = await _packagerService.GetPendingPackagersAsync(cancellationToken);
+        return Ok(response);
     }
 }

@@ -25,8 +25,8 @@ builder.Services.AddControllers(options =>
     options.InvalidModelStateResponseFactory = context =>
     {
         var errors = context.ModelState
-            .Where(e => e.Value.Errors.Count > 0)
-            .SelectMany(kvp => kvp.Value.Errors.Select(e => new { Field = kvp.Key, Error = e.ErrorMessage }))
+            .Where(e => e.Value != null && e.Value.Errors.Count > 0)
+            .SelectMany(kvp => kvp.Value!.Errors.Select(e => new { Field = kvp.Key, Error = e.ErrorMessage }))
             .ToList();
 
         var response = new 

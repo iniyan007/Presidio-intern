@@ -117,19 +117,8 @@ public class PackagesController : ControllerBase
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             throw new UnauthorizedAccessException("User ID not found in token.");
 
-        try
-        {
-            await _packageService.UpdatePackageDetailsAsync(userId, id, request, cancellationToken);
-            return Ok(new { success = true, message = "Package details updated successfully." });
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { success = false, message = ex.Message });
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Forbid();
-        }
+        await _packageService.UpdatePackageDetailsAsync(userId, id, request, cancellationToken);
+        return Ok(new { success = true, message = "Package details updated successfully." });
     }
 
     [HttpPost("{id}/republish")]
@@ -141,19 +130,8 @@ public class PackagesController : ControllerBase
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             throw new UnauthorizedAccessException("User ID not found in token.");
 
-        try
-        {
-            await _packageService.RepublishPackageAsync(userId, id, request, cancellationToken);
-            return Ok(new { success = true, message = "Package republished with new dates successfully." });
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { success = false, message = ex.Message });
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Forbid();
-        }
+        await _packageService.RepublishPackageAsync(userId, id, request, cancellationToken);
+        return Ok(new { success = true, message = "Package republished with new dates successfully." });
     }
 
     [HttpGet("{id}/revenue")]

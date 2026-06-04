@@ -69,6 +69,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<Wishlist> Wishlists { get; set; }
+
     public virtual DbSet<VBookingRevenue> VBookingRevenues { get; set; }
 
     public virtual DbSet<VPackagerRevenueSummary> VPackagerRevenueSummaries { get; set; }
@@ -1178,6 +1180,35 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.TotalPlatformFee).HasColumnName("total_platform_fee");
         });
         modelBuilder.HasSequence("booking_ref_seq");
+
+        modelBuilder.Entity<Wishlist>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("wishlists_pkey");
+            entity.ToTable("wishlists");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.PackageId).HasColumnName("package_id");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Wishlists)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("wishlists_user_id_fkey");
+
+            entity.HasOne(d => d.Package).WithMany(p => p.Wishlists)
+                .HasForeignKey(d => d.PackageId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("wishlists_package_id_fkey");
+
+            // Ensure unique constraint so a user can't favorite the same package twice
+            entity.HasIndex(e => new { e.UserId, e.PackageId }).IsUnique().HasDatabaseName("ix_wishlists_user_id_package_id");
+        });
 
         OnModelCreatingPartial(modelBuilder);
     }
