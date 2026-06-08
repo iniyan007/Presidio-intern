@@ -57,7 +57,7 @@
             },
             "MailKit": {
               "target": "Package",
-              "version": "[4.6.0, )"
+              "version": "[4.17.0, )"
             },
             "Microsoft.AspNetCore.Hosting.Abstractions": {
               "target": "Package",

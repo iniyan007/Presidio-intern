@@ -59,6 +59,19 @@ public class BookingRepositoryTests
 
         _dbContext.Packages.Add(package);
 
+        var user = _dbContext.Users.Local.FirstOrDefault(u => u.Id == userId);
+        if (user == null)
+        {
+            user = new User
+            {
+                Id = userId,
+                FullName = "Test User",
+                Email = "test@user.com",
+                PasswordHash = "hash"
+            };
+            _dbContext.Users.Add(user);
+        }
+
         return new Booking
         {
             Id = Guid.NewGuid(),

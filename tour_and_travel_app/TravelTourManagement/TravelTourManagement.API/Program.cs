@@ -6,14 +6,30 @@ using TravelTourManagement.Business;
 using TravelTourManagement.Business.Configuration;
 using TravelTourManagement.DataAccess;
 using Quartz;
+using Serilog;
 using TravelTourManagement.Business.Services;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/traveltour-.txt", rollingInterval: RollingInterval.Day)
+    .CreateBootstrapLogger();
 
-var builder = WebApplication.CreateBuilder(args);
+try
+{
+    Log.Information("Starting web application");
+    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+    QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Host.UseSerilog((context, services, configuration) => configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .WriteTo.File("logs/traveltour-.txt", rollingInterval: RollingInterval.Day));
 
 builder.Services.AddControllers(options =>
 {
@@ -75,6 +91,10 @@ builder.Services.AddDataAccessServices(builder.Configuration);
 
 // Register Business Services
 builder.Services.AddBusinessServices(builder.Configuration);
+
+// Add User Context and HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<TravelTourManagement.DataAccess.Interface.IUserContextService, TravelTourManagement.API.Services.UserContextService>();
 
 // Add SignalR and its dispatcher
 builder.Services.AddSignalR();
@@ -177,6 +197,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseRateLimiter();
@@ -189,3 +210,12 @@ app.MapHub<TravelTourManagement.API.Hubs.NotificationHub>("/hubs/notifications")
 app.MapHub<TravelTourManagement.API.Hubs.ChatHub>("/hubs/chat");
 
 app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

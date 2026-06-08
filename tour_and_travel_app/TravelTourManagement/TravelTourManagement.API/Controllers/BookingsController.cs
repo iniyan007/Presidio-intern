@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using TravelTourManagement.Business.Interface;
 using TravelTourManagement.DataAccess.DTOs.Bookings;
 using System.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace TravelTourManagement.API.Controllers;
 
@@ -32,22 +35,16 @@ public class BookingsController : ControllerBase
             throw new UnauthorizedAccessException("User ID not found in token.");
 
         CreateBookingRequest bookingData;
-        try
+        bookingData = System.Text.Json.JsonSerializer.Deserialize<CreateBookingRequest>(request.BookingData, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+
+        // Manual validation
+        var context = new ValidationContext(bookingData, serviceProvider: null, items: null);
+        var results = new List<ValidationResult>();
+        bool isValid = Validator.TryValidateObject(bookingData, context, results, true);
+        if (!isValid)
         {
-            bookingData = System.Text.Json.JsonSerializer.Deserialize<CreateBookingRequest>(request.BookingData, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
-            
-            // Manual validation
-            var context = new System.ComponentModel.DataAnnotations.ValidationContext(bookingData, serviceProvider: null, items: null);
-            var results = new System.Collections.Generic.List<System.ComponentModel.DataAnnotations.ValidationResult>();
-            bool isValid = System.ComponentModel.DataAnnotations.Validator.TryValidateObject(bookingData, context, results, true);
-            if (!isValid)
-            {
-                return BadRequest(results);
-            }
-        }
-        catch (System.Text.Json.JsonException ex)
-        {
-            return BadRequest(new { message = "Invalid JSON in BookingData.", details = ex.Message });
+            var errors = string.Join(" | ", results.Select(r => r.ErrorMessage));
+            throw new ValidationException($"Validation failed: {errors}");
         }
 
         var response = await _bookingService.CreateBookingAsync(userId, bookingData, request.DocumentFiles, cancellationToken);

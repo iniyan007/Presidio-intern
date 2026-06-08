@@ -35,6 +35,7 @@ namespace TravelTourManagement.API.Filters
                 UnauthorizedAccessException => 401,
                 ValidationException => 400,
                 ArgumentException => 400,
+                System.Text.Json.JsonException => 400,
                 InvalidOperationException => 400, // Or 409 Conflict, but sticking to 400 for bad business logic generally
                 _ => 500
             };
@@ -48,6 +49,7 @@ namespace TravelTourManagement.API.Filters
                 UnauthorizedAccessException => "UNAUTHORIZED",
                 ValidationException => "VALIDATION_ERROR",
                 ArgumentException => "BAD_REQUEST",
+                System.Text.Json.JsonException => "INVALID_JSON",
                 InvalidOperationException => "INVALID_OPERATION",
                 _ => "INTERNAL_SERVER_ERROR"
             };

@@ -51,19 +51,20 @@ public class PackagesController : ControllerBase
         try
         {
             packageData = System.Text.Json.JsonSerializer.Deserialize<CreatePackageRequest>(request.PackageData, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
-            
-            // Manual validation
-            var context = new ValidationContext(packageData, serviceProvider: null, items: null);
-            var results = new List<ValidationResult>();
-            bool isValid = Validator.TryValidateObject(packageData, context, results, true);
-            if (!isValid)
-            {
-                return BadRequest(results);
-            }
         }
         catch (System.Text.Json.JsonException ex)
         {
-            return BadRequest(new { message = "Invalid JSON in PackageData.", details = ex.Message });
+            throw new ArgumentException($"Invalid JSON in PackageData: {ex.Message}", ex);
+        }
+
+        // Manual validation
+        var context = new ValidationContext(packageData, serviceProvider: null, items: null);
+        var results = new List<ValidationResult>();
+        bool isValid = Validator.TryValidateObject(packageData, context, results, true);
+        if (!isValid)
+        {
+            var errors = string.Join(" | ", results.Select(r => r.ErrorMessage));
+            throw new ValidationException($"Validation failed: {errors}");
         }
 
         var packageId = await _packageService.CreatePackageAsync(userId, packageData, request.MediaFiles, cancellationToken);

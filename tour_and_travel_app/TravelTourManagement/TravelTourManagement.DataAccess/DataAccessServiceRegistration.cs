@@ -35,12 +35,19 @@ public static class DataAccessServiceRegistration
 
         var dataSource = dataSourceBuilder.Build();
 
+        // Register Interceptor
+        services.AddSingleton<TravelTourManagement.DataAccess.Interceptors.AuditInterceptor>();
+
         // Configure DbContext with PostgreSQL
-        services.AddDbContext<ApplicationDbContext>(options =>
+        services.AddDbContext<ApplicationDbContext>((sp, options) =>
+        {
+            var interceptor = sp.GetRequiredService<TravelTourManagement.DataAccess.Interceptors.AuditInterceptor>();
             options.UseNpgsql(dataSource, builder => 
             {
                 builder.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(5), errorCodesToAdd: null);
-            }));
+            })
+            .AddInterceptors(interceptor);
+        });
 
         // Register Repositories
         services.AddScoped(typeof(IRepository<,>), typeof(GenericRepository<,>));
