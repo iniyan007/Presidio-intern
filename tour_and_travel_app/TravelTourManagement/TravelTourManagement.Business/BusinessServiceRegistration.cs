@@ -11,8 +11,9 @@ public static class BusinessServiceRegistration
 {
     public static IServiceCollection AddBusinessServices(this IServiceCollection services, IConfiguration configuration)
     {
-        // Configure JwtOptions
+        // Configure JwtOptions and EmailSettings
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
+        services.Configure<TravelTourManagement.Business.Models.EmailSettings>(configuration.GetSection("EmailSettings"));
 
         // Register Providers
         services.AddScoped<IJwtProvider, JwtProvider>();

@@ -57,6 +57,7 @@ public class BookingRepository : GenericRepository<Booking, Guid>, IBookingRepos
             .Include(b => b.TravelDocuments)
             .Include(b => b.Package)
                 .ThenInclude(p => p.Packager)
+            .Include(b => b.User)
             .FirstOrDefaultAsync(b => b.Id == bookingId, cancellationToken);
 
     /// <inheritdoc />

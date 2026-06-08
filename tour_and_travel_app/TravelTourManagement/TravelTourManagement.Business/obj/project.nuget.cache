@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "JHKQPaX2NN8=",
+  "dgSpecHash": "EPOzyh6X7AI=",
   "success": true,
   "projectFilePath": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/TravelTourManagement.Business.csproj",
   "expectedPackageFiles": [
     "/Users/iniyan/.nuget/packages/automapper/16.1.1/automapper.16.1.1.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/bcrypt.net-next/4.2.0/bcrypt.net-next.4.2.0.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/bouncycastle.cryptography/2.3.1/bouncycastle.cryptography.2.3.1.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/mailkit/4.6.0/mailkit.4.6.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.aspnetcore.hosting.abstractions/2.3.10/microsoft.aspnetcore.hosting.abstractions.2.3.10.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.aspnetcore.hosting.server.abstractions/2.3.9/microsoft.aspnetcore.hosting.server.abstractions.2.3.9.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.aspnetcore.http.abstractions/2.3.9/microsoft.aspnetcore.http.abstractions.2.3.9.nupkg.sha512",
@@ -34,6 +36,7 @@
     "/Users/iniyan/.nuget/packages/microsoft.identitymodel.jsonwebtokens/8.18.0/microsoft.identitymodel.jsonwebtokens.8.18.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.identitymodel.logging/8.18.0/microsoft.identitymodel.logging.8.18.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/microsoft.identitymodel.tokens/8.18.0/microsoft.identitymodel.tokens.8.18.0.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/mimekit/4.6.0/mimekit.4.6.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/npgsql/8.0.6/npgsql.8.0.6.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/npgsql.entityframeworkcore.postgresql/8.0.11/npgsql.entityframeworkcore.postgresql.8.0.11.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/pipelines.sockets.unofficial/2.2.8/pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
@@ -41,9 +44,22 @@
     "/Users/iniyan/.nuget/packages/questpdf/2026.5.0/questpdf.2026.5.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/stackexchange.redis/2.7.27/stackexchange.redis.2.7.27.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/system.diagnostics.diagnosticsource/10.0.8/system.diagnostics.diagnosticsource.10.0.8.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/system.formats.asn1/8.0.0/system.formats.asn1.8.0.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/system.identitymodel.tokens.jwt/8.18.0/system.identitymodel.tokens.jwt.8.18.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/system.io.pipelines/5.0.2/system.io.pipelines.5.0.2.nupkg.sha512",
+    "/Users/iniyan/.nuget/packages/system.security.cryptography.pkcs/8.0.0/system.security.cryptography.pkcs.8.0.0.nupkg.sha512",
     "/Users/iniyan/.nuget/packages/system.text.encodings.web/8.0.0/system.text.encodings.web.8.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'MailKit' 4.6.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr",
+      "libraryId": "MailKit",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

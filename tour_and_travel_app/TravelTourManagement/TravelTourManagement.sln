@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelTourManagement.Busine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelTourManagement.DataAccess", "TravelTourManagement.DataAccess\TravelTourManagement.DataAccess.csproj", "{17164D19-CC1D-45FA-810E-EF4AC78D49A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelTourManagement.Tests", "TravelTourManagement.Tests\TravelTourManagement.Tests.csproj", "{80E181AE-58DE-4C5C-AC63-EBE3D51738C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{17164D19-CC1D-45FA-810E-EF4AC78D49A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17164D19-CC1D-45FA-810E-EF4AC78D49A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17164D19-CC1D-45FA-810E-EF4AC78D49A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80E181AE-58DE-4C5C-AC63-EBE3D51738C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80E181AE-58DE-4C5C-AC63-EBE3D51738C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80E181AE-58DE-4C5C-AC63-EBE3D51738C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80E181AE-58DE-4C5C-AC63-EBE3D51738C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

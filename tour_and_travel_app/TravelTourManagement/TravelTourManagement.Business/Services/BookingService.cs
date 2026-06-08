@@ -28,6 +28,7 @@ public class BookingService : IBookingService
     private readonly IRepository<TravelDocument, Guid> _documentRepository;
     private readonly IPdfService _pdfService;
     private readonly INotificationService _notificationService;
+    private readonly IEmailService _emailService;
     private readonly ApplicationDbContext _context;
 
     public BookingService(
@@ -41,6 +42,7 @@ public class BookingService : IBookingService
         ISchedulerFactory schedulerFactory,
         IPdfService pdfService,
         INotificationService notificationService,
+        IEmailService emailService,
         ApplicationDbContext context)
     {
         _bookingRepository = bookingRepository;
@@ -53,6 +55,7 @@ public class BookingService : IBookingService
         _documentRepository = documentRepository;
         _pdfService = pdfService;
         _notificationService = notificationService;
+        _emailService = emailService;
         _context = context;
     }
 
@@ -399,10 +402,27 @@ public class BookingService : IBookingService
         await _notificationService.SendNotificationAsync(
             booking.UserId, 
             "Booking Confirmed", 
-            $"Great news! Your booking {booking.BookingReference} has been confirmed by the packager Check My Bookings to download your ticket!.", 
+            $"Great news! Your booking {booking.BookingReference} has been confirmed by the packager. Check My Bookings to download your ticket or check your email!", 
             booking.Id, 
             TravelTourManagement.DataAccess.Enums.NotificationType.booking,
             cancellationToken);
+
+        try
+        {
+            var pdfBytes = _pdfService.GenerateBookingTicketPdf(booking);
+            var emailBody = $"Hello {booking.User.FullName},\n\nGreat news! Your booking ({booking.BookingReference}) for {booking.Package.Title} has been confirmed.\n\nPlease find your booking ticket attached to this email.\n\nSafe travels!\nTravel Tour Management";
+            await _emailService.SendEmailWithAttachmentAsync(
+                booking.User.Email, 
+                $"Booking Confirmed - Ticket {booking.BookingReference}", 
+                emailBody, 
+                pdfBytes, 
+                $"BookingTicket_{booking.BookingReference}.pdf", 
+                cancellationToken);
+        }
+        catch
+        {
+            // Fail silently so it doesn't break the booking confirmation process
+        }
 
         return _mapper.Map<BookingResponse>(booking);
     }
