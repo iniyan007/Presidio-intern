@@ -127,6 +127,35 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
         return package;
     }
 
+    public async Task<List<string>> GetDistinctCountriesAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Where(p => p.Status == TravelTourManagement.DataAccess.Enums.PackageStatus.Published)
+            .Select(p => p.Country)
+            .Where(c => !string.IsNullOrEmpty(c))
+            .Distinct()
+            .OrderBy(c => c)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<List<string>> GetDistinctDestinationsAsync(string? country = null, CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.Where(p => p.Status == TravelTourManagement.DataAccess.Enums.PackageStatus.Published);
+        
+        if (!string.IsNullOrWhiteSpace(country))
+        {
+            query = query.Where(p => p.Country.ToLower() == country.ToLower());
+        }
+
+        return await query
+            .Select(p => p.Destination)
+            .Where(d => !string.IsNullOrEmpty(d))
+            .Distinct()
+            .OrderBy(d => d)
+            .ToListAsync(cancellationToken);
+    }
+
+
     
     public async Task<(IReadOnlyList<Package> Packages, int TotalCount)> SearchPackagesAsync(
         PackageSearchRequest request,

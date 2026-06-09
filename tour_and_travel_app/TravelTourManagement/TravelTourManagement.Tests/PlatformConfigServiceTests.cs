@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 using NUnit.Framework;
 using TravelTourManagement.Business.Services;
@@ -19,6 +20,7 @@ public class PlatformConfigServiceTests
 {
     private Mock<IRepository<PlatformConfig, Guid>> _repoMock;
     private Mock<IMapper> _mapperMock;
+    private Mock<IDistributedCache> _cacheMock;
     private PlatformConfigService _configService;
 
     [SetUp]
@@ -26,7 +28,13 @@ public class PlatformConfigServiceTests
     {
         _repoMock = new Mock<IRepository<PlatformConfig, Guid>>();
         _mapperMock = new Mock<IMapper>();
-        _configService = new PlatformConfigService(_repoMock.Object, _mapperMock.Object);
+        _cacheMock = new Mock<IDistributedCache>();
+
+        // Mock GetAsync to return null by default so it falls back to DB
+        _cacheMock.Setup(c => c.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((byte[]?)null);
+
+        _configService = new PlatformConfigService(_repoMock.Object, _mapperMock.Object, _cacheMock.Object);
     }
 
     [Test]

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
+using TravelTourManagement.Business.Extensions;
 using TravelTourManagement.Business.Interface;
 using TravelTourManagement.DataAccess.DTOs.Packages;
 using TravelTourManagement.DataAccess.Entities;
@@ -20,13 +22,15 @@ public class PackageService : IPackageService
     private readonly IPackagerRepository _packagerRepository;
     private readonly IBookingRepository _bookingRepository;
     private readonly AutoMapper.IMapper _mapper;
+    private readonly IDistributedCache _cache;
 
-    public PackageService(IPackageRepository packageRepository, IPackagerRepository packagerRepository, IBookingRepository bookingRepository, AutoMapper.IMapper mapper)
+    public PackageService(IPackageRepository packageRepository, IPackagerRepository packagerRepository, IBookingRepository bookingRepository, AutoMapper.IMapper mapper, IDistributedCache cache)
     {
         _packageRepository = packageRepository;
         _packagerRepository = packagerRepository;
         _bookingRepository = bookingRepository;
         _mapper = mapper;
+        _cache = cache;
     }
 
     public async Task<Guid> CreatePackageAsync(Guid userId, CreatePackageRequest request, List<IFormFile>? mediaFiles = null, CancellationToken cancellationToken = default)
@@ -104,6 +108,8 @@ public class PackageService : IPackageService
         package.Status = TravelTourManagement.DataAccess.Enums.PackageStatus.Archived;
         package.UpdatedAt = DateTime.UtcNow;
         await _packageRepository.UpdateAsync(package, cancellationToken);
+        
+        await _cache.RemoveAsync($"Package_{packageId}", cancellationToken);
     }
 
     public async Task<string> UploadPackageMediaAsync(Guid userId, Guid packageId, System.IO.Stream fileStream, string fileName, string contentType, string category, bool isPrimary, int displayOrder, string? caption, CancellationToken cancellationToken = default)
@@ -158,11 +164,22 @@ public class PackageService : IPackageService
 
     public async Task<PackageDetailResponse> GetPublishedPackageByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
+        string cacheKey = $"Package_{id}";
+        var cachedPackage = await _cache.GetRecordAsync<PackageDetailResponse>(cacheKey, cancellationToken);
+        if (cachedPackage != null)
+        {
+            return cachedPackage;
+        }
+
         var package = await _packageRepository.GetWithFullDetailsAsync(id, cancellationToken);
         if (package == null || package.Status != TravelTourManagement.DataAccess.Enums.PackageStatus.Published)
             throw new KeyNotFoundException("Published package not found.");
 
-        return _mapper.Map<PackageDetailResponse>(package);
+        var response = _mapper.Map<PackageDetailResponse>(package);
+
+        await _cache.SetRecordAsync(cacheKey, response, TimeSpan.FromMinutes(2), null, cancellationToken);
+        
+        return response;
     }
 
     public async Task<PackageRevenueResponse> GetPackageRevenueAsync(Guid userId, string role, Guid packageId, CancellationToken cancellationToken = default)
@@ -235,6 +252,8 @@ public class PackageService : IPackageService
         package.UpdatedAt = DateTime.UtcNow;
 
         await _packageRepository.UpdateAsync(package, cancellationToken);
+        
+        await _cache.RemoveAsync($"Package_{packageId}", cancellationToken);
     }
 
     public async Task RepublishPackageAsync(Guid userId, Guid packageId, RepublishPackageRequest request, CancellationToken cancellationToken = default)
@@ -283,9 +302,22 @@ public class PackageService : IPackageService
 
     public async Task<PagedResponse<PackageSummaryResponse>> SearchPackagesAsync(PackageSearchRequest request, CancellationToken cancellationToken = default)
     {
+        string cacheKey = $"SearchPackages_{request.PageNumber}_{request.PageSize}_{request.SearchTerm}_{request.Destination}_{request.Country}_{request.PackageType}_{request.MinPrice}_{request.MaxPrice}_{request.MinDurationDays}_{request.MaxDurationDays}_{request.SortBy}";
+        
+        var cachedResponse = await _cache.GetRecordAsync<PagedResponse<PackageSummaryResponse>>(cacheKey, cancellationToken);
+        if (cachedResponse != null)
+        {
+            return cachedResponse;
+        }
+
         var (packages, totalCount) = await _packageRepository.SearchPackagesAsync(request, cancellationToken);
         var summaryResponses = _mapper.Map<List<PackageSummaryResponse>>(packages);
-        return new PagedResponse<PackageSummaryResponse>(summaryResponses, totalCount, request.PageNumber, request.PageSize);
+        
+        var response = new PagedResponse<PackageSummaryResponse>(summaryResponses, totalCount, request.PageNumber, request.PageSize);
+
+        await _cache.SetRecordAsync(cacheKey, response, TimeSpan.FromMinutes(2), null, cancellationToken);
+
+        return response;
     }
 
 }

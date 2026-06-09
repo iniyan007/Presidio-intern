@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Quartz;
@@ -37,6 +38,7 @@ public class BookingTimeoutJob : IJob
             var bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
             var packageRepository = scope.ServiceProvider.GetRequiredService<IPackageRepository>();
             var pricingRepository = scope.ServiceProvider.GetRequiredService<IRepository<PackageSeasonalPricing, Guid>>();
+            var cache = scope.ServiceProvider.GetRequiredService<IDistributedCache>();
 
             var booking = await bookingRepository.GetByIdAsync(bookingId, cancellationToken);
             if (booking == null) return;
@@ -70,6 +72,7 @@ public class BookingTimeoutJob : IJob
                 package.CurrentBookings -= seatConsumingTravelers;
                 if (package.CurrentBookings < 0) package.CurrentBookings = 0; 
                 await packageRepository.UpdateAsync(package, cancellationToken);
+                await cache.RemoveAsync($"Package_{package.Id}", cancellationToken);
             }
 
             _logger.LogInformation($"[Quartz Job] Successfully auto-cancelled booking {booking.BookingReference}");

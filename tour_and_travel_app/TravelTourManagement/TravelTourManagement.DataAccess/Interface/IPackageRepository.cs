@@ -39,9 +39,11 @@ public interface IPackageRepository : IRepository<Package, Guid>
 
     Task<(IReadOnlyList<Package> Packages, int TotalCount)> SearchPackagesAsync(PackageSearchRequest request, CancellationToken cancellationToken = default);
 
+    Task<List<string>> GetDistinctCountriesAsync(CancellationToken cancellationToken = default);
+    Task<List<string>> GetDistinctDestinationsAsync(string? country = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Returns packages available for booking within the given travel date range
+    /// Retrieves available packages by date range. for booking within the given travel date range
     /// (i.e. at least one active seasonal pricing slot covers the range).
     /// </summary>
     Task<IReadOnlyList<Package>> GetAvailableByDateRangeAsync(

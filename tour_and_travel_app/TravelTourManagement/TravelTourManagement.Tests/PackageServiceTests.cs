@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 using NUnit.Framework;
 using TravelTourManagement.Business.Services;
@@ -25,6 +26,7 @@ public class PackageServiceTests
     private Mock<IPackagerRepository> _packagerRepoMock;
     private Mock<IBookingRepository> _bookingRepoMock;
     private Mock<IMapper> _mapperMock;
+    private Mock<IDistributedCache> _cacheMock;
     private PackageService _packageService;
 
     [SetUp]
@@ -34,12 +36,18 @@ public class PackageServiceTests
         _packagerRepoMock = new Mock<IPackagerRepository>();
         _bookingRepoMock = new Mock<IBookingRepository>();
         _mapperMock = new Mock<IMapper>();
+        _cacheMock = new Mock<IDistributedCache>();
+
+        // Mock GetAsync to return null by default so it falls back to DB
+        _cacheMock.Setup(c => c.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((byte[]?)null);
 
         _packageService = new PackageService(
             _packageRepoMock.Object,
             _packagerRepoMock.Object,
             _bookingRepoMock.Object,
-            _mapperMock.Object
+            _mapperMock.Object,
+            _cacheMock.Object
         );
     }
 

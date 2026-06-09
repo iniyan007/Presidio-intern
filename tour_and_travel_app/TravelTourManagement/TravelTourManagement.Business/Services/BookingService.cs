@@ -13,6 +13,7 @@ using AutoMapper;
 using TravelTourManagement.DataAccess.Enums;
 using TravelTourManagement.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace TravelTourManagement.Business.Services;
 
@@ -30,6 +31,7 @@ public class BookingService : IBookingService
     private readonly INotificationService _notificationService;
     private readonly IEmailService _emailService;
     private readonly ApplicationDbContext _context;
+    private readonly IDistributedCache _cache;
 
     public BookingService(
         IPlatformConfigService platformConfigService,
@@ -43,7 +45,8 @@ public class BookingService : IBookingService
         IPdfService pdfService,
         INotificationService notificationService,
         IEmailService emailService,
-        ApplicationDbContext context)
+        ApplicationDbContext context,
+        IDistributedCache cache)
     {
         _bookingRepository = bookingRepository;
         _packageRepository = packageRepository;
@@ -57,6 +60,7 @@ public class BookingService : IBookingService
         _notificationService = notificationService;
         _emailService = emailService;
         _context = context;
+        _cache = cache;
     }
 
     public async Task<byte[]> DownloadBookingTicketAsync(Guid userId, Guid bookingId, CancellationToken cancellationToken = default)
@@ -111,6 +115,7 @@ public class BookingService : IBookingService
             // Prevent negative bookings just in case
             if (package.CurrentBookings < 0) package.CurrentBookings = 0;
             await _packageRepository.UpdateAsync(package, cancellationToken);
+            await _cache.RemoveAsync($"Package_{package.Id}", cancellationToken);
         }
 
         // Update Booking Status
@@ -340,6 +345,8 @@ public class BookingService : IBookingService
 
         package.CurrentBookings += seatConsumingTravelers;
         await _packageRepository.UpdateAsync(package, cancellationToken);
+        
+        await _cache.RemoveAsync($"Package_{package.Id}", cancellationToken);
 
         // Schedule Quartz Job to cancel booking if payment is not completed within 5 minutes
         var scheduler = await _schedulerFactory.GetScheduler(cancellationToken);

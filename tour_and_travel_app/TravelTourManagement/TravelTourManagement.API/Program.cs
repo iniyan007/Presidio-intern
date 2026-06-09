@@ -31,7 +31,9 @@ try
         .WriteTo.Console()
         .WriteTo.File("logs/traveltour-.txt", rollingInterval: RollingInterval.Day));
 
-builder.Services.AddControllers(options =>
+    builder.Services.AddDistributedMemoryCache();
+
+    builder.Services.AddControllers(options =>
 {
     options.Filters.Add<TravelTourManagement.API.Filters.RequireEmailVerificationFilter>();
     options.Filters.Add<TravelTourManagement.API.Filters.GlobalExceptionFilter>();

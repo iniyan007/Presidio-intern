@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 using NUnit.Framework;
 using Quartz;
@@ -32,6 +35,7 @@ public class BookingServiceTests
     private Mock<IEmailService> _emailServiceMock;
     private Mock<IPlatformConfigService> _platformConfigServiceMock;
     private Mock<IMapper> _mapperMock;
+    private Mock<IDistributedCache> _cacheMock;
     
     private ApplicationDbContext _dbContext;
     private BookingService _bookingService;
@@ -56,6 +60,10 @@ public class BookingServiceTests
         _emailServiceMock = new Mock<IEmailService>();
         _platformConfigServiceMock = new Mock<IPlatformConfigService>();
         _mapperMock = new Mock<IMapper>();
+        _cacheMock = new Mock<IDistributedCache>();
+
+        _cacheMock.Setup(c => c.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((byte[]?)null);
 
         _platformConfigServiceMock.Setup(x => x.GetConfigAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new TravelTourManagement.DataAccess.DTOs.PlatformConfig.PlatformConfigResponse { PlatformFeePercent = 5.0m, GstPercent = 10.0m });
         
@@ -80,7 +88,8 @@ public class BookingServiceTests
             _pdfServiceMock.Object,
             _notificationServiceMock.Object,
             _emailServiceMock.Object,
-            _dbContext
+            _dbContext,
+            _cacheMock.Object
         );
     }
 

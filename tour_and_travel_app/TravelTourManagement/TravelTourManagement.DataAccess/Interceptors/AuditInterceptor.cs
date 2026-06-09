@@ -83,6 +83,12 @@ public class AuditInterceptor : SaveChangesInterceptor
             if (primaryKeyProperty != null && primaryKeyProperty.CurrentValue is Guid entityId)
             {
                 auditLog.EntityId = entityId;
+                
+                // Fallback for Login/Register where UserContext is null but we are modifying a User
+                if (auditLog.PerformedBy == null && entityName == "User")
+                {
+                    auditLog.PerformedBy = entityId;
+                }
             }
             else
             {

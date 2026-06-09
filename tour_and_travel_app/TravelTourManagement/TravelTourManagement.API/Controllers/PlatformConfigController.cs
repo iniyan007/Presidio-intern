@@ -28,7 +28,7 @@ public class PlatformConfigController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateConfig([FromBody] UpdatePlatformConfigRequest request, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

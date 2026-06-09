@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -59,6 +60,11 @@ public class BackgroundJobsTests
         scopedServiceProviderMock
             .Setup(x => x.GetService(typeof(IRepository<PackageSeasonalPricing, Guid>)))
             .Returns(_pricingRepoMock.Object);
+
+        var cacheMock = new Mock<IDistributedCache>();
+        scopedServiceProviderMock
+            .Setup(x => x.GetService(typeof(IDistributedCache)))
+            .Returns(cacheMock.Object);
 
         _serviceScopeMock.Setup(x => x.ServiceProvider).Returns(scopedServiceProviderMock.Object);
     }
