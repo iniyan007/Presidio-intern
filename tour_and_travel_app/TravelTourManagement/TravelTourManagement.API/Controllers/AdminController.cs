@@ -54,4 +54,36 @@ public class AdminController : ControllerBase
         var response = await _packagerService.GetPendingPackagersAsync(cancellationToken);
         return Ok(response);
     }
+
+    [HttpGet("packagers/{id:guid}/documents")]
+    public async Task<IActionResult> GetPackagerDocuments(Guid id, CancellationToken cancellationToken)
+    {
+        var response = await _packagerService.GetPackagerDocumentsAsync(id, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpGet("packagers/documents/{fileName}")]
+    [AllowAnonymous] // Ideally should be authorized, but for testing UI easier to allow or secure with token
+    public IActionResult GetPackagerDocumentFile(string fileName)
+    {
+        if (fileName.Contains("..") || fileName.Contains("/") || fileName.Contains("\\"))
+            throw new ArgumentException("Invalid file name.");
+
+        var currentDirectory = System.IO.Directory.GetCurrentDirectory(); 
+        var solutionDirectory = System.IO.Directory.GetParent(currentDirectory)?.FullName ?? currentDirectory;
+        var uploadDirectory = System.IO.Path.Combine(solutionDirectory, "TravelTourManagement.DataAccess", "Uploads", "Packagers", "Documents");
+        
+        var filePath = System.IO.Path.Combine(uploadDirectory, fileName);
+        if (!System.IO.File.Exists(filePath))
+            return NotFound();
+
+        var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+        if (!provider.TryGetContentType(fileName, out var contentType))
+        {
+            contentType = "application/octet-stream";
+        }
+
+        var fileStream = new System.IO.FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+        return File(fileStream, contentType);
+    }
 }

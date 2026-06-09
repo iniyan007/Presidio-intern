@@ -48,7 +48,7 @@ public class PackagerServiceTests
         var userId = Guid.NewGuid();
         _packagerRepoMock.Setup(x => x.ExistsByUserIdAsync(userId, It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
-        var request = new ApplyPackagerRequest("Company", "123", "Desc", "email", "phone", "url");
+        var request = new ApplyPackagerRequest { CompanyName = "Company", BusinessLicenseNo = "123", Description = "Desc", ContactEmail = "email", ContactPhone = "phone", WebsiteUrl = "url" };
         Func<Task> act = async () => await _packagerService.ApplyToBecomePackagerAsync(userId, request);
 
         await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("You have already submitted a packager application or are already a packager.");
@@ -61,7 +61,7 @@ public class PackagerServiceTests
         _packagerRepoMock.Setup(x => x.ExistsByUserIdAsync(userId, It.IsAny<CancellationToken>())).ReturnsAsync(false);
         _packagerRepoMock.Setup(x => x.AddAsync(It.IsAny<Packager>(), It.IsAny<CancellationToken>())).ReturnsAsync((Packager p, CancellationToken c) => p);
 
-        var request = new ApplyPackagerRequest("Company", "123", "Desc", "email", "phone", "url");
+        var request = new ApplyPackagerRequest { CompanyName = "Company", BusinessLicenseNo = "123", Description = "Desc", ContactEmail = "email", ContactPhone = "phone", WebsiteUrl = "url" };
         var expectedResponse = new PackagerResponse(Guid.NewGuid(), userId, "Company", "123", "Desc", "email", "phone", "url", "pending", null, 0, 0, DateTime.UtcNow);
         _mapperMock.Setup(x => x.Map<PackagerResponse>(It.IsAny<Packager>())).Returns(expectedResponse);
 

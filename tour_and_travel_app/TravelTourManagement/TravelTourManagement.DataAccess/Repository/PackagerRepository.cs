@@ -47,6 +47,14 @@ public class PackagerRepository : GenericRepository<Packager, Guid>, IPackagerRe
             .ToListAsync(cancellationToken);
 
     /// <inheritdoc />
+    public async Task<Packager?> GetWithDocumentsAsync(
+        Guid packagerId,
+        CancellationToken cancellationToken = default)
+        => await _dbSet
+            .Include(pk => pk.PackagerDocuments)
+            .FirstOrDefaultAsync(pk => pk.Id == packagerId, cancellationToken);
+
+    /// <inheritdoc />
     public async Task<Packager?> GetWithPackagesAsync(
         Guid packagerId,
         CancellationToken cancellationToken = default)

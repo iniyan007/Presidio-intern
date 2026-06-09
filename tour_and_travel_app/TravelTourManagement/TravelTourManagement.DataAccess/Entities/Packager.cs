@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace TravelTourManagement.DataAccess.Entities;
@@ -42,6 +42,8 @@ public partial class Packager
     public virtual ICollection<MessageThread> MessageThreads { get; set; } = new List<MessageThread>();
 
     public virtual ICollection<Package> Packages { get; set; } = new List<Package>();
+
+    public virtual ICollection<PackagerDocument> PackagerDocuments { get; set; } = new List<PackagerDocument>();
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 

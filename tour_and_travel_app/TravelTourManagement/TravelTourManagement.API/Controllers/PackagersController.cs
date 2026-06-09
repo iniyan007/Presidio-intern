@@ -21,7 +21,7 @@ public class PackagersController : ControllerBase
 
     [HttpPost("apply")]
     [Authorize]
-    public async Task<IActionResult> ApplyToBecomePackager([FromBody] ApplyPackagerRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> ApplyToBecomePackager([FromForm] ApplyPackagerRequest request, CancellationToken cancellationToken)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))

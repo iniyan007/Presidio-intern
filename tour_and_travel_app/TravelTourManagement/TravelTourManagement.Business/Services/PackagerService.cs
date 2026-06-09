@@ -8,6 +8,8 @@ using TravelTourManagement.DataAccess.Entities;
 using TravelTourManagement.DataAccess.Interface;
 using AutoMapper;
 using TravelTourManagement.Business.Interface;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace TravelTourManagement.Business.Services;
 
@@ -45,8 +47,47 @@ public class PackagerService : IPackagerService
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             TotalReviews = 0,
-            AvgRating = 0
+            AvgRating = 0,
+            PackagerDocuments = new List<PackagerDocument>()
         };
+
+        var currentDirectory = Directory.GetCurrentDirectory(); 
+        var solutionDirectory = Directory.GetParent(currentDirectory)?.FullName ?? currentDirectory;
+        var uploadDirectory = Path.Combine(solutionDirectory, "TravelTourManagement.DataAccess", "Uploads", "Packagers", "Documents");
+        
+        if (!Directory.Exists(uploadDirectory))
+        {
+            Directory.CreateDirectory(uploadDirectory);
+        }
+
+        async Task ProcessDocumentAsync(IFormFile file, string documentType)
+        {
+            if (file == null || file.Length == 0) return;
+            
+            var extension = Path.GetExtension(file.FileName);
+            var uniqueFileName = $"{Guid.NewGuid()}{extension}";
+            var filePath = Path.Combine(uploadDirectory, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream, cancellationToken);
+            }
+
+            packager.PackagerDocuments.Add(new PackagerDocument
+            {
+                DocumentType = documentType,
+                FilePath = $"/uploads/packagers/documents/{uniqueFileName}",
+                FileName = uniqueFileName,
+                OriginalFilename = file.FileName,
+                FileSizeBytes = file.Length,
+                MimeType = file.ContentType,
+                UploadedAt = DateTime.UtcNow
+            });
+        }
+
+        await ProcessDocumentAsync(request.PanDocument, "PAN");
+        await ProcessDocumentAsync(request.GstDocument, "GST");
+        await ProcessDocumentAsync(request.BusinessRegistration, "Registration");
 
         var createdPackager = await _packagerRepository.AddAsync(packager, cancellationToken);
         return _mapper.Map<PackagerResponse>(createdPackager);
@@ -151,4 +192,24 @@ public class PackagerService : IPackagerService
         return new TravelTourManagement.DataAccess.DTOs.PagedResponse<PublicPackagerResponse>(responseItems, totalCount, request.PageNumber, request.PageSize);
     }
 
+    public async Task<IEnumerable<PackagerDocumentResponse>> GetPackagerDocumentsAsync(Guid packagerId, CancellationToken cancellationToken = default)
+    {
+        var packager = await _packagerRepository.GetWithDocumentsAsync(packagerId, cancellationToken);
+        if (packager == null)
+        {
+            throw new KeyNotFoundException("Packager not found.");
+        }
+
+        return packager.PackagerDocuments.Select(doc => new PackagerDocumentResponse
+        {
+            Id = doc.Id,
+            DocumentType = doc.DocumentType,
+            FileName = doc.FileName,
+            OriginalFilename = doc.OriginalFilename,
+            FileSizeBytes = doc.FileSizeBytes,
+            MimeType = doc.MimeType,
+            UploadedAt = doc.UploadedAt,
+            FileUrl = $"/api/Admin/packagers/documents/{doc.FileName}"
+        });
+    }
 }

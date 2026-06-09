@@ -14,4 +14,5 @@ public interface IPackagerService
     Task<IEnumerable<PackagerResponse>> GetPendingPackagersAsync(CancellationToken cancellationToken = default);
     Task<PackagerResponse> GetMyPackagerStatusAsync(Guid userId, CancellationToken cancellationToken = default);
     Task<TravelTourManagement.DataAccess.DTOs.PagedResponse<PublicPackagerResponse>> GetPublicPackagersAsync(PackagerSearchRequest request, CancellationToken cancellationToken = default);
+    Task<IEnumerable<PackagerDocumentResponse>> GetPackagerDocumentsAsync(Guid packagerId, CancellationToken cancellationToken = default);
 }

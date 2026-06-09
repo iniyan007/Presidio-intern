@@ -57,6 +57,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Packager> Packagers { get; set; }
 
+    public virtual DbSet<PackagerDocument> PackagerDocuments { get; set; }
+
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<PlatformConfig> PlatformConfigs { get; set; }
@@ -826,6 +828,42 @@ public partial class ApplicationDbContext : DbContext
             entity.HasOne(d => d.User).WithOne(p => p.PackagerUser)
                 .HasForeignKey<Packager>(d => d.UserId)
                 .HasConstraintName("packagers_user_id_fkey");
+        });
+
+        modelBuilder.Entity<PackagerDocument>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("packager_documents_pkey");
+
+            entity.ToTable("packager_documents");
+
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("uuid_generate_v4()")
+                .HasColumnName("id");
+            entity.Property(e => e.PackagerId).HasColumnName("packager_id");
+            entity.Property(e => e.DocumentType)
+                .HasMaxLength(50)
+                .HasColumnName("document_type");
+            entity.Property(e => e.FileName)
+                .HasMaxLength(255)
+                .HasColumnName("file_name");
+            entity.Property(e => e.FilePath)
+                .HasColumnName("file_path");
+            entity.Property(e => e.OriginalFilename)
+                .HasMaxLength(255)
+                .HasColumnName("original_filename");
+            entity.Property(e => e.FileSizeBytes).HasColumnName("file_size_bytes");
+            entity.Property(e => e.MimeType)
+                .HasMaxLength(100)
+                .HasColumnName("mime_type");
+            entity.Property(e => e.UploadedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("uploaded_at");
+
+            entity.HasOne(d => d.Packager).WithMany(p => p.PackagerDocuments)
+                .HasForeignKey(d => d.PackagerId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("packager_documents_packager_id_fkey");
         });
 
         modelBuilder.Entity<Payment>(entity =>

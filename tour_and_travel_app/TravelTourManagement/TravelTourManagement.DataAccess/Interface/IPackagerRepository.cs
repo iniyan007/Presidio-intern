@@ -25,6 +25,11 @@ public interface IPackagerRepository : IRepository<Packager, Guid>
     Task<IReadOnlyList<Packager>> GetPendingApprovalAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Returns the packager together with their full list of <see cref="PackagerDocument"/> entities.
+    /// </summary>
+    Task<Packager?> GetWithDocumentsAsync(Guid packagerId, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Returns the packager together with their full list of <see cref="Package"/> entities.
     /// </summary>
     Task<Packager?> GetWithPackagesAsync(Guid packagerId, CancellationToken cancellationToken = default);
