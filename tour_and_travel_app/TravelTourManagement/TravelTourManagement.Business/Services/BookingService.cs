@@ -151,6 +151,7 @@ public class BookingService : IBookingService
         });
     }
 
+
     public async Task<BookingResponse> CreateBookingAsync(Guid userId, CreateBookingRequest request, List<IFormFile>? documentFiles = null, CancellationToken cancellationToken = default)
     {
         var strategy = _context.Database.CreateExecutionStrategy();
@@ -159,9 +160,92 @@ public class BookingService : IBookingService
             using var transaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable, cancellationToken);
             try
             {
-                var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
-                if (user == null)
-                    throw new UnauthorizedAccessException("User not found.");
+                var (package, pricing) = await ValidateBookingRequestAsync(userId, request, cancellationToken);
+                var (adultCount, childCount) = CalculateTravelerCounts(request.Travelers);
+                var seatConsumingTravelers = adultCount + childCount;
+
+                ValidateCapacity(package, pricing, seatConsumingTravelers);
+
+                string reference = await GenerateBookingReferenceAsync(cancellationToken);
+
+                var prices = await CalculateBookingPricesAsync(pricing, adultCount, childCount, cancellationToken);
+
+                var travelers = await ProcessTravelersAndDocumentsAsync(request.Travelers, documentFiles, cancellationToken);
+
+                var booking = new Booking
+                {
+                    UserId = userId,
+                    PackageId = request.PackageId,
+                    SeasonalPricingId = request.SeasonalPricingId,
+                    BookingReference = reference,
+                    AdultCount = adultCount,
+                    ChildCount = childCount,
+                    InfantCount = request.InfantCount,
+                    TravelDate = request.TravelDate,
+                    ReturnDate = request.TravelDate.AddDays(package.DurationDays),
+                    SpecialRequests = request.SpecialRequests,
+                    PackagerBaseAmount = prices.BaseAmount,
+                    PlatformFeePercent = prices.PlatformFeePercent,
+                    PlatformFeeAmount = prices.PlatformFeeAmount,
+                    TaxAmount = prices.TaxAmount,
+                    TotalAmount = prices.TotalAmount,
+                    PaidAmount = 0,
+                    Status = TravelTourManagement.DataAccess.Enums.BookingStatus.Pending,
+                    PaymentStatus = TravelTourManagement.DataAccess.Enums.PaymentStatus.Unpaid,
+                    BookedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    BookingTravelers = travelers
+                };
+
+                foreach (var traveler in booking.BookingTravelers)
+                {
+                    foreach (var doc in traveler.TravelDocuments)
+                    {
+                        doc.Booking = booking;
+                    }
+                }
+
+                await _bookingRepository.AddAsync(booking, cancellationToken);
+
+                pricing.AvailableSlots -= seatConsumingTravelers;
+                await _seasonalPricingRepository.UpdateAsync(pricing, cancellationToken);
+
+                package.CurrentBookings += seatConsumingTravelers;
+                await _packageRepository.UpdateAsync(package, cancellationToken);
+                
+                await _cache.RemoveAsync($"Package_{package.Id}", cancellationToken);
+
+                await ScheduleBookingTimeoutJobAsync(booking.Id, cancellationToken);
+
+                await _notificationService.SendNotificationAsync(
+                    userId, 
+                    "Booking Request Submitted", 
+                    $"Your booking request for {package.Title} has been successfully submitted! Reference: {booking.BookingReference}", 
+                    booking.Id, 
+                    TravelTourManagement.DataAccess.Enums.NotificationType.booking,
+                    cancellationToken);
+
+                await transaction.CommitAsync(cancellationToken);
+                return _mapper.Map<BookingResponse>(booking);
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex) when (ex.InnerException is Npgsql.PostgresException pgEx && (pgEx.SqlState == "40001" || pgEx.SqlState == "40P01"))
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw new InvalidOperationException("Due to high traffic, this package was just updated. Please try booking again.");
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
+    }
+
+    private async Task<(Package package, PackageSeasonalPricing pricing)> ValidateBookingRequestAsync(Guid userId, CreateBookingRequest request, CancellationToken cancellationToken)
+    {
+        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        if (user == null)
+            throw new UnauthorizedAccessException("User not found.");
 
         var package = await _packageRepository.GetByIdAsync(request.PackageId, cancellationToken);
         if (package == null || package.Status != TravelTourManagement.DataAccess.Enums.PackageStatus.Published)
@@ -181,10 +265,7 @@ public class BookingService : IBookingService
                 throw new System.ComponentModel.DataAnnotations.ValidationException($"{package.Type} packages must be booked at least 1 month in advance.");
             }
         }
-
         
-        
-        // Passport Validation
         bool isIndia = package.Country?.Equals("India", StringComparison.OrdinalIgnoreCase) ?? false;
         if (!isIndia)
         {
@@ -192,38 +273,47 @@ public class BookingService : IBookingService
                 throw new InvalidOperationException("Passport Number is required for all travelers when traveling outside of India.");
         }
 
-        // Calculate Adult and Child Counts based on Travelers list
+        return (package, pricing);
+    }
+
+    private (int adultCount, int childCount) CalculateTravelerCounts(IEnumerable<TravelTourManagement.DataAccess.DTOs.Bookings.BookingTravelerRequest> travelers)
+    {
         int adultCount = 0;
         int childCount = 0;
-        foreach (var traveler in request.Travelers)
+        foreach (var traveler in travelers)
         {
             int age = traveler.Age ?? 
-                     (traveler.DateOfBirth.HasValue ? DateTime.Today.Year - traveler.DateOfBirth.Value.Year : 20); // Default to adult if unknown
+                     (traveler.DateOfBirth.HasValue ? DateTime.Today.Year - traveler.DateOfBirth.Value.Year : 20);
             
             if (age < 12) childCount++;
             else adultCount++;
         }
+        return (adultCount, childCount);
+    }
 
-        // Check availability (Infants do not consume seats)
-        var totalTravelers = adultCount + childCount + request.InfantCount;
-        var seatConsumingTravelers = adultCount + childCount;
-        
+    private void ValidateCapacity(Package package, PackageSeasonalPricing pricing, int seatConsumingTravelers)
+    {
         if (seatConsumingTravelers > pricing.AvailableSlots)
             throw new InvalidOperationException($"Not enough slots available. Requested: {seatConsumingTravelers}, Available: {pricing.AvailableSlots}");
         
         if (package.CurrentBookings + seatConsumingTravelers > package.MaxCapacity)
             throw new InvalidOperationException("Package max capacity exceeded.");
+    }
 
-        // Generate Booking Reference
+    private async Task<string> GenerateBookingReferenceAsync(CancellationToken cancellationToken)
+    {
         string reference;
         do
         {
             var randomString = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
             reference = $"BKG-{DateTime.UtcNow.Year}-{randomString}";
         } while (await _bookingRepository.ReferenceExistsAsync(reference, cancellationToken));
+        return reference;
+    }
 
-        // Calculate Prices
-        decimal baseAmount = (adultCount * pricing.BasePrice) + (childCount * (pricing.ChildPrice));
+    private async Task<(decimal BaseAmount, decimal PlatformFeePercent, decimal PlatformFeeAmount, decimal TaxAmount, decimal TotalAmount)> CalculateBookingPricesAsync(PackageSeasonalPricing pricing, int adultCount, int childCount, CancellationToken cancellationToken)
+    {
+        decimal baseAmount = (adultCount * pricing.BasePrice) + (childCount * pricing.ChildPrice);
         if (pricing.DiscountPercent > 0)
         {
             baseAmount -= baseAmount * (pricing.DiscountPercent / 100m);
@@ -235,152 +325,98 @@ public class BookingService : IBookingService
         decimal taxAmount = (baseAmount + platformFeeAmount) * (platformConfig.GstPercent / 100m);
         decimal totalAmount = baseAmount + platformFeeAmount + taxAmount;
 
-        var booking = new Booking
+        return (baseAmount, platformFeePercent, platformFeeAmount, taxAmount, totalAmount);
+    }
+
+    private async Task<List<BookingTraveler>> ProcessTravelersAndDocumentsAsync(
+        IEnumerable<TravelTourManagement.DataAccess.DTOs.Bookings.BookingTravelerRequest> travelerRequests, 
+        List<IFormFile>? documentFiles, 
+        CancellationToken cancellationToken)
+    {
+        var travelers = new List<BookingTraveler>();
+        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "travel_documents");
+        if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+
+        foreach (var t in travelerRequests)
         {
-            UserId = userId,
-            PackageId = request.PackageId,
-            SeasonalPricingId = request.SeasonalPricingId,
-            BookingReference = reference,
-            AdultCount = adultCount,
-            ChildCount = childCount,
-            InfantCount = request.InfantCount,
-            TravelDate = request.TravelDate,
-            ReturnDate = request.TravelDate.AddDays(package.DurationDays),
-            SpecialRequests = request.SpecialRequests,
-            PackagerBaseAmount = baseAmount,
-            PlatformFeePercent = platformFeePercent,
-            PlatformFeeAmount = platformFeeAmount,
-            TaxAmount = taxAmount,
-            TotalAmount = totalAmount,
-            PaidAmount = 0, // Unpaid at creation
-            Status = TravelTourManagement.DataAccess.Enums.BookingStatus.Pending,
-            PaymentStatus = TravelTourManagement.DataAccess.Enums.PaymentStatus.Unpaid,
-            BookedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
-            BookingTravelers = request.Travelers.Select(t => {
-                var traveler = new BookingTraveler
-                {
-                    FullName = t.FullName,
-                    DateOfBirth = t.DateOfBirth,
-                    Age = t.Age,
-                    Gender = t.Gender,
-                    MealPreference = t.MealPreference,
-                    AadharCardNumber = t.AadharCardNumber,
-                    PassportNumber = t.PassportNumber,
-                    Nationality = t.Nationality,
-                    IsPrimary = t.IsPrimary,
-                    TravelDocuments = new List<TravelDocument>()
-                };
-
-                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "travel_documents");
-                if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
-
-                if (!string.IsNullOrEmpty(t.AadharCardFileName) && documentFiles != null)
-                {
-                    var file = documentFiles.FirstOrDefault(f => f.FileName == t.AadharCardFileName);
-                    if (file != null && file.Length > 0)
-                    {
-                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            file.CopyTo(fileStream); 
-                        }
-                        traveler.TravelDocuments.Add(new TravelDocument
-                        {
-                            DocumentType = "Aadhar Card",
-                            FileName = uniqueFileName,
-                            OriginalFilename = file.FileName,
-                            FilePath = $"/uploads/travel_documents/{uniqueFileName}",
-                            FileSizeBytes = file.Length,
-                            MimeType = file.ContentType,
-                            UploadedAt = DateTime.UtcNow
-                        });
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(t.PassportFileName) && documentFiles != null)
-                {
-                    var file = documentFiles.FirstOrDefault(f => f.FileName == t.PassportFileName);
-                    if (file != null && file.Length > 0)
-                    {
-                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            file.CopyTo(fileStream);
-                        }
-                        traveler.TravelDocuments.Add(new TravelDocument
-                        {
-                            DocumentType = "Passport",
-                            FileName = uniqueFileName,
-                            OriginalFilename = file.FileName,
-                            FilePath = $"/uploads/travel_documents/{uniqueFileName}",
-                            FileSizeBytes = file.Length,
-                            MimeType = file.ContentType,
-                            UploadedAt = DateTime.UtcNow
-                        });
-                    }
-                }
-
-                return traveler;
-            }).ToList()
-        };
-
-
-        foreach (var traveler in booking.BookingTravelers)
-        {
-            foreach (var doc in traveler.TravelDocuments)
+            var traveler = new BookingTraveler
             {
-                doc.Booking = booking;
+                FullName = t.FullName,
+                DateOfBirth = t.DateOfBirth,
+                Age = t.Age,
+                Gender = t.Gender,
+                MealPreference = t.MealPreference,
+                AadharCardNumber = t.AadharCardNumber,
+                PassportNumber = t.PassportNumber,
+                Nationality = t.Nationality,
+                IsPrimary = t.IsPrimary,
+                TravelDocuments = new List<TravelDocument>()
+            };
+
+            if (!string.IsNullOrEmpty(t.AadharCardFileName) && documentFiles != null)
+            {
+                var file = documentFiles.FirstOrDefault(f => f.FileName == t.AadharCardFileName);
+                if (file != null && file.Length > 0)
+                {
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream, cancellationToken); 
+                    }
+                    traveler.TravelDocuments.Add(new TravelDocument
+                    {
+                        DocumentType = "Aadhar Card",
+                        FileName = uniqueFileName,
+                        OriginalFilename = file.FileName,
+                        FilePath = $"/uploads/travel_documents/{uniqueFileName}",
+                        FileSizeBytes = file.Length,
+                        MimeType = file.ContentType,
+                        UploadedAt = DateTime.UtcNow
+                    });
+                }
             }
+
+            if (!string.IsNullOrEmpty(t.PassportFileName) && documentFiles != null)
+            {
+                var file = documentFiles.FirstOrDefault(f => f.FileName == t.PassportFileName);
+                if (file != null && file.Length > 0)
+                {
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream, cancellationToken);
+                    }
+                    traveler.TravelDocuments.Add(new TravelDocument
+                    {
+                        DocumentType = "Passport",
+                        FileName = uniqueFileName,
+                        OriginalFilename = file.FileName,
+                        FilePath = $"/uploads/travel_documents/{uniqueFileName}",
+                        FileSizeBytes = file.Length,
+                        MimeType = file.ContentType,
+                        UploadedAt = DateTime.UtcNow
+                    });
+                }
+            }
+
+            travelers.Add(traveler);
         }
+        return travelers;
+    }
 
-        await _bookingRepository.AddAsync(booking, cancellationToken);
-
-
-        // Update slots (only for seat-consuming travelers)
-        pricing.AvailableSlots -= seatConsumingTravelers;
-        await _seasonalPricingRepository.UpdateAsync(pricing, cancellationToken);
-
-        package.CurrentBookings += seatConsumingTravelers;
-        await _packageRepository.UpdateAsync(package, cancellationToken);
-        
-        await _cache.RemoveAsync($"Package_{package.Id}", cancellationToken);
-
-        // Schedule Quartz Job to cancel booking if payment is not completed within 5 minutes
+    private async Task ScheduleBookingTimeoutJobAsync(Guid bookingId, CancellationToken cancellationToken)
+    {
         var scheduler = await _schedulerFactory.GetScheduler(cancellationToken);
         var jobKey = new JobKey("BookingTimeoutJob");
         var trigger = TriggerBuilder.Create()
             .ForJob(jobKey)
-            .StartAt(DateTimeOffset.UtcNow.AddMinutes(5)) // Run in exactly 5 minutes
-            .UsingJobData("BookingId", booking.Id.ToString())
+            .StartAt(DateTimeOffset.UtcNow.AddMinutes(5))
+            .UsingJobData("BookingId", bookingId.ToString())
             .Build();
 
         await scheduler.ScheduleJob(trigger, cancellationToken);
-
-        await _notificationService.SendNotificationAsync(
-            userId, 
-            "Booking Request Submitted", 
-            $"Your booking request for {package.Title} has been successfully submitted! Reference: {booking.BookingReference}", 
-            booking.Id, 
-            TravelTourManagement.DataAccess.Enums.NotificationType.booking,
-            cancellationToken);
-
-        await transaction.CommitAsync(cancellationToken);
-        return _mapper.Map<BookingResponse>(booking);
-            }
-            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex) when (ex.InnerException is Npgsql.PostgresException pgEx && (pgEx.SqlState == "40001" || pgEx.SqlState == "40P01"))
-            {
-                await transaction.RollbackAsync(cancellationToken);
-                throw new InvalidOperationException("Due to high traffic, this package was just updated. Please try booking again.");
-            }
-            catch
-            {
-                await transaction.RollbackAsync(cancellationToken);
-                throw;
-            }
-        });
     }
 
     public async Task<BookingResponse> VerifyBookingAsync(Guid packagerUserId, Guid bookingId, CancellationToken cancellationToken = default)
