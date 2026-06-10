@@ -1,0 +1,20 @@
+@if(products().length === 0) {
+    <div class="spinner-border text-success" role="status">
+        <span class="sr-only"></span>
+    </div>
+}
+
+<section class="products-container">
+   @for (product of products(); track product.id) 
+   {
+        <article class="card">
+          <img class="card-img-top" [src]="product.thumbnail">
+          <div class="card-body">
+            <h5 class="card-title">{{product.title}}</h5>
+            <p class="card-text">{{product.description}}</p>
+            <p class="card-text">Rating: {{product.rating}}</p>
+            <button class="btn btn-primary" (click)="viewDetails(product.id)">View Details</button>
+          </div>
+        </article>
+   }
+</section>

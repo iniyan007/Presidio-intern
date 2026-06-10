@@ -1,0 +1,60 @@
+@if(product()) {
+    <article class="card product-detail-card">
+        <div class="card-img-top">
+            <img [src]="product()!.thumbnail" alt="{{product()!.title}}">
+            <div class="image-grid">
+                @for (img of product()!.images; track img) {
+                    <img [src]="img" alt="{{product()!.title}}">
+                }
+            </div>
+        </div>
+
+        <div class="card-body">
+            <h2 class="card-title">{{product()!.title}}</h2>
+            <p class="card-text">{{product()!.description}}</p>
+
+            <div class="price-row">
+                <span class="price">${{product()!.price}}</span>
+                <span class="discount">{{product()!.discountPercentage}}% off</span>
+                <span class="rating">Rating: {{product()!.rating}}</span>
+            </div>
+
+            <div class="meta-row">
+                <span><strong>Brand:</strong> {{product()!.brand}}</span>
+                <span><strong>SKU:</strong> {{product()!.sku}}</span>
+                <span><strong>Availability:</strong> {{product()!.availabilityStatus}}</span>
+                <span><strong>Stock:</strong> {{product()!.stock}}</span>
+            </div>
+
+            <ul class="attributes">
+                <li><strong>Weight:</strong> {{product()!.weight}}</li>
+                <li><strong>Dimensions (W×H×D):</strong> {{product()!.dimensions.width}} × {{product()!.dimensions.height}} × {{product()!.dimensions.depth}}</li>
+                <li><strong>Warranty:</strong> {{product()!.warrantyInformation}}</li>
+                <li><strong>Shipping:</strong> {{product()!.shippingInformation}}</li>
+                <li><strong>Minimum Order:</strong> {{product()!.minimumOrderQuantity}}</li>
+            </ul>
+
+            <div class="tags">
+                @for (tag of product()!.tags; track tag) {
+                    <span class="tag">{{tag}}</span>
+                }
+            </div>
+
+            <div class="reviews">
+                <h3>Reviews</h3>
+                @for (r of product()!.reviews; track r.date) {
+                    <div class="review">
+                        <div class="review-header"><strong>{{r.reviewerName}}</strong> — <span>Rating: {{r.rating}}</span></div>
+                        <p>{{r.comment}}</p>
+                        <small class="review-date">{{r.date}}</small>
+                    </div>
+                }
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary">Add to cart</button>
+                <button class="btn btn-outline-secondary" (click)="goBack()">Back to list</button>
+            </div>
+        </div>
+    </article>
+}

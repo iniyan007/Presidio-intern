@@ -1,0 +1,22 @@
+@if(userInfo()) {
+  <section class="profile-card">
+    <div class="profile-header">
+      <img class="avatar" [src]="userInfo()!.image || 'https://via.placeholder.com/120'" alt="{{userInfo()!.firstName}} {{userInfo()!.lastName}}">
+      <div>
+        <h2>{{userInfo()!.firstName}} {{userInfo()!.lastName}}</h2>
+        <p class="username">@{{userInfo()!.username}}</p>
+      </div>
+    </div>
+
+    <div class="profile-details">
+      <div class="detail-row"><span class="label">Email</span><span>{{userInfo()!.email}}</span></div>
+      <div class="detail-row"><span class="label">Gender</span><span>{{userInfo()!.gender}}</span></div>
+      <div class="detail-row"><span class="label">User ID</span><span>{{userInfo()!.id}}</span></div>
+    </div>
+  </section>
+} @else {
+  <section class="profile-card empty">
+    <h2>No profile data</h2>
+    <p>Please log in to view your profile details.</p>
+  </section>
+}

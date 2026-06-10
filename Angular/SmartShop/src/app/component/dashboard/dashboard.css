@@ -1,0 +1,47 @@
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+.nav-link {
+  font-weight: 500;
+  margin-left: 1rem;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #fff !important;
+}
+
+.nav-link.active {
+  border-bottom: 2px solid #fff;
+}
+
+.dashboard-greeting {
+  padding: 1rem 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  color: #111827;
+}
+
+.dashboard-greeting p {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.dashboard-content {
+  min-height: calc(100vh - 56px - 64px);
+  padding: 2rem;
+  background: #f8f9fa;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

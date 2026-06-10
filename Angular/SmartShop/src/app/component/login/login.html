@@ -1,0 +1,18 @@
+<section>
+    <h1>Login</h1>
+    <form (ngSubmit)="handleLoginClick()" class="login-form">
+        <div class="input">
+            <input type="text" id="username" [formField]="loginform.username" placeholder="Username">
+        </div>
+        <div class="input">
+            <input type="password" id="password" [formField]="loginform.password" placeholder="Password ">
+        </div>
+        <button [disabled]="progress() || loginform().invalid()" type="submit">Login
+            @if (progress()) {
+                <div class="spinner-border text-success" role="status">
+                <span class="sr-only"></span>
+            </div>
+            }
+        </button>   
+    </form>
+</section>
