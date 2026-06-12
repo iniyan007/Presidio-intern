@@ -1,0 +1,538 @@
+2026-06-12 01:08:18.542 +05:30 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+FROM packages AS p
+2026-06-12 01:08:18.564 +05:30 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.available_slots, p.base_price, p.child_price, p.discount_percent, p.end_date, p.is_active, p.package_id, p.season_name, p.start_date
+FROM package_seasonal_pricing AS p
+2026-06-12 01:08:18.567 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.available_slots, p.base_price, p.child_price, p.discount_percent, p.end_date, p.is_active, p.package_id, p.season_name, p.start_date
+FROM package_seasonal_pricing AS p
+2026-06-12 01:08:18.567 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.available_slots, p.base_price, p.child_price, p.discount_percent, p.end_date, p.is_active, p.package_id, p.season_name, p.start_date
+FROM package_seasonal_pricing AS p
+2026-06-12 14:24:56.557 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Auth/Login - application/json 73
+2026-06-12 14:24:56.599 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-12 14:24:56.650 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TravelTourManagement.DataAccess.DTOs.Users.LoginRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.AuthController (TravelTourManagement.API).
+2026-06-12 14:24:56.792 +05:30 [INF] Executed DbCommand (16ms) [Parameters=[@__email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, u.created_at, u.email, u.full_name, u.is_active, u.is_email_verified, u.last_login_at, u.password_hash, u.phone, u.profile_picture, u."RefreshToken", u."RefreshTokenExpiryTime", u.updated_at
+FROM users AS u
+WHERE u.email = @__email_0
+LIMIT 1
+2026-06-12 14:24:57.043 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM packagers AS p
+WHERE p.user_id = @__userId_0
+LIMIT 1
+2026-06-12 14:24:57.177 +05:30 [INF] Executed DbCommand (43ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p11='?' (DbType = Guid), @p10='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET last_login_at = @p10
+WHERE id = @p11;
+2026-06-12 14:24:57.210 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p22='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p11='?', @p12='?', @p13='?' (DbType = Boolean), @p14='?' (DbType = Boolean), @p15='?' (DbType = DateTime), @p16='?', @p17='?', @p18='?', @p19='?', @p20='?' (DbType = DateTime), @p21='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET created_at = @p10, email = @p11, full_name = @p12, is_active = @p13, is_email_verified = @p14, last_login_at = @p15, password_hash = @p16, phone = @p17, profile_picture = @p18, "RefreshToken" = @p19, "RefreshTokenExpiryTime" = @p20, updated_at = @p21
+WHERE id = @p22;
+2026-06-12 14:24:57.214 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Users.AuthResponse'.
+2026-06-12 14:24:57.217 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API) in 566.7695ms
+2026-06-12 14:24:57.217 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-12 14:24:57.217 +05:30 [INF] HTTP POST /api/Auth/Login responded 200 in 636.0322 ms
+2026-06-12 14:24:57.217 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Auth/Login - 200 null application/json; charset=utf-8 662.8646ms
+2026-06-12 14:25:26.791 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Auth/Login - application/json 66
+2026-06-12 14:25:26.794 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-12 14:25:26.794 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TravelTourManagement.DataAccess.DTOs.Users.LoginRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.AuthController (TravelTourManagement.API).
+2026-06-12 14:25:26.800 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, u.created_at, u.email, u.full_name, u.is_active, u.is_email_verified, u.last_login_at, u.password_hash, u.phone, u.profile_picture, u."RefreshToken", u."RefreshTokenExpiryTime", u.updated_at
+FROM users AS u
+WHERE u.email = @__email_0
+LIMIT 1
+2026-06-12 14:25:26.944 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM packagers AS p
+WHERE p.user_id = @__userId_0
+LIMIT 1
+2026-06-12 14:25:26.948 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p11='?' (DbType = Guid), @p10='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET last_login_at = @p10
+WHERE id = @p11;
+2026-06-12 14:25:26.951 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p22='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p11='?', @p12='?', @p13='?' (DbType = Boolean), @p14='?' (DbType = Boolean), @p15='?' (DbType = DateTime), @p16='?', @p17='?', @p18='?', @p19='?', @p20='?' (DbType = DateTime), @p21='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET created_at = @p10, email = @p11, full_name = @p12, is_active = @p13, is_email_verified = @p14, last_login_at = @p15, password_hash = @p16, phone = @p17, profile_picture = @p18, "RefreshToken" = @p19, "RefreshTokenExpiryTime" = @p20, updated_at = @p21
+WHERE id = @p22;
+2026-06-12 14:25:26.952 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Users.AuthResponse'.
+2026-06-12 14:25:26.952 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API) in 157.6145ms
+2026-06-12 14:25:26.952 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-12 14:25:26.952 +05:30 [INF] HTTP POST /api/Auth/Login responded 200 in 158.5298 ms
+2026-06-12 14:25:26.952 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Auth/Login - 200 null application/json; charset=utf-8 161.7048ms
+2026-06-12 14:25:54.395 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/hubs/chat?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTBkNDE4OS1lN2YyLTRmNDgtOTc3ZS1jNGE2OTAzNWI1ZGEiLCJlbWFpbCI6ImtwbnRyYXZlbHNAZ21haWwuY29tIiwicm9sZSI6IlBhY2thZ2VyIiwiRW1haWxWZXJpZmllZCI6IlRydWUiLCJqdGkiOiIyYzc2MTQxYi0wM2NhLTQyYjMtYmFhZS1kYjhlNTcwY2Q4ZTAiLCJuYmYiOjE3ODEyNTQ1MjYsImV4cCI6MTc4MTI1ODEyNiwiaWF0IjoxNzgxMjU0NTI2LCJpc3MiOiJUcmF2ZWxUb3VyTWFuYWdlbWVudEFQSSIsImF1ZCI6IlRyYXZlbFRvdXJNYW5hZ2VtZW50VXNlcnMifQ.WhqdmXKkNR_cVFE4yCEM4Pg3nJKKOCQjoTM6Vzwm9fM - null null
+2026-06-12 14:25:54.432 +05:30 [INF] Executing endpoint '/hubs/chat'
+2026-06-12 14:26:11.719 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/hubs/chat?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiMzdhNjNjMy1hNWU4LTQzMDUtOTViMC05MjZjM2ZhNjAzNTQiLCJlbWFpbCI6ImluaXlhbnN0YXJ6ekBnbWFpbC5jb20iLCJyb2xlIjoiVHJhdmVsZXIiLCJFbWFpbFZlcmlmaWVkIjoiVHJ1ZSIsImp0aSI6IjQ2MTYwM2QzLTUyOWYtNGNiMS04MmVjLWJkNTA1MjgzYWM2OSIsIm5iZiI6MTc4MTI1NDQ5NywiZXhwIjoxNzgxMjU4MDk3LCJpYXQiOjE3ODEyNTQ0OTcsImlzcyI6IlRyYXZlbFRvdXJNYW5hZ2VtZW50QVBJIiwiYXVkIjoiVHJhdmVsVG91ck1hbmFnZW1lbnRVc2VycyJ9._Q1HXmW8OHWE7aluGhwo06wpTwO7j3upYsM1IJdg984 - null null
+2026-06-12 14:26:11.724 +05:30 [INF] Executing endpoint '/hubs/chat'
+2026-06-12 14:26:47.198 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Messages/send - application/json 120
+2026-06-12 14:26:47.217 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.SendMessage (TravelTourManagement.API)'
+2026-06-12 14:26:47.221 +05:30 [INF] Route matched with {action = "SendMessage", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SendMessage(TravelTourManagement.DataAccess.DTOs.Messages.SendMessageRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:26:47.266 +05:30 [INF] Executed DbCommand (11ms) [Parameters=[@__request_ThreadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__request_ThreadId_0
+LIMIT 1
+2026-06-12 14:26:47.380 +05:30 [INF] Executed DbCommand (36ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p11='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p12='?', @p13='?' (DbType = Guid), @p14='?' (DbType = Object), @p15='?' (DbType = DateTime), @p16='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE message_threads SET last_message_at = @p10
+WHERE id = @p11;
+INSERT INTO messages (body, sender_id, sender_role, sent_at, thread_id)
+VALUES (@p12, @p13, @p14, @p15, @p16)
+RETURNING id, is_read;
+2026-06-12 14:26:47.393 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Messages.MessageDto'.
+2026-06-12 14:26:47.394 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.SendMessage (TravelTourManagement.API) in 172.8683ms
+2026-06-12 14:26:47.394 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.SendMessage (TravelTourManagement.API)'
+2026-06-12 14:26:47.394 +05:30 [INF] HTTP POST /api/Messages/send responded 200 in 182.4787 ms
+2026-06-12 14:26:47.395 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Messages/send - 200 null application/json; charset=utf-8 196.985ms
+2026-06-12 14:27:26.328 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Messages/send - application/json 122
+2026-06-12 14:27:26.331 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.SendMessage (TravelTourManagement.API)'
+2026-06-12 14:27:26.331 +05:30 [INF] Route matched with {action = "SendMessage", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SendMessage(TravelTourManagement.DataAccess.DTOs.Messages.SendMessageRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:27:26.338 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__request_ThreadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__request_ThreadId_0
+LIMIT 1
+2026-06-12 14:27:26.348 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__senderId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM packagers AS p
+WHERE p.user_id = @__senderId_0
+LIMIT 1
+2026-06-12 14:27:26.352 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p11='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p12='?', @p13='?' (DbType = Guid), @p14='?' (DbType = Object), @p15='?' (DbType = DateTime), @p16='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE message_threads SET last_message_at = @p10
+WHERE id = @p11;
+INSERT INTO messages (body, sender_id, sender_role, sent_at, thread_id)
+VALUES (@p12, @p13, @p14, @p15, @p16)
+RETURNING id, is_read;
+2026-06-12 14:27:26.354 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Messages.MessageDto'.
+2026-06-12 14:27:26.354 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.SendMessage (TravelTourManagement.API) in 22.4856ms
+2026-06-12 14:27:26.354 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.SendMessage (TravelTourManagement.API)'
+2026-06-12 14:27:26.354 +05:30 [INF] HTTP POST /api/Messages/send responded 200 in 24.2280 ms
+2026-06-12 14:27:26.355 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Messages/send - 200 null application/json; charset=utf-8 26.8736ms
+2026-06-12 14:28:15.762 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - null null
+2026-06-12 14:28:15.769 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 14:28:15.776 +05:30 [INF] Route matched with {action = "GetThreadMessages", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetThreadMessages(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:28:15.801 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 14:28:15.812 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id AS "Id", m.thread_id AS "ThreadId", m.sender_id AS "SenderId", m.sender_role AS "SenderRole", m.body AS "Body", m.is_read AS "IsRead", m.sent_at AS "SentAt"
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0
+ORDER BY m.sent_at
+2026-06-12 14:28:15.814 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[TravelTourManagement.DataAccess.DTOs.Messages.MessageDto, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 14:28:15.815 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API) in 37.8723ms
+2026-06-12 14:28:15.815 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 14:28:15.815 +05:30 [INF] HTTP GET /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages responded 200 in 49.2806 ms
+2026-06-12 14:28:15.815 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - 200 null application/json; charset=utf-8 52.9369ms
+2026-06-12 14:28:41.865 +05:30 [INF] Request starting HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - null 0
+2026-06-12 14:28:41.870 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 14:28:41.877 +05:30 [INF] Route matched with {action = "MarkMessagesAsRead", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MarkMessagesAsRead(System.Guid, TravelTourManagement.DataAccess.Enums.MessageSenderRole, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:28:41.885 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 14:28:41.897 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid), @__senderRoleToMark_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.body, m.is_read, m.sender_id, m.sender_role, m.sent_at, m.thread_id
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0 AND NOT (m.is_read) AND m.sender_role = @__senderRoleToMark_1
+2026-06-12 14:28:41.902 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@p1='?' (DbType = Guid), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE messages SET is_read = @p0
+WHERE id = @p1;
+2026-06-12 14:28:41.903 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType4`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 14:28:41.905 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API) in 27.9807ms
+2026-06-12 14:28:41.905 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 14:28:41.905 +05:30 [INF] HTTP PUT /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read responded 200 in 36.8062 ms
+2026-06-12 14:28:41.905 +05:30 [INF] Request finished HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - 200 null application/json; charset=utf-8 40.5987ms
+2026-06-12 14:28:47.900 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - null null
+2026-06-12 14:28:47.900 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 14:28:47.901 +05:30 [INF] Route matched with {action = "GetThreadMessages", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetThreadMessages(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:28:47.902 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 14:28:47.905 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id AS "Id", m.thread_id AS "ThreadId", m.sender_id AS "SenderId", m.sender_role AS "SenderRole", m.body AS "Body", m.is_read AS "IsRead", m.sent_at AS "SentAt"
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0
+ORDER BY m.sent_at
+2026-06-12 14:28:47.906 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[TravelTourManagement.DataAccess.DTOs.Messages.MessageDto, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 14:28:47.906 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API) in 5.3085ms
+2026-06-12 14:28:47.906 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 14:28:47.906 +05:30 [INF] HTTP GET /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages responded 200 in 6.4654 ms
+2026-06-12 14:28:47.907 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - 200 null application/json; charset=utf-8 6.9158ms
+2026-06-12 14:29:23.659 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Messages/threads - null null
+2026-06-12 14:29:23.668 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetUserThreads (TravelTourManagement.API)'
+2026-06-12 14:29:23.677 +05:30 [INF] Route matched with {action = "GetUserThreads", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetUserThreads(System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:29:23.717 +05:30 [INF] Executed DbCommand (6ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, u.id, u.created_at, u.email, u.full_name, u.is_active, u.is_email_verified, u.last_login_at, u.password_hash, u.phone, u.profile_picture, u."RefreshToken", u."RefreshTokenExpiryTime", u.updated_at, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url, u0.id, u0.created_at, u0.email, u0.full_name, u0.is_active, u0.is_email_verified, u0.last_login_at, u0.password_hash, u0.phone, u0.profile_picture, u0."RefreshToken", u0."RefreshTokenExpiryTime", u0.updated_at, p0.id, p0.avg_rating, p0.cancellation_policy, p0.city, p0.country, p0.created_at, p0.current_bookings, p0.description, p0.destination, p0.duration_days, p0.duration_nights, p0.is_featured, p0.max_capacity, p0.min_age, p0.packager_id, p0.status, p0.title, p0.total_reviews, p0.package_type, p0.updated_at
+FROM message_threads AS m
+INNER JOIN users AS u ON m.user_id = u.id
+INNER JOIN packagers AS p ON m.packager_id = p.id
+INNER JOIN users AS u0 ON p.user_id = u0.id
+LEFT JOIN packages AS p0 ON m.package_id = p0.id
+WHERE m.user_id = @__userId_0
+ORDER BY COALESCE(m.last_message_at, m.created_at) DESC
+2026-06-12 14:29:23.724 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_thread_Id_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.body, m.is_read, m.sender_id, m.sender_role, m.sent_at, m.thread_id
+FROM messages AS m
+WHERE m.thread_id = @__8__locals1_thread_Id_0
+ORDER BY m.sent_at DESC
+LIMIT 1
+2026-06-12 14:29:23.730 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_thread_Id_0='?' (DbType = Guid), @__readerRoleToCount_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM messages AS m
+WHERE m.thread_id = @__8__locals1_thread_Id_0 AND NOT (m.is_read) AND m.sender_role = @__readerRoleToCount_1
+2026-06-12 14:29:23.730 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[TravelTourManagement.DataAccess.DTOs.Messages.MessageThreadDto, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 14:29:23.740 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.GetUserThreads (TravelTourManagement.API) in 63.1999ms
+2026-06-12 14:29:23.740 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetUserThreads (TravelTourManagement.API)'
+2026-06-12 14:29:23.740 +05:30 [INF] HTTP GET /api/Messages/threads responded 200 in 79.0244 ms
+2026-06-12 14:29:23.741 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Messages/threads - 200 null application/json; charset=utf-8 82.004ms
+2026-06-12 14:50:55.819 +05:30 [INF] Request starting HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - null 0
+2026-06-12 14:50:55.828 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 14:50:55.829 +05:30 [INF] Route matched with {action = "MarkMessagesAsRead", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MarkMessagesAsRead(System.Guid, TravelTourManagement.DataAccess.Enums.MessageSenderRole, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:50:55.871 +05:30 [INF] Executed DbCommand (19ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 14:50:55.875 +05:30 [INF] Executing BadRequestObjectResult, writing value of type '<>f__AnonymousType0`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 14:50:55.882 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API) in 52.3345ms
+2026-06-12 14:50:55.883 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 14:50:55.883 +05:30 [INF] HTTP PUT /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read responded 400 in 61.2870 ms
+2026-06-12 14:50:55.883 +05:30 [INF] Request finished HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - 400 null application/json; charset=utf-8 64.2674ms
+2026-06-12 14:51:28.548 +05:30 [INF] Request starting HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - null 0
+2026-06-12 14:51:28.564 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 14:51:28.565 +05:30 [INF] Route matched with {action = "MarkMessagesAsRead", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MarkMessagesAsRead(System.Guid, TravelTourManagement.DataAccess.Enums.MessageSenderRole, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:51:28.584 +05:30 [INF] Executed DbCommand (10ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 14:51:28.604 +05:30 [INF] Executed DbCommand (18ms) [Parameters=[@__threadId_0='?' (DbType = Guid), @__senderRoleToMark_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.body, m.is_read, m.sender_id, m.sender_role, m.sent_at, m.thread_id
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0 AND NOT (m.is_read) AND m.sender_role = @__senderRoleToMark_1
+2026-06-12 14:51:28.604 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType4`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 14:51:28.605 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API) in 40.5176ms
+2026-06-12 14:51:28.605 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 14:51:28.606 +05:30 [INF] HTTP PUT /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read responded 200 in 46.1986 ms
+2026-06-12 14:51:28.606 +05:30 [INF] Request finished HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - 200 null application/json; charset=utf-8 58.1111ms
+2026-06-12 14:51:45.839 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - null null
+2026-06-12 14:51:45.841 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 14:51:45.841 +05:30 [INF] Route matched with {action = "GetThreadMessages", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetThreadMessages(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:51:45.846 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 14:51:45.851 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id AS "Id", m.thread_id AS "ThreadId", m.sender_id AS "SenderId", m.sender_role AS "SenderRole", m.body AS "Body", m.is_read AS "IsRead", m.sent_at AS "SentAt"
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0
+ORDER BY m.sent_at
+2026-06-12 14:51:45.852 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[TravelTourManagement.DataAccess.DTOs.Messages.MessageDto, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 14:51:45.852 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API) in 10.9438ms
+2026-06-12 14:51:45.853 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 14:51:45.853 +05:30 [INF] HTTP GET /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages responded 200 in 12.7975 ms
+2026-06-12 14:51:45.854 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - 200 null application/json; charset=utf-8 14.5178ms
+2026-06-12 14:57:45.565 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Messages/threads - null null
+2026-06-12 14:57:45.571 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetUserThreads (TravelTourManagement.API)'
+2026-06-12 14:57:45.572 +05:30 [INF] Route matched with {action = "GetUserThreads", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetUserThreads(System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:57:45.611 +05:30 [INF] Executed DbCommand (12ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, u.id, u.created_at, u.email, u.full_name, u.is_active, u.is_email_verified, u.last_login_at, u.password_hash, u.phone, u.profile_picture, u."RefreshToken", u."RefreshTokenExpiryTime", u.updated_at, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url, u0.id, u0.created_at, u0.email, u0.full_name, u0.is_active, u0.is_email_verified, u0.last_login_at, u0.password_hash, u0.phone, u0.profile_picture, u0."RefreshToken", u0."RefreshTokenExpiryTime", u0.updated_at, p0.id, p0.avg_rating, p0.cancellation_policy, p0.city, p0.country, p0.created_at, p0.current_bookings, p0.description, p0.destination, p0.duration_days, p0.duration_nights, p0.is_featured, p0.max_capacity, p0.min_age, p0.packager_id, p0.status, p0.title, p0.total_reviews, p0.package_type, p0.updated_at
+FROM message_threads AS m
+INNER JOIN users AS u ON m.user_id = u.id
+INNER JOIN packagers AS p ON m.packager_id = p.id
+INNER JOIN users AS u0 ON p.user_id = u0.id
+LEFT JOIN packages AS p0 ON m.package_id = p0.id
+WHERE m.user_id = @__userId_0
+ORDER BY COALESCE(m.last_message_at, m.created_at) DESC
+2026-06-12 14:57:45.615 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_thread_Id_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.body, m.is_read, m.sender_id, m.sender_role, m.sent_at, m.thread_id
+FROM messages AS m
+WHERE m.thread_id = @__8__locals1_thread_Id_0
+ORDER BY m.sent_at DESC
+LIMIT 1
+2026-06-12 14:57:45.619 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__8__locals1_thread_Id_0='?' (DbType = Guid), @__readerRoleToCount_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM messages AS m
+WHERE m.thread_id = @__8__locals1_thread_Id_0 AND NOT (m.is_read) AND m.sender_role = @__readerRoleToCount_1
+2026-06-12 14:57:45.619 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[TravelTourManagement.DataAccess.DTOs.Messages.MessageThreadDto, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 14:57:45.620 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.GetUserThreads (TravelTourManagement.API) in 48.1401ms
+2026-06-12 14:57:45.620 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetUserThreads (TravelTourManagement.API)'
+2026-06-12 14:57:45.620 +05:30 [INF] HTTP GET /api/Messages/threads responded 200 in 53.1326 ms
+2026-06-12 14:57:45.621 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Messages/threads - 200 null application/json; charset=utf-8 55.5774ms
+2026-06-12 14:57:51.854 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - null null
+2026-06-12 14:57:51.857 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 14:57:51.857 +05:30 [INF] Route matched with {action = "GetThreadMessages", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetThreadMessages(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:57:51.862 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 14:57:51.865 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id AS "Id", m.thread_id AS "ThreadId", m.sender_id AS "SenderId", m.sender_role AS "SenderRole", m.body AS "Body", m.is_read AS "IsRead", m.sent_at AS "SentAt"
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0
+ORDER BY m.sent_at
+2026-06-12 14:57:51.865 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[TravelTourManagement.DataAccess.DTOs.Messages.MessageDto, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 14:57:51.867 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API) in 9.0447ms
+2026-06-12 14:57:51.867 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 14:57:51.867 +05:30 [INF] HTTP GET /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages responded 200 in 11.1973 ms
+2026-06-12 14:57:51.867 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - 200 null application/json; charset=utf-8 12.7485ms
+2026-06-12 14:57:55.512 +05:30 [INF] Request starting HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - null 0
+2026-06-12 14:57:55.513 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 14:57:55.513 +05:30 [INF] Route matched with {action = "MarkMessagesAsRead", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MarkMessagesAsRead(System.Guid, TravelTourManagement.DataAccess.Enums.MessageSenderRole, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:57:55.517 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 14:57:55.519 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid), @__senderRoleToMark_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.body, m.is_read, m.sender_id, m.sender_role, m.sent_at, m.thread_id
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0 AND NOT (m.is_read) AND m.sender_role = @__senderRoleToMark_1
+2026-06-12 14:57:55.519 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType4`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 14:57:55.519 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API) in 6.2031ms
+2026-06-12 14:57:55.519 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 14:57:55.520 +05:30 [INF] HTTP PUT /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read responded 200 in 7.6299 ms
+2026-06-12 14:57:55.520 +05:30 [INF] Request finished HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - 200 null application/json; charset=utf-8 8.3249ms
+2026-06-12 14:58:01.404 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - null null
+2026-06-12 14:58:01.406 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 14:58:01.406 +05:30 [INF] Route matched with {action = "GetThreadMessages", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetThreadMessages(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:58:01.410 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 14:58:01.412 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id AS "Id", m.thread_id AS "ThreadId", m.sender_id AS "SenderId", m.sender_role AS "SenderRole", m.body AS "Body", m.is_read AS "IsRead", m.sent_at AS "SentAt"
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0
+ORDER BY m.sent_at
+2026-06-12 14:58:01.413 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[TravelTourManagement.DataAccess.DTOs.Messages.MessageDto, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 14:58:01.413 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API) in 6.8197ms
+2026-06-12 14:58:01.413 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 14:58:01.414 +05:30 [INF] HTTP GET /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages responded 200 in 8.3965 ms
+2026-06-12 14:58:01.414 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - 200 null application/json; charset=utf-8 9.5676ms
+2026-06-12 14:58:17.294 +05:30 [INF] Request starting HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - null 0
+2026-06-12 14:58:17.296 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 14:58:17.297 +05:30 [INF] Route matched with {action = "MarkMessagesAsRead", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MarkMessagesAsRead(System.Guid, TravelTourManagement.DataAccess.Enums.MessageSenderRole, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 14:58:17.302 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 14:58:17.304 +05:30 [INF] Executing BadRequestObjectResult, writing value of type '<>f__AnonymousType0`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 14:58:17.304 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API) in 7.2652ms
+2026-06-12 14:58:17.304 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 14:58:17.305 +05:30 [INF] HTTP PUT /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read responded 400 in 9.1551 ms
+2026-06-12 14:58:17.305 +05:30 [INF] Request finished HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - 400 null application/json; charset=utf-8 11.0317ms
+2026-06-12 15:00:43.164 +05:30 [INF] Application is shutting down...
+2026-06-12 15:00:43.197 +05:30 [INF] Executed endpoint '/hubs/chat'
+2026-06-12 15:00:43.197 +05:30 [INF] Executed endpoint '/hubs/chat'
+2026-06-12 15:00:43.198 +05:30 [INF] HTTP GET /hubs/chat responded 101 in 2088818.4777 ms
+2026-06-12 15:00:43.198 +05:30 [INF] HTTP GET /hubs/chat responded 101 in 2071494.2366 ms
+2026-06-12 15:00:43.198 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/hubs/chat?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTBkNDE4OS1lN2YyLTRmNDgtOTc3ZS1jNGE2OTAzNWI1ZGEiLCJlbWFpbCI6ImtwbnRyYXZlbHNAZ21haWwuY29tIiwicm9sZSI6IlBhY2thZ2VyIiwiRW1haWxWZXJpZmllZCI6IlRydWUiLCJqdGkiOiIyYzc2MTQxYi0wM2NhLTQyYjMtYmFhZS1kYjhlNTcwY2Q4ZTAiLCJuYmYiOjE3ODEyNTQ1MjYsImV4cCI6MTc4MTI1ODEyNiwiaWF0IjoxNzgxMjU0NTI2LCJpc3MiOiJUcmF2ZWxUb3VyTWFuYWdlbWVudEFQSSIsImF1ZCI6IlRyYXZlbFRvdXJNYW5hZ2VtZW50VXNlcnMifQ.WhqdmXKkNR_cVFE4yCEM4Pg3nJKKOCQjoTM6Vzwm9fM - 101 null null 2088822.869ms
+2026-06-12 15:00:43.198 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/hubs/chat?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiMzdhNjNjMy1hNWU4LTQzMDUtOTViMC05MjZjM2ZhNjAzNTQiLCJlbWFpbCI6ImluaXlhbnN0YXJ6ekBnbWFpbC5jb20iLCJyb2xlIjoiVHJhdmVsZXIiLCJFbWFpbFZlcmlmaWVkIjoiVHJ1ZSIsImp0aSI6IjQ2MTYwM2QzLTUyOWYtNGNiMS04MmVjLWJkNTA1MjgzYWM2OSIsIm5iZiI6MTc4MTI1NDQ5NywiZXhwIjoxNzgxMjU4MDk3LCJpYXQiOjE3ODEyNTQ0OTcsImlzcyI6IlRyYXZlbFRvdXJNYW5hZ2VtZW50QVBJIiwiYXVkIjoiVHJhdmVsVG91ck1hbmFnZW1lbnRVc2VycyJ9._Q1HXmW8OHWE7aluGhwo06wpTwO7j3upYsM1IJdg984 - 101 null null 2071497.3565ms
+2026-06-12 15:00:43.217 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED shutting down.
+2026-06-12 15:00:43.218 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED paused.
+2026-06-12 15:00:43.222 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED Shutdown complete.
+2026-06-12 15:00:47.586 +05:30 [INF] Starting web application
+2026-06-12 15:00:47.956 +05:30 [INF] User profile is available. Using '/Users/iniyan/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2026-06-12 15:00:47.973 +05:30 [INF] Initialized Scheduler Signaller of type: Quartz.Core.SchedulerSignalerImpl
+2026-06-12 15:00:47.974 +05:30 [INF] Quartz Scheduler created
+2026-06-12 15:00:47.974 +05:30 [INF] JobFactory set to: Quartz.Simpl.MicrosoftDependencyInjectionJobFactory
+2026-06-12 15:00:47.974 +05:30 [INF] RAMJobStore initialized.
+2026-06-12 15:00:47.974 +05:30 [INF] Quartz Scheduler 3.18.1.0 - 'QuartzScheduler' with instanceId 'NON_CLUSTERED' initialized
+2026-06-12 15:00:47.975 +05:30 [INF] Using thread pool 'Quartz.Simpl.DefaultThreadPool', size: 10
+2026-06-12 15:00:47.975 +05:30 [INF] Using job store 'Quartz.Simpl.RAMJobStore', supports persistence: False, clustered: False
+2026-06-12 15:00:47.980 +05:30 [INF] Adding 2 jobs, 1 triggers.
+2026-06-12 15:00:47.980 +05:30 [INF] Adding job: DEFAULT.BookingTimeoutJob
+2026-06-12 15:00:47.981 +05:30 [INF] Adding job: DEFAULT.PackageCompletionJob
+2026-06-12 15:00:48.011 +05:30 [INF] Now listening on: http://localhost:5081
+2026-06-12 15:00:48.012 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-12 15:00:48.012 +05:30 [INF] Hosting environment: Development
+2026-06-12 15:00:48.012 +05:30 [INF] Content root path: /Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API
+2026-06-12 15:00:48.013 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED started.
+2026-06-12 15:00:51.920 +05:30 [INF] Request starting HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - null 0
+2026-06-12 15:00:51.941 +05:30 [WRN] Failed to determine the https port for redirect.
+2026-06-12 15:00:51.983 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 15:00:51.992 +05:30 [INF] Route matched with {action = "MarkMessagesAsRead", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MarkMessagesAsRead(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 15:00:52.615 +05:30 [INF] Executed DbCommand (27ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 15:00:52.709 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__threadId_0='?' (DbType = Guid), @__senderRoleToMark_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.body, m.is_read, m.sender_id, m.sender_role, m.sent_at, m.thread_id
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0 AND NOT (m.is_read) AND m.sender_role = @__senderRoleToMark_1
+2026-06-12 15:00:52.758 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@p1='?' (DbType = Guid), @p0='?' (DbType = Boolean), @p3='?' (DbType = Guid), @p2='?' (DbType = Boolean), @p5='?' (DbType = Guid), @p4='?' (DbType = Boolean), @p7='?' (DbType = Guid), @p6='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE messages SET is_read = @p0
+WHERE id = @p1;
+UPDATE messages SET is_read = @p2
+WHERE id = @p3;
+UPDATE messages SET is_read = @p4
+WHERE id = @p5;
+UPDATE messages SET is_read = @p6
+WHERE id = @p7;
+2026-06-12 15:00:52.768 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType4`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 15:00:52.784 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API) in 790.4686ms
+2026-06-12 15:00:52.784 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 15:00:52.785 +05:30 [INF] HTTP PUT /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read responded 200 in 845.0257 ms
+2026-06-12 15:00:52.789 +05:30 [INF] Request finished HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - 200 null application/json; charset=utf-8 869.5053ms
+2026-06-12 15:00:59.779 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - null null
+2026-06-12 15:00:59.791 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 15:00:59.795 +05:30 [INF] Route matched with {action = "GetThreadMessages", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetThreadMessages(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 15:00:59.807 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 15:00:59.814 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id AS "Id", m.thread_id AS "ThreadId", m.sender_id AS "SenderId", m.sender_role AS "SenderRole", m.body AS "Body", m.is_read AS "IsRead", m.sent_at AS "SentAt"
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0
+ORDER BY m.sent_at
+2026-06-12 15:00:59.815 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[TravelTourManagement.DataAccess.DTOs.Messages.MessageDto, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 15:00:59.828 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API) in 32.1678ms
+2026-06-12 15:00:59.828 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 15:00:59.828 +05:30 [INF] HTTP GET /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages responded 200 in 40.4092 ms
+2026-06-12 15:00:59.828 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - 200 null application/json; charset=utf-8 48.9921ms
+2026-06-12 15:01:07.398 +05:30 [INF] Request starting HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - null 0
+2026-06-12 15:01:07.402 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 15:01:07.403 +05:30 [INF] Route matched with {action = "MarkMessagesAsRead", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MarkMessagesAsRead(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 15:01:07.432 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 15:01:07.434 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid), @__senderRoleToMark_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.body, m.is_read, m.sender_id, m.sender_role, m.sent_at, m.thread_id
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0 AND NOT (m.is_read) AND m.sender_role = @__senderRoleToMark_1
+2026-06-12 15:01:07.434 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType4`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 15:01:07.434 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API) in 31.197ms
+2026-06-12 15:01:07.434 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 15:01:07.434 +05:30 [INF] HTTP PUT /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read responded 200 in 35.0608 ms
+2026-06-12 15:01:07.434 +05:30 [INF] Request finished HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - 200 null application/json; charset=utf-8 36.1592ms
+2026-06-12 15:01:19.558 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Notifications - null null
+2026-06-12 15:01:19.560 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.NotificationsController.GetMyNotifications (TravelTourManagement.API)'
+2026-06-12 15:01:19.565 +05:30 [INF] Route matched with {action = "GetMyNotifications", controller = "Notifications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetMyNotifications(Int32, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.NotificationsController (TravelTourManagement.API).
+2026-06-12 15:01:19.582 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n.id, n.title, n.message, n.reference_id, n.is_read, n.created_at
+FROM notifications AS n
+WHERE n.user_id = @__userId_0
+ORDER BY n.created_at DESC
+LIMIT @__p_1
+2026-06-12 15:01:19.583 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType6`2[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.IEnumerable`1[[TravelTourManagement.DataAccess.DTOs.Notifications.NotificationResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 15:01:19.588 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.NotificationsController.GetMyNotifications (TravelTourManagement.API) in 22.956ms
+2026-06-12 15:01:19.589 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.NotificationsController.GetMyNotifications (TravelTourManagement.API)'
+2026-06-12 15:01:19.589 +05:30 [INF] HTTP GET /api/Notifications responded 200 in 29.4881 ms
+2026-06-12 15:01:19.589 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Notifications - 200 null application/json; charset=utf-8 30.7206ms
+2026-06-12 15:01:30.836 +05:30 [INF] Request starting HTTP/1.1 PUT http://localhost:5081/api/Notifications/12344444444/read - null 0
+2026-06-12 15:01:30.838 +05:30 [INF] HTTP PUT /api/Notifications/12344444444/read responded 404 in 0.8205 ms
+2026-06-12 15:01:30.839 +05:30 [INF] Request finished HTTP/1.1 PUT http://localhost:5081/api/Notifications/12344444444/read - 404 0 null 3.2687ms
+2026-06-12 15:01:30.840 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: PUT http://localhost:5081/api/Notifications/12344444444/read, Response status code: 404
+2026-06-12 15:01:47.027 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/hubs/notifications?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiMzdhNjNjMy1hNWU4LTQzMDUtOTViMC05MjZjM2ZhNjAzNTQiLCJlbWFpbCI6ImluaXlhbnN0YXJ6ekBnbWFpbC5jb20iLCJyb2xlIjoiVHJhdmVsZXIiLCJFbWFpbFZlcmlmaWVkIjoiVHJ1ZSIsImp0aSI6IjQ2MTYwM2QzLTUyOWYtNGNiMS04MmVjLWJkNTA1MjgzYWM2OSIsIm5iZiI6MTc4MTI1NDQ5NywiZXhwIjoxNzgxMjU4MDk3LCJpYXQiOjE3ODEyNTQ0OTcsImlzcyI6IlRyYXZlbFRvdXJNYW5hZ2VtZW50QVBJIiwiYXVkIjoiVHJhdmVsVG91ck1hbmFnZW1lbnRVc2VycyJ9._Q1HXmW8OHWE7aluGhwo06wpTwO7j3upYsM1IJdg984 - null null
+2026-06-12 15:01:47.038 +05:30 [INF] Executing endpoint '/hubs/notifications'
+2026-06-12 15:02:30.116 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/hubs/chat?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTBkNDE4OS1lN2YyLTRmNDgtOTc3ZS1jNGE2OTAzNWI1ZGEiLCJlbWFpbCI6ImtwbnRyYXZlbHNAZ21haWwuY29tIiwicm9sZSI6IlBhY2thZ2VyIiwiRW1haWxWZXJpZmllZCI6IlRydWUiLCJqdGkiOiIyYzc2MTQxYi0wM2NhLTQyYjMtYmFhZS1kYjhlNTcwY2Q4ZTAiLCJuYmYiOjE3ODEyNTQ1MjYsImV4cCI6MTc4MTI1ODEyNiwiaWF0IjoxNzgxMjU0NTI2LCJpc3MiOiJUcmF2ZWxUb3VyTWFuYWdlbWVudEFQSSIsImF1ZCI6IlRyYXZlbFRvdXJNYW5hZ2VtZW50VXNlcnMifQ.WhqdmXKkNR_cVFE4yCEM4Pg3nJKKOCQjoTM6Vzwm9fM - null null
+2026-06-12 15:02:30.123 +05:30 [INF] Executing endpoint '/hubs/chat'
+2026-06-12 15:02:36.920 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/hubs/chat?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiMzdhNjNjMy1hNWU4LTQzMDUtOTViMC05MjZjM2ZhNjAzNTQiLCJlbWFpbCI6ImluaXlhbnN0YXJ6ekBnbWFpbC5jb20iLCJyb2xlIjoiVHJhdmVsZXIiLCJFbWFpbFZlcmlmaWVkIjoiVHJ1ZSIsImp0aSI6IjQ2MTYwM2QzLTUyOWYtNGNiMS04MmVjLWJkNTA1MjgzYWM2OSIsIm5iZiI6MTc4MTI1NDQ5NywiZXhwIjoxNzgxMjU4MDk3LCJpYXQiOjE3ODEyNTQ0OTcsImlzcyI6IlRyYXZlbFRvdXJNYW5hZ2VtZW50QVBJIiwiYXVkIjoiVHJhdmVsVG91ck1hbmFnZW1lbnRVc2VycyJ9._Q1HXmW8OHWE7aluGhwo06wpTwO7j3upYsM1IJdg984 - null null
+2026-06-12 15:02:36.923 +05:30 [INF] Executing endpoint '/hubs/chat'
+2026-06-12 15:03:16.062 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Messages/send - application/json 142
+2026-06-12 15:03:16.069 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.SendMessage (TravelTourManagement.API)'
+2026-06-12 15:03:16.080 +05:30 [INF] Route matched with {action = "SendMessage", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SendMessage(TravelTourManagement.DataAccess.DTOs.Messages.SendMessageRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 15:03:16.131 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__request_ThreadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__request_ThreadId_0
+LIMIT 1
+2026-06-12 15:03:16.147 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__senderId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM packagers AS p
+WHERE p.user_id = @__senderId_0
+LIMIT 1
+2026-06-12 15:03:16.216 +05:30 [INF] Executed DbCommand (28ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p11='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p12='?', @p13='?' (DbType = Guid), @p14='?' (DbType = Object), @p15='?' (DbType = DateTime), @p16='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE message_threads SET last_message_at = @p10
+WHERE id = @p11;
+INSERT INTO messages (body, sender_id, sender_role, sent_at, thread_id)
+VALUES (@p12, @p13, @p14, @p15, @p16)
+RETURNING id, is_read;
+2026-06-12 15:03:16.228 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Messages.MessageDto'.
+2026-06-12 15:03:16.229 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.SendMessage (TravelTourManagement.API) in 148.1613ms
+2026-06-12 15:03:16.229 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.SendMessage (TravelTourManagement.API)'
+2026-06-12 15:03:16.229 +05:30 [INF] HTTP POST /api/Messages/send responded 200 in 163.6744 ms
+2026-06-12 15:03:16.229 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Messages/send - 200 null application/json; charset=utf-8 167.2375ms
+2026-06-12 15:03:43.993 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - null null
+2026-06-12 15:03:43.997 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 15:03:43.998 +05:30 [INF] Route matched with {action = "GetThreadMessages", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetThreadMessages(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 15:03:44.014 +05:30 [INF] Executed DbCommand (6ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 15:03:44.018 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id AS "Id", m.thread_id AS "ThreadId", m.sender_id AS "SenderId", m.sender_role AS "SenderRole", m.body AS "Body", m.is_read AS "IsRead", m.sent_at AS "SentAt"
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0
+ORDER BY m.sent_at
+2026-06-12 15:03:44.019 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[TravelTourManagement.DataAccess.DTOs.Messages.MessageDto, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 15:03:44.020 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API) in 21.8397ms
+2026-06-12 15:03:44.020 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.GetThreadMessages (TravelTourManagement.API)'
+2026-06-12 15:03:44.020 +05:30 [INF] HTTP GET /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages responded 200 in 24.6280 ms
+2026-06-12 15:03:44.021 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/messages - 200 null application/json; charset=utf-8 27.5085ms
+2026-06-12 15:04:03.505 +05:30 [INF] Request starting HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - null 0
+2026-06-12 15:04:03.524 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 15:04:03.525 +05:30 [INF] Route matched with {action = "MarkMessagesAsRead", controller = "Messages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MarkMessagesAsRead(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.MessagesController (TravelTourManagement.API).
+2026-06-12 15:04:03.541 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__threadId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.created_at, m.last_message_at, m.package_id, m.packager_id, m.user_id, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM message_threads AS m
+INNER JOIN packagers AS p ON m.packager_id = p.id
+WHERE m.id = @__threadId_0
+LIMIT 1
+2026-06-12 15:04:03.548 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__threadId_0='?' (DbType = Guid), @__senderRoleToMark_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.body, m.is_read, m.sender_id, m.sender_role, m.sent_at, m.thread_id
+FROM messages AS m
+WHERE m.thread_id = @__threadId_0 AND NOT (m.is_read) AND m.sender_role = @__senderRoleToMark_1
+2026-06-12 15:04:03.553 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@p1='?' (DbType = Guid), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE messages SET is_read = @p0
+WHERE id = @p1;
+2026-06-12 15:04:03.553 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType4`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 15:04:03.553 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API) in 28.3744ms
+2026-06-12 15:04:03.554 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
+2026-06-12 15:04:03.554 +05:30 [INF] HTTP PUT /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read responded 200 in 35.3142 ms
+2026-06-12 15:04:03.554 +05:30 [INF] Request finished HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - 200 null application/json; charset=utf-8 49.6156ms

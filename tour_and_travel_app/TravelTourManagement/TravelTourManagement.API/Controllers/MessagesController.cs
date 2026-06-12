@@ -20,7 +20,7 @@ public class MessagesController : ControllerBase
     }
 
     private Guid GetUserId() => Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new UnauthorizedAccessException());
-    private bool IsPackager() => User.IsInRole("packager");
+    private bool IsPackager() => User.IsInRole("Packager") || User.IsInRole("packager");
 
     [HttpPost("threads/init")]
     public async Task<IActionResult> GetOrInitializeThread([FromBody] CreateThreadRequest request, CancellationToken cancellationToken)
@@ -51,8 +51,9 @@ public class MessagesController : ControllerBase
     }
 
     [HttpPut("threads/{threadId}/read")]
-    public async Task<IActionResult> MarkMessagesAsRead(Guid threadId, [FromQuery] MessageSenderRole readerRole, CancellationToken cancellationToken)
+    public async Task<IActionResult> MarkMessagesAsRead(Guid threadId, CancellationToken cancellationToken)
     {
+        var readerRole = IsPackager() ? MessageSenderRole.packager : MessageSenderRole.user;
         var success = await _messageService.MarkMessagesAsReadAsync(threadId, GetUserId(), readerRole, cancellationToken);
         if (!success) return BadRequest(new { message = "Failed to mark messages as read." });
         return Ok(new { success = true });

@@ -13,8 +13,6 @@ public class RequireEmailVerificationFilter : IAsyncActionFilter
         if (user.Identity?.IsAuthenticated == true)
         {
             var path = context.HttpContext.Request.Path.Value;
-            
-            // Only apply to protected endpoints other than the auth/otp endpoints
             if (path != null && 
                 !path.Contains("/send-otp") && 
                 !path.Contains("/verify-otp") && 

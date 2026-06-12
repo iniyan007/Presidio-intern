@@ -19,8 +19,6 @@ public class SignalRNotificationDispatcher : INotificationDispatcher
 
     public async Task PushNotificationAsync(Guid userId, NotificationResponse notification, CancellationToken cancellationToken = default)
     {
-        // SignalR uses the user identifier mapping automatically. 
-        // We push the "ReceiveNotification" event to the specific user's clients.
         await _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", notification, cancellationToken);
     }
 }

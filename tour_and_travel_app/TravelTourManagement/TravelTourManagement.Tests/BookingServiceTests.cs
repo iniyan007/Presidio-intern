@@ -405,4 +405,120 @@ public class BookingServiceTests
         Func<Task> act = async () => await _bookingService.VerifyDocumentAsync(packagerUserId, docId, new VerifyDocumentRequest { IsVerified = true });
         await act.Should().ThrowAsync<UnauthorizedAccessException>().WithMessage("You are not authorized to verify documents for this package.");
     }
+
+    [Test]
+    public async Task CreateBookingAsync_ValidRequest_CreatesBookingSuccessfully()
+    {
+        var userId = Guid.NewGuid();
+        var user = new User { Id = userId, FullName = "John Doe", Email = "j@d.com" };
+        var packageId = Guid.NewGuid();
+        var pricingId = Guid.NewGuid();
+        
+        var package = new Package 
+        { 
+            Id = packageId, 
+            Status = PackageStatus.Published,
+            Type = PackageType.Group,
+            Destination = "Manali",
+            Country = "India",
+            MaxCapacity = 50,
+            CurrentBookings = 0,
+            PackagerId = Guid.NewGuid()
+        };
+        
+        var pricing = new PackageSeasonalPricing 
+        { 
+            Id = pricingId, 
+            PackageId = packageId,
+            IsActive = true,
+            BasePrice = 1000,
+            ChildPrice = 500,
+            DiscountPercent = 10,
+            AvailableSlots = 20,
+            StartDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-10)),
+            EndDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(30))
+        };
+        package.PackageSeasonalPricings.Add(pricing);
+
+        var request = new CreateBookingRequest 
+        { 
+            PackageId = packageId, 
+            SeasonalPricingId = pricingId,
+            TravelDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(10)),
+            SpecialRequests = "None",
+            Travelers = new List<BookingTravelerRequest>
+            {
+                new BookingTravelerRequest { FullName = "John Doe", Age = 30, DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-30)), AadharCardNumber = "123456789012" },
+                new BookingTravelerRequest { FullName = "Jane Doe", Age = 28, DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-28)), AadharCardNumber = "123456789012" }
+            }
+        };
+
+        _userRepoMock.Setup(x => x.GetByIdAsync(userId, It.IsAny<CancellationToken>())).ReturnsAsync(user);
+        _packageRepoMock.Setup(x => x.GetByIdAsync(packageId, It.IsAny<CancellationToken>())).ReturnsAsync(package);
+        _pricingRepoMock.Setup(x => x.GetByIdAsync(pricingId, It.IsAny<CancellationToken>())).ReturnsAsync(pricing);
+        
+        _bookingRepoMock.Setup(x => x.AddAsync(It.IsAny<Booking>(), It.IsAny<CancellationToken>())).ReturnsAsync((Booking b, CancellationToken c) => b);
+
+        var response = await _bookingService.CreateBookingAsync(userId, request, null);
+
+        response.Should().NotBeNull();
+        response.AdultCount.Should().Be(2);
+        response.TotalAmount.Should().Be(2079.0m);
+        
+        _bookingRepoMock.Verify(x => x.AddAsync(It.IsAny<Booking>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public async Task VerifyBookingAsync_ValidBooking_VerifiesAndSchedulesCompletionJob()
+    {
+        var packagerUserId = Guid.NewGuid();
+        var bookingId = Guid.NewGuid();
+        
+        var package = new Package { Id = Guid.NewGuid(), Packager = new Packager { UserId = packagerUserId }, Type = PackageType.Group };
+        var booking = new Booking 
+        { 
+            Id = bookingId, 
+            PackageId = package.Id, 
+            Package = package,
+            Status = BookingStatus.DocumentUnderReview, 
+            PaymentStatus = PaymentStatus.Paid,
+            UserId = Guid.NewGuid()
+        };
+
+        _bookingRepoMock.Setup(x => x.GetWithFullDetailsAsync(bookingId, It.IsAny<CancellationToken>())).ReturnsAsync(booking);
+        
+        var mockScheduler = new Mock<IScheduler>();
+        _schedulerFactoryMock.Setup(x => x.GetScheduler(It.IsAny<CancellationToken>())).ReturnsAsync(mockScheduler.Object);
+
+        await _bookingService.VerifyBookingAsync(packagerUserId, bookingId);
+
+        booking.Status.Should().Be(BookingStatus.Confirmed);
+        _bookingRepoMock.Verify(x => x.UpdateAsync(booking, It.IsAny<CancellationToken>()), Times.Once);
+        _notificationServiceMock.Verify(x => x.SendNotificationAsync(booking.UserId, "Booking Confirmed", It.IsAny<string>(), booking.Id, TravelTourManagement.DataAccess.Enums.NotificationType.booking, It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public async Task VerifyDocumentAsync_ValidDocument_UpdatesStatusToVerified()
+    {
+        var packagerUserId = Guid.NewGuid();
+        var docId = Guid.NewGuid();
+        var booking = new Booking { Id = Guid.NewGuid(), PackageId = Guid.NewGuid(), UserId = Guid.NewGuid() };
+        var doc = new TravelDocument 
+        { 
+            Id = docId, 
+            BookingId = booking.Id, 
+            Status = DocumentStatus.Uploaded,
+            Traveler = new BookingTraveler { BookingId = booking.Id } 
+        };
+        var package = new Package { Packager = new Packager { UserId = packagerUserId } };
+        
+        _documentRepoMock.Setup(x => x.GetByIdAsync(docId, It.IsAny<CancellationToken>())).ReturnsAsync(doc);
+        _bookingRepoMock.Setup(x => x.GetByIdAsync(booking.Id, It.IsAny<CancellationToken>())).ReturnsAsync(booking);
+        _packageRepoMock.Setup(x => x.GetWithFullDetailsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(package);
+
+        await _bookingService.VerifyDocumentAsync(packagerUserId, docId, new VerifyDocumentRequest { IsVerified = true, RejectionReason = null });
+
+        doc.Status.Should().Be(DocumentStatus.Verified);
+        _documentRepoMock.Verify(x => x.UpdateAsync(doc, It.IsAny<CancellationToken>()), Times.Once);
+    }
 }

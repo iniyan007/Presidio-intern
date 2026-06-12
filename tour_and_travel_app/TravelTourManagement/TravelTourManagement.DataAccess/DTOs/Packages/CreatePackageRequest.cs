@@ -16,8 +16,8 @@ public record CreatePackageRequest(
     [Required] [Range(1, 1000, ErrorMessage = "MaxCapacity must be between 1 and 1000")] int MaxCapacity,
     [Range(0, 120, ErrorMessage = "MinAge must be between 0 and 120")] int? MinAge,
     string? CancellationPolicy,
-    [Required] string Type, // Postgres Enum: package_type ('group', 'private', etc.)
-    [Required] string Status, // Postgres Enum: package_status ('draft', 'published', etc.)
+    [Required] string Type, 
+    [Required] string Status,
     
     List<CreatePackageHighlightRequest> Highlights,
     List<CreatePackageInclusionRequest> Inclusions,
@@ -29,9 +29,6 @@ public record CreatePackageRequest(
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         var results = new List<ValidationResult>();
-
-        // International Package Validation Rules
-        // Flexible Dates Package Rules
         bool isFlexibleDatePackage = string.Equals(Type, "Honeymoon", StringComparison.OrdinalIgnoreCase) ||
                                      string.Equals(Type, "Private", StringComparison.OrdinalIgnoreCase) ||
                                      string.Equals(Type, "Family", StringComparison.OrdinalIgnoreCase);

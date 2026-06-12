@@ -12,6 +12,7 @@ The application is engineered using **Clean Architecture (N-Tier)** principles, 
 
 ### Key Technical Patterns Used:
 * **Repository Pattern**: A `GenericRepository` handles standard CRUD, while specialized repositories (e.g., `BookingRepository`) handle complex `Include` and domain-specific queries.
+* **Service Segregation**: Massive core operations (like `CreateBookingAsync`) are aggressively refactored and segregated into highly modular, private validation and execution steps to strictly adhere to the Single Responsibility Principle.
 * **Dependency Injection (DI)**: Extensively used to decouple services and promote testability.
 * **Real-Time Event Dispatching**: WebSockets (SignalR) are abstracted behind dispatcher interfaces (`INotificationDispatcher`, `IMessageDispatcher`) so the Business Layer remains decoupled from the API's networking protocols.
 * **Cancellation Tokens**: Implemented pervasively across the entire stack (Controllers -> Services -> Repositories) to allow graceful connection termination and optimize resource usage if a client disconnects mid-request.
@@ -35,7 +36,8 @@ The application is engineered using **Clean Architecture (N-Tier)** principles, 
 
 ### 2. Packager (Agency) Lifecycle
 * **Application System**: Users can apply to become a "Packager" (`Status: Pending`).
-* **Admin Moderation**: The `Admin` can review applications and Approve or Reject them. Once approved, the user gains the `Packager` role and can begin publishing packages.
+* **Mandatory Business Verification**: Prospective packagers must upload their PAN, GST, and Business Registration certificates securely to the server during application.
+* **Admin Moderation**: The `Admin` can review applications and uploaded business documents, and Approve or Reject them. Once approved, the user gains the `Packager` role and can begin publishing packages.
 * **Platform Configuration**: Admins manage global categories, tags, and settings used by Packagers to categorize their offerings.
 
 ### 3. Package Management & Engagement
@@ -43,7 +45,8 @@ The application is engineered using **Clean Architecture (N-Tier)** principles, 
 * **Multipart Form Uploads**: Package creation supports uploading multiple high-quality media images directly via `multipart/form-data`, securely saving them to local storage.
 * **Automated Seat Management**: Seat counts are strictly managed. When a booking is created, available seats are dynamically reduced (excluding Infants). 
 * **Wishlists**: Travelers can toggle packages into their personal Wishlists for future reference.
-* **Search & Discovery**: Rich search endpoints for Travelers to filter packages by destination, price, category, and travel dates.
+* **Date-Based Search & Discovery**: Rich search endpoints for Travelers to filter packages by destination, price, category, and exact travel date ranges. The backend dynamically correlates user travel dates with active `SeasonalPricing` windows.
+* **Automatic Expiration Filtering**: The system globally and automatically hides packages where the last available booking date has elapsed.
 
 ### 4. Booking & Payment Ecosystem
 * **Multi-Passenger Bookings**: A single booking supports multiple travelers categorized by Adults, Children, and Infants.

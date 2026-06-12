@@ -31,8 +31,6 @@ public class PackageCompletionJob : IJob
             using var scope = _serviceProvider.CreateScope();
             var packageRepository = scope.ServiceProvider.GetRequiredService<IPackageRepository>();
             var pricingRepository = scope.ServiceProvider.GetRequiredService<IRepository<PackageSeasonalPricing, Guid>>();
-
-            // Get all published packages
             var allPackages = await packageRepository.GetAllAsync();
             var publishedPackages = allPackages.Where(p => p.Status == PackageStatus.Published).ToList();
 
@@ -44,14 +42,9 @@ public class PackageCompletionJob : IJob
 
             foreach (var package in publishedPackages)
             {
-                // We need to fetch the seasonal pricings for this package
-                // Since IPackageRepository.GetAllAsync() might not include SeasonalPricings, 
-                // we should fetch it via pricingRepository
                 var allPricings = await pricingRepository.GetAllAsync();
                 var packagePricings = allPricings.Where(p => p.PackageId == package.Id && p.IsActive).ToList();
 
-                // If a package has no active pricings, should it be completed? Let's ignore it or mark it completed.
-                // Let's assume if it has active pricings and ALL of them have ended, it's completed.
                 if (packagePricings.Any() && packagePricings.All(p => p.EndDate < today))
                 {
                     package.Status = PackageStatus.Completed;

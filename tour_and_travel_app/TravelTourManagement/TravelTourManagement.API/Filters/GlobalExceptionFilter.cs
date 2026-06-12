@@ -15,7 +15,7 @@ namespace TravelTourManagement.API.Filters
             {
                 success = false,
                 message = exception.Message,
-                details = exception.StackTrace, // In production, we might want to hide this, but keeping it for development
+                details = exception.StackTrace, 
                 errorCode = GetErrorCode(exception)
             };
 
@@ -36,8 +36,7 @@ namespace TravelTourManagement.API.Filters
                 ValidationException => 400,
                 ArgumentException => 400,
                 System.Text.Json.JsonException => 400,
-                InvalidOperationException => 400, // Or 409 Conflict, but sticking to 400 for bad business logic generally
-                _ => 500
+                InvalidOperationException => 400, 
             };
         }
 

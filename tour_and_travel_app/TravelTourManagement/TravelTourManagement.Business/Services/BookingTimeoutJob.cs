@@ -42,8 +42,6 @@ public class BookingTimeoutJob : IJob
 
             var booking = await bookingRepository.GetByIdAsync(bookingId, cancellationToken);
             if (booking == null) return;
-
-            // Only cancel if it's STILL pending after the timeout!
             if (booking.Status != BookingStatus.Pending)
             {
                 _logger.LogInformation($"[Quartz Job] Booking {booking.BookingReference} is no longer pending. Doing nothing.");

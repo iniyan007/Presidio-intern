@@ -99,7 +99,13 @@ public class PackageMappingProfile : Profile
                 src.TotalReviews,
                 src.PackageMedia != null ? src.PackageMedia.FirstOrDefault(m => m.IsPrimary) != null ? src.PackageMedia.FirstOrDefault(m => m.IsPrimary)!.FilePath : null : null,
                 src.PackageSeasonalPricings != null ? src.PackageSeasonalPricings.Where(p => p.IsActive).OrderBy(p => p.BasePrice).FirstOrDefault() != null ? src.PackageSeasonalPricings.Where(p => p.IsActive).OrderBy(p => p.BasePrice).FirstOrDefault()!.BasePrice : 0 : 0,
-                src.MaxCapacity - src.CurrentBookings
+                src.MaxCapacity - src.CurrentBookings,
+                src.PackageSeasonalPricings != null && src.PackageSeasonalPricings.Any(p => p.IsActive && p.StartDate >= DateOnly.FromDateTime(DateTime.UtcNow))
+                    ? src.PackageSeasonalPricings.Where(p => p.IsActive && p.StartDate >= DateOnly.FromDateTime(DateTime.UtcNow)).Min(p => p.StartDate)
+                    : null,
+                src.PackageSeasonalPricings != null && src.PackageSeasonalPricings.Any(p => p.IsActive)
+                    ? src.PackageSeasonalPricings.Where(p => p.IsActive).Max(p => p.EndDate)
+                    : null
             ));
 
         // 3. Entity -> DTO (Package Detail)

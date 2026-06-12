@@ -21,10 +21,13 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
     /// <inheritdoc />
     public async Task<IReadOnlyList<Package>> GetFeaturedPackagesAsync(
         CancellationToken cancellationToken = default)
-        => await _dbSet
-            .Where(p => p.IsFeatured)
+    {
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        return await _dbSet
+            .Where(p => p.IsFeatured && p.PackageSeasonalPricings.Any(sp => sp.IsActive && sp.EndDate >= today))
             .OrderByDescending(p => p.AvgRating)
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<Package>> GetByPackagerIdAsync(
@@ -41,12 +44,13 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
         CancellationToken cancellationToken = default)
     {
         var lower = keyword.ToLower();
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
         return await _dbSet
-            .Where(p =>
-                p.Destination.ToLower().Contains(lower) ||
+            .Where(p => p.PackageSeasonalPricings.Any(sp => sp.IsActive && sp.EndDate >= today) &&
+                (p.Destination.ToLower().Contains(lower) ||
                 p.Country.ToLower().Contains(lower)     ||
                 (p.City != null && p.City.ToLower().Contains(lower)) ||
-                p.Title.ToLower().Contains(lower))
+                p.Title.ToLower().Contains(lower)))
             .OrderByDescending(p => p.AvgRating)
             .ToListAsync(cancellationToken);
     }
@@ -55,10 +59,13 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
     public async Task<IReadOnlyList<Package>> GetByDestinationAsync(
         string destination,
         CancellationToken cancellationToken = default)
-        => await _dbSet
-            .Where(p => p.Destination.ToLower() == destination.ToLower())
+    {
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        return await _dbSet
+            .Where(p => p.Destination.ToLower() == destination.ToLower() && p.PackageSeasonalPricings.Any(sp => sp.IsActive && sp.EndDate >= today))
             .OrderByDescending(p => p.AvgRating)
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<Package?> GetWithFullDetailsAsync(
@@ -83,8 +90,10 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
 
     public async Task<IReadOnlyList<Package>> GetAllPublishedWithFullDetailsAsync(
         CancellationToken cancellationToken = default)
-        => await _dbSet
-            .Where(p => p.Status == TravelTourManagement.DataAccess.Enums.PackageStatus.Published)
+    {
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        return await _dbSet
+            .Where(p => p.Status == TravelTourManagement.DataAccess.Enums.PackageStatus.Published && p.PackageSeasonalPricings.Any(sp => sp.IsActive && sp.EndDate >= today))
             .Include(p => p.ItineraryDays)
                 .ThenInclude(d => d.ItineraryActivities)
             .Include(p => p.ItineraryDays)
@@ -100,6 +109,7 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
             .Include(p => p.Packager)
             .Include(p => p.Reviews)
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<Package>> GetAvailableByDateRangeAsync(
@@ -161,7 +171,8 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
         PackageSearchRequest request,
         CancellationToken cancellationToken = default)
     {
-        var query = _dbSet.Where(p => p.Status == TravelTourManagement.DataAccess.Enums.PackageStatus.Published);
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var query = _dbSet.Where(p => p.Status == TravelTourManagement.DataAccess.Enums.PackageStatus.Published && p.PackageSeasonalPricings.Any(sp => sp.IsActive && sp.EndDate >= today));
 
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
         {
@@ -204,6 +215,13 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
             query = query.Where(p => p.PackageSeasonalPricings.Any(sp => sp.IsActive &&
                 (!request.MinPrice.HasValue || sp.BasePrice >= request.MinPrice.Value) &&
                 (!request.MaxPrice.HasValue || sp.BasePrice <= request.MaxPrice.Value)));
+        }
+
+        if (request.TravelStartDate.HasValue || request.TravelEndDate.HasValue)
+        {
+            query = query.Where(p => p.PackageSeasonalPricings.Any(sp => sp.IsActive && sp.AvailableSlots > 0 &&
+                (!request.TravelStartDate.HasValue || sp.StartDate <= request.TravelStartDate.Value) &&
+                (!request.TravelEndDate.HasValue || sp.EndDate >= request.TravelEndDate.Value)));
         }
 
         // Apply Sorting

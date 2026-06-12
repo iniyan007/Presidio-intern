@@ -879,3 +879,154 @@ ORDER BY t.id
 2026-06-09 16:57:39.885 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.AdminController.GetPackagerDocumentFile (TravelTourManagement.API)'
 2026-06-09 16:57:39.885 +05:30 [INF] HTTP GET /api/Admin/packagers/documents/ifjkwefjve responded 404 in 42.0240 ms
 2026-06-09 16:57:39.885 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Admin/packagers/documents/ifjkwefjve - 404 null application/problem+json; charset=utf-8 45.0317ms
+2026-06-09 17:14:11.516 +05:30 [INF] Application is shutting down...
+2026-06-09 17:14:11.535 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED shutting down.
+2026-06-09 17:14:11.535 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED paused.
+2026-06-09 17:14:11.539 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED Shutdown complete.
+2026-06-09 17:14:15.097 +05:30 [INF] Starting web application
+2026-06-09 17:14:15.394 +05:30 [INF] User profile is available. Using '/Users/iniyan/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2026-06-09 17:14:15.411 +05:30 [INF] Initialized Scheduler Signaller of type: Quartz.Core.SchedulerSignalerImpl
+2026-06-09 17:14:15.411 +05:30 [INF] Quartz Scheduler created
+2026-06-09 17:14:15.412 +05:30 [INF] JobFactory set to: Quartz.Simpl.MicrosoftDependencyInjectionJobFactory
+2026-06-09 17:14:15.412 +05:30 [INF] RAMJobStore initialized.
+2026-06-09 17:14:15.412 +05:30 [INF] Quartz Scheduler 3.18.1.0 - 'QuartzScheduler' with instanceId 'NON_CLUSTERED' initialized
+2026-06-09 17:14:15.412 +05:30 [INF] Using thread pool 'Quartz.Simpl.DefaultThreadPool', size: 10
+2026-06-09 17:14:15.412 +05:30 [INF] Using job store 'Quartz.Simpl.RAMJobStore', supports persistence: False, clustered: False
+2026-06-09 17:14:15.417 +05:30 [INF] Adding 2 jobs, 1 triggers.
+2026-06-09 17:14:15.418 +05:30 [INF] Adding job: DEFAULT.BookingTimeoutJob
+2026-06-09 17:14:15.419 +05:30 [INF] Adding job: DEFAULT.PackageCompletionJob
+2026-06-09 17:14:15.451 +05:30 [INF] Now listening on: http://localhost:5081
+2026-06-09 17:14:15.451 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-09 17:14:15.452 +05:30 [INF] Hosting environment: Development
+2026-06-09 17:14:15.452 +05:30 [INF] Content root path: /Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API
+2026-06-09 17:14:15.453 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED started.
+2026-06-09 17:14:21.601 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/swagger/index.html - null null
+2026-06-09 17:14:21.651 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/swagger/index.html - 200 null text/html;charset=utf-8 50.0865ms
+2026-06-09 17:14:21.799 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/swagger/v1/swagger.json - null null
+2026-06-09 17:14:21.857 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 58.2437ms
+2026-06-09 17:17:23.084 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages - null null
+2026-06-09 17:17:23.097 +05:30 [WRN] Failed to determine the https port for redirect.
+2026-06-09 17:17:23.128 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-09 17:17:23.139 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-09 17:17:23.659 +05:30 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-06-09 17:17:24.228 +05:30 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status
+2026-06-09 17:17:24.295 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-09 17:17:24.314 +05:30 [INF] Executed DbCommand (11ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p0.id, p1.id, p1.caption, p1.category, p1.display_order, p1.file_name, p1.file_path, p1.file_size_bytes, p1.is_primary, p1.mime_type, p1.package_id, p1.uploaded_at, p2.id, p2.available_slots, p2.base_price, p2.child_price, p2.discount_percent, p2.end_date, p2.is_active, p2.package_id, p2.season_name, p2.start_date, p0.approved_at, p0.approved_by, p0.avg_rating, p0.business_license_no, p0.company_name, p0.contact_email, p0.contact_phone, p0.created_at, p0.deactivated_at, p0.deactivation_reason, p0.description, p0.total_reviews, p0.updated_at, p0.user_id, p0.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status
+    ORDER BY p.created_at DESC
+    LIMIT @__p_1 OFFSET @__p_0
+) AS t
+INNER JOIN packagers AS p0 ON t.packager_id = p0.id
+LEFT JOIN package_media AS p1 ON t.id = p1.package_id
+LEFT JOIN package_seasonal_pricing AS p2 ON t.id = p2.package_id
+ORDER BY t.created_at DESC, t.id, p0.id, p1.id
+2026-06-09 17:17:24.395 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-09 17:17:24.399 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 1259.1211ms
+2026-06-09 17:17:24.399 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-09 17:17:24.400 +05:30 [INF] HTTP GET /api/Packages responded 200 in 1309.9433 ms
+2026-06-09 17:17:24.403 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages - 200 null application/json; charset=utf-8 1319.3063ms
+2026-06-09 17:20:31.728 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages - null null
+2026-06-09 17:20:31.740 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-09 17:20:31.742 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-09 17:20:31.780 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status
+2026-06-09 17:20:31.786 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p0.id, p1.id, p1.caption, p1.category, p1.display_order, p1.file_name, p1.file_path, p1.file_size_bytes, p1.is_primary, p1.mime_type, p1.package_id, p1.uploaded_at, p2.id, p2.available_slots, p2.base_price, p2.child_price, p2.discount_percent, p2.end_date, p2.is_active, p2.package_id, p2.season_name, p2.start_date, p0.approved_at, p0.approved_by, p0.avg_rating, p0.business_license_no, p0.company_name, p0.contact_email, p0.contact_phone, p0.created_at, p0.deactivated_at, p0.deactivation_reason, p0.description, p0.total_reviews, p0.updated_at, p0.user_id, p0.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status
+    ORDER BY p.created_at DESC
+    LIMIT @__p_1 OFFSET @__p_0
+) AS t
+INNER JOIN packagers AS p0 ON t.packager_id = p0.id
+LEFT JOIN package_media AS p1 ON t.id = p1.package_id
+LEFT JOIN package_seasonal_pricing AS p2 ON t.id = p2.package_id
+ORDER BY t.created_at DESC, t.id, p0.id, p1.id
+2026-06-09 17:20:31.792 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-09 17:20:31.792 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 50.0713ms
+2026-06-09 17:20:31.792 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-09 17:20:31.792 +05:30 [INF] HTTP GET /api/Packages responded 200 in 57.0024 ms
+2026-06-09 17:20:31.793 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages - 200 null application/json; charset=utf-8 64.5662ms
+2026-06-09 17:21:14.626 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages - null null
+2026-06-09 17:21:14.636 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-09 17:21:14.638 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-09 17:21:14.662 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-09 17:21:14.662 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 23.8085ms
+2026-06-09 17:21:14.663 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-09 17:21:14.663 +05:30 [INF] HTTP GET /api/Packages responded 200 in 33.6489 ms
+2026-06-09 17:21:14.663 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages - 200 null application/json; charset=utf-8 37.3842ms
+2026-06-09 17:21:20.797 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages - multipart/form-data; boundary=--------------------------741357575849778481956557 170
+2026-06-09 17:21:20.798 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-09 17:21:20.798 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-09 17:21:20.804 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-09 17:21:20.804 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 6.5843ms
+2026-06-09 17:21:20.805 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-09 17:21:20.805 +05:30 [INF] HTTP GET /api/Packages responded 200 in 7.1576 ms
+2026-06-09 17:21:20.805 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages - 200 null application/json; charset=utf-8 7.849ms
+2026-06-09 17:21:50.247 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages - multipart/form-data; boundary=--------------------------693216671320343211960963 175
+2026-06-09 17:21:50.250 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-09 17:21:50.251 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-09 17:21:50.258 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-09 17:21:50.258 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 7.2805ms
+2026-06-09 17:21:50.258 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-09 17:21:50.258 +05:30 [INF] HTTP GET /api/Packages responded 200 in 8.4877 ms
+2026-06-09 17:21:50.259 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages - 200 null application/json; charset=utf-8 12.19ms
+2026-06-09 17:34:03.894 +05:30 [INF] Application is shutting down...
+2026-06-09 17:34:03.915 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED shutting down.
+2026-06-09 17:34:03.915 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED paused.
+2026-06-09 17:34:03.919 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED Shutdown complete.
+2026-06-09 17:34:09.110 +05:30 [INF] Starting web application
+2026-06-09 17:34:09.447 +05:30 [INF] User profile is available. Using '/Users/iniyan/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2026-06-09 17:34:09.464 +05:30 [INF] Initialized Scheduler Signaller of type: Quartz.Core.SchedulerSignalerImpl
+2026-06-09 17:34:09.464 +05:30 [INF] Quartz Scheduler created
+2026-06-09 17:34:09.465 +05:30 [INF] JobFactory set to: Quartz.Simpl.MicrosoftDependencyInjectionJobFactory
+2026-06-09 17:34:09.465 +05:30 [INF] RAMJobStore initialized.
+2026-06-09 17:34:09.465 +05:30 [INF] Quartz Scheduler 3.18.1.0 - 'QuartzScheduler' with instanceId 'NON_CLUSTERED' initialized
+2026-06-09 17:34:09.465 +05:30 [INF] Using thread pool 'Quartz.Simpl.DefaultThreadPool', size: 10
+2026-06-09 17:34:09.465 +05:30 [INF] Using job store 'Quartz.Simpl.RAMJobStore', supports persistence: False, clustered: False
+2026-06-09 17:34:09.470 +05:30 [INF] Adding 2 jobs, 1 triggers.
+2026-06-09 17:34:09.471 +05:30 [INF] Adding job: DEFAULT.BookingTimeoutJob
+2026-06-09 17:34:09.472 +05:30 [INF] Adding job: DEFAULT.PackageCompletionJob
+2026-06-09 17:34:09.499 +05:30 [INF] Now listening on: http://localhost:5081
+2026-06-09 17:34:09.499 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-09 17:34:09.500 +05:30 [INF] Hosting environment: Development
+2026-06-09 17:34:09.500 +05:30 [INF] Content root path: /Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API
+2026-06-09 17:34:09.501 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED started.
+2026-06-09 17:34:16.586 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages - multipart/form-data; boundary=--------------------------539568982467860775698348 175
+2026-06-09 17:34:16.607 +05:30 [WRN] Failed to determine the https port for redirect.
+2026-06-09 17:34:16.626 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-09 17:34:16.635 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-09 17:34:17.246 +05:30 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-06-09 17:34:17.458 +05:30 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status
+2026-06-09 17:34:17.521 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-09 17:34:17.542 +05:30 [INF] Executed DbCommand (13ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p0.id, p1.id, p1.caption, p1.category, p1.display_order, p1.file_name, p1.file_path, p1.file_size_bytes, p1.is_primary, p1.mime_type, p1.package_id, p1.uploaded_at, p2.id, p2.available_slots, p2.base_price, p2.child_price, p2.discount_percent, p2.end_date, p2.is_active, p2.package_id, p2.season_name, p2.start_date, p0.approved_at, p0.approved_by, p0.avg_rating, p0.business_license_no, p0.company_name, p0.contact_email, p0.contact_phone, p0.created_at, p0.deactivated_at, p0.deactivation_reason, p0.description, p0.total_reviews, p0.updated_at, p0.user_id, p0.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status
+    ORDER BY p.created_at DESC
+    LIMIT @__p_1 OFFSET @__p_0
+) AS t
+INNER JOIN packagers AS p0 ON t.packager_id = p0.id
+LEFT JOIN package_media AS p1 ON t.id = p1.package_id
+LEFT JOIN package_seasonal_pricing AS p2 ON t.id = p2.package_id
+ORDER BY t.created_at DESC, t.id, p0.id, p1.id
+2026-06-09 17:34:17.634 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-09 17:34:17.638 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 1001.2471ms
+2026-06-09 17:34:17.638 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-09 17:34:17.639 +05:30 [INF] HTTP GET /api/Packages responded 200 in 1032.7125 ms
+2026-06-09 17:34:17.642 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages - 200 null application/json; charset=utf-8 1056.445ms

@@ -122,8 +122,8 @@ public class WishlistServiceTests
         await _dbContext.Wishlists.AddRangeAsync(wishlist1, wishlist2, wishlist3, wishlistOtherUser);
         await _dbContext.SaveChangesAsync();
 
-        var packageSummary1 = new PackageSummaryResponse(package1.Id, Guid.NewGuid(), "Company", "Pkg 1", "Type", "Dest 1", "Country", 1, 1, 5, 10, null, 100, 10);
-        var packageSummary3 = new PackageSummaryResponse(package3.Id, Guid.NewGuid(), "Company", "Pkg 3", "Type", "Dest 3", "Country", 1, 1, 5, 10, null, 100, 10);
+        var packageSummary1 = new PackageSummaryResponse(package1.Id, Guid.NewGuid(), "Company", "Pkg 1", "Type", "Dest 1", "Country", 1, 1, 5, 10, null, 100, 10, null, null);
+        var packageSummary3 = new PackageSummaryResponse(package3.Id, Guid.NewGuid(), "Company", "Pkg 3", "Type", "Dest 3", "Country", 1, 1, 5, 10, null, 100, 10, null, null);
 
         _mapperMock.Setup(x => x.Map<PackageSummaryResponse>(It.Is<Package>(p => p.Id == package1.Id))).Returns(packageSummary1);
         _mapperMock.Setup(x => x.Map<PackageSummaryResponse>(It.Is<Package>(p => p.Id == package3.Id))).Returns(packageSummary3);

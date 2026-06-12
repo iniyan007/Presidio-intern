@@ -16,5 +16,7 @@ public record PackageSummaryResponse(
     int TotalReviews,
     string? PrimaryImageUrl,
     decimal StartingPrice,
-    int PendingSeats
+    int PendingSeats,
+    DateOnly? EarliestDepartureDate,
+    DateOnly? AvailableUntil
 );

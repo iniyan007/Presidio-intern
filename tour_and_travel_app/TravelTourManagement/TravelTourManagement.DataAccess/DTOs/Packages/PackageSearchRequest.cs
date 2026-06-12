@@ -22,6 +22,9 @@ public class PackageSearchRequest
     [Range(1, 365)]
     public int? MaxDurationDays { get; set; }
 
+    public DateOnly? TravelStartDate { get; set; }
+    public DateOnly? TravelEndDate { get; set; }
+
     // Sort options: PriceAsc, PriceDesc, RatingDesc, DurationAsc, DurationDesc, Newest
     public string? SortBy { get; set; } = "Newest";
 
