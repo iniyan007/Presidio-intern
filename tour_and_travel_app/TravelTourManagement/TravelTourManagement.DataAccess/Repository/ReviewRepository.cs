@@ -22,6 +22,8 @@ public class ReviewRepository : GenericRepository<Review, Guid>, IReviewReposito
         Guid packageId,
         CancellationToken cancellationToken = default)
         => await _dbSet
+            .Include(r => r.User)
+            .Include(r => r.ReviewMedia)
             .Where(r => r.PackageId == packageId)
             .OrderByDescending(r => r.CreatedAt)
             .ToListAsync(cancellationToken);
@@ -31,6 +33,8 @@ public class ReviewRepository : GenericRepository<Review, Guid>, IReviewReposito
         Guid packagerId,
         CancellationToken cancellationToken = default)
         => await _dbSet
+            .Include(r => r.User)
+            .Include(r => r.ReviewMedia)
             .Where(r => r.PackagerId == packagerId)
             .OrderByDescending(r => r.CreatedAt)
             .ToListAsync(cancellationToken);
