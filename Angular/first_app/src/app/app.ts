@@ -1,11 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { Customers } from './customers/customers';
-import { Cards } from './cards/cards';
+import { Products } from './product/product';
 
 @Component({
   standalone: true,
   selector: 'app-root',
-  imports: [Customers, Cards],
+  imports: [Customers, Products],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })

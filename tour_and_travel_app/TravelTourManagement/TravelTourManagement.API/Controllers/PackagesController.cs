@@ -56,8 +56,6 @@ public class PackagesController : ControllerBase
         {
             throw new ArgumentException($"Invalid JSON in PackageData: {ex.Message}", ex);
         }
-
-        // Manual validation
         var context = new ValidationContext(packageData, serviceProvider: null, items: null);
         var results = new List<ValidationResult>();
         bool isValid = Validator.TryValidateObject(packageData, context, results, true);

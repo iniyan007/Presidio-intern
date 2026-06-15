@@ -1,0 +1,15 @@
+2026-06-15 00:21:34.127 +05:30 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+FROM packages AS p
+2026-06-15 00:21:34.137 +05:30 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.available_slots, p.base_price, p.child_price, p.discount_percent, p.end_date, p.is_active, p.package_id, p.season_name, p.start_date
+FROM package_seasonal_pricing AS p
+2026-06-15 00:21:34.139 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.available_slots, p.base_price, p.child_price, p.discount_percent, p.end_date, p.is_active, p.package_id, p.season_name, p.start_date
+FROM package_seasonal_pricing AS p
+2026-06-15 00:21:34.140 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.available_slots, p.base_price, p.child_price, p.discount_percent, p.end_date, p.is_active, p.package_id, p.season_name, p.start_date
+FROM package_seasonal_pricing AS p
+2026-06-15 00:21:34.141 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.available_slots, p.base_price, p.child_price, p.discount_percent, p.end_date, p.is_active, p.package_id, p.season_name, p.start_date
+FROM package_seasonal_pricing AS p

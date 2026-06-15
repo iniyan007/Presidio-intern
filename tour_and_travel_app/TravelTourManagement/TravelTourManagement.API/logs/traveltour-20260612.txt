@@ -536,3 +536,508 @@ WHERE id = @p1;
 2026-06-12 15:04:03.554 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.MessagesController.MarkMessagesAsRead (TravelTourManagement.API)'
 2026-06-12 15:04:03.554 +05:30 [INF] HTTP PUT /api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read responded 200 in 35.3142 ms
 2026-06-12 15:04:03.554 +05:30 [INF] Request finished HTTP/1.1 PUT http://localhost:5081/api/Messages/threads/ad3452ca-e01e-4a5a-ad3e-fccb13e6d93f/read - 200 null application/json; charset=utf-8 49.6156ms
+2026-06-12 16:17:03.103 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Notifications - null null
+2026-06-12 16:17:03.126 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '12/06/2026 9:54:57 AM', Current time (UTC): '12/06/2026 10:47:03 AM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-06-12 16:17:03.139 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '12/06/2026 9:54:57 AM', Current time (UTC): '12/06/2026 10:47:03 AM'.
+2026-06-12 16:17:03.144 +05:30 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-06-12 16:17:03.150 +05:30 [INF] AuthenticationScheme: Bearer was challenged.
+2026-06-12 16:17:03.151 +05:30 [INF] HTTP GET /api/Notifications responded 401 in 45.3813 ms
+2026-06-12 16:17:03.151 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Notifications - 401 0 null 48.3521ms
+2026-06-12 16:26:36.305 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Auth/Login - application/json 73
+2026-06-12 16:26:36.313 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-12 16:26:36.322 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TravelTourManagement.DataAccess.DTOs.Users.LoginRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.AuthController (TravelTourManagement.API).
+2026-06-12 16:26:36.418 +05:30 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-06-12 16:26:36.465 +05:30 [INF] Executed DbCommand (15ms) [Parameters=[@__email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, u.created_at, u.email, u.full_name, u.is_active, u.is_email_verified, u.last_login_at, u.password_hash, u.phone, u.profile_picture, u."RefreshToken", u."RefreshTokenExpiryTime", u.updated_at
+FROM users AS u
+WHERE u.email = @__email_0
+LIMIT 1
+2026-06-12 16:26:36.709 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM packagers AS p
+WHERE p.user_id = @__userId_0
+LIMIT 1
+2026-06-12 16:26:36.731 +05:30 [INF] Executed DbCommand (15ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p11='?' (DbType = Guid), @p10='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET last_login_at = @p10
+WHERE id = @p11;
+2026-06-12 16:26:36.748 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p22='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p11='?', @p12='?', @p13='?' (DbType = Boolean), @p14='?' (DbType = Boolean), @p15='?' (DbType = DateTime), @p16='?', @p17='?', @p18='?', @p19='?', @p20='?' (DbType = DateTime), @p21='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET created_at = @p10, email = @p11, full_name = @p12, is_active = @p13, is_email_verified = @p14, last_login_at = @p15, password_hash = @p16, phone = @p17, profile_picture = @p18, "RefreshToken" = @p19, "RefreshTokenExpiryTime" = @p20, updated_at = @p21
+WHERE id = @p22;
+2026-06-12 16:26:36.751 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Users.AuthResponse'.
+2026-06-12 16:26:36.752 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API) in 429.1967ms
+2026-06-12 16:26:36.752 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-12 16:26:36.752 +05:30 [INF] HTTP POST /api/Auth/Login responded 200 in 443.8157 ms
+2026-06-12 16:26:36.752 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Auth/Login - 200 null application/json; charset=utf-8 447.1519ms
+2026-06-12 16:26:57.321 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Notifications - null null
+2026-06-12 16:26:57.323 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.NotificationsController.GetMyNotifications (TravelTourManagement.API)'
+2026-06-12 16:26:57.323 +05:30 [INF] Route matched with {action = "GetMyNotifications", controller = "Notifications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetMyNotifications(Int32, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.NotificationsController (TravelTourManagement.API).
+2026-06-12 16:26:57.337 +05:30 [INF] Executed DbCommand (10ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n.id, n.title, n.message, n.reference_id, n.is_read, n.created_at
+FROM notifications AS n
+WHERE n.user_id = @__userId_0
+ORDER BY n.created_at DESC
+LIMIT @__p_1
+2026-06-12 16:26:57.338 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType6`2[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.IEnumerable`1[[TravelTourManagement.DataAccess.DTOs.Notifications.NotificationResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 16:26:57.339 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.NotificationsController.GetMyNotifications (TravelTourManagement.API) in 15.0155ms
+2026-06-12 16:26:57.339 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.NotificationsController.GetMyNotifications (TravelTourManagement.API)'
+2026-06-12 16:26:57.339 +05:30 [INF] HTTP GET /api/Notifications responded 200 in 17.2425 ms
+2026-06-12 16:26:57.339 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Notifications - 200 null application/json; charset=utf-8 18.7985ms
+2026-06-12 16:27:09.916 +05:30 [INF] Request starting HTTP/1.1 PUT http://localhost:5081/api/Notifications/12344444444/read - null 0
+2026-06-12 16:27:09.920 +05:30 [INF] HTTP PUT /api/Notifications/12344444444/read responded 404 in 0.5670 ms
+2026-06-12 16:27:09.920 +05:30 [INF] Request finished HTTP/1.1 PUT http://localhost:5081/api/Notifications/12344444444/read - 404 0 null 3.8278ms
+2026-06-12 16:27:09.920 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: PUT http://localhost:5081/api/Notifications/12344444444/read, Response status code: 404
+2026-06-12 17:19:47.300 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Packages - multipart/form-data; boundary=--------------------------615830820966801510750296 6581945
+2026-06-12 17:19:47.308 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '12/06/2026 9:55:26 AM', Current time (UTC): '12/06/2026 11:49:47 AM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-06-12 17:19:47.312 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '12/06/2026 9:55:26 AM', Current time (UTC): '12/06/2026 11:49:47 AM'.
+2026-06-12 17:19:47.323 +05:30 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Packager)
+2026-06-12 17:19:47.325 +05:30 [INF] AuthenticationScheme: Bearer was challenged.
+2026-06-12 17:19:47.325 +05:30 [INF] HTTP POST /api/Packages responded 401 in 23.4810 ms
+2026-06-12 17:19:47.325 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Packages - 401 0 null 25.9096ms
+2026-06-12 17:19:47.330 +05:30 [INF] Connection id "0HNM8CL5POLHN", Request id "0HNM8CL5POLHN:00000001": the application completed without reading the entire request body.
+2026-06-12 17:19:54.252 +05:30 [INF] Connection id "0HNM8CL5POLHN", Request id "0HNM8CL5POLHN:00000001": automatic draining of the request body timed out after taking over 5 seconds.
+2026-06-12 17:19:54.633 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Auth/Login - application/json 66
+2026-06-12 17:19:54.638 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-12 17:19:54.638 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TravelTourManagement.DataAccess.DTOs.Users.LoginRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.AuthController (TravelTourManagement.API).
+2026-06-12 17:19:54.682 +05:30 [INF] Executed DbCommand (20ms) [Parameters=[@__email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, u.created_at, u.email, u.full_name, u.is_active, u.is_email_verified, u.last_login_at, u.password_hash, u.phone, u.profile_picture, u."RefreshToken", u."RefreshTokenExpiryTime", u.updated_at
+FROM users AS u
+WHERE u.email = @__email_0
+LIMIT 1
+2026-06-12 17:19:54.897 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM packagers AS p
+WHERE p.user_id = @__userId_0
+LIMIT 1
+2026-06-12 17:19:54.931 +05:30 [INF] Executed DbCommand (32ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p11='?' (DbType = Guid), @p10='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET last_login_at = @p10
+WHERE id = @p11;
+2026-06-12 17:19:54.939 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p22='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p11='?', @p12='?', @p13='?' (DbType = Boolean), @p14='?' (DbType = Boolean), @p15='?' (DbType = DateTime), @p16='?', @p17='?', @p18='?', @p19='?', @p20='?' (DbType = DateTime), @p21='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET created_at = @p10, email = @p11, full_name = @p12, is_active = @p13, is_email_verified = @p14, last_login_at = @p15, password_hash = @p16, phone = @p17, profile_picture = @p18, "RefreshToken" = @p19, "RefreshTokenExpiryTime" = @p20, updated_at = @p21
+WHERE id = @p22;
+2026-06-12 17:19:54.941 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Users.AuthResponse'.
+2026-06-12 17:19:54.942 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API) in 303.1374ms
+2026-06-12 17:19:54.942 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-12 17:19:54.942 +05:30 [INF] HTTP POST /api/Auth/Login responded 200 in 304.7872 ms
+2026-06-12 17:19:54.942 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Auth/Login - 200 null application/json; charset=utf-8 309.0718ms
+2026-06-12 17:20:21.960 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Packages - multipart/form-data; boundary=--------------------------011508060137646154610215 6581945
+2026-06-12 17:20:21.969 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.CreatePackage (TravelTourManagement.API)'
+2026-06-12 17:20:21.999 +05:30 [INF] Route matched with {action = "CreatePackage", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreatePackage(TravelTourManagement.DataAccess.DTOs.Packages.CreatePackageCombinedRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-12 17:20:22.058 +05:30 [INF] Executing BadRequestObjectResult, writing value of type '<>f__AnonymousType0`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 17:20:22.060 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.CreatePackage (TravelTourManagement.API) in 60.8204ms
+2026-06-12 17:20:22.060 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.CreatePackage (TravelTourManagement.API)'
+2026-06-12 17:20:22.060 +05:30 [INF] HTTP POST /api/Packages responded 400 in 97.3380 ms
+2026-06-12 17:20:22.062 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Packages - 400 null application/json; charset=utf-8 102.6187ms
+2026-06-12 17:22:11.187 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Packages - multipart/form-data; boundary=--------------------------437434707801696192089524 6581945
+2026-06-12 17:22:11.196 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.CreatePackage (TravelTourManagement.API)'
+2026-06-12 17:22:11.198 +05:30 [INF] Route matched with {action = "CreatePackage", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreatePackage(TravelTourManagement.DataAccess.DTOs.Packages.CreatePackageCombinedRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-12 17:22:11.345 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM packagers AS p
+WHERE p.user_id = @__userId_0
+LIMIT 1
+2026-06-12 17:22:11.574 +05:30 [INF] Executed DbCommand (58ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p10='?' (DbType = Guid), @p11='?', @p12='?' (DbType = Guid), @p13='?', @p14='?', @p15='?' (DbType = Object), @p16='?' (DbType = Object), @p17='?' (DbType = DateTime), @p18='?' (DbType = Guid), @p19='?', @p20='?' (DbType = Guid), @p21='?', @p22='?' (DbType = Guid), @p23='?', @p24='?', @p25='?' (DbType = Object), @p26='?' (DbType = Object), @p27='?' (DbType = DateTime), @p28='?' (DbType = Guid), @p29='?', @p30='?' (DbType = Guid), @p31='?', @p32='?' (DbType = Guid), @p33='?', @p34='?', @p35='?' (DbType = Object), @p36='?' (DbType = Object), @p37='?' (DbType = DateTime), @p38='?' (DbType = Guid), @p39='?', @p40='?' (DbType = Guid), @p41='?', @p42='?' (DbType = Guid), @p43='?', @p44='?', @p45='?' (DbType = Object), @p46='?' (DbType = Object), @p47='?' (DbType = DateTime), @p48='?' (DbType = Guid), @p49='?', @p50='?' (DbType = Guid), @p51='?', @p52='?' (DbType = Guid), @p53='?', @p54='?', @p55='?' (DbType = Object), @p56='?' (DbType = Object), @p57='?' (DbType = DateTime), @p58='?' (DbType = Guid), @p59='?', @p60='?' (DbType = Guid), @p61='?', @p62='?' (DbType = Guid), @p63='?', @p64='?', @p65='?' (DbType = Object), @p66='?' (DbType = Object), @p67='?' (DbType = DateTime), @p68='?' (DbType = Guid), @p69='?', @p70='?' (DbType = Guid), @p71='?', @p72='?' (DbType = Guid), @p73='?', @p74='?', @p75='?' (DbType = Object), @p76='?' (DbType = Object), @p77='?' (DbType = DateTime), @p78='?' (DbType = Guid), @p79='?', @p80='?' (DbType = Guid), @p81='?', @p82='?' (DbType = Guid), @p83='?', @p84='?', @p85='?' (DbType = Object), @p86='?' (DbType = Object), @p87='?' (DbType = DateTime), @p88='?' (DbType = Guid), @p89='?', @p90='?' (DbType = Guid), @p91='?', @p92='?' (DbType = Guid), @p93='?', @p94='?', @p95='?' (DbType = Object), @p96='?' (DbType = Object), @p97='?' (DbType = DateTime), @p98='?' (DbType = Guid), @p99='?', @p100='?' (DbType = Guid), @p101='?', @p102='?' (DbType = Guid), @p103='?', @p104='?', @p105='?' (DbType = Object), @p106='?' (DbType = Object), @p107='?' (DbType = DateTime), @p108='?' (DbType = Guid), @p109='?', @p110='?' (DbType = Guid), @p111='?', @p112='?' (DbType = Guid), @p113='?', @p114='?', @p115='?' (DbType = Object), @p116='?' (DbType = Object), @p117='?' (DbType = DateTime), @p118='?' (DbType = Guid), @p119='?', @p120='?' (DbType = Guid), @p121='?', @p122='?' (DbType = Guid), @p123='?', @p124='?', @p125='?' (DbType = Object), @p126='?' (DbType = Object), @p127='?' (DbType = DateTime), @p128='?' (DbType = Guid), @p129='?', @p130='?' (DbType = Guid), @p131='?', @p132='?' (DbType = Guid), @p133='?', @p134='?', @p135='?' (DbType = Object), @p136='?' (DbType = Object), @p137='?' (DbType = DateTime), @p138='?' (DbType = Guid), @p139='?', @p140='?' (DbType = Guid), @p141='?', @p142='?' (DbType = Guid), @p143='?', @p144='?', @p145='?' (DbType = Object), @p146='?' (DbType = Object), @p147='?' (DbType = DateTime), @p148='?' (DbType = Guid), @p149='?', @p150='?' (DbType = Guid), @p151='?', @p152='?' (DbType = Guid), @p153='?', @p154='?', @p155='?' (DbType = Object), @p156='?' (DbType = Object), @p157='?' (DbType = DateTime), @p158='?' (DbType = Guid), @p159='?', @p160='?' (DbType = Guid), @p161='?', @p162='?' (DbType = Guid), @p163='?', @p164='?', @p165='?' (DbType = Object), @p166='?' (DbType = Object), @p167='?' (DbType = DateTime), @p168='?' (DbType = Guid), @p169='?', @p170='?' (DbType = Guid), @p171='?', @p172='?' (DbType = Guid), @p173='?', @p174='?', @p175='?' (DbType = Object), @p176='?' (DbType = Object), @p177='?' (DbType = DateTime), @p178='?' (DbType = Guid), @p179='?', @p180='?' (DbType = Guid), @p181='?', @p182='?' (DbType = Guid), @p183='?', @p184='?', @p185='?' (DbType = Object), @p186='?' (DbType = Object), @p187='?' (DbType = DateTime), @p188='?' (DbType = Guid), @p189='?', @p190='?' (DbType = Guid), @p191='?', @p192='?' (DbType = Guid), @p193='?', @p194='?', @p195='?' (DbType = Object), @p196='?' (DbType = Object), @p197='?' (DbType = DateTime), @p198='?' (DbType = Guid), @p199='?', @p200='?' (DbType = Guid), @p201='?', @p202='?' (DbType = Guid), @p203='?', @p204='?', @p205='?' (DbType = Object), @p206='?' (DbType = Object), @p207='?' (DbType = DateTime), @p208='?' (DbType = Guid), @p209='?', @p210='?' (DbType = Guid), @p211='?', @p212='?' (DbType = Guid), @p213='?', @p214='?', @p215='?' (DbType = Object), @p216='?' (DbType = Object), @p217='?' (DbType = DateTime), @p218='?' (DbType = Guid), @p219='?', @p220='?' (DbType = Guid), @p221='?', @p222='?' (DbType = Guid), @p223='?', @p224='?', @p225='?' (DbType = Object), @p226='?' (DbType = Object), @p227='?' (DbType = DateTime), @p228='?' (DbType = Guid), @p229='?', @p230='?' (DbType = Guid), @p231='?', @p232='?' (DbType = Guid), @p233='?', @p234='?', @p235='?' (DbType = Object), @p236='?' (DbType = Object), @p237='?' (DbType = DateTime), @p238='?' (DbType = Guid), @p239='?', @p240='?' (DbType = Guid), @p241='?', @p242='?' (DbType = Guid), @p243='?', @p244='?', @p245='?' (DbType = Object), @p246='?' (DbType = Object), @p247='?' (DbType = DateTime), @p248='?' (DbType = Guid), @p249='?', @p250='?' (DbType = Guid), @p251='?', @p252='?' (DbType = Guid), @p253='?', @p254='?', @p255='?' (DbType = Object), @p256='?' (DbType = Object), @p257='?' (DbType = DateTime), @p258='?' (DbType = Guid), @p259='?', @p260='?' (DbType = Guid), @p261='?', @p262='?' (DbType = Guid), @p263='?', @p264='?', @p265='?' (DbType = Object), @p266='?' (DbType = Object), @p267='?' (DbType = DateTime), @p268='?' (DbType = Guid), @p269='?', @p270='?' (DbType = Guid), @p271='?', @p272='?' (DbType = Guid), @p273='?', @p274='?', @p275='?' (DbType = Object), @p276='?' (DbType = Object), @p277='?' (DbType = DateTime), @p278='?' (DbType = Guid), @p279='?', @p280='?' (DbType = Guid), @p281='?', @p282='?' (DbType = Guid), @p283='?', @p284='?', @p285='?' (DbType = Object), @p286='?' (DbType = Object), @p287='?' (DbType = DateTime), @p288='?' (DbType = Guid), @p289='?', @p290='?' (DbType = Guid), @p291='?', @p292='?' (DbType = Guid), @p293='?', @p294='?', @p295='?' (DbType = Object), @p296='?' (DbType = Object), @p297='?' (DbType = DateTime), @p298='?' (DbType = Guid), @p299='?', @p300='?' (DbType = Guid), @p301='?', @p302='?' (DbType = Guid), @p303='?', @p304='?', @p305='?' (DbType = Object), @p306='?' (DbType = Object), @p307='?' (DbType = DateTime), @p308='?' (DbType = Guid), @p309='?', @p310='?', @p311='?', @p312='?', @p313='?' (DbType = DateTime), @p314='?', @p315='?', @p316='?' (DbType = Int32), @p317='?' (DbType = Int32), @p318='?' (DbType = Int32), @p319='?' (DbType = Int32), @p320='?' (DbType = Guid), @p321='?' (DbType = Object), @p322='?', @p323='?' (DbType = Object), @p324='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27, @p28, @p29);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p30, @p31, @p32, @p33, @p34, @p35, @p36, @p37, @p38, @p39);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p40, @p41, @p42, @p43, @p44, @p45, @p46, @p47, @p48, @p49);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p50, @p51, @p52, @p53, @p54, @p55, @p56, @p57, @p58, @p59);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p60, @p61, @p62, @p63, @p64, @p65, @p66, @p67, @p68, @p69);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p70, @p71, @p72, @p73, @p74, @p75, @p76, @p77, @p78, @p79);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p80, @p81, @p82, @p83, @p84, @p85, @p86, @p87, @p88, @p89);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p90, @p91, @p92, @p93, @p94, @p95, @p96, @p97, @p98, @p99);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p100, @p101, @p102, @p103, @p104, @p105, @p106, @p107, @p108, @p109);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p110, @p111, @p112, @p113, @p114, @p115, @p116, @p117, @p118, @p119);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p120, @p121, @p122, @p123, @p124, @p125, @p126, @p127, @p128, @p129);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p130, @p131, @p132, @p133, @p134, @p135, @p136, @p137, @p138, @p139);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p140, @p141, @p142, @p143, @p144, @p145, @p146, @p147, @p148, @p149);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p150, @p151, @p152, @p153, @p154, @p155, @p156, @p157, @p158, @p159);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p160, @p161, @p162, @p163, @p164, @p165, @p166, @p167, @p168, @p169);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p170, @p171, @p172, @p173, @p174, @p175, @p176, @p177, @p178, @p179);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p180, @p181, @p182, @p183, @p184, @p185, @p186, @p187, @p188, @p189);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p190, @p191, @p192, @p193, @p194, @p195, @p196, @p197, @p198, @p199);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p200, @p201, @p202, @p203, @p204, @p205, @p206, @p207, @p208, @p209);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p210, @p211, @p212, @p213, @p214, @p215, @p216, @p217, @p218, @p219);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p220, @p221, @p222, @p223, @p224, @p225, @p226, @p227, @p228, @p229);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p230, @p231, @p232, @p233, @p234, @p235, @p236, @p237, @p238, @p239);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p240, @p241, @p242, @p243, @p244, @p245, @p246, @p247, @p248, @p249);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p250, @p251, @p252, @p253, @p254, @p255, @p256, @p257, @p258, @p259);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p260, @p261, @p262, @p263, @p264, @p265, @p266, @p267, @p268, @p269);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p270, @p271, @p272, @p273, @p274, @p275, @p276, @p277, @p278, @p279);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p280, @p281, @p282, @p283, @p284, @p285, @p286, @p287, @p288, @p289);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p290, @p291, @p292, @p293, @p294, @p295, @p296, @p297, @p298, @p299);
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p300, @p301, @p302, @p303, @p304, @p305, @p306, @p307, @p308, @p309);
+INSERT INTO packages (cancellation_policy, city, country, created_at, description, destination, duration_days, duration_nights, max_capacity, min_age, packager_id, status, title, package_type, updated_at)
+VALUES (@p310, @p311, @p312, @p313, @p314, @p315, @p316, @p317, @p318, @p319, @p320, @p321, @p322, @p323, @p324)
+RETURNING id, avg_rating, current_bookings, is_featured, total_reviews;
+2026-06-12 17:22:11.602 +05:30 [INF] Executed DbCommand (22ms) [Parameters=[@p325='?' (DbType = DateTime), @p326='?' (DbType = Int32), @p327='?', @p328='?', @p329='?' (DbType = Guid), @p330='?', @p331='?' (DbType = DateTime), @p332='?' (DbType = Int32), @p333='?', @p334='?', @p335='?' (DbType = Guid), @p336='?', @p337='?' (DbType = DateTime), @p338='?' (DbType = Int32), @p339='?', @p340='?', @p341='?' (DbType = Guid), @p342='?', @p343='?' (DbType = DateTime), @p344='?' (DbType = Int32), @p345='?', @p346='?', @p347='?' (DbType = Guid), @p348='?', @p349='?' (DbType = DateTime), @p350='?' (DbType = Int32), @p351='?', @p352='?', @p353='?' (DbType = Guid), @p354='?', @p355='?' (DbType = DateTime), @p356='?' (DbType = Int32), @p357='?', @p358='?', @p359='?' (DbType = Guid), @p360='?', @p361='?' (DbType = Int32), @p362='?', @p363='?' (DbType = Guid), @p364='?' (DbType = Int32), @p365='?', @p366='?' (DbType = Guid), @p367='?' (DbType = Int32), @p368='?', @p369='?' (DbType = Guid), @p370='?', @p371='?' (DbType = Int32), @p372='?' (DbType = Guid), @p373='?' (DbType = Object), @p374='?', @p375='?' (DbType = Int32), @p376='?' (DbType = Guid), @p377='?' (DbType = Object), @p378='?', @p379='?' (DbType = Int32), @p380='?' (DbType = Guid), @p381='?' (DbType = Object), @p382='?', @p383='?' (DbType = Int32), @p384='?' (DbType = Guid), @p385='?' (DbType = Object), @p386='?', @p387='?' (DbType = Int32), @p388='?' (DbType = Guid), @p389='?' (DbType = Object), @p390='?', @p391='?' (DbType = Object), @p392='?' (DbType = Int32), @p393='?', @p394='?', @p395='?' (DbType = Int64), @p396='?' (DbType = Boolean), @p397='?', @p398='?' (DbType = Guid), @p399='?' (DbType = DateTime), @p400='?' (DbType = Int32), @p401='?' (DbType = Decimal), @p402='?' (DbType = Decimal), @p403='?' (DbType = Decimal), @p404='?' (DbType = Date), @p405='?' (DbType = Guid), @p406='?', @p407='?' (DbType = Date)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO itinerary_days (created_at, day_number, description, location, package_id, title)
+VALUES (@p325, @p326, @p327, @p328, @p329, @p330)
+RETURNING id;
+INSERT INTO itinerary_days (created_at, day_number, description, location, package_id, title)
+VALUES (@p331, @p332, @p333, @p334, @p335, @p336)
+RETURNING id;
+INSERT INTO itinerary_days (created_at, day_number, description, location, package_id, title)
+VALUES (@p337, @p338, @p339, @p340, @p341, @p342)
+RETURNING id;
+INSERT INTO itinerary_days (created_at, day_number, description, location, package_id, title)
+VALUES (@p343, @p344, @p345, @p346, @p347, @p348)
+RETURNING id;
+INSERT INTO itinerary_days (created_at, day_number, description, location, package_id, title)
+VALUES (@p349, @p350, @p351, @p352, @p353, @p354)
+RETURNING id;
+INSERT INTO itinerary_days (created_at, day_number, description, location, package_id, title)
+VALUES (@p355, @p356, @p357, @p358, @p359, @p360)
+RETURNING id;
+INSERT INTO package_highlights (display_order, highlight_text, package_id)
+VALUES (@p361, @p362, @p363)
+RETURNING id;
+INSERT INTO package_highlights (display_order, highlight_text, package_id)
+VALUES (@p364, @p365, @p366)
+RETURNING id;
+INSERT INTO package_highlights (display_order, highlight_text, package_id)
+VALUES (@p367, @p368, @p369)
+RETURNING id;
+INSERT INTO package_inclusions (description, display_order, package_id, type)
+VALUES (@p370, @p371, @p372, @p373)
+RETURNING id;
+INSERT INTO package_inclusions (description, display_order, package_id, type)
+VALUES (@p374, @p375, @p376, @p377)
+RETURNING id;
+INSERT INTO package_inclusions (description, display_order, package_id, type)
+VALUES (@p378, @p379, @p380, @p381)
+RETURNING id;
+INSERT INTO package_inclusions (description, display_order, package_id, type)
+VALUES (@p382, @p383, @p384, @p385)
+RETURNING id;
+INSERT INTO package_inclusions (description, display_order, package_id, type)
+VALUES (@p386, @p387, @p388, @p389)
+RETURNING id;
+INSERT INTO package_media (caption, category, display_order, file_name, file_path, file_size_bytes, is_primary, mime_type, package_id, uploaded_at)
+VALUES (@p390, @p391, @p392, @p393, @p394, @p395, @p396, @p397, @p398, @p399)
+RETURNING id;
+INSERT INTO package_seasonal_pricing (available_slots, base_price, child_price, discount_percent, end_date, package_id, season_name, start_date)
+VALUES (@p400, @p401, @p402, @p403, @p404, @p405, @p406, @p407)
+RETURNING id, is_active;
+2026-06-12 17:22:11.620 +05:30 [INF] Executed DbCommand (15ms) [Parameters=[@p408='?', @p409='?', @p410='?' (DbType = Object), @p411='?', @p412='?' (DbType = Int32), @p413='?' (DbType = Decimal), @p414='?' (DbType = Guid), @p415='?', @p416='?' (DbType = Int32), @p417='?', @p418='?', @p419='?' (DbType = Object), @p420='?', @p421='?' (DbType = Int32), @p422='?' (DbType = Decimal), @p423='?' (DbType = Boolean), @p424='?' (DbType = Guid), @p425='?', @p426='?' (DbType = Int32), @p427='?', @p428='?', @p429='?' (DbType = Object), @p430='?', @p431='?' (DbType = Int32), @p432='?' (DbType = Decimal), @p433='?' (DbType = Guid), @p434='?', @p435='?' (DbType = Int32), @p436='?', @p437='?', @p438='?' (DbType = Object), @p439='?', @p440='?' (DbType = Int32), @p441='?' (DbType = Decimal), @p442='?' (DbType = Guid), @p443='?', @p444='?' (DbType = Int32), @p445='?', @p446='?', @p447='?' (DbType = Object), @p448='?', @p449='?' (DbType = Int32), @p450='?' (DbType = Decimal), @p451='?' (DbType = Guid), @p452='?', @p453='?' (DbType = Int32), @p454='?', @p455='?', @p456='?' (DbType = Object), @p457='?', @p458='?' (DbType = Int32), @p459='?' (DbType = Decimal), @p460='?' (DbType = Guid), @p461='?', @p462='?' (DbType = Int32), @p463='?', @p464='?' (DbType = Guid), @p465='?' (DbType = Object), @p466='?', @p467='?', @p468='?' (DbType = Guid), @p469='?' (DbType = Object), @p470='?', @p471='?', @p472='?' (DbType = Guid), @p473='?' (DbType = Object), @p474='?', @p475='?', @p476='?' (DbType = Guid), @p477='?' (DbType = Object), @p478='?', @p479='?', @p480='?' (DbType = Guid), @p481='?' (DbType = Object), @p482='?', @p483='?', @p484='?' (DbType = Time), @p485='?' (DbType = Time), @p486='?', @p487='?', @p488='?' (DbType = Guid), @p489='?', @p490='?', @p491='?' (DbType = Int16), @p492='?' (DbType = Decimal), @p493='?', @p494='?' (DbType = Time), @p495='?' (DbType = Guid), @p496='?', @p497='?', @p498='?' (DbType = Time), @p499='?' (DbType = Int32), @p500='?' (DbType = Object), @p501='?', @p502='?' (DbType = Decimal), @p503='?', @p504='?' (DbType = Time), @p505='?' (DbType = Guid), @p506='?', @p507='?', @p508='?' (DbType = Time), @p509='?' (DbType = Int32), @p510='?' (DbType = Object), @p511='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO itinerary_activities (activity_title, activity_type, session, description, duration_minutes, extra_cost, itinerary_day_id, location, sequence_order)
+VALUES (@p408, @p409, @p410, @p411, @p412, @p413, @p414, @p415, @p416)
+RETURNING id, is_optional;
+INSERT INTO itinerary_activities (activity_title, activity_type, session, description, duration_minutes, extra_cost, is_optional, itinerary_day_id, location, sequence_order)
+VALUES (@p417, @p418, @p419, @p420, @p421, @p422, @p423, @p424, @p425, @p426)
+RETURNING id;
+INSERT INTO itinerary_activities (activity_title, activity_type, session, description, duration_minutes, extra_cost, itinerary_day_id, location, sequence_order)
+VALUES (@p427, @p428, @p429, @p430, @p431, @p432, @p433, @p434, @p435)
+RETURNING id, is_optional;
+INSERT INTO itinerary_activities (activity_title, activity_type, session, description, duration_minutes, extra_cost, itinerary_day_id, location, sequence_order)
+VALUES (@p436, @p437, @p438, @p439, @p440, @p441, @p442, @p443, @p444)
+RETURNING id, is_optional;
+INSERT INTO itinerary_activities (activity_title, activity_type, session, description, duration_minutes, extra_cost, itinerary_day_id, location, sequence_order)
+VALUES (@p445, @p446, @p447, @p448, @p449, @p450, @p451, @p452, @p453)
+RETURNING id, is_optional;
+INSERT INTO itinerary_activities (activity_title, activity_type, session, description, duration_minutes, extra_cost, itinerary_day_id, location, sequence_order)
+VALUES (@p454, @p455, @p456, @p457, @p458, @p459, @p460, @p461, @p462)
+RETURNING id, is_optional;
+INSERT INTO itinerary_day_meals (description, itinerary_day_id, meal, venue)
+VALUES (@p463, @p464, @p465, @p466)
+RETURNING id, is_included;
+INSERT INTO itinerary_day_meals (description, itinerary_day_id, meal, venue)
+VALUES (@p467, @p468, @p469, @p470)
+RETURNING id, is_included;
+INSERT INTO itinerary_day_meals (description, itinerary_day_id, meal, venue)
+VALUES (@p471, @p472, @p473, @p474)
+RETURNING id, is_included;
+INSERT INTO itinerary_day_meals (description, itinerary_day_id, meal, venue)
+VALUES (@p475, @p476, @p477, @p478)
+RETURNING id, is_included;
+INSERT INTO itinerary_day_meals (description, itinerary_day_id, meal, venue)
+VALUES (@p479, @p480, @p481, @p482)
+RETURNING id, is_included;
+INSERT INTO package_accommodation (amenities, check_in_time, check_out_time, hotel_address, hotel_name, itinerary_day_id, notes, room_type, star_rating)
+VALUES (@p483, @p484, @p485, @p486, @p487, @p488, @p489, @p490, @p491)
+RETURNING id;
+INSERT INTO package_transport (distance_km, drop_point, drop_time, itinerary_day_id, notes, pickup_point, pickup_time, segment_order, mode, vehicle_description)
+VALUES (@p492, @p493, @p494, @p495, @p496, @p497, @p498, @p499, @p500, @p501)
+RETURNING id;
+INSERT INTO package_transport (distance_km, drop_point, drop_time, itinerary_day_id, notes, pickup_point, pickup_time, segment_order, mode, vehicle_description)
+VALUES (@p502, @p503, @p504, @p505, @p506, @p507, @p508, @p509, @p510, @p511)
+RETURNING id;
+2026-06-12 17:22:11.629 +05:30 [INF] Executing CreatedAtActionResult, writing value of type '<>f__AnonymousType8`2[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 17:22:11.641 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.CreatePackage (TravelTourManagement.API) in 442.3115ms
+2026-06-12 17:22:11.641 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.CreatePackage (TravelTourManagement.API)'
+2026-06-12 17:22:11.642 +05:30 [INF] HTTP POST /api/Packages responded 201 in 451.7394 ms
+2026-06-12 17:22:11.644 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Packages - 201 null application/json; charset=utf-8 456.8557ms
+2026-06-12 17:22:17.158 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Packages - multipart/form-data; boundary=--------------------------197473056352716747278772 6581945
+2026-06-12 17:22:17.161 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.CreatePackage (TravelTourManagement.API)'
+2026-06-12 17:22:17.161 +05:30 [INF] Route matched with {action = "CreatePackage", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreatePackage(TravelTourManagement.DataAccess.DTOs.Packages.CreatePackageCombinedRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-12 17:22:17.185 +05:30 [INF] Executing ConflictObjectResult, writing value of type '<>f__AnonymousType0`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-12 17:22:17.185 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.CreatePackage (TravelTourManagement.API) in 23.978ms
+2026-06-12 17:22:17.186 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.CreatePackage (TravelTourManagement.API)'
+2026-06-12 17:22:17.186 +05:30 [INF] HTTP POST /api/Packages responded 409 in 25.5670 ms
+2026-06-12 17:22:17.187 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Packages - 409 null application/json; charset=utf-8 28.7451ms
+2026-06-12 17:22:45.876 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages?PageNumber=1& - null null
+2026-06-12 17:22:45.877 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-12 17:22:45.888 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-12 17:22:45.931 +05:30 [INF] Executed DbCommand (9ms) [Parameters=[@__today_0='?' (DbType = Date)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+2026-06-12 17:22:45.950 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-12 17:22:45.962 +05:30 [INF] Executed DbCommand (8ms) [Parameters=[@__today_0='?' (DbType = Date), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+    ORDER BY p.created_at DESC
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-12 17:22:45.975 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 17:22:45.975 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 87.1987ms
+2026-06-12 17:22:45.975 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-12 17:22:45.975 +05:30 [INF] HTTP GET /api/Packages responded 200 in 98.7595 ms
+2026-06-12 17:22:45.975 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages?PageNumber=1& - 200 null application/json; charset=utf-8 99.7743ms
+2026-06-12 17:23:48.397 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - null null
+2026-06-12 17:23:48.401 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-12 17:23:48.413 +05:30 [INF] Route matched with {action = "GetPackageMedia", controller = "Packages"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetPackageMedia(System.String) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-12 17:23:48.423 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-12 17:23:48.441 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API) in 27.5009ms
+2026-06-12 17:23:48.441 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-12 17:23:48.442 +05:30 [INF] HTTP GET /api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg responded 200 in 42.9411 ms
+2026-06-12 17:23:48.445 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - 200 6573821 image/jpeg 47.7869ms
+2026-06-12 17:24:08.289 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - null null
+2026-06-12 17:24:08.305 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-12 17:24:08.309 +05:30 [INF] Route matched with {action = "GetPackageMedia", controller = "Packages"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetPackageMedia(System.String) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-12 17:24:08.342 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-12 17:24:08.375 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API) in 65.2634ms
+2026-06-12 17:24:08.375 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-12 17:24:08.376 +05:30 [INF] HTTP GET /api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg responded 200 in 80.2165 ms
+2026-06-12 17:24:08.376 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - 200 6573821 image/jpeg 86.9214ms
+2026-06-12 17:25:23.603 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages?Destination=Bali&PageNumber=1& - null null
+2026-06-12 17:25:23.608 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-12 17:25:23.613 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-12 17:25:23.691 +05:30 [INF] Executed DbCommand (18ms) [Parameters=[@__today_0='?' (DbType = Date), @__lowerDest_1_contains='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND lower(p.destination) LIKE @__lowerDest_1_contains
+2026-06-12 17:25:23.702 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-12 17:25:23.716 +05:30 [INF] Executed DbCommand (8ms) [Parameters=[@__today_0='?' (DbType = Date), @__lowerDest_1_contains='?', @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND lower(p.destination) LIKE @__lowerDest_1_contains
+    ORDER BY p.created_at DESC
+    LIMIT @__p_3 OFFSET @__p_2
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-12 17:25:23.719 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 17:25:23.719 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 105.5897ms
+2026-06-12 17:25:23.719 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-12 17:25:23.719 +05:30 [INF] HTTP GET /api/Packages responded 200 in 113.2386 ms
+2026-06-12 17:25:23.719 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages?Destination=Bali&PageNumber=1& - 200 null application/json; charset=utf-8 116.4442ms
+2026-06-12 17:25:50.370 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages?PackageType=Honeymoon&PageNumber=1& - null null
+2026-06-12 17:25:50.371 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-12 17:25:50.372 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-12 17:25:50.391 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+2026-06-12 17:25:50.401 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-12 17:25:50.409 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object), @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+    ORDER BY p.created_at DESC
+    LIMIT @__p_3 OFFSET @__p_2
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-12 17:25:50.411 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 17:25:50.412 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 39.5762ms
+2026-06-12 17:25:50.412 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-12 17:25:50.412 +05:30 [INF] HTTP GET /api/Packages responded 200 in 41.3672 ms
+2026-06-12 17:25:50.412 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages?PackageType=Honeymoon&PageNumber=1& - 200 null application/json; charset=utf-8 42.677ms
+2026-06-12 17:25:57.979 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages?PackageType=Group&PageNumber=1& - null null
+2026-06-12 17:25:57.984 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-12 17:25:57.985 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-12 17:25:58.003 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+2026-06-12 17:25:58.007 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object), @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+    ORDER BY p.created_at DESC
+    LIMIT @__p_3 OFFSET @__p_2
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-12 17:25:58.013 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 17:25:58.014 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 28.6519ms
+2026-06-12 17:25:58.014 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-12 17:25:58.014 +05:30 [INF] HTTP GET /api/Packages responded 200 in 32.2727 ms
+2026-06-12 17:25:58.014 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages?PackageType=Group&PageNumber=1& - 200 null application/json; charset=utf-8 35.4394ms
+2026-06-12 17:26:05.991 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages?PageNumber=1& - null null
+2026-06-12 17:26:05.992 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-12 17:26:05.992 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-12 17:26:05.998 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+2026-06-12 17:26:06.001 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+    ORDER BY p.created_at DESC
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-12 17:26:06.005 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-12 17:26:06.006 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 13.5971ms
+2026-06-12 17:26:06.006 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-12 17:26:06.006 +05:30 [INF] HTTP GET /api/Packages responded 200 in 14.5673 ms
+2026-06-12 17:26:06.007 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages?PageNumber=1& - 200 null application/json; charset=utf-8 15.9602ms
+2026-06-12 17:26:35.737 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 - multipart/form-data; boundary=--------------------------611602356198760619779951 5732
+2026-06-12 17:26:35.758 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPublishedPackageById (TravelTourManagement.API)'
+2026-06-12 17:26:35.767 +05:30 [INF] Route matched with {action = "GetPublishedPackageById", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPublishedPackageById(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-12 17:26:35.824 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-12 17:26:35.862 +05:30 [INF] Executed DbCommand (31ms) [Parameters=[@__packageId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, t.id0, t0.id, t0.created_at, t0.day_number, t0.description, t0.location, t0.package_id, t0.title, t0.id0, t0.activity_title, t0.activity_type, t0.session, t0.description0, t0.duration_minutes, t0.extra_cost, t0.is_optional, t0.itinerary_day_id, t0.location0, t0.sequence_order, t0.id1, t0.description1, t0.is_included, t0.itinerary_day_id0, t0.meal, t0.venue, t0.id2, t0.amenities, t0.check_in_time, t0.check_out_time, t0.hotel_address, t0.hotel_name, t0.itinerary_day_id1, t0.notes, t0.room_type, t0.star_rating, t0.id3, t0.distance_km, t0.drop_point, t0.drop_time, t0.itinerary_day_id2, t0.notes0, t0.pickup_point, t0.pickup_time, t0.segment_order, t0.mode, t0.vehicle_description, p3.id, p3.display_order, p3.highlight_text, p3.package_id, p4.id, p4.description, p4.display_order, p4.package_id, p4.type, p5.id, p5.caption, p5.category, p5.display_order, p5.file_name, p5.file_path, p5.file_size_bytes, p5.is_primary, p5.mime_type, p5.package_id, p5.uploaded_at, p6.id, p6.available_slots, p6.base_price, p6.child_price, p6.discount_percent, p6.end_date, p6.is_active, p6.package_id, p6.season_name, p6.start_date, t.approved_at, t.approved_by, t.avg_rating0, t.business_license_no, t.company_name, t.contact_email, t.contact_phone, t.created_at0, t.deactivated_at, t.deactivation_reason, t.description0, t.total_reviews0, t.updated_at0, t.user_id, t.website_url, r.id, r.accommodation_rating, r.admin_note, r.booking_id, r.comment, r.created_at, r.food_rating, r.guide_rating, r.is_verified_traveler, r.overall_rating, r.package_id, r.packager_id, r.transport_rating, r.updated_at, r.user_id, r.value_rating
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at, p0.id AS id0, p0.approved_at, p0.approved_by, p0.avg_rating AS avg_rating0, p0.business_license_no, p0.company_name, p0.contact_email, p0.contact_phone, p0.created_at AS created_at0, p0.deactivated_at, p0.deactivation_reason, p0.description AS description0, p0.total_reviews AS total_reviews0, p0.updated_at AS updated_at0, p0.user_id, p0.website_url
+    FROM packages AS p
+    INNER JOIN packagers AS p0 ON p.packager_id = p0.id
+    WHERE p.id = @__packageId_0
+    LIMIT 1
+) AS t
+LEFT JOIN (
+    SELECT i.id, i.created_at, i.day_number, i.description, i.location, i.package_id, i.title, i0.id AS id0, i0.activity_title, i0.activity_type, i0.session, i0.description AS description0, i0.duration_minutes, i0.extra_cost, i0.is_optional, i0.itinerary_day_id, i0.location AS location0, i0.sequence_order, i1.id AS id1, i1.description AS description1, i1.is_included, i1.itinerary_day_id AS itinerary_day_id0, i1.meal, i1.venue, p1.id AS id2, p1.amenities, p1.check_in_time, p1.check_out_time, p1.hotel_address, p1.hotel_name, p1.itinerary_day_id AS itinerary_day_id1, p1.notes, p1.room_type, p1.star_rating, p2.id AS id3, p2.distance_km, p2.drop_point, p2.drop_time, p2.itinerary_day_id AS itinerary_day_id2, p2.notes AS notes0, p2.pickup_point, p2.pickup_time, p2.segment_order, p2.mode, p2.vehicle_description
+    FROM itinerary_days AS i
+    LEFT JOIN itinerary_activities AS i0 ON i.id = i0.itinerary_day_id
+    LEFT JOIN itinerary_day_meals AS i1 ON i.id = i1.itinerary_day_id
+    LEFT JOIN package_accommodation AS p1 ON i.id = p1.itinerary_day_id
+    LEFT JOIN package_transport AS p2 ON i.id = p2.itinerary_day_id
+) AS t0 ON t.id = t0.package_id
+LEFT JOIN package_highlights AS p3 ON t.id = p3.package_id
+LEFT JOIN package_inclusions AS p4 ON t.id = p4.package_id
+LEFT JOIN package_media AS p5 ON t.id = p5.package_id
+LEFT JOIN package_seasonal_pricing AS p6 ON t.id = p6.package_id
+LEFT JOIN reviews AS r ON t.id = r.package_id
+ORDER BY t.id, t.id0, t0.id, t0.id0, t0.id1, t0.id2, t0.id3, p3.id, p4.id, p5.id, p6.id
+2026-06-12 17:26:35.894 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Packages.PackageDetailResponse'.
+2026-06-12 17:26:35.896 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPublishedPackageById (TravelTourManagement.API) in 127.8485ms
+2026-06-12 17:26:35.896 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPublishedPackageById (TravelTourManagement.API)'
+2026-06-12 17:26:35.896 +05:30 [INF] HTTP GET /api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 responded 200 in 153.2009 ms
+2026-06-12 17:26:35.896 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 - 200 null application/json; charset=utf-8 159.231ms
+2026-06-12 17:32:58.701 +05:30 [INF] Executed endpoint '/hubs/chat'
+2026-06-12 17:32:58.701 +05:30 [INF] HTTP GET /hubs/chat responded 101 in 9027985.4654 ms
+2026-06-12 17:32:58.701 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/hubs/chat?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTBkNDE4OS1lN2YyLTRmNDgtOTc3ZS1jNGE2OTAzNWI1ZGEiLCJlbWFpbCI6ImtwbnRyYXZlbHNAZ21haWwuY29tIiwicm9sZSI6IlBhY2thZ2VyIiwiRW1haWxWZXJpZmllZCI6IlRydWUiLCJqdGkiOiIyYzc2MTQxYi0wM2NhLTQyYjMtYmFhZS1kYjhlNTcwY2Q4ZTAiLCJuYmYiOjE3ODEyNTQ1MjYsImV4cCI6MTc4MTI1ODEyNiwiaWF0IjoxNzgxMjU0NTI2LCJpc3MiOiJUcmF2ZWxUb3VyTWFuYWdlbWVudEFQSSIsImF1ZCI6IlRyYXZlbFRvdXJNYW5hZ2VtZW50VXNlcnMifQ.WhqdmXKkNR_cVFE4yCEM4Pg3nJKKOCQjoTM6Vzwm9fM - 101 null null 9027989.8209ms
+2026-06-12 17:32:58.811 +05:30 [INF] Executed endpoint '/hubs/chat'
+2026-06-12 17:32:58.812 +05:30 [INF] HTTP GET /hubs/chat responded 101 in 9021293.5844 ms
+2026-06-12 17:32:58.812 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/hubs/chat?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiMzdhNjNjMy1hNWU4LTQzMDUtOTViMC05MjZjM2ZhNjAzNTQiLCJlbWFpbCI6ImluaXlhbnN0YXJ6ekBnbWFpbC5jb20iLCJyb2xlIjoiVHJhdmVsZXIiLCJFbWFpbFZlcmlmaWVkIjoiVHJ1ZSIsImp0aSI6IjQ2MTYwM2QzLTUyOWYtNGNiMS04MmVjLWJkNTA1MjgzYWM2OSIsIm5iZiI6MTc4MTI1NDQ5NywiZXhwIjoxNzgxMjU4MDk3LCJpYXQiOjE3ODEyNTQ0OTcsImlzcyI6IlRyYXZlbFRvdXJNYW5hZ2VtZW50QVBJIiwiYXVkIjoiVHJhdmVsVG91ck1hbmFnZW1lbnRVc2VycyJ9._Q1HXmW8OHWE7aluGhwo06wpTwO7j3upYsM1IJdg984 - 101 null null 9021295.7225ms
+2026-06-12 17:32:58.814 +05:30 [INF] Executed endpoint '/hubs/notifications'
+2026-06-12 17:32:58.814 +05:30 [INF] HTTP GET /hubs/notifications responded 101 in 9071190.1381 ms
+2026-06-12 17:32:58.814 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/hubs/notifications?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiMzdhNjNjMy1hNWU4LTQzMDUtOTViMC05MjZjM2ZhNjAzNTQiLCJlbWFpbCI6ImluaXlhbnN0YXJ6ekBnbWFpbC5jb20iLCJyb2xlIjoiVHJhdmVsZXIiLCJFbWFpbFZlcmlmaWVkIjoiVHJ1ZSIsImp0aSI6IjQ2MTYwM2QzLTUyOWYtNGNiMS04MmVjLWJkNTA1MjgzYWM2OSIsIm5iZiI6MTc4MTI1NDQ5NywiZXhwIjoxNzgxMjU4MDk3LCJpYXQiOjE3ODEyNTQ0OTcsImlzcyI6IlRyYXZlbFRvdXJNYW5hZ2VtZW50QVBJIiwiYXVkIjoiVHJhdmVsVG91ck1hbmFnZW1lbnRVc2VycyJ9._Q1HXmW8OHWE7aluGhwo06wpTwO7j3upYsM1IJdg984 - 101 null null 9071193.5517ms

@@ -1,0 +1,22 @@
+<section>
+    <h1>Register</h1>
+    <form (submit)="handleRegisterClick()">
+        <div>
+            <label for="fullname">Full Name:</label>
+            <input type="text" id="fullname" [(ngModel)]="register().fullname" name="fullname" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" [(ngModel)]="register().email" name="email" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" [(ngModel)]="register().password" name="password" required>
+        </div>
+        <div>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" [(ngModel)]="register().phone" name="phone" required>
+        </div>
+        <button type="submit">Register</button>
+    </form>
+</section>

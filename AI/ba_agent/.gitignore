@@ -1,0 +1,4 @@
+.venv
+./credentials.json
+./processed_ids.json
+./token.json

@@ -296,7 +296,6 @@ public class AuthService : IAuthService
 
         await _userRepository.UpdateAsync(user, cancellationToken);
         
-        // Explicitly clean up any remaining OTPs and the Reset Token after a successful reset
         await _otpService.DeleteResetTokenAsync(request.Email);
         await _otpService.DeleteOtpAsync(request.Email);
     }

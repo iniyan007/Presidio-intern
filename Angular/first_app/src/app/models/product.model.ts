@@ -1,8 +1,13 @@
-export class ProductModel{
-    constructor(public title: string = "",public price: number = 0, public description: string = "", public imageUrl: string = ""){
-        this.title = title;
-        this.price = price;
-        this.description = description;
-        this.imageUrl = imageUrl;
+export class ProductModel {
+    constructor(
+        public title: string = "",
+        public description: string = "",
+        public price: number = 0,
+        public thumbnail: string = "",
+        public stock: number = 0,
+        public id: number = 0
+    ){
+       
     }
+
 }

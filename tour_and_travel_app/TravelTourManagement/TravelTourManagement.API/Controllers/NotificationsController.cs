@@ -19,10 +19,6 @@ public class NotificationsController : ControllerBase
     {
         _notificationService = notificationService;
     }
-
-    /// <summary>
-    /// Gets all recent notifications for the authenticated user.
-    /// </summary>
     [HttpGet]
     public async Task<IActionResult> GetMyNotifications([FromQuery] int limit = 50, CancellationToken cancellationToken = default)
     {
@@ -33,10 +29,6 @@ public class NotificationsController : ControllerBase
         var notifications = await _notificationService.GetUserNotificationsAsync(userId, limit, cancellationToken);
         return Ok(new { success = true, data = notifications });
     }
-
-    /// <summary>
-    /// Marks a specific notification as read.
-    /// </summary>
     [HttpPut("{id:guid}/read")]
     public async Task<IActionResult> MarkAsRead(Guid id, CancellationToken cancellationToken)
     {
@@ -51,9 +43,6 @@ public class NotificationsController : ControllerBase
         return Ok(new { success = true, message = "Notification marked as read." });
     }
 
-    /// <summary>
-    /// Marks all unread notifications as read.
-    /// </summary>
     [HttpPut("read-all")]
     public async Task<IActionResult> MarkAllAsRead(CancellationToken cancellationToken)
     {

@@ -84,7 +84,7 @@ public record CreatePackageInclusionRequest(
 );
 
 public record CreatePackageMediaRequest(
-    [Required] string FilePath,
+    string? FilePath,
     [Required] string FileName,
     string? Caption,
     int DisplayOrder,
