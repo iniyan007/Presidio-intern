@@ -57,128 +57,101 @@ FROM package_seasonal_pricing AS p
 2026-06-16 14:42:46.660 +05:30 [INF] Hosting environment: Development
 2026-06-16 14:42:46.660 +05:30 [INF] Content root path: /Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API
 2026-06-16 14:42:46.661 +05:30 [INF] Scheduler QuartzScheduler_$_NON_CLUSTERED started.
-2026-06-16 14:43:10.703 +05:30 [INF] Starting web application
-2026-06-16 14:43:10.997 +05:30 [INF] User profile is available. Using '/Users/iniyan/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
-2026-06-16 14:43:11.014 +05:30 [INF] Initialized Scheduler Signaller of type: Quartz.Core.SchedulerSignalerImpl
-2026-06-16 14:43:11.014 +05:30 [INF] Quartz Scheduler created
-2026-06-16 14:43:11.014 +05:30 [INF] JobFactory set to: Quartz.Simpl.MicrosoftDependencyInjectionJobFactory
-2026-06-16 14:43:11.014 +05:30 [INF] RAMJobStore initialized.
-2026-06-16 14:43:11.015 +05:30 [INF] Quartz Scheduler 3.18.1.0 - 'QuartzScheduler' with instanceId 'NON_CLUSTERED' initialized
-2026-06-16 14:43:11.015 +05:30 [INF] Using thread pool 'Quartz.Simpl.DefaultThreadPool', size: 10
-2026-06-16 14:43:11.015 +05:30 [INF] Using job store 'Quartz.Simpl.RAMJobStore', supports persistence: False, clustered: False
-2026-06-16 14:43:11.020 +05:30 [INF] Adding 2 jobs, 1 triggers.
-2026-06-16 14:43:11.021 +05:30 [INF] Adding job: DEFAULT.BookingTimeoutJob
-2026-06-16 14:43:11.022 +05:30 [INF] Adding job: DEFAULT.PackageCompletionJob
-2026-06-16 14:43:11.053 +05:30 [ERR] Hosting failed to start
-System.IO.IOException: Failed to bind to address http://127.0.0.1:5081: address already in use.
- ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
- ---> System.Net.Sockets.SocketException (48): Address already in use
-   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
-   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
-   --- End of inner exception stack trace ---
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
-   --- End of inner exception stack trace ---
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
-   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
-   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
-2026-06-16 14:43:11.058 +05:30 [FTL] Application terminated unexpectedly
-System.IO.IOException: Failed to bind to address http://127.0.0.1:5081: address already in use.
- ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
- ---> System.Net.Sockets.SocketException (48): Address already in use
-   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
-   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
-   --- End of inner exception stack trace ---
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
-   --- End of inner exception stack trace ---
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
-   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
-   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
-   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
-   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
-   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
-   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
-   at Program.<Main>$(String[] args) in /Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.API/Program.cs:line 228
-2026-06-16 14:43:30.264 +05:30 [INF] Starting web application
-2026-06-16 14:43:30.571 +05:30 [INF] User profile is available. Using '/Users/iniyan/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
-2026-06-16 14:43:30.588 +05:30 [INF] Initialized Scheduler Signaller of type: Quartz.Core.SchedulerSignalerImpl
-2026-06-16 14:43:30.589 +05:30 [INF] Quartz Scheduler created
-2026-06-16 14:43:30.589 +05:30 [INF] JobFactory set to: Quartz.Simpl.MicrosoftDependencyInjectionJobFactory
-2026-06-16 14:43:30.589 +05:30 [INF] RAMJobStore initialized.
-2026-06-16 14:43:30.589 +05:30 [INF] Quartz Scheduler 3.18.1.0 - 'QuartzScheduler' with instanceId 'NON_CLUSTERED' initialized
-2026-06-16 14:43:30.589 +05:30 [INF] Using thread pool 'Quartz.Simpl.DefaultThreadPool', size: 10
-2026-06-16 14:43:30.589 +05:30 [INF] Using job store 'Quartz.Simpl.RAMJobStore', supports persistence: False, clustered: False
-2026-06-16 14:43:30.595 +05:30 [INF] Adding 2 jobs, 1 triggers.
-2026-06-16 14:43:30.595 +05:30 [INF] Adding job: DEFAULT.BookingTimeoutJob
-2026-06-16 14:43:30.596 +05:30 [INF] Adding job: DEFAULT.PackageCompletionJob
-2026-06-16 14:43:30.626 +05:30 [ERR] Hosting failed to start
-System.IO.IOException: Failed to bind to address http://127.0.0.1:5081: address already in use.
- ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
- ---> System.Net.Sockets.SocketException (48): Address already in use
-   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
-   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
-   --- End of inner exception stack trace ---
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
-   --- End of inner exception stack trace ---
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
-   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
-   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
-2026-06-16 14:43:30.631 +05:30 [FTL] Application terminated unexpectedly
-System.IO.IOException: Failed to bind to address http://127.0.0.1:5081: address already in use.
- ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
- ---> System.Net.Sockets.SocketException (48): Address already in use
-   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
-   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
-   --- End of inner exception stack trace ---
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
-   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
-   --- End of inner exception stack trace ---
-   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
-   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+2026-06-16 15:00:17.439 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Auth/Login - application/json 73
+2026-06-16 15:00:17.475 +05:30 [WRN] Failed to determine the https port for redirect.
+2026-06-16 15:00:17.503 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-16 15:00:17.513 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TravelTourManagement.DataAccess.DTOs.Users.LoginRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.AuthController (TravelTourManagement.API).
+2026-06-16 15:00:18.038 +05:30 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-06-16 15:00:18.258 +05:30 [INF] Executed DbCommand (24ms) [Parameters=[@__email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, u.created_at, u.email, u.full_name, u.is_active, u.is_email_verified, u.last_login_at, u.password_hash, u.phone, u.profile_picture, u."RefreshToken", u."RefreshTokenExpiryTime", u.updated_at
+FROM users AS u
+WHERE u.email = @__email_0
+LIMIT 1
+2026-06-16 15:00:18.519 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM packagers AS p
+WHERE p.user_id = @__userId_0
+LIMIT 1
+2026-06-16 15:00:18.624 +05:30 [INF] Executed DbCommand (17ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p11='?' (DbType = Guid), @p10='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET last_login_at = @p10
+WHERE id = @p11;
+2026-06-16 15:00:18.652 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p22='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p11='?', @p12='?', @p13='?' (DbType = Boolean), @p14='?' (DbType = Boolean), @p15='?' (DbType = DateTime), @p16='?', @p17='?', @p18='?', @p19='?', @p20='?' (DbType = DateTime), @p21='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET created_at = @p10, email = @p11, full_name = @p12, is_active = @p13, is_email_verified = @p14, last_login_at = @p15, password_hash = @p16, phone = @p17, profile_picture = @p18, "RefreshToken" = @p19, "RefreshTokenExpiryTime" = @p20, updated_at = @p21
+WHERE id = @p22;
+2026-06-16 15:00:18.658 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Users.AuthResponse'.
+2026-06-16 15:00:18.668 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API) in 1152.8062ms
+2026-06-16 15:00:18.668 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-16 15:00:18.669 +05:30 [INF] HTTP POST /api/Auth/Login responded 200 in 1194.7887 ms
+2026-06-16 15:00:18.673 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Auth/Login - 200 null application/json; charset=utf-8 1233.9837ms
+2026-06-16 15:00:34.915 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Auth/Login - application/json 61
+2026-06-16 15:00:34.923 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-16 15:00:34.924 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TravelTourManagement.DataAccess.DTOs.Users.LoginRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.AuthController (TravelTourManagement.API).
+2026-06-16 15:00:34.955 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, u.created_at, u.email, u.full_name, u.is_active, u.is_email_verified, u.last_login_at, u.password_hash, u.phone, u.profile_picture, u."RefreshToken", u."RefreshTokenExpiryTime", u.updated_at
+FROM users AS u
+WHERE u.email = @__email_0
+LIMIT 1
+2026-06-16 15:00:35.170 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p11='?' (DbType = Guid), @p10='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET last_login_at = @p10
+WHERE id = @p11;
+2026-06-16 15:00:35.173 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p22='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p11='?', @p12='?', @p13='?' (DbType = Boolean), @p14='?' (DbType = Boolean), @p15='?' (DbType = DateTime), @p16='?', @p17='?', @p18='?', @p19='?', @p20='?' (DbType = DateTime), @p21='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET created_at = @p10, email = @p11, full_name = @p12, is_active = @p13, is_email_verified = @p14, last_login_at = @p15, password_hash = @p16, phone = @p17, profile_picture = @p18, "RefreshToken" = @p19, "RefreshTokenExpiryTime" = @p20, updated_at = @p21
+WHERE id = @p22;
+2026-06-16 15:00:35.174 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Users.AuthResponse'.
+2026-06-16 15:00:35.175 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API) in 250.7546ms
+2026-06-16 15:00:35.175 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-16 15:00:35.175 +05:30 [INF] HTTP POST /api/Auth/Login responded 200 in 253.4773 ms
+2026-06-16 15:00:35.175 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Auth/Login - 200 null application/json; charset=utf-8 260.3609ms
+2026-06-16 15:00:49.616 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5081/api/Auth/Login - application/json 66
+2026-06-16 15:00:49.622 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-16 15:00:49.622 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TravelTourManagement.DataAccess.DTOs.Users.LoginRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.AuthController (TravelTourManagement.API).
+2026-06-16 15:00:49.642 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, u.created_at, u.email, u.full_name, u.is_active, u.is_email_verified, u.last_login_at, u.password_hash, u.phone, u.profile_picture, u."RefreshToken", u."RefreshTokenExpiryTime", u.updated_at
+FROM users AS u
+WHERE u.email = @__email_0
+LIMIT 1
+2026-06-16 15:00:49.778 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM packagers AS p
+WHERE p.user_id = @__userId_0
+LIMIT 1
+2026-06-16 15:00:49.781 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p11='?' (DbType = Guid), @p10='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET last_login_at = @p10
+WHERE id = @p11;
+2026-06-16 15:00:49.783 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p22='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p11='?', @p12='?', @p13='?' (DbType = Boolean), @p14='?' (DbType = Boolean), @p15='?' (DbType = DateTime), @p16='?', @p17='?', @p18='?', @p19='?', @p20='?' (DbType = DateTime), @p21='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET created_at = @p10, email = @p11, full_name = @p12, is_active = @p13, is_email_verified = @p14, last_login_at = @p15, password_hash = @p16, phone = @p17, profile_picture = @p18, "RefreshToken" = @p19, "RefreshTokenExpiryTime" = @p20, updated_at = @p21
+WHERE id = @p22;
+2026-06-16 15:00:49.784 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Users.AuthResponse'.
+2026-06-16 15:00:49.784 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API) in 161.9444ms
+2026-06-16 15:00:49.784 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
+2026-06-16 15:00:49.784 +05:30 [INF] HTTP POST /api/Auth/Login responded 200 in 166.5655 ms
+2026-06-16 15:00:49.784 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5081/api/Auth/Login - 200 null application/json; charset=utf-8 168.6385ms
+2026-06-16 15:01:08.503 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5081/api/Admin/packagers/pending - null null
+2026-06-16 15:01:08.542 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.AdminController.GetPendingPackagers (TravelTourManagement.API)'
+2026-06-16 15:01:08.545 +05:30 [INF] Route matched with {action = "GetPendingPackagers", controller = "Admin"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPendingPackagers(System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.AdminController (TravelTourManagement.API).
+2026-06-16 15:01:08.559 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM packagers AS p
+WHERE p.approved_at IS NULL AND p.deactivated_at IS NULL
+ORDER BY p.created_at
+2026-06-16 15:01:08.563 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[TravelTourManagement.DataAccess.DTOs.Packagers.PackagerResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:01:08.568 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.AdminController.GetPendingPackagers (TravelTourManagement.API) in 23.0751ms
+2026-06-16 15:01:08.568 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.AdminController.GetPendingPackagers (TravelTourManagement.API)'
+2026-06-16 15:01:08.568 +05:30 [INF] HTTP GET /api/Admin/packagers/pending responded 200 in 56.9105 ms
+2026-06-16 15:01:08.568 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5081/api/Admin/packagers/pending - 200 null application/json; charset=utf-8 65.1421ms
+ions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
    at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
    at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
    at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
@@ -309,3 +282,757 @@ WHERE id = @p22;
 2026-06-16 14:49:46.803 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.AuthController.Login (TravelTourManagement.API)'
 2026-06-16 14:49:46.803 +05:30 [INF] HTTP POST /api/Auth/login responded 200 in 199.6941 ms
 2026-06-16 14:49:46.803 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5082/api/Auth/login - 200 null application/json; charset=utf-8 200.0279ms
+2026-06-16 15:05:44.782 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages - null null
+2026-06-16 15:05:44.796 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:05:44.799 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:05:44.838 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:05:45.040 +05:30 [INF] Executed DbCommand (14ms) [Parameters=[@__today_0='?' (DbType = Date)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+2026-06-16 15:05:45.072 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-16 15:05:45.083 +05:30 [INF] Executed DbCommand (7ms) [Parameters=[@__today_0='?' (DbType = Date), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+    ORDER BY p.created_at DESC
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-16 15:05:45.144 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:05:45.145 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 307.0573ms
+2026-06-16 15:05:45.145 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:05:45.145 +05:30 [INF] HTTP GET /api/Packages responded 200 in 350.0092 ms
+2026-06-16 15:05:45.145 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages - 200 null application/json; charset=utf-8 367.6846ms
+2026-06-16 15:05:48.749 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages - null null
+2026-06-16 15:05:48.752 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:05:48.753 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:05:48.753 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:05:48.811 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:05:48.812 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 59.7475ms
+2026-06-16 15:05:48.813 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:05:48.813 +05:30 [INF] HTTP GET /api/Packages responded 200 in 60.8542 ms
+2026-06-16 15:05:48.813 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages - 200 null application/json; charset=utf-8 63.9993ms
+2026-06-16 15:06:25.433 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages - null null
+2026-06-16 15:06:25.436 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:06:25.437 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:06:25.445 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:06:25.446 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 8.9051ms
+2026-06-16 15:06:25.446 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:06:25.446 +05:30 [INF] HTTP GET /api/Packages responded 200 in 10.7735 ms
+2026-06-16 15:06:25.446 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages - 200 null application/json; charset=utf-8 12.7321ms
+2026-06-16 15:06:41.768 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages - null null
+2026-06-16 15:06:41.772 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:06:41.774 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:06:41.779 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:06:41.785 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:06:41.786 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 5.9613ms
+2026-06-16 15:06:41.786 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:06:41.787 +05:30 [INF] HTTP GET /api/Packages responded 200 in 15.3724 ms
+2026-06-16 15:06:41.789 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages - 200 null application/json; charset=utf-8 20.7343ms
+2026-06-16 15:06:41.809 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - null null
+2026-06-16 15:06:41.813 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:06:41.817 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:06:41.819 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.3345 ms
+2026-06-16 15:06:41.819 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 2.1738ms
+2026-06-16 15:06:41.820 +05:30 [INF] Route matched with {action = "GetPackageMedia", controller = "Packages"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetPackageMedia(System.String) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:06:41.820 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:06:41.824 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-16 15:06:41.895 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API) in 74.3016ms
+2026-06-16 15:06:41.895 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:06:41.895 +05:30 [INF] HTTP GET /api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg responded 200 in 82.6825 ms
+2026-06-16 15:06:41.895 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - 200 6573821 image/jpeg 86.4199ms
+2026-06-16 15:07:52.581 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages - null null
+2026-06-16 15:07:52.592 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:07:52.600 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:07:52.602 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:07:52.628 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__today_0='?' (DbType = Date)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+2026-06-16 15:07:52.631 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+    ORDER BY p.created_at DESC
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-16 15:07:52.636 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:07:52.636 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 34.3576ms
+2026-06-16 15:07:52.637 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:07:52.637 +05:30 [INF] HTTP GET /api/Packages responded 200 in 46.3788 ms
+2026-06-16 15:07:52.637 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages - 200 null application/json; charset=utf-8 56.4033ms
+2026-06-16 15:07:52.644 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - null null
+2026-06-16 15:07:52.647 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:07:52.650 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 2.1421 ms
+2026-06-16 15:07:52.651 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 2.9257ms
+2026-06-16 15:07:52.651 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:07:52.651 +05:30 [INF] Route matched with {action = "GetPackageMedia", controller = "Packages"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetPackageMedia(System.String) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:07:52.652 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:07:52.655 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-16 15:07:52.701 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API) in 49.8637ms
+2026-06-16 15:07:52.701 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:07:52.701 +05:30 [INF] HTTP GET /api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg responded 200 in 50.4721 ms
+2026-06-16 15:07:52.701 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - 200 6573821 image/jpeg 56.634ms
+2026-06-16 15:11:32.669 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages - null null
+2026-06-16 15:11:32.673 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:11:32.674 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:11:32.675 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:11:32.710 +05:30 [INF] Executed DbCommand (10ms) [Parameters=[@__today_0='?' (DbType = Date)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+2026-06-16 15:11:32.723 +05:30 [INF] Executed DbCommand (8ms) [Parameters=[@__today_0='?' (DbType = Date), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+    ORDER BY p.created_at DESC
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-16 15:11:32.727 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:11:32.728 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 51.889ms
+2026-06-16 15:11:32.728 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:11:32.728 +05:30 [INF] HTTP GET /api/Packages responded 200 in 55.7741 ms
+2026-06-16 15:11:32.728 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages - 200 null application/json; charset=utf-8 59.0907ms
+2026-06-16 15:11:32.733 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - null null
+2026-06-16 15:11:32.734 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:11:32.734 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:11:32.734 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.0586 ms
+2026-06-16 15:11:32.734 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.2687ms
+2026-06-16 15:11:32.734 +05:30 [INF] Route matched with {action = "GetPackageMedia", controller = "Packages"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetPackageMedia(System.String) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:11:32.734 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:11:32.735 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-16 15:11:32.769 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API) in 34.6894ms
+2026-06-16 15:11:32.769 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:11:32.769 +05:30 [INF] HTTP GET /api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg responded 200 in 35.0600 ms
+2026-06-16 15:11:32.769 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - 200 6573821 image/jpeg 35.345ms
+2026-06-16 15:11:41.801 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages - null null
+2026-06-16 15:11:41.802 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:11:41.802 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:11:41.802 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:11:41.806 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:11:41.807 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 4.2491ms
+2026-06-16 15:11:41.807 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:11:41.807 +05:30 [INF] HTTP GET /api/Packages responded 200 in 4.7831 ms
+2026-06-16 15:11:41.807 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages - 200 null application/json; charset=utf-8 5.3568ms
+2026-06-16 15:11:41.815 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:11:41.815 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - null null
+2026-06-16 15:11:41.816 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.1649 ms
+2026-06-16 15:11:41.816 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:11:41.816 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 1.5159ms
+2026-06-16 15:11:41.818 +05:30 [INF] Route matched with {action = "GetPackageMedia", controller = "Packages"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetPackageMedia(System.String) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:11:41.818 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:11:41.823 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-16 15:11:41.950 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API) in 132.1277ms
+2026-06-16 15:11:41.950 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:11:41.950 +05:30 [INF] HTTP GET /api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg responded 200 in 134.7889 ms
+2026-06-16 15:11:41.950 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - 200 6573821 image/jpeg 135.605ms
+2026-06-16 15:12:12.284 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:12:12.286 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.7326 ms
+2026-06-16 15:12:12.286 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 2.1417ms
+2026-06-16 15:12:12.286 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:13:00.083 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Group - null null
+2026-06-16 15:13:00.091 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:00.101 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:00.102 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:00.173 +05:30 [INF] Executed DbCommand (7ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+2026-06-16 15:13:00.181 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-16 15:13:00.192 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object), @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+    ORDER BY p.created_at DESC
+    LIMIT @__p_3 OFFSET @__p_2
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-16 15:13:00.194 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:00.195 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 92.5576ms
+2026-06-16 15:13:00.195 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:00.195 +05:30 [INF] HTTP GET /api/Packages responded 200 in 104.7003 ms
+2026-06-16 15:13:00.195 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Group - 200 null application/json; charset=utf-8 112.4535ms
+2026-06-16 15:13:02.369 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Honeymoon - null null
+2026-06-16 15:13:02.370 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:02.370 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:02.371 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:02.378 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+2026-06-16 15:13:02.381 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object), @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+    ORDER BY p.created_at DESC
+    LIMIT @__p_3 OFFSET @__p_2
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-16 15:13:02.385 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:02.386 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 14.8475ms
+2026-06-16 15:13:02.386 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:02.386 +05:30 [INF] HTTP GET /api/Packages responded 200 in 16.1382 ms
+2026-06-16 15:13:02.386 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Honeymoon - 200 null application/json; charset=utf-8 16.7312ms
+2026-06-16 15:13:02.392 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - null null
+2026-06-16 15:13:02.393 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:13:02.393 +05:30 [INF] Route matched with {action = "GetPackageMedia", controller = "Packages"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetPackageMedia(System.String) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:02.395 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-16 15:13:02.450 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API) in 56.5865ms
+2026-06-16 15:13:02.450 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:13:02.450 +05:30 [INF] HTTP GET /api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg responded 200 in 57.4645 ms
+2026-06-16 15:13:02.450 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - 200 6573821 image/jpeg 58.392ms
+2026-06-16 15:13:03.685 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Family - null null
+2026-06-16 15:13:03.685 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:03.685 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:03.686 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:03.694 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+2026-06-16 15:13:03.697 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object), @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+    ORDER BY p.created_at DESC
+    LIMIT @__p_3 OFFSET @__p_2
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-16 15:13:03.700 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:03.700 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 14.1867ms
+2026-06-16 15:13:03.700 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:03.700 +05:30 [INF] HTTP GET /api/Packages responded 200 in 15.4756 ms
+2026-06-16 15:13:03.701 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Family - 200 null application/json; charset=utf-8 15.9947ms
+2026-06-16 15:13:04.744 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Adventure - null null
+2026-06-16 15:13:04.745 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:04.745 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:04.746 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:04.751 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+2026-06-16 15:13:04.756 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object), @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+    ORDER BY p.created_at DESC
+    LIMIT @__p_3 OFFSET @__p_2
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-16 15:13:04.759 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:04.759 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 13.3199ms
+2026-06-16 15:13:04.759 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:04.759 +05:30 [INF] HTTP GET /api/Packages responded 200 in 14.7113 ms
+2026-06-16 15:13:04.760 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Adventure - 200 null application/json; charset=utf-8 15.6611ms
+2026-06-16 15:13:04.766 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:13:04.767 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.3080 ms
+2026-06-16 15:13:04.767 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 1.4016ms
+2026-06-16 15:13:04.768 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:13:07.306 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Family - null null
+2026-06-16 15:13:07.306 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:07.307 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:07.307 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:07.311 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:07.313 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 6.2692ms
+2026-06-16 15:13:07.314 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:07.314 +05:30 [INF] HTTP GET /api/Packages responded 200 in 7.8187 ms
+2026-06-16 15:13:07.314 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Family - 200 null application/json; charset=utf-8 8.7274ms
+2026-06-16 15:13:08.588 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Group - null null
+2026-06-16 15:13:08.588 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:08.589 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:08.589 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:08.594 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:08.594 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 5.0732ms
+2026-06-16 15:13:08.594 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:08.594 +05:30 [INF] HTTP GET /api/Packages responded 200 in 6.3821 ms
+2026-06-16 15:13:08.595 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Group - 200 null application/json; charset=utf-8 7.146ms
+2026-06-16 15:13:11.182 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages - null null
+2026-06-16 15:13:11.184 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:11.185 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:11.185 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:11.187 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:11.187 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 2.5222ms
+2026-06-16 15:13:11.187 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:11.188 +05:30 [INF] HTTP GET /api/Packages responded 200 in 3.5402 ms
+2026-06-16 15:13:11.188 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages - 200 null application/json; charset=utf-8 5.4577ms
+2026-06-16 15:13:11.193 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:13:11.194 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.2160 ms
+2026-06-16 15:13:11.194 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.646ms
+2026-06-16 15:13:11.194 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:13:14.163 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Group - null null
+2026-06-16 15:13:14.164 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:14.164 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:14.164 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:14.167 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:14.168 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 3.1659ms
+2026-06-16 15:13:14.168 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:14.168 +05:30 [INF] HTTP GET /api/Packages responded 200 in 4.3164 ms
+2026-06-16 15:13:14.169 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Group - 200 null application/json; charset=utf-8 5.3824ms
+2026-06-16 15:13:15.147 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Pilgrimage - null null
+2026-06-16 15:13:15.148 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:15.149 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:15.149 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:15.155 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+2026-06-16 15:13:15.160 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__today_0='?' (DbType = Date), @__parsedType_1='?' (DbType = Object), @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND p.package_type = @__parsedType_1
+    ORDER BY p.created_at DESC
+    LIMIT @__p_3 OFFSET @__p_2
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-16 15:13:15.164 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:15.164 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 14.9688ms
+2026-06-16 15:13:15.165 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:15.165 +05:30 [INF] HTTP GET /api/Packages responded 200 in 16.7648 ms
+2026-06-16 15:13:15.165 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Pilgrimage - 200 null application/json; charset=utf-8 17.3586ms
+2026-06-16 15:13:15.787 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Honeymoon - null null
+2026-06-16 15:13:15.787 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:15.787 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:15.787 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:15.791 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:15.792 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 4.399ms
+2026-06-16 15:13:15.792 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:15.792 +05:30 [INF] HTTP GET /api/Packages responded 200 in 5.1421 ms
+2026-06-16 15:13:15.792 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Honeymoon - 200 null application/json; charset=utf-8 5.6023ms
+2026-06-16 15:13:16.426 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Family - null null
+2026-06-16 15:13:16.426 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:16.426 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:16.427 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:16.431 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:16.432 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 4.6629ms
+2026-06-16 15:13:16.432 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:16.432 +05:30 [INF] HTTP GET /api/Packages responded 200 in 6.0738 ms
+2026-06-16 15:13:16.432 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Family - 200 null application/json; charset=utf-8 6.6817ms
+2026-06-16 15:13:17.018 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Adventure - null null
+2026-06-16 15:13:17.018 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:17.019 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:17.019 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:17.022 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:17.022 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 3.1795ms
+2026-06-16 15:13:17.023 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:17.023 +05:30 [INF] HTTP GET /api/Packages responded 200 in 4.2764 ms
+2026-06-16 15:13:17.023 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Adventure - 200 null application/json; charset=utf-8 4.7336ms
+2026-06-16 15:13:17.028 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:13:17.028 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.1612 ms
+2026-06-16 15:13:17.029 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.8448ms
+2026-06-16 15:13:17.029 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:13:17.567 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Group - null null
+2026-06-16 15:13:17.568 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:17.568 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:17.568 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:17.572 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:17.573 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 4.2086ms
+2026-06-16 15:13:17.573 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:17.573 +05:30 [INF] HTTP GET /api/Packages responded 200 in 5.8115 ms
+2026-06-16 15:13:17.574 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?PackageType=Group - 200 null application/json; charset=utf-8 6.6667ms
+2026-06-16 15:13:18.426 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages - null null
+2026-06-16 15:13:18.427 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:18.427 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:18.427 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:18.432 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:18.432 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 4.8128ms
+2026-06-16 15:13:18.432 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:18.432 +05:30 [INF] HTTP GET /api/Packages responded 200 in 5.9443 ms
+2026-06-16 15:13:18.432 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages - 200 null application/json; charset=utf-8 6.4892ms
+2026-06-16 15:13:18.440 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:13:18.440 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.1420 ms
+2026-06-16 15:13:18.440 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.4521ms
+2026-06-16 15:13:18.440 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:13:25.544 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?SearchTerm=Bali - null null
+2026-06-16 15:13:25.545 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:13:25.547 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:25.548 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:13:25.574 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[@__today_0='?' (DbType = Date), @__lowerTerm_1_contains='?', @__lowerTerm_1_contains_1='?', @__lowerTerm_1_contains_2='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND (lower(p.title) LIKE @__lowerTerm_1_contains OR lower(p.destination) LIKE @__lowerTerm_1_contains_1 OR lower(p.country) LIKE @__lowerTerm_1_contains_2 OR (p.city IS NOT NULL AND lower(p.city) LIKE @__lowerTerm_1_contains_2))
+2026-06-16 15:13:25.585 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-16 15:13:25.594 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date), @__lowerTerm_1_contains='?', @__lowerTerm_1_contains_1='?', @__lowerTerm_1_contains_2='?', @__p_3='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0) AND (lower(p.title) LIKE @__lowerTerm_1_contains OR lower(p.destination) LIKE @__lowerTerm_1_contains_1 OR lower(p.country) LIKE @__lowerTerm_1_contains_2 OR (p.city IS NOT NULL AND lower(p.city) LIKE @__lowerTerm_1_contains_2))
+    ORDER BY p.created_at DESC
+    LIMIT @__p_3 OFFSET @__p_2
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-16 15:13:25.595 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:13:25.595 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 43.6207ms
+2026-06-16 15:13:25.595 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:13:25.595 +05:30 [INF] HTTP GET /api/Packages responded 200 in 49.7178 ms
+2026-06-16 15:13:25.595 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?SearchTerm=Bali - 200 null application/json; charset=utf-8 50.846ms
+2026-06-16 15:15:04.906 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages - null null
+2026-06-16 15:15:04.910 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:15:04.911 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:15:04.912 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:15:04.925 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__today_0='?' (DbType = Date)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+2026-06-16 15:15:04.941 +05:30 [INF] Executed DbCommand (14ms) [Parameters=[@__today_0='?' (DbType = Date), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+    ORDER BY p.created_at DESC
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.created_at DESC, t.id, p1.id, p2.id
+2026-06-16 15:15:04.944 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:15:04.945 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 32.8155ms
+2026-06-16 15:15:04.945 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:15:04.945 +05:30 [INF] HTTP GET /api/Packages responded 200 in 36.2064 ms
+2026-06-16 15:15:04.945 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages - 200 null application/json; charset=utf-8 39.6143ms
+2026-06-16 15:15:04.958 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - null null
+2026-06-16 15:15:04.959 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:15:04.959 +05:30 [INF] Route matched with {action = "GetPackageMedia", controller = "Packages"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetPackageMedia(System.String) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:15:04.959 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:15:04.960 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.1901 ms
+2026-06-16 15:15:04.960 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.7191ms
+2026-06-16 15:15:04.961 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:15:04.962 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-16 15:15:04.995 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API) in 36.3123ms
+2026-06-16 15:15:04.996 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:15:04.996 +05:30 [INF] HTTP GET /api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg responded 200 in 37.5800 ms
+2026-06-16 15:15:04.996 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - 200 6573821 image/jpeg 38.2705ms
+2026-06-16 15:15:08.230 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages - null null
+2026-06-16 15:15:08.230 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:15:08.230 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:15:08.231 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:15:08.233 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:15:08.234 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 3.0102ms
+2026-06-16 15:15:08.234 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:15:08.234 +05:30 [INF] HTTP GET /api/Packages responded 200 in 3.9613 ms
+2026-06-16 15:15:08.234 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages - 200 null application/json; charset=utf-8 4.2891ms
+2026-06-16 15:15:08.240 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - null null
+2026-06-16 15:15:08.240 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:15:08.241 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:15:08.241 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.0315 ms
+2026-06-16 15:15:08.241 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.9466ms
+2026-06-16 15:15:08.241 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:15:08.242 +05:30 [INF] Route matched with {action = "GetPackageMedia", controller = "Packages"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetPackageMedia(System.String) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:15:08.246 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-16 15:15:08.295 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API) in 52.943ms
+2026-06-16 15:15:08.295 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:15:08.295 +05:30 [INF] HTTP GET /api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg responded 200 in 54.4380 ms
+2026-06-16 15:15:08.295 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - 200 6573821 image/jpeg 55.0607ms
+2026-06-16 15:15:16.488 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages - null null
+2026-06-16 15:15:16.490 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:15:16.490 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:15:16.491 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:15:16.498 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:15:16.498 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 7.4531ms
+2026-06-16 15:15:16.498 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:15:16.498 +05:30 [INF] HTTP GET /api/Packages responded 200 in 8.9197 ms
+2026-06-16 15:15:16.499 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages - 200 null application/json; charset=utf-8 10.2248ms
+2026-06-16 15:15:16.502 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:15:16.502 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - null null
+2026-06-16 15:15:16.502 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:15:16.502 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.2425 ms
+2026-06-16 15:15:16.502 +05:30 [INF] Route matched with {action = "GetPackageMedia", controller = "Packages"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetPackageMedia(System.String) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:15:16.502 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.7829ms
+2026-06-16 15:15:16.502 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:15:16.503 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-16 15:15:16.535 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API) in 32.7375ms
+2026-06-16 15:15:16.535 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:15:16.535 +05:30 [INF] HTTP GET /api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg responded 200 in 33.3598 ms
+2026-06-16 15:15:16.535 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - 200 6573821 image/jpeg 33.6895ms
+2026-06-16 15:15:32.289 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:15:32.289 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.1597 ms
+2026-06-16 15:15:32.289 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.5972ms
+2026-06-16 15:15:32.289 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:16:17.430 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?SortBy=PriceAsc - null null
+2026-06-16 15:16:17.433 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:16:17.434 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:16:17.435 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:16:17.464 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__today_0='?' (DbType = Date)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+2026-06-16 15:16:17.478 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-16 15:16:17.493 +05:30 [INF] Executed DbCommand (9ms) [Parameters=[@__today_0='?' (DbType = Date), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p2.id, p3.id, p3.caption, p3.category, p3.display_order, p3.file_name, p3.file_path, p3.file_size_bytes, p3.is_primary, p3.mime_type, p3.package_id, p3.uploaded_at, p4.id, p4.available_slots, p4.base_price, p4.child_price, p4.discount_percent, p4.end_date, p4.is_active, p4.package_id, p4.season_name, p4.start_date, p2.approved_at, p2.approved_by, p2.avg_rating, p2.business_license_no, p2.company_name, p2.contact_email, p2.contact_phone, p2.created_at, p2.deactivated_at, p2.deactivation_reason, p2.description, p2.total_reviews, p2.updated_at, p2.user_id, p2.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at, (
+        SELECT min(p1.base_price)
+        FROM package_seasonal_pricing AS p1
+        WHERE p.id = p1.package_id AND p1.is_active) AS c
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+    ORDER BY (
+        SELECT min(p1.base_price)
+        FROM package_seasonal_pricing AS p1
+        WHERE p.id = p1.package_id AND p1.is_active)
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+INNER JOIN packagers AS p2 ON t.packager_id = p2.id
+LEFT JOIN package_media AS p3 ON t.id = p3.package_id
+LEFT JOIN package_seasonal_pricing AS p4 ON t.id = p4.package_id
+ORDER BY t.c, t.id, p2.id, p3.id
+2026-06-16 15:16:17.497 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:16:17.497 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 61.6899ms
+2026-06-16 15:16:17.497 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:16:17.497 +05:30 [INF] HTTP GET /api/Packages responded 200 in 65.2930 ms
+2026-06-16 15:16:17.497 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?SortBy=PriceAsc - 200 null application/json; charset=utf-8 67.1572ms
+2026-06-16 15:16:17.501 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:16:17.502 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.1675 ms
+2026-06-16 15:16:17.502 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.5799ms
+2026-06-16 15:16:17.502 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:16:19.249 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?SortBy=DurationAsc - null null
+2026-06-16 15:16:19.249 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:16:19.250 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:16:19.250 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:16:19.261 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__today_0='?' (DbType = Date)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+2026-06-16 15:16:19.276 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-16 15:16:19.285 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__today_0='?' (DbType = Date), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+    ORDER BY p.duration_days
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.duration_days, t.id, p1.id, p2.id
+2026-06-16 15:16:19.287 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:16:19.287 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 36.6277ms
+2026-06-16 15:16:19.287 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:16:19.287 +05:30 [INF] HTTP GET /api/Packages responded 200 in 38.0075 ms
+2026-06-16 15:16:19.287 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?SortBy=DurationAsc - 200 null application/json; charset=utf-8 38.5158ms
+2026-06-16 15:16:19.294 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:16:19.295 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.1499 ms
+2026-06-16 15:16:19.295 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.5462ms
+2026-06-16 15:16:19.295 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:16:21.949 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?SortBy=DurationDesc - null null
+2026-06-16 15:16:21.949 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:16:21.949 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:16:21.949 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:16:21.958 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__today_0='?' (DbType = Date)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+2026-06-16 15:16:21.971 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-16 15:16:21.980 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__today_0='?' (DbType = Date), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p1.id, p2.id, p2.caption, p2.category, p2.display_order, p2.file_name, p2.file_path, p2.file_size_bytes, p2.is_primary, p2.mime_type, p2.package_id, p2.uploaded_at, p3.id, p3.available_slots, p3.base_price, p3.child_price, p3.discount_percent, p3.end_date, p3.is_active, p3.package_id, p3.season_name, p3.start_date, p1.approved_at, p1.approved_by, p1.avg_rating, p1.business_license_no, p1.company_name, p1.contact_email, p1.contact_phone, p1.created_at, p1.deactivated_at, p1.deactivation_reason, p1.description, p1.total_reviews, p1.updated_at, p1.user_id, p1.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+    ORDER BY p.duration_days DESC
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+INNER JOIN packagers AS p1 ON t.packager_id = p1.id
+LEFT JOIN package_media AS p2 ON t.id = p2.package_id
+LEFT JOIN package_seasonal_pricing AS p3 ON t.id = p3.package_id
+ORDER BY t.duration_days DESC, t.id, p1.id, p2.id
+2026-06-16 15:16:21.981 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:16:21.981 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 32.1535ms
+2026-06-16 15:16:21.981 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:16:21.981 +05:30 [INF] HTTP GET /api/Packages responded 200 in 32.5915 ms
+2026-06-16 15:16:21.981 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?SortBy=DurationDesc - 200 null application/json; charset=utf-8 32.8274ms
+2026-06-16 15:16:21.986 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:16:21.986 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.1321 ms
+2026-06-16 15:16:21.987 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.4068ms
+2026-06-16 15:16:21.987 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:16:23.614 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?SortBy=PriceAsc - null null
+2026-06-16 15:16:23.615 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:16:23.615 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:16:23.615 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:16:23.665 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:16:23.665 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 49.6437ms
+2026-06-16 15:16:23.665 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:16:23.665 +05:30 [INF] HTTP GET /api/Packages responded 200 in 50.3962 ms
+2026-06-16 15:16:23.665 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?SortBy=PriceAsc - 200 null application/json; charset=utf-8 51.1925ms
+2026-06-16 15:16:23.676 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:16:23.677 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.3002 ms
+2026-06-16 15:16:23.677 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.9686ms
+2026-06-16 15:16:23.677 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:16:27.358 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages?SortBy=PriceDesc - null null
+2026-06-16 15:16:27.358 +05:30 [INF] CORS policy execution successful.
+2026-06-16 15:16:27.359 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:16:27.359 +05:30 [INF] Route matched with {action = "SearchPackages", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SearchPackages(TravelTourManagement.DataAccess.DTOs.Packages.PackageSearchRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:16:27.369 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__today_0='?' (DbType = Date)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM packages AS p
+WHERE p.status = 'published'::package_status AND EXISTS (
+    SELECT 1
+    FROM package_seasonal_pricing AS p0
+    WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+2026-06-16 15:16:27.380 +05:30 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-16 15:16:27.390 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__today_0='?' (DbType = Date), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, p2.id, p3.id, p3.caption, p3.category, p3.display_order, p3.file_name, p3.file_path, p3.file_size_bytes, p3.is_primary, p3.mime_type, p3.package_id, p3.uploaded_at, p4.id, p4.available_slots, p4.base_price, p4.child_price, p4.discount_percent, p4.end_date, p4.is_active, p4.package_id, p4.season_name, p4.start_date, p2.approved_at, p2.approved_by, p2.avg_rating, p2.business_license_no, p2.company_name, p2.contact_email, p2.contact_phone, p2.created_at, p2.deactivated_at, p2.deactivation_reason, p2.description, p2.total_reviews, p2.updated_at, p2.user_id, p2.website_url
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at, (
+        SELECT min(p1.base_price)
+        FROM package_seasonal_pricing AS p1
+        WHERE p.id = p1.package_id AND p1.is_active) AS c
+    FROM packages AS p
+    WHERE p.status = 'published'::package_status AND EXISTS (
+        SELECT 1
+        FROM package_seasonal_pricing AS p0
+        WHERE p.id = p0.package_id AND p0.is_active AND p0.end_date >= @__today_0)
+    ORDER BY (
+        SELECT min(p1.base_price)
+        FROM package_seasonal_pricing AS p1
+        WHERE p.id = p1.package_id AND p1.is_active) DESC
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+INNER JOIN packagers AS p2 ON t.packager_id = p2.id
+LEFT JOIN package_media AS p3 ON t.id = p3.package_id
+LEFT JOIN package_seasonal_pricing AS p4 ON t.id = p4.package_id
+ORDER BY t.c DESC, t.id, p2.id, p3.id
+2026-06-16 15:16:27.392 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PagedResponse`1[[TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse, TravelTourManagement.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-16 15:16:27.392 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API) in 33.5417ms
+2026-06-16 15:16:27.392 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.SearchPackages (TravelTourManagement.API)'
+2026-06-16 15:16:27.392 +05:30 [INF] HTTP GET /api/Packages responded 200 in 34.1138 ms
+2026-06-16 15:16:27.393 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages?SortBy=PriceDesc - 200 null application/json; charset=utf-8 35.0664ms
+2026-06-16 15:16:27.398 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - null null
+2026-06-16 15:16:27.398 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - null null
+2026-06-16 15:16:27.398 +05:30 [INF] HTTP GET /uploads/packages/kerala-cover.jpg responded 404 in 0.1190 ms
+2026-06-16 15:16:27.398 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:16:27.398 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/uploads/packages/kerala-cover.jpg - 404 0 null 0.4615ms
+2026-06-16 15:16:27.398 +05:30 [INF] Route matched with {action = "GetPackageMedia", controller = "Packages"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetPackageMedia(System.String) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-16 15:16:27.398 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5082/uploads/packages/kerala-cover.jpg, Response status code: 404
+2026-06-16 15:16:27.401 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-16 15:16:27.478 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API) in 79.2578ms
+2026-06-16 15:16:27.478 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPackageMedia (TravelTourManagement.API)'
+2026-06-16 15:16:27.478 +05:30 [INF] HTTP GET /api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg responded 200 in 79.7496 ms
+2026-06-16 15:16:27.478 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages/media/41208bb6-2683-41d7-b929-b3a8965f33eb_bali-cover.jpg - 200 6573821 image/jpeg 80.3183ms

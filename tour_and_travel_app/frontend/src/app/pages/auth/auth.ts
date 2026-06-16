@@ -19,6 +19,9 @@ export class AuthComponent {
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
   isLoading = signal<boolean>(false);
+  
+  showLoginPassword = signal<boolean>(false);
+  showSignupPassword = signal<boolean>(false);
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
@@ -38,7 +41,10 @@ export class AuthComponent {
   }
 
   onLogin() {
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
     this.isLoading.set(true);
     this.errorMessage.set('');
     this.successMessage.set('');
@@ -52,13 +58,20 @@ export class AuthComponent {
       },
       error: (err: any) => {
         this.isLoading.set(false);
-        this.errorMessage.set(err.error?.message || 'Login failed');
+        if (err.status === 401) {
+          this.errorMessage.set('Invalid email or password. Please try again.');
+        } else {
+          this.errorMessage.set(err.error?.message || 'Login failed. Please try again later.');
+        }
       }
     });
   }
 
   onSignup() {
-    if (this.signupForm.invalid) return;
+    if (this.signupForm.invalid) {
+      this.signupForm.markAllAsTouched();
+      return;
+    }
     this.isLoading.set(true);
     this.errorMessage.set('');
     this.successMessage.set('');
