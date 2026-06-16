@@ -1,0 +1,149 @@
+<main class="min-h-screen flex items-stretch overflow-hidden">
+<!-- Left Side: Immersive Visual & Brand Mission -->
+<section class="hidden lg:flex lg:w-1/2 relative flex-col justify-end p-margin-desktop bg-primary overflow-hidden">
+<!-- Background Image -->
+<div class="absolute inset-0">
+<img alt="Misty mountain peaks" class="w-full h-full object-cover" data-alt="A breathtaking high-altitude landscape featuring jagged mountain peaks shrouded in soft, rolling mist at dawn. The lighting is ethereal and cool, dominated by deep Mountain Blue shadows and pale, misty whites that evoke a sense of serene adventure. The composition is expansive and grand, reflecting a professional corporate-modern travel brand aesthetic with high-resolution clarity and a tranquil, inspiring mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0K6k6L52Etm7i8Ud-48TFHKWfLxlYVh7607YL5HB5TLWDq3pl4-M_zzZRmO12PewzXuXcm9OucGq_ozi4TgjQLq7GHGE_-CuXxNbQh8ZJoIBa2_gkd9m1W3LIGZazXe7uTerZExsAf9Gs3y_O-NCg8nEa4VJD7ArUCJ_PL2NlYSEhOgyu90lo1oiolCU6fk68NCPOuCk7HCaJVD_RkRdaSxUp1CfTrDMIWbwIb5ZLR3J3_9weOQBoyOVxTmkXSHFyEFfxtVT0cBE">
+<!-- Overlay Gradient for legibility -->
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent"></div>
+</div>
+<!-- Glassmorphism Mission Statement -->
+<div class="glass-panel relative z-10 p-8 rounded-xl max-w-xl mb-12 ml-12 animate-fade-up">
+<div class="mb-4">
+<span class="font-display-lg text-display-lg text-white font-bold tracking-tighter">TourMate</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-white mb-4 leading-tight">
+                    Redefining the art of exploration.
+                </h2>
+<p class="font-body-md text-body-md text-white/90 leading-relaxed">
+                    Our mission is to bridge the gap between logistical precision and the wild spirit of adventure. We empower tour operators and travelers with the tools to manage complex journeys as easily as a walk in the park. Join the community where every peak is reachable and every trail is tracked.
+                </p>
+</div>
+<div class="relative z-10 flex items-center gap-4 text-white/70 ml-12 mb-12">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-primary bg-surface-container" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAJa1D49DU_dw3upfmdaagrqD2J82PUbOm5v9Yz4MO1qu4vAGZYGPbYkQRMBn9IT3UIumZZfx-MmESEDOIH2KCdODEIVaBnicOtNZ6XMJVj4LlyycPG3CB1Sj-U12ghmgsV1O_AGmADAZnvw8oe2lwm80r5-p7rpNJv7T8nR4rkc15VD9LM9jCwp7SPP1E7uQVgAB5PaE5hDkLvY0eU5mFHOluYmGYcDDO75MxDAwW9SqB4RoTewYAGaNHPT-IsfznHuw2v3QTjm-0'); background-size: cover;"></div>
+<div class="w-8 h-8 rounded-full border-2 border-primary bg-surface-container" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB4v7bYcUimnN7KIHsMoipIW41ZbrR9neWQTqFHrtReHwRLUB4OicOeHkvGDTrpi8Tu1Qgh_QshNGbuCNj9v9VEUTZtoq6oKhpcgO2oNVncPX84Xfl0UqH5sJNX7hmyn4UKlJa3m8OKLge_I-j4r1hs3VzA8-9ir5VO49JQyGc0nQt_BzEKE8vOyg7fs8Jh_WLK9A0SVTqtnY7LYoBth1IgFJ3O62MOmes2fTeVlAiysw8Ck4akJxkStPmHjBM2nkH7iAwszX4doiw'); background-size: cover;"></div>
+<div class="w-8 h-8 rounded-full border-2 border-primary bg-surface-container" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYsoGlZy4Li_1RLMp5gTfe4Vt6_4hQddBmVmCyIjQ0Tg76cRMHGfI5RblfMN4zMm4BcpvB2jHriMXycx-1a9u7AfVmKSnJ-rCjGauYYnCa5pYEPR-7d02NcOYPTUCuZCU9k8WbLQCQ0vss3VKBLg7Q4w915inN4ctriaXZyZconEvJrlVkv-NbsH_uhDx7YFrJBYlX5VL9SBrXkn0dwIM-SmUqwPXej5rROFSAzUEySCDXfrA_eRYdn1Ztl7HkyIaN1LZlEWAcTEM'); background-size: cover;"></div>
+</div>
+<span class="font-label-md text-label-md">Trusted by 2,000+ tour operators worldwide</span>
+</div>
+</section>
+
+<!-- Right Side: Interaction Portal -->
+<section class="w-full lg:w-1/2 flex flex-col justify-center items-center bg-surface-container-lowest p-8 lg:p-16 overflow-y-auto">
+<div class="w-full max-w-md">
+<!-- Mobile Logo -->
+<div class="lg:hidden flex justify-center mb-8">
+<span class="font-display-lg text-display-lg text-primary font-bold tracking-tighter">TourMate</span>
+</div>
+<div class="text-center mb-10">
+<h1 class="font-headline-lg text-headline-lg text-primary mb-2">
+  @if (isLoginTab()) { Welcome Back } @else { Join TourMate }
+</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Your next adventure starts with a single click.</p>
+</div>
+
+<!-- Tabs Navigation -->
+<div class="flex p-1 bg-surface-container rounded-xl mb-8">
+<button 
+  (click)="isLoginTab.set(true)"
+  [class]="isLoginTab() ? 'bg-white shadow-sm text-primary' : 'text-on-surface-variant'"
+  class="flex-1 py-3 font-label-md text-label-md rounded-lg transition-all duration-300">
+    Login
+</button>
+<button 
+  (click)="isLoginTab.set(false)"
+  [class]="!isLoginTab() ? 'bg-white shadow-sm text-primary' : 'text-on-surface-variant hover:text-primary'"
+  class="flex-1 py-3 font-label-md text-label-md rounded-lg transition-all duration-300">
+    Sign Up
+</button>
+</div>
+
+<!-- Login Form -->
+@if (isLoginTab()) {
+<form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-5 animate-fade-up">
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="login-email">Email Address</label>
+<input formControlName="email" class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 bg-surface-container-lowest outline-none transition-all placeholder:text-outline/50" id="login-email" placeholder="name@company.com" type="email">
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="login-password">Password</label>
+<div class="relative">
+<input formControlName="password" class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 bg-surface-container-lowest outline-none transition-all placeholder:text-outline/50" id="login-password" placeholder="••••••••" type="password">
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between py-1">
+<label class="flex items-center gap-2 cursor-pointer group">
+<div class="relative flex items-center">
+<input class="peer hidden" type="checkbox">
+<div class="w-5 h-5 border-2 border-outline-variant rounded-md peer-checked:bg-primary peer-checked:border-primary transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[16px] hidden peer-checked:block">check</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant group-hover:text-on-surface">Remember me</span>
+</label>
+<a class="font-label-md text-label-md text-secondary hover:underline underline-offset-4" href="#">Forgot password?</a>
+</div>
+<button [disabled]="loginForm.invalid || isLoading()" class="w-full py-4 bg-primary text-white font-label-md text-label-md rounded-xl shadow-lg hover:shadow-xl hover:translate-y-[-2px] active:translate-y-[0px] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
+  @if (isLoading()) { Signing In... } @else { Sign In }
+</button>
+
+@if (errorMessage()) {
+  <div class="text-error text-sm text-center">{{ errorMessage() }}</div>
+}
+@if (successMessage()) {
+  <div class="text-green-600 text-sm text-center">{{ successMessage() }}</div>
+}
+
+</form>
+}
+
+<!-- Signup Form -->
+@if (!isLoginTab()) {
+<form [formGroup]="signupForm" (ngSubmit)="onSignup()" class="space-y-5 animate-fade-up">
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="signup-name">Full Name</label>
+<input formControlName="fullName" class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 bg-surface-container-lowest outline-none transition-all placeholder:text-outline/50" id="signup-name" placeholder="John Doe" type="text">
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="signup-phone">Phone Number (Optional)</label>
+<div class="relative flex">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 font-body-md text-on-surface-variant/70">+91</span>
+<input formControlName="phone" class="w-full pl-14 pr-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 bg-surface-container-lowest outline-none transition-all placeholder:text-outline/50 font-body-md" id="signup-phone" placeholder="98765 43210" type="tel">
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="signup-email">Email Address</label>
+<input formControlName="email" class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 bg-surface-container-lowest outline-none transition-all placeholder:text-outline/50" id="signup-email" placeholder="name@company.com" type="email">
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="signup-password">Password</label>
+<div class="relative">
+<input formControlName="password" class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 bg-surface-container-lowest outline-none transition-all placeholder:text-outline/50" id="signup-password" placeholder="Create a strong password" type="password">
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<button [disabled]="signupForm.invalid || isLoading()" class="w-full py-4 bg-secondary-container text-white font-label-md text-label-md rounded-xl shadow-lg hover:shadow-xl hover:translate-y-[-2px] active:translate-y-[0px] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
+  @if (isLoading()) { Creating Account... } @else { Create Account }
+</button>
+
+@if (errorMessage()) {
+  <div class="text-error text-sm text-center">{{ errorMessage() }}</div>
+}
+@if (successMessage()) {
+  <div class="text-green-600 text-sm text-center">{{ successMessage() }}</div>
+}
+</form>
+}
+
+<div class="mt-12 text-center">
+
+</div>
+</div>
+</section>
+</main>

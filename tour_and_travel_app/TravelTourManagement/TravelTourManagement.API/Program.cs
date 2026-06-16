@@ -59,6 +59,18 @@ try
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendPolicy",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials(); // needed for SignalR and cookies if any
+        });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -203,6 +215,8 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseRateLimiter();
+
+app.UseCors("FrontendPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
