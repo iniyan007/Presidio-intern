@@ -13,10 +13,18 @@ namespace TravelTourManagement.API.Controllers;
 public class ReviewsController : ControllerBase
 {
     private readonly IReviewService _reviewService;
+    private readonly string _uploadDirectory;
 
     public ReviewsController(IReviewService reviewService)
     {
         _reviewService = reviewService;
+        var currentDirectory = Directory.GetCurrentDirectory(); 
+        var solutionDirectory = Directory.GetParent(currentDirectory)?.FullName ?? currentDirectory;
+        _uploadDirectory = Path.Combine(solutionDirectory, "TravelTourManagement.DataAccess", "Uploads", "ReviewMedia");
+        if (!Directory.Exists(_uploadDirectory))
+        {
+            Directory.CreateDirectory(_uploadDirectory);
+        }
     }
 
     [HttpPost("api/Bookings/{bookingId}/reviews")]
@@ -47,5 +55,62 @@ public class ReviewsController : ControllerBase
     {
         var reviews = await _reviewService.GetReviewsByPackagerIdAsync(packagerId, cancellationToken);
         return Ok(reviews);
+    }
+
+    [HttpPost("api/Reviews/upload-media")]
+    [Authorize(Roles = "Traveler")]
+    public async Task<IActionResult> UploadMedia(List<Microsoft.AspNetCore.Http.IFormFile> files, CancellationToken cancellationToken)
+    {
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("User ID not found in token.");
+
+        if (files == null || files.Count == 0)
+            return BadRequest(new { message = "No files uploaded." });
+
+        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+        var uploadedPaths = new List<string>();
+
+        foreach (var file in files)
+        {
+            if (file.Length == 0) continue;
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!System.Linq.Enumerable.Contains(allowedExtensions, extension))
+                return BadRequest(new { message = $"Invalid file type for {file.FileName}. Only JPG, JPEG, and PNG are allowed." });
+
+            if (file.Length > 5 * 1024 * 1024) // 5 MB limit per file
+                return BadRequest(new { message = $"File {file.FileName} exceeds 5MB limit." });
+
+            var uniqueFileName = $"{Guid.NewGuid()}{extension}";
+            var filePath = Path.Combine(_uploadDirectory, uniqueFileName);
+
+            using var stream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(stream, cancellationToken);
+
+            uploadedPaths.Add($"/api/Reviews/media/{uniqueFileName}");
+        }
+
+        return Ok(new { success = true, paths = uploadedPaths });
+    }
+
+    [HttpGet("api/Reviews/media/{fileName}")]
+    [AllowAnonymous]
+    public IActionResult GetMedia(string fileName)
+    {
+        if (fileName.Contains("..") || fileName.Contains("/") || fileName.Contains("\\"))
+            return BadRequest("Invalid file name.");
+
+        var filePath = Path.Combine(_uploadDirectory, fileName);
+        if (!System.IO.File.Exists(filePath))
+            return NotFound("File not found.");
+
+        var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+        if (!provider.TryGetContentType(fileName, out var contentType))
+        {
+            contentType = "application/octet-stream";
+        }
+
+        var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+        return File(fileStream, contentType);
     }
 }

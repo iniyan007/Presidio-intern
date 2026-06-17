@@ -29,6 +29,7 @@ export class UserService {
   userProfile = signal<UserProfile | null>(null);
 
   constructor() {
+    // If token exists, load profile on startup
     if (localStorage.getItem('jwt_token')) {
       this.loadProfile().subscribe({
         error: () => console.log('Failed to load profile on startup')

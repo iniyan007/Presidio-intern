@@ -1,0 +1,105 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+  <div class="bg-surface-container-lowest rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+      <h2 class="font-display-sm text-primary">Write a Review</h2>
+      <button (click)="close.emit()" class="text-on-surface-variant hover:text-error transition-colors">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="p-6 overflow-y-auto">
+      @if (errorMessage()) {
+        <div class="bg-error/10 text-error p-4 rounded-lg mb-6 text-sm font-bold flex items-start gap-2">
+          <span class="material-symbols-outlined text-[20px]">error</span>
+          <span>{{ errorMessage() }}</span>
+        </div>
+      }
+
+      <div class="space-y-6">
+        <!-- Overall Rating -->
+        <div class="text-center pb-6 border-b border-outline-variant/50">
+          <label class="block font-label-lg text-primary mb-2">Overall Experience</label>
+          <div class="flex justify-center gap-2 text-amber-400">
+            @for (i of [1,2,3,4,5]; track i) {
+              <span class="material-symbols-outlined text-4xl cursor-pointer hover:scale-110 transition-transform" 
+                    [style.font-variation-settings]="overallRating() >= i ? '\'FILL\' 1' : '\'FILL\' 0'"
+                    (click)="setRating('overall', i)">star</span>
+            }
+          </div>
+        </div>
+
+        <!-- Category Ratings -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+          @for (category of [
+            { id: 'accommodation', label: 'Accommodation', icon: 'hotel', value: accommodationRating() },
+            { id: 'transport', label: 'Transport', icon: 'directions_car', value: transportRating() },
+            { id: 'food', label: 'Food', icon: 'restaurant', value: foodRating() },
+            { id: 'guide', label: 'Guide', icon: 'person', value: guideRating() },
+            { id: 'value', label: 'Value for Money', icon: 'payments', value: valueRating() }
+          ]; track category.id) {
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-on-surface">
+                <span class="material-symbols-outlined text-[18px] text-on-surface-variant">{{ category.icon }}</span>
+                <span class="font-label-md">{{ category.label }}</span>
+              </div>
+              <div class="flex gap-1 text-amber-400">
+                @for (i of [1,2,3,4,5]; track i) {
+                  <span class="material-symbols-outlined text-[20px] cursor-pointer" 
+                        [style.font-variation-settings]="category.value >= i ? '\'FILL\' 1' : '\'FILL\' 0'"
+                        (click)="setRating(category.id, i)">star</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Comment -->
+        <div>
+          <label class="block font-label-md text-on-surface mb-2">Share your experience (Optional)</label>
+          <textarea [(ngModel)]="comment" rows="4" 
+                    class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-body-md"
+                    placeholder="Tell us what you loved, and what could be improved..."></textarea>
+        </div>
+
+        <!-- Media Upload -->
+        <div>
+          <label class="block font-label-md text-on-surface mb-2">Attach Photos</label>
+          <div class="flex items-center gap-4 mb-4">
+            <button type="button" (click)="fileInput.click()" class="flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-lg font-label-md text-primary hover:bg-surface-container transition-colors border border-outline-variant/50">
+              <span class="material-symbols-outlined text-[18px]">add_a_photo</span>
+              Upload Images
+            </button>
+            <input type="file" #fileInput multiple accept="image/jpeg, image/png, image/jpg" class="hidden" (change)="onFileSelected($event)">
+          </div>
+          
+          @if (previewUrls().length > 0) {
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+              @for (url of previewUrls(); track $index) {
+                <div class="relative group aspect-square rounded-lg overflow-hidden border border-outline-variant">
+                  <img [src]="url" class="w-full h-full object-cover">
+                  <button type="button" (click)="removeFile($index)" class="absolute top-1 right-1 bg-black/60 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-error">
+                    <span class="material-symbols-outlined text-[14px]">close</span>
+                  </button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="p-6 border-t border-outline-variant bg-surface-container-lowest flex justify-end gap-3">
+      <button (click)="close.emit()" class="px-6 py-2 rounded-lg font-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors" [disabled]="isSubmitting()">
+        Cancel
+      </button>
+      <button (click)="submitReview()" class="bg-primary text-on-primary px-8 py-2 rounded-lg font-label-md hover:bg-primary/90 transition-colors flex items-center gap-2 shadow-md" [disabled]="isSubmitting()">
+        @if (isSubmitting()) {
+          <span class="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
+          Submitting...
+        } @else {
+          Submit Review
+        }
+      </button>
+    </div>
+  </div>
+</div>

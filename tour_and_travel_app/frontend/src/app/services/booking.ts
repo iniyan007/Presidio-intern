@@ -75,4 +75,19 @@ export class BookingService {
     formData.append('file', file);
     return this.http.put(`${this.apiUrl}/documents/${documentId}/reupload`, formData);
   }
+
+  createReview(bookingId: string, reviewData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${bookingId}/reviews`, reviewData);
+  }
+
+  uploadReviewMedia(files: File[]): Observable<{ success: boolean, paths: string[] }> {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files', file);
+    });
+    // The endpoint is actually on the base API URL, not under /Bookings
+    // so we need to construct it carefully.
+    const baseUrl = this.apiUrl.replace('/api/Bookings', '');
+    return this.http.post<{ success: boolean, paths: string[] }>(`${baseUrl}/api/Reviews/upload-media`, formData);
+  }
 }

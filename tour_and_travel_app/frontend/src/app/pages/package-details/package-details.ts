@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { PackageService, TravelPackageDetails, PackageMedia, PackageReview } from '../../services/package.service';
 import { AuthService } from '../../services/auth.service';
+import { BookingService } from '../../services/booking';
+import { ReviewModalComponent } from '../../components/review-modal/review-modal';
 
 @Component({
   selector: 'app-package-details',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ReviewModalComponent],
   templateUrl: './package-details.html',
   styleUrl: './package-details.css'
 })
@@ -16,12 +18,15 @@ export class PackageDetailsComponent implements OnInit {
   private router = inject(Router);
   private packageService = inject(PackageService);
   private authService = inject(AuthService);
+  private bookingService = inject(BookingService);
 
   pkg = signal<TravelPackageDetails | null>(null);
   reviews = signal<PackageReview[]>([]);
   isLoading = signal<boolean>(true);
   errorMessage = signal<string>('');
   isLoggedIn = signal<boolean>(false);
+  showReviewModal = signal<boolean>(false);
+  eligibleBookingId = signal<string | null>(null);
 
   ngOnInit() {
     this.isLoggedIn.set(!!this.authService.getToken());
@@ -54,10 +59,10 @@ export class PackageDetailsComponent implements OnInit {
     });
   }
 
-  loadReviews(id: string) {
-    this.packageService.getPackageReviews(id).subscribe({
-      next: (data) => {
-        this.reviews.set(data);
+  loadReviews(packageId: string) {
+    this.packageService.getPackageReviews(packageId).subscribe({
+      next: (res) => {
+        this.reviews.set(res);
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -92,5 +97,39 @@ export class PackageDetailsComponent implements OnInit {
     const p = this.pkg();
     if (!p || !p.seasonalPricings || p.seasonalPricings.length === 0) return 0;
     return Math.min(...p.seasonalPricings.map(sp => sp.basePrice));
+  }
+
+  checkReviewEligibilityAndOpen() {
+    const packageId = this.pkg()?.id;
+    if (!packageId) return;
+
+    this.bookingService.getMyBookings().subscribe({
+      next: (bookings) => {
+        // Find a booking for this package that is Confirmed or Completed
+        const eligibleBooking = bookings.find(b => 
+          b.packageId === packageId && 
+          (b.status === 'Confirmed' || b.status === 'Completed')
+        );
+
+        if (eligibleBooking) {
+          this.eligibleBookingId.set(eligibleBooking.id);
+          this.showReviewModal.set(true);
+        } else {
+          alert('You must have a Confirmed or Completed booking for this package before writing a review.');
+        }
+      },
+      error: () => {
+        alert('Please log in to write a review.');
+      }
+    });
+  }
+
+  onReviewSubmitted() {
+    this.showReviewModal.set(false);
+    alert('Review submitted successfully! Thank you for your feedback.');
+    if (this.pkg()?.id) {
+      this.loadReviews(this.pkg()!.id);
+      this.loadPackage(this.pkg()!.id); // Reload package to update averages
+    }
   }
 }

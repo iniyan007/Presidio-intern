@@ -361,7 +361,7 @@
   <span class="text-on-surface-variant text-caption ml-2">based on {{ p.totalReviews }} reviews</span>
   </div>
   </div>
-  <button class="inline-flex items-center justify-center bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md hover:opacity-90 transition-all">
+  <button (click)="checkReviewEligibilityAndOpen()" class="inline-flex items-center justify-center bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md hover:opacity-90 transition-all">
         Write a Review
   </button>
   </div>
@@ -395,6 +395,15 @@
   
   </div>
   </div>
+  
+  @if (showReviewModal()) {
+    <app-review-modal 
+      [bookingId]="eligibleBookingId()!" 
+      (close)="showReviewModal.set(false)" 
+      (submitted)="onReviewSubmitted()">
+    </app-review-modal>
+  }
+  
   </ng-container>
 }
 </main>
