@@ -1,0 +1,200 @@
+<main class="max-w-5xl mx-auto px-margin-mobile md:px-margin-desktop py-12">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="font-display-md text-primary">My Bookings</h1>
+    <button routerLink="/" class="text-secondary font-label-md hover:underline flex items-center gap-1">
+      <span class="material-symbols-outlined text-[18px]">explore</span>
+      Find More Packages
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <div class="flex justify-center items-center py-20">
+      <div class="inline-block animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="bg-error/10 text-error p-6 rounded-xl font-label-md text-center">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (!isLoading() && bookings().length === 0 && !errorMessage()) {
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-16 text-center shadow-sm">
+      <span class="material-symbols-outlined text-[64px] text-outline mb-4">luggage</span>
+      <h2 class="font-display-sm text-on-surface mb-2">No Bookings Yet</h2>
+      <p class="text-on-surface-variant font-body-md mb-6">Looks like you haven't booked any adventures yet. Time to start exploring!</p>
+      <button routerLink="/" class="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md shadow hover:shadow-lg hover:-translate-y-0.5 transition-all">
+        Browse Packages
+      </button>
+    </div>
+  }
+
+  @if (!isLoading() && bookings().length > 0) {
+    <div class="space-y-6">
+      @for (booking of bookings(); track booking.id) {
+        <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+          
+          <!-- Booking Header Overview -->
+          <div class="p-6 border-b border-outline-variant bg-surface-container-lowest relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+            
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="font-label-lg font-bold text-on-surface tracking-wider uppercase text-sm">
+                  Ref: {{ booking.bookingReference }}
+                </span>
+                
+                <!-- Overall Status Badge -->
+                <span [class]="'px-2.5 py-0.5 rounded-full text-xs font-bold uppercase border ' + getBookingStatusBadge(booking.status)">
+                  {{ booking.status }}
+                </span>
+                
+                <!-- Payment Status Badge -->
+                <span [class]="'px-2.5 py-0.5 rounded-full text-xs font-bold uppercase ' + getPaymentStatusBadge(booking.paymentStatus)">
+                  {{ booking.paymentStatus }}
+                </span>
+              </div>
+              
+              <h2 class="font-display-sm text-primary mb-1 cursor-pointer hover:underline" [routerLink]="['/package', booking.packageId]">
+                {{ packageTitles()[booking.packageId] || 'Loading Package Details...' }}
+              </h2>
+              
+              <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-on-surface-variant font-body-md text-sm">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[16px]">calendar_month</span>
+                  {{ booking.travelDate | date:'mediumDate' }} - {{ booking.returnDate | date:'mediumDate' }}
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[16px]">group</span>
+                  {{ booking.adultCount }} Adults, {{ booking.childCount }} Children
+                </div>
+                <div class="flex items-center gap-1.5 font-bold text-on-surface">
+                  <span class="material-symbols-outlined text-[16px]">payments</span>
+                  ₹{{ booking.totalAmount | number:'1.2-2' }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center gap-3 md:flex-col lg:flex-row">
+              @if (booking.status === 'Confirmed') {
+                <button (click)="downloadTicket(booking.id)" class="flex items-center gap-1.5 bg-primary/10 text-primary px-4 py-2 rounded-full font-label-md hover:bg-primary hover:text-white transition-colors">
+                  <span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                  Ticket
+                </button>
+              }
+              
+              <button (click)="toggleBooking(booking.id)" class="flex items-center justify-center w-10 h-10 rounded-full border border-outline hover:bg-surface-container transition-colors">
+                <span class="material-symbols-outlined transition-transform duration-300" [class.rotate-180]="isExpanded(booking.id)">expand_more</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Cancellation Interface -->
+          @if (isCancelling() === booking.id && !booking.cancelledAt) {
+            <div class="bg-error/5 p-6 border-b border-error/20">
+              <h4 class="font-label-lg text-error mb-2">Cancel Booking</h4>
+              <p class="text-body-sm text-on-surface-variant mb-4">Are you sure you want to cancel this booking? This action cannot be undone and refunds will be processed based on the package's cancellation policy.</p>
+              
+              <textarea [(ngModel)]="cancellationReason" placeholder="Please provide a reason for cancellation" class="w-full p-3 rounded-lg border border-error/30 bg-white focus:outline-none focus:ring-1 focus:ring-error mb-4" rows="2"></textarea>
+              
+              <div class="flex items-center gap-3">
+                <button (click)="cancelBooking(booking.id)" class="bg-error text-white px-5 py-2 rounded-full font-label-md shadow hover:shadow-lg transition-all">Confirm Cancellation</button>
+                <button (click)="isCancelling.set(null)" class="text-on-surface-variant hover:text-on-surface font-label-md px-4 py-2">Keep Booking</button>
+              </div>
+            </div>
+          } @else if (booking.cancelledAt) {
+            <div class="bg-error/10 p-4 border-b border-error/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+               <div>
+                 <span class="font-bold text-error block">Cancelled on {{ booking.cancelledAt | date:'mediumDate' }}</span>
+                 <span class="text-on-surface-variant text-sm">Reason: {{ booking.cancellationReason || 'N/A' }}</span>
+               </div>
+            </div>
+          }
+
+          <!-- Expandable Body (Travelers & Documents) -->
+          <div class="overflow-hidden transition-all duration-300" [ngClass]="isExpanded(booking.id) ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'">
+            <div class="p-6 bg-surface-container-lowest/50">
+              
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-label-lg font-bold text-on-surface flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary">group</span>
+                  Traveler Details
+                </h3>
+                
+                @if (!booking.cancelledAt) {
+                  <button (click)="initiateCancel(booking.id)" class="text-error text-sm font-bold hover:underline">Request Cancellation</button>
+                }
+              </div>
+              
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                @for (traveler of booking.travelers; track traveler.id) {
+                  <div class="bg-white border border-outline-variant rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-4 border-b border-outline-variant pb-3">
+                      <div>
+                        <span class="font-label-md text-on-surface font-bold text-lg block">{{ traveler.fullName }}</span>
+                        <div class="flex items-center gap-2 text-xs text-on-surface-variant mt-1">
+                          @if(traveler.isPrimary) { <span class="bg-primary/10 text-primary px-2 py-0.5 rounded font-bold uppercase">Primary</span> }
+                          <span>{{ traveler.age }} yrs</span>
+                          <span>• {{ traveler.gender }}</span>
+                          @if(traveler.nationality) { <span>• {{ traveler.nationality }}</span> }
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Documents Section -->
+                    <div class="space-y-3">
+                      <h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Uploaded Documents</h4>
+                      
+                      @if (traveler.documents.length === 0) {
+                        <p class="text-sm text-on-surface-variant italic">No documents uploaded.</p>
+                      }
+
+                      @for (doc of traveler.documents; track doc.id) {
+                        <div class="flex flex-col gap-2 p-3 rounded-lg border border-outline-variant bg-surface-container-lowest">
+                          <div class="flex items-start justify-between">
+                            <div class="flex items-center gap-2">
+                              <span class="material-symbols-outlined text-on-surface-variant">description</span>
+                              <div>
+                                <span class="text-sm font-label-md text-on-surface block">{{ doc.documentType }}</span>
+                                <a [href]="'http://localhost:5082/' + doc.filePath" target="_blank" class="text-xs text-primary hover:underline">{{ doc.fileName }}</a>
+                              </div>
+                            </div>
+                            <span [class]="'px-2 py-0.5 rounded text-[10px] font-bold uppercase border ' + getStatusBadgeClass(doc.status)">
+                              {{ doc.status }}
+                            </span>
+                          </div>
+
+                          @if (doc.status === 'Rejected') {
+                            <div class="mt-2 text-xs text-error bg-error/5 p-2 rounded border border-error/10">
+                              <span class="font-bold">Reason:</span> {{ doc.rejectionReason }}
+                            </div>
+                            
+                            <!-- Reupload Button -->
+                            @if (!booking.cancelledAt) {
+                              <div class="mt-2 flex justify-end">
+                                <label class="cursor-pointer bg-primary text-white text-xs px-3 py-1.5 rounded shadow hover:bg-primary/90 transition-colors flex items-center gap-1" [class.opacity-50]="isUploading() === doc.id">
+                                  <span class="material-symbols-outlined text-[14px]">upload</span>
+                                  {{ isUploading() === doc.id ? 'Uploading...' : 'Re-upload Document' }}
+                                  <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" (change)="onFileSelected($event, doc.id)" [disabled]="isUploading() === doc.id">
+                                </label>
+                              </div>
+                            }
+                          }
+                        </div>
+                      }
+                    </div>
+
+                  </div>
+                }
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      }
+    </div>
+  }
+
+</main>

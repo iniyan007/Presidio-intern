@@ -13,6 +13,7 @@ public record BookingResponse(
     int InfantCount,
     decimal TotalAmount,
     decimal PaidAmount,
+    string Status, // e.g., Pending, DocumentUnderReview, Confirmed, Cancelled
     string PaymentStatus, // derived: Unpaid, Partial, Paid
     DateOnly TravelDate,
     DateOnly ReturnDate,

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { PackageService, TravelPackage } from '../../services/package.service';
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,12 +16,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private packageService = inject(PackageService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  userService = inject(UserService);
 
   packages = signal<TravelPackage[]>([]);
   isLoading = signal<boolean>(true);
   errorMessage = signal<string>('');
-  
-  isLoggedIn = signal<boolean>(false);
   
   // Search & Filter State
   searchDestination = signal<string>('');
@@ -31,7 +31,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private pollingInterval: any;
 
   ngOnInit() {
-    this.isLoggedIn.set(!!this.authService.getToken());
     this.loadPackages();
     
     // Poll every 10 seconds to update live seat availability
@@ -88,7 +87,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   viewDetails(packageId: string) {
-    if (!this.isLoggedIn()) {
+    if (!this.authService.isAuthenticated()) {
       alert('Please log in to view package details and continue booking.');
       this.router.navigate(['/auth']);
     } else {

@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -27,6 +27,7 @@ export class AuthComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -64,7 +65,7 @@ export class AuthComponent implements OnInit {
     this.authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
         this.isLoading.set(false);
-        window.location.href = '/';
+        this.router.navigate(['/']);
       },
       error: (err: any) => {
         this.isLoading.set(false);

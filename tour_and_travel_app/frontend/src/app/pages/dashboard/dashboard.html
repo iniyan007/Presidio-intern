@@ -3,7 +3,13 @@
 <!-- Hero Section & Search -->
 <section class="mb-16">
 <div class="text-center mb-10">
-<h1 class="font-display-lg text-display-lg mb-4 text-primary">Unforgettable Journeys Await</h1>
+<h1 class="font-display-lg text-display-lg mb-4 text-primary">
+  @if (userService.userProfile()) {
+    Welcome back, {{ userService.userProfile()?.fullName }}!
+  } @else {
+    Unforgettable Journeys Await
+  }
+</h1>
 <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Explore handpicked travel experiences tailored for adventurers, groups, and seekers of serenity.</p>
 </div>
 <!-- Enhanced Search Bar -->

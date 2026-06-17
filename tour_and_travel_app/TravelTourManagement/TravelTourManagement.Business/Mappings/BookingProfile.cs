@@ -46,6 +46,7 @@ public class BookingProfile : Profile
                 src.InfantCount,
                 src.TotalAmount,
                 src.PaidAmount,
+                src.Status.ToString(),
                 src.PaymentStatus.ToString(),
                 src.TravelDate,
                 src.ReturnDate,

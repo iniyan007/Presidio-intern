@@ -11,16 +11,10 @@ import { UserService } from '../../services/user';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
-export class NavbarComponent implements OnInit {
-  private authService = inject(AuthService);
+export class NavbarComponent {
+  authService = inject(AuthService);
   private router = inject(Router);
   userService = inject(UserService);
-
-  isLoggedIn = signal<boolean>(false);
-
-  ngOnInit() {
-    this.isLoggedIn.set(!!this.authService.getToken());
-  }
 
   getProfileImageUrl(fileName: string): string {
     return `http://localhost:5082/api/Users/profile/picture/${fileName}`;
@@ -28,7 +22,6 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.authService.logout();
-    this.isLoggedIn.set(false);
     this.router.navigate(['/']);
   }
 }
