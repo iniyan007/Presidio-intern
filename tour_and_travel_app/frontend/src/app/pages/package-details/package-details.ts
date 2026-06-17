@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { PackageService, TravelPackageDetails, PackageMedia, PackageReview } from '../../services/package.service';
+import { PackageService, TravelPackageDetails, PackageMedia, PackageReview, PackageSeasonalPricing } from '../../services/package.service';
 import { AuthService } from '../../services/auth.service';
 import { BookingService } from '../../services/booking';
 import { ReviewModalComponent } from '../../components/review-modal/review-modal';
@@ -27,6 +27,7 @@ export class PackageDetailsComponent implements OnInit {
   isLoggedIn = signal<boolean>(false);
   showReviewModal = signal<boolean>(false);
   eligibleBookingId = signal<string | null>(null);
+  selectedSeason = signal<PackageSeasonalPricing | null>(null);
 
   ngOnInit() {
     this.isLoggedIn.set(!!this.authService.getToken());

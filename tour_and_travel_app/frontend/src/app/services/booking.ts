@@ -51,12 +51,30 @@ export interface CancelBookingRequest {
   reason: string;
 }
 
+export interface PlatformConfigResponse {
+  id: string;
+  platformFeePercent: number;
+  gstPercent: number;
+  note: string | null;
+  updatedBy: string | null;
+  updatedAt: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class BookingService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:5082/api/Bookings';
+  private platformUrl = 'http://localhost:5082/api/PlatformConfig';
+
+  getPlatformConfig(): Observable<PlatformConfigResponse> {
+    return this.http.get<PlatformConfigResponse>(this.platformUrl);
+  }
+
+  createBooking(formData: FormData): Observable<BookingResponse> {
+    return this.http.post<BookingResponse>(this.apiUrl, formData);
+  }
 
   getMyBookings(): Observable<BookingResponse[]> {
     return this.http.get<BookingResponse[]>(`${this.apiUrl}/my-bookings`);

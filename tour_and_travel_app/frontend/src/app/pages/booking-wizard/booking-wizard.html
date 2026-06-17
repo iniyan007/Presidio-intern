@@ -1,0 +1,328 @@
+<div class="font-body-md min-h-[calc(100vh-80px)] pt-6 pb-20">
+<main class="max-w-[1200px] mx-auto px-4 md:px-8">
+  
+  @if (errorMessage()) {
+    <div class="mb-8 p-4 bg-error-container text-on-error-container rounded-lg border border-error/50">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined">error</span>
+        <span class="font-bold">{{ errorMessage() }}</span>
+      </div>
+    </div>
+  }
+
+  <!-- Progress Stepper -->
+  <div class="mb-12">
+    <div class="flex items-center justify-between max-w-3xl mx-auto">
+      <div class="flex flex-col items-center gap-2 group cursor-pointer" (click)="setStep(1)">
+        <div [ngClass]="step() > 1 ? 'bg-[#10b981]' : (step() === 1 ? 'bg-primary' : 'bg-surface-container-highest text-on-surface-variant')" class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold transition-all">
+          @if (step() > 1) { <span class="material-symbols-outlined">check</span> } @else { 1 }
+        </div>
+        <span [ngClass]="step() > 1 ? 'text-[#10b981]' : (step() === 1 ? 'text-primary' : 'text-on-surface-variant')" class="font-label-md text-label-md font-bold">Traveler Details</span>
+      </div>
+      <div class="flex-1 h-[2px] bg-outline-variant mx-4 mb-6"></div>
+      
+      <div class="flex flex-col items-center gap-2 group cursor-pointer" (click)="step() >= 2 ? setStep(2) : null">
+        <div [ngClass]="step() > 2 ? 'bg-[#10b981]' : (step() === 2 ? 'bg-primary text-white' : 'bg-surface-container-highest text-on-surface-variant')" class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all">
+          @if (step() > 2) { <span class="material-symbols-outlined">check</span> } @else { 2 }
+        </div>
+        <span [ngClass]="step() > 2 ? 'text-[#10b981]' : (step() === 2 ? 'text-primary font-bold' : 'text-on-surface-variant')" class="font-label-md text-label-md">Document Upload</span>
+      </div>
+      <div class="flex-1 h-[2px] bg-outline-variant mx-4 mb-6"></div>
+      
+      <div class="flex flex-col items-center gap-2 group cursor-pointer" (click)="step() >= 3 ? setStep(3) : null">
+        <div [ngClass]="step() === 3 ? 'bg-primary text-white' : 'bg-surface-container-highest text-on-surface-variant'" class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all">3</div>
+        <span [ngClass]="step() === 3 ? 'text-primary font-bold' : 'text-on-surface-variant'" class="font-label-md text-label-md">Review & Pay</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+    <!-- Left Column: Forms -->
+    <div class="lg:col-span-8 space-y-8">
+      
+      <!-- Step 1 Content -->
+      @if (step() === 1) {
+        <section class="space-y-8 block">
+          <!-- General Details -->
+          <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_4px_20px_rgba(26,54,93,0.08)]">
+            <h2 class="font-headline-lg text-headline-lg mb-6 text-primary">Booking Details</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label class="font-label-md text-label-md text-on-surface-variant">Travel Date <span class="text-error">*</span></label>
+                <input type="date" 
+                       [ngModel]="travelDate()" 
+                       (ngModelChange)="travelDate.set($event)" 
+                       [disabled]="isFixedDate()"
+                       [min]="seasonStart()"
+                       [max]="seasonEnd()"
+                       [ngClass]="isFixedDate() ? 'bg-surface-container text-on-surface-variant cursor-not-allowed' : 'bg-surface-bright text-on-surface focus:ring-primary'"
+                       class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:outline-none focus:ring-2">
+                @if (isFixedDate()) {
+                  <p class="text-caption text-secondary mt-1">Fixed departure date for this package type.</p>
+                }
+              </div>
+              <div class="space-y-2">
+                <label class="font-label-md text-label-md text-on-surface-variant">Infant Count (Under 2 years)</label>
+                <input type="number" min="0" [ngModel]="infantCount()" (ngModelChange)="infantCount.set($event)" class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+              </div>
+              <div class="md:col-span-2 space-y-2">
+                <label class="font-label-md text-label-md text-on-surface-variant">Special Requests</label>
+                <textarea rows="3" [ngModel]="specialRequests()" (ngModelChange)="specialRequests.set($event)" class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright text-on-surface focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. Need vegetarian meals and adjacent rooms"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Traveler List -->
+          <div class="space-y-6">
+            <div class="flex items-center justify-between">
+              <h2 class="font-headline-lg text-headline-lg text-primary">Travelers 
+                @if (selectedSeason()) {
+                  <span class="text-label-md font-normal text-on-surface-variant ml-2 border-l border-outline-variant pl-2">
+                    {{ maxAllowedTravelers() }} slots available
+                  </span>
+                }
+              </h2>
+              <button (click)="addTraveler()" 
+                      [disabled]="selectedSeason() ? travelers().length >= maxAllowedTravelers() : true"
+                      [ngClass]="(selectedSeason() && travelers().length < maxAllowedTravelers()) ? 'text-primary hover:opacity-80' : 'text-on-surface-variant opacity-50 cursor-not-allowed'"
+                      class="flex items-center gap-2 font-bold transition-all">
+                <span class="material-symbols-outlined">add_circle</span> Add Traveler
+              </button>
+            </div>
+
+            @for (traveler of travelers(); track $index) {
+              <div [ngClass]="traveler.isPrimary ? 'border-l-4 border-primary' : ''" class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_4px_20px_rgba(26,54,93,0.08)] relative">
+                @if (!traveler.isPrimary) {
+                  <button (click)="removeTraveler($index)" class="absolute top-4 right-4 text-error hover:bg-error/10 p-2 rounded-full transition-colors">
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                }
+
+                <div class="flex justify-between items-start mb-6">
+                  <div class="flex items-center gap-3">
+                    <span [ngClass]="traveler.isPrimary ? 'bg-primary text-white' : 'bg-surface-container-highest text-on-surface-variant'" class="w-8 h-8 rounded-full flex items-center justify-center font-bold">{{ $index + 1 }}</span>
+                    <h3 class="font-title-md text-title-md">
+                      {{ traveler.isPrimary ? 'Primary Traveler:' : 'Traveler:' }} {{ traveler.fullName || 'New Traveler' }}
+                    </h3>
+                  </div>
+                  @if (traveler.isPrimary) {
+                    <span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full text-caption font-bold">PRIMARY</span>
+                  }
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div class="space-y-1">
+                    <label class="font-label-md text-label-md text-on-surface-variant">Full Name <span class="text-error">*</span></label>
+                    <input type="text" [ngModel]="traveler.fullName" (ngModelChange)="updateTraveler($index, 'fullName', $event)" class="w-full px-4 py-2 rounded-lg border border-outline-variant bg-surface-bright focus:outline-none focus:ring-2 focus:ring-primary">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="font-label-md text-label-md text-on-surface-variant">DOB <span class="text-error">*</span></label>
+                    <input type="date" [ngModel]="traveler.dateOfBirth" (ngModelChange)="updateTraveler($index, 'dateOfBirth', $event)" class="w-full px-4 py-2 rounded-lg border border-outline-variant bg-surface-bright focus:outline-none focus:ring-2 focus:ring-primary">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="font-label-md text-label-md text-on-surface-variant">Gender</label>
+                    <select [ngModel]="traveler.gender" (ngModelChange)="updateTraveler($index, 'gender', $event)" class="w-full px-4 py-2 rounded-lg border border-outline-variant bg-surface-bright focus:outline-none focus:ring-2 focus:ring-primary">
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div class="space-y-1">
+                    <label class="font-label-md text-label-md text-on-surface-variant">Nationality</label>
+                    <input type="text" [ngModel]="traveler.nationality" (ngModelChange)="updateTraveler($index, 'nationality', $event)" class="w-full px-4 py-2 rounded-lg border border-outline-variant bg-surface-bright focus:outline-none focus:ring-2 focus:ring-primary">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="font-label-md text-label-md text-on-surface-variant">Passport Number 
+                      @if (pkg()?.country?.toLowerCase() !== 'india') {
+                        <span class="text-error">*</span>
+                      }
+                    </label>
+                    <input type="text" [ngModel]="traveler.passportNumber" (ngModelChange)="updateTraveler($index, 'passportNumber', $event)" placeholder="Enter Passport No." class="w-full px-4 py-2 rounded-lg border border-outline-variant bg-surface-bright focus:outline-none focus:ring-2 focus:ring-primary">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="font-label-md text-label-md text-on-surface-variant">Aadhar Number <span class="text-error">*</span></label>
+                    <input type="text" [ngModel]="traveler.aadharCardNumber" (ngModelChange)="updateTraveler($index, 'aadharCardNumber', $event)" placeholder="12 Digit Aadhar No." class="w-full px-4 py-2 rounded-lg border border-outline-variant bg-surface-bright focus:outline-none focus:ring-2 focus:ring-primary">
+                  </div>
+                  <div class="space-y-1 md:col-span-2 lg:col-span-1">
+                    <label class="font-label-md text-label-md text-on-surface-variant">Meal Preference</label>
+                    <select [ngModel]="traveler.mealPreference" (ngModelChange)="updateTraveler($index, 'mealPreference', $event)" class="w-full px-4 py-2 rounded-lg border border-outline-variant bg-surface-bright focus:outline-none focus:ring-2 focus:ring-primary">
+                      <option value="Vegetarian">Vegetarian</option>
+                      <option value="Non-Vegetarian">Non-Vegetarian</option>
+                      <option value="Vegan">Vegan</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="flex justify-end gap-4 mt-8">
+            <button (click)="saveDraft()" class="px-8 py-3 rounded-lg border border-primary text-primary font-bold hover:bg-surface-container-low transition-all">Save Draft</button>
+            <button (click)="setStep(2)" class="px-10 py-3 rounded-lg bg-primary text-white font-bold hover:opacity-90 shadow-lg transition-all" [disabled]="!selectedSeason()">Continue to Documents</button>
+          </div>
+        </section>
+      }
+
+      <!-- Step 2 Content -->
+      @if (step() === 2) {
+        <section class="space-y-8 block">
+          <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_4px_20px_rgba(26,54,93,0.08)]">
+            <h2 class="font-headline-lg text-headline-lg mb-6 text-primary">Document Upload</h2>
+            <p class="text-on-surface-variant mb-8">Please upload high-quality scans of identity documents for all travelers. PDF, JPG, or PNG formats are accepted. Aadhar is mandatory for all travelers.</p>
+
+            @for (traveler of travelers(); track $index) {
+              <div class="space-y-6 pb-8 border-b border-outline-variant mb-8">
+                <h3 class="font-title-md text-title-md text-primary">{{ $index + 1 }}. {{ traveler.fullName }}</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  
+                  <!-- Passport Upload -->
+                  <div class="space-y-3">
+                    <label class="font-label-md text-label-md">Passport Scan</label>
+                    @if (traveler.passportFile) {
+                      <div class="border-2 border-dashed border-outline-variant rounded-xl p-6 flex flex-col items-center justify-center bg-surface-bright group hover:border-primary transition-colors">
+                        <div class="flex items-center gap-3 bg-secondary-container/10 p-3 rounded-lg w-full">
+                          <span class="material-symbols-outlined text-secondary">description</span>
+                          <span class="flex-1 font-caption text-caption text-on-surface truncate">{{ traveler.passportFile.name }}</span>
+                          <span (click)="removeFile($index, 'passport')" class="material-symbols-outlined text-error cursor-pointer">delete</span>
+                        </div>
+                      </div>
+                    } @else {
+                      <div class="relative border-2 border-dashed border-outline-variant rounded-xl p-6 flex flex-col items-center justify-center bg-surface-bright cursor-pointer hover:bg-surface-container transition-colors">
+                        <span class="material-symbols-outlined text-primary text-4xl mb-2">cloud_upload</span>
+                        <span class="text-caption font-label-md text-primary">Click to Upload</span>
+                        <input type="file" class="absolute inset-0 opacity-0 cursor-pointer" accept=".pdf,.jpg,.jpeg,.png" (change)="onFileSelected($event, $index, 'passport')">
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Aadhar Upload -->
+                  <div class="space-y-3">
+                    <label class="font-label-md text-label-md">Aadhar Card <span class="text-error">*</span></label>
+                    @if (traveler.aadharFile) {
+                      <div class="border-2 border-dashed border-outline-variant rounded-xl p-6 flex flex-col items-center justify-center bg-surface-bright group hover:border-primary transition-colors">
+                        <div class="flex items-center gap-3 bg-secondary-container/10 p-3 rounded-lg w-full">
+                          <span class="material-symbols-outlined text-secondary">description</span>
+                          <span class="flex-1 font-caption text-caption text-on-surface truncate">{{ traveler.aadharFile.name }}</span>
+                          <span (click)="removeFile($index, 'aadhar')" class="material-symbols-outlined text-error cursor-pointer">delete</span>
+                        </div>
+                      </div>
+                    } @else {
+                      <div class="relative border-2 border-dashed border-outline-variant rounded-xl p-6 flex flex-col items-center justify-center bg-surface-bright cursor-pointer hover:bg-surface-container transition-colors">
+                        <span class="material-symbols-outlined text-primary text-4xl mb-2">cloud_upload</span>
+                        <span class="text-caption font-label-md text-primary">Click to Upload</span>
+                        <input type="file" class="absolute inset-0 opacity-0 cursor-pointer" accept=".pdf,.jpg,.jpeg,.png" (change)="onFileSelected($event, $index, 'aadhar')">
+                      </div>
+                    }
+                  </div>
+
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="flex justify-between gap-4 mt-8">
+            <button (click)="setStep(1)" class="px-8 py-3 rounded-lg border border-primary text-primary font-bold hover:bg-surface-container-low transition-all">Back to Details</button>
+            <button (click)="setStep(3)" class="px-10 py-3 rounded-lg bg-primary text-white font-bold hover:opacity-90 shadow-lg transition-all">Proceed to Payment</button>
+          </div>
+        </section>
+      }
+
+      <!-- Step 3 Content -->
+      @if (step() === 3) {
+        <section class="space-y-8 block">
+          <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_4px_20px_rgba(26,54,93,0.08)]">
+            <h2 class="font-headline-lg text-headline-lg mb-6 text-primary">Review & Confirm</h2>
+            <p class="text-on-surface-variant mb-8">Please review your booking details and total cost before confirming the booking.</p>
+            
+            <div class="space-y-6">
+              <div class="bg-primary/5 p-4 rounded-xl border border-primary/10 flex items-start gap-4">
+                <span class="material-symbols-outlined text-primary mt-1">verified_user</span>
+                <div>
+                  <h4 class="font-bold text-on-surface">Secure Booking</h4>
+                  <p class="text-caption text-on-surface-variant mt-1">Your data is transmitted securely and your payment will be processed through our PCI-DSS compliant partner.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between gap-4 mt-8">
+            <button (click)="setStep(2)" class="px-8 py-3 rounded-lg border border-primary text-primary font-bold hover:bg-surface-container-low transition-all">Back to Documents</button>
+            <button (click)="submitBooking()" [disabled]="isSubmitting()" class="px-10 py-3 rounded-lg bg-secondary text-white font-bold hover:opacity-90 shadow-lg transition-all flex items-center gap-2">
+              @if (isSubmitting()) {
+                <span class="material-symbols-outlined animate-spin">progress_activity</span> Processing...
+              } @else {
+                <span class="material-symbols-outlined">lock</span> Confirm Booking
+              }
+            </button>
+          </div>
+        </section>
+      }
+
+    </div>
+
+    <!-- Right Column: Sidebar Summary -->
+    <aside class="lg:col-span-4 sticky top-28">
+      <div class="bg-white/80 backdrop-blur-xl border border-outline-variant/30 p-6 rounded-2xl shadow-[0px_8px_30px_rgba(0,0,0,0.04)] overflow-hidden relative">
+        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="relative z-10 space-y-5">
+          
+          <div class="pb-5 border-b border-outline-variant/20">
+            <h2 class="font-title-md text-title-md text-primary leading-tight font-bold">{{ pkg()?.title || 'Loading Package...' }}</h2>
+            @if (selectedSeason()) {
+              <div class="mt-3 p-3 bg-primary/5 rounded-lg border border-primary/20">
+                <span class="text-caption text-primary font-bold block mb-1">Season: {{ selectedSeason()!.seasonName }}</span>
+                <span class="text-xs text-on-surface-variant flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px]">calendar_month</span>
+                  {{ selectedSeason()!.startDate | date:'mediumDate' }} - {{ selectedSeason()!.endDate | date:'mediumDate' }}
+                </span>
+              </div>
+            }
+          </div>
+
+          <div class="space-y-3 text-sm font-medium">
+            <div class="flex justify-between items-center">
+              <span class="text-on-surface-variant">Travelers</span>
+              <span class="font-bold text-primary">{{ adultCount() }} Adults, {{ childCount() }} Child</span>
+            </div>
+            
+            <div class="flex justify-between items-center">
+              <span class="text-on-surface-variant">Base Price</span>
+              <span class="font-bold">₹{{ pricing().baseTotal | number:'1.2-2' }}</span>
+            </div>
+            
+            @if (pricing().discount > 0) {
+              <div class="flex justify-between items-center text-[#10b981]">
+                <span class="flex items-center gap-1">Discount <span class="text-xs">({{ selectedSeason()?.discountPercent }}%)</span></span>
+                <span class="font-bold">- ₹{{ pricing().discount | number:'1.2-2' }}</span>
+              </div>
+            }
+
+            @if (pricing().platformFee > 0 || pricing().gst > 0) {
+              <div class="pt-2 border-t border-outline-variant/10 space-y-2 mt-2">
+                <div class="flex justify-between items-center text-xs">
+                  <span class="text-on-surface-variant">Platform Fee <span class="opacity-70">({{ platformConfig()?.platformFeePercent }}%)</span></span>
+                  <span class="font-medium text-on-surface">₹{{ pricing().platformFee | number:'1.2-2' }}</span>
+                </div>
+                <div class="flex justify-between items-center text-xs">
+                  <span class="text-on-surface-variant">Taxes (GST) <span class="opacity-70">({{ platformConfig()?.gstPercent }}%)</span></span>
+                  <span class="font-medium text-on-surface">₹{{ pricing().gst | number:'1.2-2' }}</span>
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="pt-5 border-t border-outline-variant/20">
+            <div class="flex justify-between items-end mb-2">
+              <div class="space-y-0.5">
+                <span class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Total Amount</span>
+                <div class="font-display-lg text-[32px] leading-none font-bold text-secondary">₹{{ pricing().grandTotal | number:'1.2-2' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</main>
+</div>

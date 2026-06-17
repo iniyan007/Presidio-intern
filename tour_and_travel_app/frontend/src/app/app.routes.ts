@@ -4,11 +4,13 @@ import { DashboardComponent } from './pages/dashboard/dashboard';
 import { PackageDetailsComponent } from './pages/package-details/package-details';
 import { ProfileComponent } from './pages/profile/profile';
 import { MyBookingsComponent } from './pages/my-bookings/my-bookings';
+import { BookingWizardComponent } from './pages/booking-wizard/booking-wizard';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'package/:id', component: PackageDetailsComponent },
+  { path: 'package/:id/book', component: BookingWizardComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'bookings', component: MyBookingsComponent },
   { path: '**', redirectTo: '' }
