@@ -28,6 +28,9 @@ export class AuthService {
       tap((res: any) => {
         if (res.token) {
           localStorage.setItem('jwt_token', res.token);
+          if (res.refreshToken) {
+            localStorage.setItem('refresh_token', res.refreshToken);
+          }
           this.isAuthenticated.set(true);
           this.userService.loadProfile().subscribe();
         }
@@ -35,13 +38,32 @@ export class AuthService {
     );
   }
 
+  refreshToken(token: string, refreshToken: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/refresh-token`, { token, refreshToken }).pipe(
+      tap((res: any) => {
+        if (res.token) {
+          localStorage.setItem('jwt_token', res.token);
+          if (res.refreshToken) {
+            localStorage.setItem('refresh_token', res.refreshToken);
+          }
+          this.isAuthenticated.set(true);
+        }
+      })
+    );
+  }
+
   logout() {
     localStorage.removeItem('jwt_token');
+    localStorage.removeItem('refresh_token');
     this.isAuthenticated.set(false);
     this.userService.userProfile.set(null);
   }
 
   getToken() {
     return localStorage.getItem('jwt_token');
+  }
+  
+  getRefreshToken() {
+    return localStorage.getItem('refresh_token');
   }
 }
