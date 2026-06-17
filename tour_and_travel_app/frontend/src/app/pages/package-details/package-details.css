@@ -1,0 +1,17 @@
+.itinerary-line::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 24px;
+    bottom: 0;
+    width: 2px;
+    background: #e6e8ea;
+}
+.itinerary-step:last-child .itinerary-line::before {
+    display: none;
+}
+.glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}

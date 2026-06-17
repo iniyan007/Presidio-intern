@@ -1,6 +1,6 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { PackageService, TravelPackage } from '../../services/package.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -11,9 +11,10 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   private packageService = inject(PackageService);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   packages = signal<TravelPackage[]>([]);
   isLoading = signal<boolean>(true);
@@ -26,14 +27,29 @@ export class DashboardComponent implements OnInit {
   searchDate = signal<string>('');
   selectedPackageType = signal<string>('');
   selectedSortBy = signal<string>('');
+  
+  private pollingInterval: any;
 
   ngOnInit() {
     this.isLoggedIn.set(!!this.authService.getToken());
     this.loadPackages();
+    
+    // Poll every 10 seconds to update live seat availability
+    this.pollingInterval = setInterval(() => {
+      this.loadPackages(true); // silent load
+    }, 10000);
   }
 
-  loadPackages() {
-    this.isLoading.set(true);
+  ngOnDestroy() {
+    if (this.pollingInterval) {
+      clearInterval(this.pollingInterval);
+    }
+  }
+
+  loadPackages(silent: boolean = false) {
+    if (!silent) {
+      this.isLoading.set(true);
+    }
     
     const filters: any = {};
     if (this.searchDestination().trim()) filters.SearchTerm = this.searchDestination().trim();
@@ -69,6 +85,15 @@ export class DashboardComponent implements OnInit {
     const value = (event.target as HTMLSelectElement).value;
     this.selectedSortBy.set(value);
     this.loadPackages();
+  }
+
+  viewDetails(packageId: string) {
+    if (!this.isLoggedIn()) {
+      alert('Please log in to view package details and continue booking.');
+      this.router.navigate(['/auth']);
+    } else {
+      this.router.navigate(['/package', packageId]);
+    }
   }
 
   getPrimaryImage(pkg: any): string {

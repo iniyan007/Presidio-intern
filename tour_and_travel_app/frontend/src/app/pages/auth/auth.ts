@@ -1,7 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './auth.html',
   styleUrl: './auth.css'
 })
-export class AuthComponent {
+export class AuthComponent implements OnInit {
   isLoginTab = signal<boolean>(true);
   loginForm: FormGroup;
   signupForm: FormGroup;
@@ -25,6 +26,17 @@ export class AuthComponent {
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private route = inject(ActivatedRoute);
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['tab'] === 'signup') {
+        this.isLoginTab.set(false);
+      } else {
+        this.isLoginTab.set(true);
+      }
+    });
+  }
 
   constructor() {
     this.loginForm = this.fb.group({
@@ -52,9 +64,7 @@ export class AuthComponent {
     this.authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
         this.isLoading.set(false);
-        this.successMessage.set('Login successful! JWT stored.');
-        console.log('Login successful:', res);
-        // We will navigate to dashboard later
+        window.location.href = '/';
       },
       error: (err: any) => {
         this.isLoading.set(false);

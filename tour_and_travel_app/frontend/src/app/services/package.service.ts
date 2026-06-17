@@ -17,6 +17,117 @@ export interface TravelPackage {
   startingPrice: number;
   pendingSeats: number;
   earliestDepartureDate: string | null;
+  availableUntil: string | null;
+}
+
+export interface PackageMedia {
+  id: string;
+  filePath: string;
+  caption: string | null;
+  isPrimary: boolean;
+  displayOrder: number;
+}
+
+export interface PackageSeasonalPricing {
+  id: string;
+  seasonName: string;
+  startDate: string;
+  endDate: string;
+  basePrice: number;
+  childPrice: number | null;
+  discountPercent: number | null;
+  availableSlots: number;
+  isActive: boolean;
+}
+
+export interface ItineraryActivity {
+  id: string;
+  sequenceOrder: number;
+  activityTitle: string;
+  description: string | null;
+  activityType: string | null;
+  location: string | null;
+  durationMinutes: number | null;
+  isOptional: boolean;
+  extraCost: number;
+}
+
+export interface ItineraryMeal {
+  id: string;
+  description: string | null;
+  venue: string | null;
+  isIncluded: boolean;
+}
+
+export interface ItineraryAccommodation {
+  id: string;
+  hotelName: string;
+  hotelAddress: string | null;
+  roomType: string | null;
+  starRating: number | null;
+  checkInTime: string | null;
+  checkOutTime: string | null;
+  amenities: string | null;
+  notes: string | null;
+}
+
+export interface ItineraryTransport {
+  id: string;
+  segmentOrder: number;
+  vehicleDescription: string;
+  pickupPoint: string;
+  dropPoint: string;
+  pickupTime: string;
+  dropTime: string;
+  distanceKm: number;
+  notes: string | null;
+}
+
+export interface ItineraryDay {
+  id: string;
+  dayNumber: number;
+  title: string;
+  description: string | null;
+  location: string | null;
+  activities: ItineraryActivity[];
+  meals: ItineraryMeal[];
+  accommodations: ItineraryAccommodation[];
+  transports?: ItineraryTransport[];
+}
+
+export interface PackageReview {
+  id: string;
+  reviewerName: string;
+  overallRating: number;
+  comment: string | null;
+  createdAt: string;
+}
+
+export interface TravelPackageDetails {
+  id: string;
+  packagerId: string;
+  packagerName: string;
+  title: string;
+  packageType: string;
+  description: string | null;
+  destination: string;
+  country: string;
+  city: string | null;
+  durationDays: number;
+  durationNights: number;
+  maxCapacity: number;
+  currentBookings: number;
+  minAge: number | null;
+  cancellationPolicy: string | null;
+  isFeatured: boolean;
+  avgRating: number;
+  totalReviews: number;
+  highlights: string[];
+  inclusions: string[];
+  exclusions: string[];
+  media: PackageMedia[];
+  seasonalPricings: PackageSeasonalPricing[];
+  itineraryDays: ItineraryDay[];
 }
 
 @Injectable({
@@ -42,7 +153,11 @@ export class PackageService {
     return this.http.get<any>(this.apiUrl, { params });
   }
 
-  getPackageById(id: string): Observable<TravelPackage> {
-    return this.http.get<TravelPackage>(`${this.apiUrl}/${id}`);
+  getPackageById(id: string): Observable<TravelPackageDetails> {
+    return this.http.get<TravelPackageDetails>(`${this.apiUrl}/${id}`);
+  }
+
+  getPackageReviews(packageId: string): Observable<PackageReview[]> {
+    return this.http.get<PackageReview[]>(`${this.apiUrl}/${packageId}/reviews`);
   }
 }

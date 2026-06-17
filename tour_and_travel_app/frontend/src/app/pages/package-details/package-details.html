@@ -1,0 +1,400 @@
+
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8">
+@if (isLoading()) {
+  <div class="flex justify-center items-center py-24">
+    <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-primary"></div>
+  </div>
+} @else if (errorMessage()) {
+  <div class="flex flex-col items-center justify-center py-24 text-center">
+    <span class="material-symbols-outlined text-6xl text-error mb-4">error</span>
+    <h2 class="font-title-md text-error">{{ errorMessage() }}</h2>
+    <button class="mt-4 bg-primary text-on-primary px-6 py-2 rounded-lg" routerLink="/">Back to Dashboard</button>
+  </div>
+} @else if (pkg()) {
+  <ng-container *ngIf="pkg() as p">
+  <!-- Hero Section -->
+  <section class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-12">
+  <div class="md:col-span-8">
+  <div class="flex flex-col gap-4 mb-6">
+  <div class="flex items-center gap-2 text-primary font-label-md">
+  <span class="material-symbols-outlined text-sm">location_on</span>
+  <span class="">{{ p.city && p.city !== p.destination ? p.city + ', ' : '' }}{{ p.destination }}, {{ p.country }}</span>
+  @if (p.isFeatured) {
+    <span class="bg-amber-400 text-amber-900 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ml-2">Featured</span>
+  }
+  </div>
+  <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">{{ p.title }}</h2>
+  <div class="flex items-center gap-3 mt-1 mb-3">
+    <div class="flex items-center text-amber-400">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+      <span class="font-bold text-primary ml-1">{{ p.avgRating > 0 ? (p.avgRating | number:'1.1-1') : 'New' }}</span>
+    </div>
+    @if (p.totalReviews > 0) {
+      <span class="text-caption text-on-surface-variant">({{ p.totalReviews }} reviews)</span>
+    }
+    <span class="text-on-surface-variant font-label-md border-l border-outline-variant pl-3">by {{ p.packagerName }}</span>
+  </div>
+  <div class="flex gap-3 flex-wrap">
+  <div class="flex items-center gap-1 bg-surface-container-high px-3 py-1 rounded-full text-primary font-label-md">
+  <span class="material-symbols-outlined text-base">schedule</span>
+                              {{ p.durationDays }} Days / {{ p.durationNights }} Nights
+                          </div>
+  <div class="flex items-center gap-1 bg-surface-container-high px-3 py-1 rounded-full text-primary font-label-md">
+  <span class="material-symbols-outlined text-base">groups</span>
+                              Capacity: {{ p.maxCapacity }} ({{ p.currentBookings }} booked)
+                          </div>
+  @if (p.minAge) {
+    <div class="flex items-center gap-1 bg-surface-container-high px-3 py-1 rounded-full text-primary font-label-md">
+    <span class="material-symbols-outlined text-base">child_care</span>
+                                Age {{ p.minAge }}+
+                            </div>
+  }
+  <div class="flex items-center gap-1 bg-surface-container-high px-3 py-1 rounded-full text-primary font-label-md">
+  <span class="material-symbols-outlined text-base">category</span>
+                              {{ p.packageType }}
+                          </div>
+  </div>
+  </div>
+  
+  <!-- Bento Grid Image Gallery -->
+  <div class="grid grid-cols-4 grid-rows-2 gap-3 h-[400px] md:h-[500px]">
+  <div class="col-span-3 row-span-2 rounded-xl overflow-hidden relative group">
+  <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" [src]="getPrimaryImage()" [alt]="p.title">
+  </div>
+  
+  @if (getGalleryImages().length > 0) {
+    <div class="col-span-1 row-span-1 rounded-xl overflow-hidden group">
+      <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" [src]="getGalleryImages()[0] || getPrimaryImage()">
+    </div>
+  }
+  @if (getGalleryImages().length > 1) {
+    <div class="col-span-1 row-span-1 rounded-xl overflow-hidden relative group">
+    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" [src]="getGalleryImages()[1] || getPrimaryImage()">
+    <div class="absolute inset-0 bg-black/30 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
+    <span class="text-white font-label-md">+ More Photos</span>
+    </div>
+    </div>
+  }
+  </div>
+  </div>
+  
+  <!-- Booking Sidebar -->
+  <div class="md:col-span-4">
+  <div class="sticky top-28 bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-[0px_4px_20px_rgba(26,54,93,0.08)]">
+  <div class="mb-6">
+  <span class="text-secondary font-label-md block mb-1">Starting Price</span>
+  <div class="flex items-baseline gap-2">
+  <span class="font-display-lg text-primary text-[32px] font-bold">₹{{ getStartingPrice() | number }}</span>
+  <span class="text-body-md text-on-surface-variant">/ Person</span>
+  </div>
+  </div>
+  
+  <div class="space-y-4 mb-6">
+  <div>
+  <label class="font-label-md text-on-surface block mb-2">Available Seasons</label>
+  <div class="flex flex-col gap-2">
+    @for (season of p.seasonalPricings; track season.id) {
+      @if (season.isActive) {
+        <div class="flex flex-col border border-outline-variant p-3 rounded-lg cursor-pointer hover:border-primary transition-colors group">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-primary">calendar_month</span>
+              <div class="flex flex-col">
+                <span class="text-body-md group-hover:text-primary transition-colors leading-tight">{{ season.seasonName }}</span>
+                <span class="text-caption text-on-surface-variant mt-0.5">{{ season.startDate | date:'mediumDate' }} - {{ season.endDate | date:'mediumDate' }}</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-end">
+              <span class="font-label-md text-primary">₹{{ season.basePrice | number }}</span>
+              @if (season.discountPercent && season.discountPercent > 0) {
+                <span class="text-[10px] text-error font-bold">{{ season.discountPercent }}% OFF</span>
+              }
+            </div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-outline-variant/30 flex justify-between items-center text-caption text-on-surface-variant">
+            @if (season.childPrice) {
+              <span>Child: ₹{{ season.childPrice | number }}</span>
+            } @else {
+              <span></span>
+            }
+            @if (season.availableSlots > 0) {
+              <span class="text-secondary font-medium">{{ season.availableSlots }} slots left</span>
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+  </div>
+  </div>
+  <button class="w-full bg-secondary text-on-secondary py-4 rounded-lg font-label-md hover:opacity-90 transition-all shadow-lg active:scale-[0.98]">
+                          BOOK NOW
+                      </button>
+  <p class="text-center text-caption text-on-surface-variant mt-4">Taxes and platform fees may apply. Safe and secure booking.</p>
+  </div>
+  </div>
+  </section>
+  
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+  <div class="md:col-span-8">
+  <!-- Description -->
+  <section class="mb-12">
+  <h3 class="font-title-md text-title-md text-primary mb-4">About the Experience</h3>
+  <p class="text-body-lg text-on-surface-variant leading-relaxed">{{ p.description || 'No overview available.' }}</p>
+  
+  @if (p.highlights && p.highlights.length > 0) {
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+      @for (h of p.highlights; track $index) {
+        <div class="flex flex-col items-center justify-center p-4 bg-surface-container rounded-lg h-full text-center">
+        <span class="material-symbols-outlined text-primary mb-2">verified</span>
+        <span class="text-caption text-on-surface-variant">{{ h }}</span>
+        </div>
+      }
+    </div>
+  }
+  </section>
+  
+  <!-- Itinerary -->
+  <section class="mb-12">
+  <h3 class="font-title-md text-title-md text-primary mb-6">Detailed Itinerary</h3>
+  <div class="space-y-0">
+    @for (day of p.itineraryDays; track day.id) {
+      <div class="itinerary-step relative pb-8">
+      <div class="itinerary-line"></div>
+      <div class="flex gap-4">
+      <div class="relative z-10 w-6 h-6 rounded-full bg-primary flex items-center justify-center ring-4 ring-background">
+      <span class="text-[10px] text-white font-bold">{{ day.dayNumber }}</span>
+      </div>
+      <div class="flex-1">
+      <div class="flex items-center justify-between mb-2">
+      <h4 class="font-label-md text-primary">Day {{ day.dayNumber }}: {{ day.title }}</h4>
+      @if (day.location) {
+        <span class="text-caption text-on-surface-variant flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">location_on</span> {{ day.location }}
+        </span>
+      }
+      </div>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+      <p class="text-body-md text-on-surface-variant mb-4">{{ day.description }}</p>
+      
+      @if (day.activities && day.activities.length > 0) {
+        <div class="space-y-3 mb-4">
+          @for (act of day.activities; track act.id) {
+            <div class="flex items-start gap-3 p-4 bg-primary/5 rounded-lg border border-primary/10">
+            <span class="material-symbols-outlined text-primary mt-0.5">explore</span>
+            <div class="w-full">
+            <div class="flex justify-between items-start mb-1">
+              <div class="font-label-md text-primary">{{ act.activityTitle }}</div>
+              @if (act.isOptional) {
+                <span class="text-[10px] uppercase tracking-wider font-bold bg-surface-container-high px-2 py-0.5 rounded text-on-surface-variant">Optional</span>
+              }
+            </div>
+            <div class="flex items-center gap-3 text-caption text-on-surface-variant mb-2">
+              <div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> {{ act.durationMinutes ? act.durationMinutes + ' mins' : 'Flexible' }}</div>
+              <div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">category</span> {{ act.activityType || 'Activity' }}</div>
+              @if (act.location) {
+                <div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">location_on</span> {{ act.location }}</div>
+              }
+            </div>
+            @if (act.description) {
+              <p class="text-caption text-on-surface-variant mb-2">{{ act.description }}</p>
+            }
+            @if (act.isOptional && act.extraCost > 0) {
+              <div class="text-caption font-bold text-secondary">Extra Cost: ₹{{ act.extraCost | number }}</div>
+            }
+            </div>
+            </div>
+          }
+        </div>
+      }
+      
+      @if (day.transports && day.transports.length > 0) {
+        <div class="space-y-3 mb-4">
+          @for (transport of day.transports; track transport.id) {
+            <div class="flex items-start gap-3 p-3 bg-secondary/5 rounded-lg border border-secondary/10">
+            <span class="material-symbols-outlined text-secondary">directions_car</span>
+            <div class="w-full">
+            <div class="flex justify-between items-center mb-1">
+            <div class="font-label-md text-secondary">{{ transport.vehicleDescription }}</div>
+            <div class="text-caption text-on-surface-variant font-medium">{{ transport.distanceKm }} km</div>
+            </div>
+            <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-4 text-caption text-on-surface-variant">
+              <div class="flex items-center gap-1">
+                <span class="font-bold">Pick-up:</span> {{ transport.pickupTime | slice:0:5 }} at {{ transport.pickupPoint }}
+              </div>
+              <div class="hidden md:block material-symbols-outlined text-[14px]">arrow_right_alt</div>
+              <div class="flex items-center gap-1">
+                <span class="font-bold">Drop-off:</span> {{ transport.dropTime | slice:0:5 }} at {{ transport.dropPoint }}
+              </div>
+            </div>
+            @if (transport.notes) {
+              <div class="mt-2 text-caption italic text-on-surface-variant">{{ transport.notes }}</div>
+            }
+            </div>
+            </div>
+          }
+        </div>
+      }
+      
+      @if (day.accommodations && day.accommodations.length > 0) {
+        <div class="space-y-3 mb-4">
+          @for (acc of day.accommodations; track acc.id) {
+            <div class="flex items-start gap-3 p-4 bg-tertiary/5 rounded-lg border border-tertiary/10">
+              <span class="material-symbols-outlined text-tertiary mt-0.5">hotel</span>
+              <div class="w-full">
+                <div class="flex justify-between items-center mb-1">
+                  <div class="font-label-md text-tertiary flex items-center gap-2">
+                    {{ acc.hotelName }}
+                    @if (acc.starRating) {
+                      <div class="flex items-center text-amber-400 text-xs">
+                        <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span class="text-on-surface-variant font-bold ml-0.5">{{ acc.starRating }} Star</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+                @if (acc.hotelAddress) {
+                  <div class="text-caption text-on-surface-variant flex items-center gap-1 mb-2">
+                    <span class="material-symbols-outlined text-[14px]">location_on</span> {{ acc.hotelAddress }}
+                  </div>
+                }
+                <div class="grid grid-cols-2 gap-2 text-caption text-on-surface-variant mb-2">
+                  @if (acc.roomType) {
+                    <div><span class="font-bold">Room:</span> {{ acc.roomType }}</div>
+                  }
+                  @if (acc.checkInTime) {
+                    <div><span class="font-bold">Check-in:</span> {{ acc.checkInTime | slice:0:5 }}</div>
+                  }
+                  @if (acc.checkOutTime) {
+                    <div><span class="font-bold">Check-out:</span> {{ acc.checkOutTime | slice:0:5 }}</div>
+                  }
+                </div>
+                @if (acc.amenities) {
+                  <div class="text-caption text-on-surface-variant mt-2 border-t border-tertiary/10 pt-2"><span class="font-bold">Amenities:</span> {{ acc.amenities }}</div>
+                }
+                @if (acc.notes) {
+                  <div class="text-caption italic text-on-surface-variant mt-1">{{ acc.notes }}</div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (day.meals && day.meals.length > 0) {
+        <div class="space-y-2">
+          <h5 class="font-label-md text-primary mb-2">Meals</h5>
+          @for (meal of day.meals; track meal.id) {
+            <div class="flex items-start gap-2 text-caption text-on-surface-variant bg-surface-container-low p-2.5 rounded border border-outline-variant/30">
+              <span class="material-symbols-outlined text-[16px] mt-0.5 text-primary">restaurant</span>
+              <div class="flex-1">
+                <div class="flex justify-between items-start">
+                  <span class="font-medium text-primary">{{ meal.description }}</span>
+                  <span class="text-[10px] uppercase font-bold {{ meal.isIncluded ? 'text-emerald-600' : 'text-on-surface-variant' }}">
+                    {{ meal.isIncluded ? 'Included' : 'Not Included' }}
+                  </span>
+                </div>
+                @if (meal.venue) {
+                  <div class="text-[11px] mt-1"><span class="font-bold">Venue:</span> {{ meal.venue }}</div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+      </div>
+      </div>
+      </div>
+      </div>
+    }
+  </div>
+  </section>
+  
+  <!-- Inclusions & Exclusions -->
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-8 py-8 border-t border-outline-variant">
+    @if (p.inclusions && p.inclusions.length > 0) {
+      <div>
+      <h3 class="font-title-md text-title-md text-primary mb-6">What's Included</h3>
+      <ul class="space-y-4">
+        @for (inc of p.inclusions; track $index) {
+          <li class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-emerald-600 mt-0.5">check_circle</span>
+          <span class="text-body-md text-on-surface-variant">{{ inc }}</span>
+          </li>
+        }
+      </ul>
+      </div>
+    }
+    @if (p.exclusions && p.exclusions.length > 0) {
+      <div>
+      <h3 class="font-title-md text-title-md text-primary mb-6">What's Excluded</h3>
+      <ul class="space-y-4">
+        @for (exc of p.exclusions; track $index) {
+          <li class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-error mt-0.5">cancel</span>
+          <span class="text-body-md text-on-surface-variant">{{ exc }}</span>
+          </li>
+        }
+      </ul>
+      </div>
+    }
+  </section>
+  
+  <section class="py-12 border-t border-outline-variant">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+  <div>
+  <h3 class="font-title-md text-title-md text-primary">Cancellation Policy</h3>
+  <p class="text-body-md text-on-surface-variant mt-2">{{ p.cancellationPolicy || 'Standard cancellation policy applies.' }}</p>
+  </div>
+  </div>
+  </section>
+
+  <section class="py-12 border-t border-outline-variant">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+  <div>
+  <h3 class="font-title-md text-title-md text-primary">Customer Reviews</h3>
+  <div class="flex items-center gap-2 mt-2">
+  <div class="flex text-amber-400">
+  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+  <span class="font-bold text-primary ml-1">{{ p.avgRating | number:'1.1-1' }} / 5</span>
+  </div>
+  <span class="text-on-surface-variant text-caption ml-2">based on {{ p.totalReviews }} reviews</span>
+  </div>
+  </div>
+  <button class="inline-flex items-center justify-center bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md hover:opacity-90 transition-all">
+        Write a Review
+  </button>
+  </div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  @if (reviews().length === 0) {
+    <div class="col-span-full text-center py-8">
+      <p class="text-on-surface-variant italic">No reviews yet for this package.</p>
+    </div>
+  } @else {
+    @for (review of reviews(); track review.id) {
+      <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 flex flex-col justify-between">
+      <div>
+      <div class="flex justify-between items-start mb-4">
+      <div>
+      <h4 class="font-label-md text-primary">{{ review.reviewerName || 'Anonymous Traveler' }}</h4>
+      <div class="flex text-amber-400 text-sm mt-1">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+      <span class="ml-1 text-primary font-bold">{{ review.overallRating }}</span>
+      </div>
+      </div>
+      <span class="text-caption text-on-surface-variant">{{ review.createdAt | date:'mediumDate' }}</span>
+      </div>
+      <p class="text-body-md text-on-surface-variant italic mb-4">"{{ review.comment || 'Left a rating without a comment.' }}"</p>
+      </div>
+      </div>
+    }
+  }
+  </div>
+  </section>
+  
+  </div>
+  </div>
+  </ng-container>
+}
+</main>

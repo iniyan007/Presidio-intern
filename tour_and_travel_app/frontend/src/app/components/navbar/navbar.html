@@ -1,0 +1,24 @@
+<header class="sticky top-0 z-50 flex justify-between items-center px-margin-desktop w-full h-20 bg-surface-container-lowest dark:bg-surface-dim shadow-[0px_4px_20px_rgba(26,54,93,0.08)]">
+<div class="flex items-center gap-12">
+<span class="font-display-lg text-display-lg font-bold text-primary dark:text-primary-fixed cursor-pointer" routerLink="/">TourMate</span>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-body-md text-body-md text-primary dark:text-primary-fixed font-bold border-b-2 border-primary pb-1 hover:text-primary transition-colors cursor-pointer" routerLink="/">Discover</a>
+@if (isLoggedIn()) {
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-outline hover:text-primary transition-colors cursor-pointer" routerLink="/bookings">My Bookings</a>
+}
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-4">
+@if (!isLoggedIn()) {
+  <button routerLink="/auth" class="font-label-md text-label-md text-primary px-5 py-2.5 hover:bg-primary/5 hover:text-secondary rounded-full transition-all duration-300">Login</button>
+  <button routerLink="/auth" [queryParams]="{tab: 'signup'}" class="font-label-md text-label-md bg-secondary text-on-secondary px-7 py-2.5 rounded-full shadow-md hover:shadow-lg hover:bg-secondary/90 hover:-translate-y-0.5 transition-all duration-300">Sign Up</button>
+} @else {
+  <div class="flex items-center gap-3">
+    <span class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-container-high rounded-full transition-all">notifications</span>
+    <span class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-container-high rounded-full transition-all" (click)="logout()">logout</span>
+  </div>
+}
+</div>
+</div>
+</header>
