@@ -1,9 +1,10 @@
 import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { PackageService, TravelPackage } from '../../services/package.service';
+import { PackageService } from '../../services/package.service';
+import { TravelPackage } from '../../models/package.model';
 import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../services/user';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-dashboard',

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { signal } from '@angular/core';
-import { UserService } from './user';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'

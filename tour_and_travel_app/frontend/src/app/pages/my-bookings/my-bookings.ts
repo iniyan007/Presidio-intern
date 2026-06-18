@@ -2,7 +2,8 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { BookingService, BookingResponse } from '../../services/booking';
+import { BookingService } from '../../services/booking.service';
+import { BookingResponse } from '../../models/booking.model';
 import { PackageService } from '../../services/package.service';
 
 @Component({

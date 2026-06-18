@@ -63,7 +63,13 @@
               </div>
               <div class="space-y-2">
                 <label class="font-label-md text-label-md text-on-surface-variant">Infant Count (Under 2 years)</label>
-                <input type="number" min="0" [ngModel]="infantCount()" (ngModelChange)="infantCount.set($event)" class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+                <input type="number" min="0" max="10" 
+                       [disabled]="pkg()?.packageType === 'Honeymoon'" 
+                       [ngClass]="pkg()?.packageType === 'Honeymoon' ? 'bg-surface-container text-on-surface-variant cursor-not-allowed' : 'bg-surface-bright text-on-surface focus:ring-primary'"
+                       [ngModel]="infantCount()" (ngModelChange)="infantCount.set($event)" class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:outline-none focus:ring-2">
+                @if (pkg()?.packageType === 'Honeymoon') {
+                  <p class="text-caption text-secondary mt-1">Infants are not allowed on honeymoon packages.</p>
+                }
               </div>
               <div class="md:col-span-2 space-y-2">
                 <label class="font-label-md text-label-md text-on-surface-variant">Special Requests</label>
@@ -92,7 +98,7 @@
 
             @for (traveler of travelers(); track $index) {
               <div [ngClass]="traveler.isPrimary ? 'border-l-4 border-primary' : ''" class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_4px_20px_rgba(26,54,93,0.08)] relative">
-                @if (!traveler.isPrimary) {
+                @if (!traveler.isPrimary && !(pkg()?.packageType === 'Honeymoon' && $index === 1)) {
                   <button (click)="removeTraveler($index)" class="absolute top-4 right-4 text-error hover:bg-error/10 p-2 rounded-full transition-colors">
                     <span class="material-symbols-outlined">delete</span>
                   </button>

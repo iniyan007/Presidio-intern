@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BookingService } from '../../services/booking';
+import { BookingService } from '../../services/booking.service';
 
 @Component({
   selector: 'app-review-modal',

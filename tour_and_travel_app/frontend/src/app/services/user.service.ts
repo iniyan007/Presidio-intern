@@ -3,21 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-export interface UserProfile {
-  id: string;
-  fullName: string;
-  email: string;
-  phone: string | null;
-  profilePicture: string | null;
-  isActive: boolean;
-  isEmailVerified: boolean;
-  isPackager: boolean;
-}
-
-export interface UpdateProfileRequest {
-  fullName: string;
-  phone?: string | null;
-}
+import { UserProfile, UpdateProfileRequest } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'

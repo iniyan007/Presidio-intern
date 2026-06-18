@@ -2,8 +2,10 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { PackageService, TravelPackageDetails, PackageSeasonalPricing } from '../../services/package.service';
-import { BookingService, PlatformConfigResponse } from '../../services/booking';
+import { PackageService } from '../../services/package.service';
+import { TravelPackageDetails, PackageSeasonalPricing } from '../../models/package.model';
+import { BookingService } from '../../services/booking.service';
+import { PlatformConfigResponse } from '../../models/booking.model';
 
 interface TravelerForm {
   fullName: string;
@@ -39,7 +41,7 @@ export class BookingWizardComponent implements OnInit {
   travelDate = signal<string>('');
   infantCount = signal<number>(0);
   specialRequests = signal<string>('');
-  
+
   travelers = signal<TravelerForm[]>([
     {
       fullName: '', dateOfBirth: '', gender: 'Male', nationality: 'Indian',
@@ -86,7 +88,7 @@ export class BookingWizardComponent implements OnInit {
   pricing = computed(() => {
     const season = this.selectedSeason();
     const config = this.platformConfig();
-    
+
     if (!season || !config) return { baseTotal: 0, discount: 0, platformFee: 0, gst: 0, grandTotal: 0 };
 
     const baseTotal = (this.adultCount() * season.basePrice) + (this.childCount() * (season.childPrice || season.basePrice));
@@ -106,7 +108,7 @@ export class BookingWizardComponent implements OnInit {
       this.packageService.getPackageById(id).subscribe({
         next: (p: TravelPackageDetails) => {
           this.pkg.set(p);
-          
+
           let loadedDateFromDraft = false;
           let loadedTravelersFromDraft = false;
           const draftStr = localStorage.getItem(`bookingDraft_${id}`);
@@ -114,8 +116,8 @@ export class BookingWizardComponent implements OnInit {
             try {
               const draft = JSON.parse(draftStr);
               if (draft.travelDate) {
-                 this.travelDate.set(draft.travelDate);
-                 loadedDateFromDraft = true;
+                this.travelDate.set(draft.travelDate);
+                loadedDateFromDraft = true;
               }
               if (draft.infantCount !== undefined) this.infantCount.set(draft.infantCount);
               if (draft.specialRequests) this.specialRequests.set(draft.specialRequests);
@@ -123,7 +125,7 @@ export class BookingWizardComponent implements OnInit {
                 this.travelers.set(draft.travelers);
                 loadedTravelersFromDraft = true;
               }
-            } catch (e) {}
+            } catch (e) { }
           }
 
           if (!loadedTravelersFromDraft && p.packageType === 'Honeymoon') {
@@ -187,6 +189,10 @@ export class BookingWizardComponent implements OnInit {
 
   removeTraveler(index: number) {
     if (index === 0) return; // Cannot remove primary
+    if (this.pkg()?.packageType === 'Honeymoon' && index === 1) {
+      alert('Honeymoon packages require exactly 2 travelers. The second traveler cannot be removed.');
+      return;
+    }
     this.travelers.update(t => t.filter((_, i) => i !== index));
   }
 
@@ -238,11 +244,20 @@ export class BookingWizardComponent implements OnInit {
           return;
         }
 
+        if (this.pkg()?.packageType === 'Honeymoon') {
+          this.infantCount.set(0);
+        }
+
+        if (this.infantCount() > 10) {
+          alert('Maximum 10 infants are allowed per booking.');
+          return;
+        }
+
         const season = this.selectedSeason()!;
         const selectedDate = new Date(this.travelDate());
         const startDate = new Date(season.startDate);
         const endDate = new Date(season.endDate);
-        
+
         if (selectedDate < startDate || selectedDate > endDate) {
           alert('Travel Date must be within the selected season range: ' + season.startDate + ' to ' + season.endDate);
           return;
@@ -263,6 +278,12 @@ export class BookingWizardComponent implements OnInit {
           const age = this.calculateAge(new Date(t.dateOfBirth));
           if (t.isPrimary && age < 18) {
             alert(`Traveler ${i + 1} (Primary): Must be at least 18 years old to book.`);
+            hasValidationErrors = true;
+            break;
+          }
+
+          if (this.pkg()?.packageType === 'Honeymoon' && age < 18) {
+            alert(`Traveler ${i + 1} (${t.fullName}): All travelers must be at least 18 years old for Honeymoon packages.`);
             hasValidationErrors = true;
             break;
           }
@@ -367,7 +388,7 @@ export class BookingWizardComponent implements OnInit {
         this.clearDraft();
         alert('Booking Created Successfully!');
         this.isSubmitting.set(false);
-        this.router.navigate(['/bookings']);
+        this.router.navigate(['/payment', res.id]);
       },
       error: (err) => {
         console.error(err);

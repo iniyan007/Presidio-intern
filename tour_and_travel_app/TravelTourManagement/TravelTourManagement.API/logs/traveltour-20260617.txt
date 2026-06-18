@@ -17287,3 +17287,224 @@ LIMIT 1
 2026-06-17 17:31:07.512 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.UsersController.GetProfilePicture (TravelTourManagement.API)'
 2026-06-17 17:31:07.512 +05:30 [INF] HTTP GET /api/Users/profile/picture/b37a63c3-a5e8-4305-95b0-926c3fa60354_1479c0a5-6245-47e2-98e5-a597652bc2aa.jpg responded 200 in 7.2882 ms
 2026-06-17 17:31:07.512 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Users/profile/picture/b37a63c3-a5e8-4305-95b0-926c3fa60354_1479c0a5-6245-47e2-98e5-a597652bc2aa.jpg - 200 696818 image/jpeg 7.5069ms
+2026-06-17 17:33:00.768 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5082/api/Users/profile - null null
+2026-06-17 17:33:00.770 +05:30 [INF] CORS policy execution successful.
+2026-06-17 17:33:00.770 +05:30 [INF] HTTP OPTIONS /api/Users/profile responded 204 in 1.0535 ms
+2026-06-17 17:33:00.771 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5082/api/Users/profile - 204 null null 3.1183ms
+2026-06-17 17:33:00.772 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Users/profile - null null
+2026-06-17 17:33:00.772 +05:30 [INF] CORS policy execution successful.
+2026-06-17 17:33:00.776 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.UsersController.GetProfile (TravelTourManagement.API)'
+2026-06-17 17:33:00.777 +05:30 [INF] Route matched with {action = "GetProfile", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetProfile(System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.UsersController (TravelTourManagement.API).
+2026-06-17 17:33:00.781 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5082/api/PlatformConfig - null null
+2026-06-17 17:33:00.781 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5082/api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 - null null
+2026-06-17 17:33:00.782 +05:30 [INF] CORS policy execution successful.
+2026-06-17 17:33:00.783 +05:30 [INF] CORS policy execution successful.
+2026-06-17 17:33:00.783 +05:30 [INF] HTTP OPTIONS /api/PlatformConfig responded 204 in 0.3349 ms
+2026-06-17 17:33:00.783 +05:30 [INF] HTTP OPTIONS /api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 responded 204 in 0.4255 ms
+2026-06-17 17:33:00.783 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5082/api/PlatformConfig - 204 null null 1.8401ms
+2026-06-17 17:33:00.783 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5082/api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 - 204 null null 2.1308ms
+2026-06-17 17:33:00.787 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/PlatformConfig - null null
+2026-06-17 17:33:00.787 +05:30 [INF] CORS policy execution successful.
+2026-06-17 17:33:00.787 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PlatformConfigController.GetConfig (TravelTourManagement.API)'
+2026-06-17 17:33:00.787 +05:30 [INF] Route matched with {action = "GetConfig", controller = "PlatformConfig"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetConfig(System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PlatformConfigController (TravelTourManagement.API).
+2026-06-17 17:33:00.789 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 - null null
+2026-06-17 17:33:00.790 +05:30 [INF] CORS policy execution successful.
+2026-06-17 17:33:00.790 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPublishedPackageById (TravelTourManagement.API)'
+2026-06-17 17:33:00.790 +05:30 [INF] Route matched with {action = "GetPublishedPackageById", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPublishedPackageById(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-17 17:33:00.796 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PlatformConfig.PlatformConfigResponse'.
+2026-06-17 17:33:00.796 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PlatformConfigController.GetConfig (TravelTourManagement.API) in 8.6523ms
+2026-06-17 17:33:00.796 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PlatformConfigController.GetConfig (TravelTourManagement.API)'
+2026-06-17 17:33:00.797 +05:30 [INF] HTTP GET /api/PlatformConfig responded 200 in 9.5831 ms
+2026-06-17 17:33:00.797 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/PlatformConfig - 200 null application/json; charset=utf-8 10.351ms
+2026-06-17 17:33:00.881 +05:30 [INF] Executed DbCommand (88ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, u.created_at, u.email, u.full_name, u.is_active, u.is_email_verified, u.last_login_at, u.password_hash, u.phone, u.profile_picture, u."RefreshToken", u."RefreshTokenExpiryTime", u.updated_at, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM users AS u
+LEFT JOIN packagers AS p ON u.id = p.user_id
+WHERE u.id = @__userId_0
+LIMIT 1
+2026-06-17 17:33:00.927 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Users.UserResponse'.
+2026-06-17 17:33:00.927 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.UsersController.GetProfile (TravelTourManagement.API) in 149.5391ms
+2026-06-17 17:33:00.927 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.UsersController.GetProfile (TravelTourManagement.API)'
+2026-06-17 17:33:00.927 +05:30 [INF] HTTP GET /api/Users/profile responded 200 in 154.3107 ms
+2026-06-17 17:33:00.927 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Users/profile - 200 null application/json; charset=utf-8 154.8688ms
+2026-06-17 17:33:00.953 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Users/profile/picture/b37a63c3-a5e8-4305-95b0-926c3fa60354_1479c0a5-6245-47e2-98e5-a597652bc2aa.jpg - null null
+2026-06-17 17:33:00.953 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.UsersController.GetProfilePicture (TravelTourManagement.API)'
+2026-06-17 17:33:00.954 +05:30 [INF] Route matched with {action = "GetProfilePicture", controller = "Users"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetProfilePicture(System.String) on controller TravelTourManagement.API.Controllers.UsersController (TravelTourManagement.API).
+2026-06-17 17:33:00.972 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-17 17:33:00.975 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.UsersController.GetProfilePicture (TravelTourManagement.API) in 21.6022ms
+2026-06-17 17:33:00.976 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.UsersController.GetProfilePicture (TravelTourManagement.API)'
+2026-06-17 17:33:00.976 +05:30 [INF] HTTP GET /api/Users/profile/picture/b37a63c3-a5e8-4305-95b0-926c3fa60354_1479c0a5-6245-47e2-98e5-a597652bc2aa.jpg responded 200 in 22.4204 ms
+2026-06-17 17:33:00.976 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Users/profile/picture/b37a63c3-a5e8-4305-95b0-926c3fa60354_1479c0a5-6245-47e2-98e5-a597652bc2aa.jpg - 200 696818 image/jpeg 22.816ms
+2026-06-17 17:33:01.206 +05:30 [INF] Executed DbCommand (163ms) [Parameters=[@__packageId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, t.id0, t0.id, t0.created_at, t0.day_number, t0.description, t0.location, t0.package_id, t0.title, t0.id0, t0.activity_title, t0.activity_type, t0.session, t0.description0, t0.duration_minutes, t0.extra_cost, t0.is_optional, t0.itinerary_day_id, t0.location0, t0.sequence_order, t0.id1, t0.description1, t0.is_included, t0.itinerary_day_id0, t0.meal, t0.venue, t0.id2, t0.amenities, t0.check_in_time, t0.check_out_time, t0.hotel_address, t0.hotel_name, t0.itinerary_day_id1, t0.notes, t0.room_type, t0.star_rating, t0.id3, t0.distance_km, t0.drop_point, t0.drop_time, t0.itinerary_day_id2, t0.notes0, t0.pickup_point, t0.pickup_time, t0.segment_order, t0.mode, t0.vehicle_description, p3.id, p3.display_order, p3.highlight_text, p3.package_id, p4.id, p4.description, p4.display_order, p4.package_id, p4.type, p5.id, p5.caption, p5.category, p5.display_order, p5.file_name, p5.file_path, p5.file_size_bytes, p5.is_primary, p5.mime_type, p5.package_id, p5.uploaded_at, p6.id, p6.available_slots, p6.base_price, p6.child_price, p6.discount_percent, p6.end_date, p6.is_active, p6.package_id, p6.season_name, p6.start_date, t.approved_at, t.approved_by, t.avg_rating0, t.business_license_no, t.company_name, t.contact_email, t.contact_phone, t.created_at0, t.deactivated_at, t.deactivation_reason, t.description0, t.total_reviews0, t.updated_at0, t.user_id, t.website_url, r.id, r.accommodation_rating, r.admin_note, r.booking_id, r.comment, r.created_at, r.food_rating, r.guide_rating, r.is_verified_traveler, r.overall_rating, r.package_id, r.packager_id, r.transport_rating, r.updated_at, r.user_id, r.value_rating
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at, p0.id AS id0, p0.approved_at, p0.approved_by, p0.avg_rating AS avg_rating0, p0.business_license_no, p0.company_name, p0.contact_email, p0.contact_phone, p0.created_at AS created_at0, p0.deactivated_at, p0.deactivation_reason, p0.description AS description0, p0.total_reviews AS total_reviews0, p0.updated_at AS updated_at0, p0.user_id, p0.website_url
+    FROM packages AS p
+    INNER JOIN packagers AS p0 ON p.packager_id = p0.id
+    WHERE p.id = @__packageId_0
+    LIMIT 1
+) AS t
+LEFT JOIN (
+    SELECT i.id, i.created_at, i.day_number, i.description, i.location, i.package_id, i.title, i0.id AS id0, i0.activity_title, i0.activity_type, i0.session, i0.description AS description0, i0.duration_minutes, i0.extra_cost, i0.is_optional, i0.itinerary_day_id, i0.location AS location0, i0.sequence_order, i1.id AS id1, i1.description AS description1, i1.is_included, i1.itinerary_day_id AS itinerary_day_id0, i1.meal, i1.venue, p1.id AS id2, p1.amenities, p1.check_in_time, p1.check_out_time, p1.hotel_address, p1.hotel_name, p1.itinerary_day_id AS itinerary_day_id1, p1.notes, p1.room_type, p1.star_rating, p2.id AS id3, p2.distance_km, p2.drop_point, p2.drop_time, p2.itinerary_day_id AS itinerary_day_id2, p2.notes AS notes0, p2.pickup_point, p2.pickup_time, p2.segment_order, p2.mode, p2.vehicle_description
+    FROM itinerary_days AS i
+    LEFT JOIN itinerary_activities AS i0 ON i.id = i0.itinerary_day_id
+    LEFT JOIN itinerary_day_meals AS i1 ON i.id = i1.itinerary_day_id
+    LEFT JOIN package_accommodation AS p1 ON i.id = p1.itinerary_day_id
+    LEFT JOIN package_transport AS p2 ON i.id = p2.itinerary_day_id
+) AS t0 ON t.id = t0.package_id
+LEFT JOIN package_highlights AS p3 ON t.id = p3.package_id
+LEFT JOIN package_inclusions AS p4 ON t.id = p4.package_id
+LEFT JOIN package_media AS p5 ON t.id = p5.package_id
+LEFT JOIN package_seasonal_pricing AS p6 ON t.id = p6.package_id
+LEFT JOIN reviews AS r ON t.id = r.package_id
+ORDER BY t.id, t.id0, t0.id, t0.id0, t0.id1, t0.id2, t0.id3, p3.id, p4.id, p5.id, p6.id
+2026-06-17 17:33:01.238 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Packages.PackageDetailResponse'.
+2026-06-17 17:33:01.238 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPublishedPackageById (TravelTourManagement.API) in 447.5836ms
+2026-06-17 17:33:01.238 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPublishedPackageById (TravelTourManagement.API)'
+2026-06-17 17:33:01.238 +05:30 [INF] HTTP GET /api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 responded 200 in 448.7301 ms
+2026-06-17 17:33:01.239 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 - 200 null application/json; charset=utf-8 449.1682ms
+2026-06-17 22:17:16.092 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5082/api/Users/profile - null null
+2026-06-17 22:17:16.098 +05:30 [INF] CORS policy execution successful.
+2026-06-17 22:17:16.100 +05:30 [INF] HTTP OPTIONS /api/Users/profile responded 204 in 3.0242 ms
+2026-06-17 22:17:16.101 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5082/api/Users/profile - 204 null null 9.9832ms
+2026-06-17 22:17:16.102 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Users/profile - null null
+2026-06-17 22:17:16.103 +05:30 [INF] CORS policy execution successful.
+2026-06-17 22:17:16.114 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5082/api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 - null null
+2026-06-17 22:17:16.115 +05:30 [INF] CORS policy execution successful.
+2026-06-17 22:17:16.115 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5082/api/PlatformConfig - null null
+2026-06-17 22:17:16.115 +05:30 [INF] HTTP OPTIONS /api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 responded 204 in 0.1538 ms
+2026-06-17 22:17:16.115 +05:30 [INF] CORS policy execution successful.
+2026-06-17 22:17:16.115 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5082/api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 - 204 null null 0.7517ms
+2026-06-17 22:17:16.115 +05:30 [INF] HTTP OPTIONS /api/PlatformConfig responded 204 in 0.1234 ms
+2026-06-17 22:17:16.116 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5082/api/PlatformConfig - 204 null null 0.6085ms
+2026-06-17 22:17:16.116 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '17/06/2026 12:03:40 PM', Current time (UTC): '17/06/2026 4:47:16 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-06-17 22:17:16.116 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 - null null
+2026-06-17 22:17:16.116 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/PlatformConfig - null null
+2026-06-17 22:17:16.127 +05:30 [INF] CORS policy execution successful.
+2026-06-17 22:17:16.127 +05:30 [INF] CORS policy execution successful.
+2026-06-17 22:17:16.128 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '17/06/2026 12:03:40 PM', Current time (UTC): '17/06/2026 4:47:16 PM'.
+2026-06-17 22:17:16.128 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '17/06/2026 12:03:40 PM', Current time (UTC): '17/06/2026 4:47:16 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-06-17 22:17:16.131 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '17/06/2026 12:03:40 PM', Current time (UTC): '17/06/2026 4:47:16 PM'.
+2026-06-17 22:17:16.129 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '17/06/2026 12:03:40 PM', Current time (UTC): '17/06/2026 4:47:16 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-06-17 22:17:16.132 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '17/06/2026 12:03:40 PM', Current time (UTC): '17/06/2026 4:47:16 PM'.
+2026-06-17 22:17:16.132 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PlatformConfigController.GetConfig (TravelTourManagement.API)'
+2026-06-17 22:17:16.134 +05:30 [INF] Route matched with {action = "GetConfig", controller = "PlatformConfig"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetConfig(System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PlatformConfigController (TravelTourManagement.API).
+2026-06-17 22:17:16.134 +05:30 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Admin|Traveler|Packager)
+2026-06-17 22:17:16.135 +05:30 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-06-17 22:17:16.142 +05:30 [INF] AuthenticationScheme: Bearer was challenged.
+2026-06-17 22:17:16.142 +05:30 [INF] HTTP GET /api/Users/profile responded 401 in 39.4047 ms
+2026-06-17 22:17:16.142 +05:30 [INF] AuthenticationScheme: Bearer was challenged.
+2026-06-17 22:17:16.142 +05:30 [INF] HTTP GET /api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 responded 401 in 14.5605 ms
+2026-06-17 22:17:16.142 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Users/profile - 401 0 null 40.2247ms
+2026-06-17 22:17:16.142 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 - 401 0 null 26.2543ms
+2026-06-17 22:17:16.346 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5082/api/Auth/refresh-token - null null
+2026-06-17 22:17:16.346 +05:30 [INF] CORS policy execution successful.
+2026-06-17 22:17:16.346 +05:30 [INF] HTTP OPTIONS /api/Auth/refresh-token responded 204 in 0.0545 ms
+2026-06-17 22:17:16.346 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5082/api/Auth/refresh-token - 204 null null 0.2864ms
+2026-06-17 22:17:16.347 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5082/api/Auth/refresh-token - application/json 531
+2026-06-17 22:17:16.347 +05:30 [INF] CORS policy execution successful.
+2026-06-17 22:17:16.347 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '17/06/2026 12:03:40 PM', Current time (UTC): '17/06/2026 4:47:16 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-06-17 22:17:16.348 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '17/06/2026 12:03:40 PM', Current time (UTC): '17/06/2026 4:47:16 PM'.
+2026-06-17 22:17:16.348 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.AuthController.RefreshToken (TravelTourManagement.API)'
+2026-06-17 22:17:16.358 +05:30 [INF] Route matched with {action = "RefreshToken", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] RefreshToken(TravelTourManagement.DataAccess.DTOs.Users.RefreshTokenRequest, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.AuthController (TravelTourManagement.API).
+2026-06-17 22:17:16.366 +05:30 [INF] Executed DbCommand (54ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.gst_percent, p.note, p.platform_fee_percent, p.updated_at, p.updated_by
+FROM platform_config AS p
+2026-06-17 22:17:16.369 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.PlatformConfig.PlatformConfigResponse'.
+2026-06-17 22:17:16.369 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PlatformConfigController.GetConfig (TravelTourManagement.API) in 235.0978ms
+2026-06-17 22:17:16.369 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PlatformConfigController.GetConfig (TravelTourManagement.API)'
+2026-06-17 22:17:16.369 +05:30 [INF] HTTP GET /api/PlatformConfig responded 200 in 241.7450 ms
+2026-06-17 22:17:16.369 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/PlatformConfig - 200 null application/json; charset=utf-8 253.243ms
+2026-06-17 22:17:16.420 +05:30 [INF] Executed DbCommand (13ms) [Parameters=[@__get_Item_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, u.created_at, u.email, u.full_name, u.is_active, u.is_email_verified, u.last_login_at, u.password_hash, u.phone, u.profile_picture, u."RefreshToken", u."RefreshTokenExpiryTime", u.updated_at
+FROM users AS u
+WHERE u.id = @__get_Item_0
+LIMIT 1
+2026-06-17 22:17:16.424 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM packagers AS p
+WHERE p.user_id = @__userId_0
+LIMIT 1
+2026-06-17 22:17:16.443 +05:30 [INF] Executed DbCommand (15ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?' (DbType = Object), @p6='?' (DbType = Object), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?', @p22='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p11='?', @p12='?', @p13='?' (DbType = Boolean), @p14='?' (DbType = Boolean), @p15='?' (DbType = DateTime), @p16='?', @p17='?', @p18='?', @p19='?', @p20='?' (DbType = DateTime), @p21='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs (id, action, entity_id, entity_type, ip_address, new_values, old_values, performed_at, performed_by, user_agent)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+UPDATE users SET created_at = @p10, email = @p11, full_name = @p12, is_active = @p13, is_email_verified = @p14, last_login_at = @p15, password_hash = @p16, phone = @p17, profile_picture = @p18, "RefreshToken" = @p19, "RefreshTokenExpiryTime" = @p20, updated_at = @p21
+WHERE id = @p22;
+2026-06-17 22:17:16.444 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Users.AuthResponse'.
+2026-06-17 22:17:16.444 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.AuthController.RefreshToken (TravelTourManagement.API) in 86.0968ms
+2026-06-17 22:17:16.444 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.AuthController.RefreshToken (TravelTourManagement.API)'
+2026-06-17 22:17:16.444 +05:30 [INF] HTTP POST /api/Auth/refresh-token responded 200 in 97.2012 ms
+2026-06-17 22:17:16.444 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5082/api/Auth/refresh-token - 200 null application/json; charset=utf-8 97.4757ms
+2026-06-17 22:17:16.474 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Users/profile - null null
+2026-06-17 22:17:16.474 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 - null null
+2026-06-17 22:17:16.475 +05:30 [INF] CORS policy execution successful.
+2026-06-17 22:17:16.475 +05:30 [INF] CORS policy execution successful.
+2026-06-17 22:17:16.475 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPublishedPackageById (TravelTourManagement.API)'
+2026-06-17 22:17:16.475 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.UsersController.GetProfile (TravelTourManagement.API)'
+2026-06-17 22:17:16.475 +05:30 [INF] Route matched with {action = "GetPublishedPackageById", controller = "Packages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPublishedPackageById(System.Guid, System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.PackagesController (TravelTourManagement.API).
+2026-06-17 22:17:16.475 +05:30 [INF] Route matched with {action = "GetProfile", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetProfile(System.Threading.CancellationToken) on controller TravelTourManagement.API.Controllers.UsersController (TravelTourManagement.API).
+2026-06-17 22:17:16.478 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, u.created_at, u.email, u.full_name, u.is_active, u.is_email_verified, u.last_login_at, u.password_hash, u.phone, u.profile_picture, u."RefreshToken", u."RefreshTokenExpiryTime", u.updated_at, p.id, p.approved_at, p.approved_by, p.avg_rating, p.business_license_no, p.company_name, p.contact_email, p.contact_phone, p.created_at, p.deactivated_at, p.deactivation_reason, p.description, p.total_reviews, p.updated_at, p.user_id, p.website_url
+FROM users AS u
+LEFT JOIN packagers AS p ON u.id = p.user_id
+WHERE u.id = @__userId_0
+LIMIT 1
+2026-06-17 22:17:16.478 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Users.UserResponse'.
+2026-06-17 22:17:16.478 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.UsersController.GetProfile (TravelTourManagement.API) in 2.9448ms
+2026-06-17 22:17:16.478 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.UsersController.GetProfile (TravelTourManagement.API)'
+2026-06-17 22:17:16.478 +05:30 [INF] HTTP GET /api/Users/profile responded 200 in 3.7794 ms
+2026-06-17 22:17:16.478 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Users/profile - 200 null application/json; charset=utf-8 4.1255ms
+2026-06-17 22:17:16.486 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5082/api/Users/profile/picture/b37a63c3-a5e8-4305-95b0-926c3fa60354_1479c0a5-6245-47e2-98e5-a597652bc2aa.jpg - null null
+2026-06-17 22:17:16.487 +05:30 [INF] Executing endpoint 'TravelTourManagement.API.Controllers.UsersController.GetProfilePicture (TravelTourManagement.API)'
+2026-06-17 22:17:16.487 +05:30 [INF] Route matched with {action = "GetProfilePicture", controller = "Users"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetProfilePicture(System.String) on controller TravelTourManagement.API.Controllers.UsersController (TravelTourManagement.API).
+2026-06-17 22:17:16.488 +05:30 [INF] Executing FileStreamResult, sending file with download name '' ...
+2026-06-17 22:17:16.490 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.UsersController.GetProfilePicture (TravelTourManagement.API) in 2.538ms
+2026-06-17 22:17:16.490 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.UsersController.GetProfilePicture (TravelTourManagement.API)'
+2026-06-17 22:17:16.490 +05:30 [INF] HTTP GET /api/Users/profile/picture/b37a63c3-a5e8-4305-95b0-926c3fa60354_1479c0a5-6245-47e2-98e5-a597652bc2aa.jpg responded 200 in 3.4675 ms
+2026-06-17 22:17:16.490 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Users/profile/picture/b37a63c3-a5e8-4305-95b0-926c3fa60354_1479c0a5-6245-47e2-98e5-a597652bc2aa.jpg - 200 696818 image/jpeg 3.7997ms
+2026-06-17 22:17:16.534 +05:30 [INF] Executed DbCommand (48ms) [Parameters=[@__packageId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT t.id, t.avg_rating, t.cancellation_policy, t.city, t.country, t.created_at, t.current_bookings, t.description, t.destination, t.duration_days, t.duration_nights, t.is_featured, t.max_capacity, t.min_age, t.packager_id, t.status, t.title, t.total_reviews, t.package_type, t.updated_at, t.id0, t0.id, t0.created_at, t0.day_number, t0.description, t0.location, t0.package_id, t0.title, t0.id0, t0.activity_title, t0.activity_type, t0.session, t0.description0, t0.duration_minutes, t0.extra_cost, t0.is_optional, t0.itinerary_day_id, t0.location0, t0.sequence_order, t0.id1, t0.description1, t0.is_included, t0.itinerary_day_id0, t0.meal, t0.venue, t0.id2, t0.amenities, t0.check_in_time, t0.check_out_time, t0.hotel_address, t0.hotel_name, t0.itinerary_day_id1, t0.notes, t0.room_type, t0.star_rating, t0.id3, t0.distance_km, t0.drop_point, t0.drop_time, t0.itinerary_day_id2, t0.notes0, t0.pickup_point, t0.pickup_time, t0.segment_order, t0.mode, t0.vehicle_description, p3.id, p3.display_order, p3.highlight_text, p3.package_id, p4.id, p4.description, p4.display_order, p4.package_id, p4.type, p5.id, p5.caption, p5.category, p5.display_order, p5.file_name, p5.file_path, p5.file_size_bytes, p5.is_primary, p5.mime_type, p5.package_id, p5.uploaded_at, p6.id, p6.available_slots, p6.base_price, p6.child_price, p6.discount_percent, p6.end_date, p6.is_active, p6.package_id, p6.season_name, p6.start_date, t.approved_at, t.approved_by, t.avg_rating0, t.business_license_no, t.company_name, t.contact_email, t.contact_phone, t.created_at0, t.deactivated_at, t.deactivation_reason, t.description0, t.total_reviews0, t.updated_at0, t.user_id, t.website_url, r.id, r.accommodation_rating, r.admin_note, r.booking_id, r.comment, r.created_at, r.food_rating, r.guide_rating, r.is_verified_traveler, r.overall_rating, r.package_id, r.packager_id, r.transport_rating, r.updated_at, r.user_id, r.value_rating
+FROM (
+    SELECT p.id, p.avg_rating, p.cancellation_policy, p.city, p.country, p.created_at, p.current_bookings, p.description, p.destination, p.duration_days, p.duration_nights, p.is_featured, p.max_capacity, p.min_age, p.packager_id, p.status, p.title, p.total_reviews, p.package_type, p.updated_at, p0.id AS id0, p0.approved_at, p0.approved_by, p0.avg_rating AS avg_rating0, p0.business_license_no, p0.company_name, p0.contact_email, p0.contact_phone, p0.created_at AS created_at0, p0.deactivated_at, p0.deactivation_reason, p0.description AS description0, p0.total_reviews AS total_reviews0, p0.updated_at AS updated_at0, p0.user_id, p0.website_url
+    FROM packages AS p
+    INNER JOIN packagers AS p0 ON p.packager_id = p0.id
+    WHERE p.id = @__packageId_0
+    LIMIT 1
+) AS t
+LEFT JOIN (
+    SELECT i.id, i.created_at, i.day_number, i.description, i.location, i.package_id, i.title, i0.id AS id0, i0.activity_title, i0.activity_type, i0.session, i0.description AS description0, i0.duration_minutes, i0.extra_cost, i0.is_optional, i0.itinerary_day_id, i0.location AS location0, i0.sequence_order, i1.id AS id1, i1.description AS description1, i1.is_included, i1.itinerary_day_id AS itinerary_day_id0, i1.meal, i1.venue, p1.id AS id2, p1.amenities, p1.check_in_time, p1.check_out_time, p1.hotel_address, p1.hotel_name, p1.itinerary_day_id AS itinerary_day_id1, p1.notes, p1.room_type, p1.star_rating, p2.id AS id3, p2.distance_km, p2.drop_point, p2.drop_time, p2.itinerary_day_id AS itinerary_day_id2, p2.notes AS notes0, p2.pickup_point, p2.pickup_time, p2.segment_order, p2.mode, p2.vehicle_description
+    FROM itinerary_days AS i
+    LEFT JOIN itinerary_activities AS i0 ON i.id = i0.itinerary_day_id
+    LEFT JOIN itinerary_day_meals AS i1 ON i.id = i1.itinerary_day_id
+    LEFT JOIN package_accommodation AS p1 ON i.id = p1.itinerary_day_id
+    LEFT JOIN package_transport AS p2 ON i.id = p2.itinerary_day_id
+) AS t0 ON t.id = t0.package_id
+LEFT JOIN package_highlights AS p3 ON t.id = p3.package_id
+LEFT JOIN package_inclusions AS p4 ON t.id = p4.package_id
+LEFT JOIN package_media AS p5 ON t.id = p5.package_id
+LEFT JOIN package_seasonal_pricing AS p6 ON t.id = p6.package_id
+LEFT JOIN reviews AS r ON t.id = r.package_id
+ORDER BY t.id, t.id0, t0.id, t0.id0, t0.id1, t0.id2, t0.id3, p3.id, p4.id, p5.id, p6.id
+2026-06-17 22:17:16.538 +05:30 [INF] Executing OkObjectResult, writing value of type 'TravelTourManagement.DataAccess.DTOs.Packages.PackageDetailResponse'.
+2026-06-17 22:17:16.539 +05:30 [INF] Executed action TravelTourManagement.API.Controllers.PackagesController.GetPublishedPackageById (TravelTourManagement.API) in 63.3292ms
+2026-06-17 22:17:16.539 +05:30 [INF] Executed endpoint 'TravelTourManagement.API.Controllers.PackagesController.GetPublishedPackageById (TravelTourManagement.API)'
+2026-06-17 22:17:16.539 +05:30 [INF] HTTP GET /api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 responded 200 in 63.9208 ms
+2026-06-17 22:17:16.539 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5082/api/Packages/a134bec4-9e4b-48df-a592-4eb10dacb5a6 - 200 null application/json; charset=utf-8 64.4275ms
