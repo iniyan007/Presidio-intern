@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { BookingService } from '../../services/booking.service';
 import { BookingResponse } from '../../models/booking.model';
 import { PackageService } from '../../services/package.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-my-bookings',
@@ -16,6 +17,7 @@ import { PackageService } from '../../services/package.service';
 export class MyBookingsComponent implements OnInit {
   bookingService = inject(BookingService);
   packageService = inject(PackageService);
+  toastService = inject(ToastService);
 
   bookings = signal<BookingResponse[]>([]);
   packageTitles = signal<Record<string, string>>({});
@@ -91,7 +93,7 @@ export class MyBookingsComponent implements OnInit {
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
       },
-      error: () => alert('Failed to download ticket.')
+      error: () => this.toastService.show('Failed to download ticket.', 'error')
     });
   }
 
@@ -102,7 +104,7 @@ export class MyBookingsComponent implements OnInit {
 
   cancelBooking(bookingId: string) {
     if (!this.cancellationReason().trim()) {
-      alert('Please provide a reason for cancellation.');
+      this.toastService.show('Please provide a reason for cancellation.', 'error');
       return;
     }
 
@@ -110,12 +112,12 @@ export class MyBookingsComponent implements OnInit {
 
     this.bookingService.cancelBooking(bookingId, { reason: this.cancellationReason() }).subscribe({
       next: () => {
-        alert('Booking cancelled successfully.');
+        this.toastService.show('Booking cancelled successfully.', 'success');
         this.isCancelling.set(null);
         this.fetchBookings();
       },
       error: (err) => {
-        alert(err.error?.message || 'Failed to cancel booking.');
+        this.toastService.show(err.error?.message || 'Failed to cancel booking.', 'error');
       }
     });
   }
@@ -127,12 +129,12 @@ export class MyBookingsComponent implements OnInit {
     this.isUploading.set(documentId);
     this.bookingService.reuploadDocument(documentId, file).subscribe({
       next: () => {
-        alert('Document re-uploaded successfully.');
+        this.toastService.show('Document re-uploaded successfully.', 'success');
         this.isUploading.set(null);
         this.fetchBookings(); // Refresh statuses
       },
       error: (err) => {
-        alert(err.error?.message || 'Failed to upload document.');
+        this.toastService.show(err.error?.message || 'Failed to upload document.', 'error');
         this.isUploading.set(null);
       }
     });

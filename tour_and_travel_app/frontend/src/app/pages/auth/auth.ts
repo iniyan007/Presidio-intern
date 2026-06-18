@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-auth',
@@ -28,6 +29,7 @@ export class AuthComponent implements OnInit {
   private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private toastService = inject(ToastService);
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -65,14 +67,15 @@ export class AuthComponent implements OnInit {
     this.authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
         this.isLoading.set(false);
+        this.toastService.show('Logged in successfully', 'success');
         this.router.navigate(['/']);
       },
       error: (err: any) => {
         this.isLoading.set(false);
         if (err.status === 401) {
-          this.errorMessage.set('Invalid email or password. Please try again.');
+          this.toastService.show('Invalid email or password. Please try again.', 'error');
         } else {
-          this.errorMessage.set(err.error?.message || 'Login failed. Please try again later.');
+          this.toastService.show(err.error?.message || 'Login failed. Please try again later.', 'error');
         }
       }
     });
@@ -90,13 +93,13 @@ export class AuthComponent implements OnInit {
     this.authService.register(this.signupForm.value).subscribe({
       next: (res: any) => {
         this.isLoading.set(false);
-        this.successMessage.set('Registration successful! Please login.');
+        this.toastService.show('Registration successful! Please login.', 'success');
         this.signupForm.reset();
         this.isLoginTab.set(true); // switch to login
       },
       error: (err: any) => {
         this.isLoading.set(false);
-        this.errorMessage.set(err.error?.message || 'Registration failed');
+        this.toastService.show(err.error?.message || 'Registration failed', 'error');
       }
     });
   }

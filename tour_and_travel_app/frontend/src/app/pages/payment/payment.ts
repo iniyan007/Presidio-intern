@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BookingService } from '../../services/booking.service';
 import { BookingResponse } from '../../models/booking.model';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-payment',
@@ -15,6 +16,7 @@ export class PaymentComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private bookingService = inject(BookingService);
+  private toastService = inject(ToastService);
 
   booking = signal<BookingResponse | null>(null);
   isLoading = signal<boolean>(true);
@@ -65,13 +67,13 @@ export class PaymentComponent implements OnInit {
     this.bookingService.processPayment(b.id, request).subscribe({
       next: () => {
         this.isProcessing.set(false);
-        alert('Payment successful! Your booking is confirmed.');
+        this.toastService.show('Payment successful! Your booking is confirmed.', 'success');
         this.router.navigate(['/bookings']);
       },
       error: (err) => {
         console.error(err);
         this.isProcessing.set(false);
-        alert(err.error?.message || 'Payment failed. Please try again.');
+        this.toastService.show(err.error?.message || 'Payment failed. Please try again.', 'error');
       }
     });
   }

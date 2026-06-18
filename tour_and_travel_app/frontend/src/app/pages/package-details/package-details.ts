@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { PackageService } from '../../services/package.service';
+import { ToastService } from '../../services/toast.service';
 import { TravelPackageDetails, PackageMedia, PackageReview, PackageSeasonalPricing } from '../../models/package.model';
 import { AuthService } from '../../services/auth.service';
 import { BookingService } from '../../services/booking.service';
@@ -19,6 +20,7 @@ export class PackageDetailsComponent implements OnInit {
   private router = inject(Router);
   private packageService = inject(PackageService);
   private authService = inject(AuthService);
+  private toastService = inject(ToastService);
   private bookingService = inject(BookingService);
 
   pkg = signal<TravelPackageDetails | null>(null);
@@ -117,18 +119,18 @@ export class PackageDetailsComponent implements OnInit {
           this.eligibleBookingId.set(eligibleBooking.id);
           this.showReviewModal.set(true);
         } else {
-          alert('You must have a Confirmed or Completed booking for this package before writing a review.');
+          this.toastService.show('You must have a Confirmed or Completed booking for this package before writing a review.', 'error');
         }
       },
       error: () => {
-        alert('Please log in to write a review.');
+        this.toastService.show('Please log in to write a review.', 'error');
       }
     });
   }
 
   onReviewSubmitted() {
     this.showReviewModal.set(false);
-    alert('Review submitted successfully! Thank you for your feedback.');
+    this.toastService.show('Review submitted successfully! Thank you for your feedback.', 'success');
     if (this.pkg()?.id) {
       this.loadReviews(this.pkg()!.id);
       this.loadPackage(this.pkg()!.id); // Reload package to update averages

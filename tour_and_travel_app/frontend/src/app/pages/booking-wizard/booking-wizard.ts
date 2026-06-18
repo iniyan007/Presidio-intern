@@ -6,6 +6,7 @@ import { PackageService } from '../../services/package.service';
 import { TravelPackageDetails, PackageSeasonalPricing } from '../../models/package.model';
 import { BookingService } from '../../services/booking.service';
 import { PlatformConfigResponse } from '../../models/booking.model';
+import { ToastService } from '../../services/toast.service';
 
 interface TravelerForm {
   fullName: string;
@@ -32,6 +33,7 @@ export class BookingWizardComponent implements OnInit {
   private router = inject(Router);
   private packageService = inject(PackageService);
   private bookingService = inject(BookingService);
+  private toastService = inject(ToastService);
 
   step = signal<number>(1);
   pkg = signal<TravelPackageDetails | null>(null);
@@ -176,7 +178,7 @@ export class BookingWizardComponent implements OnInit {
   addTraveler() {
     const maxSlots = this.maxAllowedTravelers();
     if (this.travelers().length >= maxSlots) {
-      alert(`Cannot add more travelers. Only ${maxSlots} slots are allowed for this package/season.`);
+      this.toastService.show(`Cannot add more travelers. Only ${maxSlots} slots are allowed for this package/season.`, 'error');
       return;
     }
 
@@ -190,7 +192,7 @@ export class BookingWizardComponent implements OnInit {
   removeTraveler(index: number) {
     if (index === 0) return; // Cannot remove primary
     if (this.pkg()?.packageType === 'Honeymoon' && index === 1) {
-      alert('Honeymoon packages require exactly 2 travelers. The second traveler cannot be removed.');
+      this.toastService.show('Honeymoon packages require exactly 2 travelers. The second traveler cannot be removed.', 'error');
       return;
     }
     this.travelers.update(t => t.filter((_, i) => i !== index));
@@ -219,7 +221,7 @@ export class BookingWizardComponent implements OnInit {
     };
 
     localStorage.setItem(key, JSON.stringify(draft));
-    alert('Draft saved successfully! You can safely leave and resume later.');
+    this.toastService.show('Draft saved successfully! You can safely leave and resume later.', 'success');
   }
 
   clearDraft() {
@@ -240,7 +242,7 @@ export class BookingWizardComponent implements OnInit {
     if (s > this.step()) {
       if (this.step() === 1) {
         if (!this.selectedSeason()) {
-          alert('No active season is selected.');
+          this.toastService.show('No active season is selected.', 'error');
           return;
         }
 
@@ -249,7 +251,7 @@ export class BookingWizardComponent implements OnInit {
         }
 
         if (this.infantCount() > 10) {
-          alert('Maximum 10 infants are allowed per booking.');
+          this.toastService.show('Maximum 10 infants are allowed per booking.', 'error');
           return;
         }
 
@@ -259,7 +261,7 @@ export class BookingWizardComponent implements OnInit {
         const endDate = new Date(season.endDate);
 
         if (selectedDate < startDate || selectedDate > endDate) {
-          alert('Travel Date must be within the selected season range: ' + season.startDate + ' to ' + season.endDate);
+          this.toastService.show('Travel Date must be within the selected season range: ' + season.startDate + ' to ' + season.endDate, 'error');
           return;
         }
 
@@ -270,33 +272,33 @@ export class BookingWizardComponent implements OnInit {
           const t = this.travelers()[i];
 
           if (!t.fullName || !t.dateOfBirth || !t.aadharCardNumber) {
-            alert(`Traveler ${i + 1}: Please fill out all mandatory fields (Name, DOB, Aadhar).`);
+            this.toastService.show(`Traveler ${i + 1}: Please fill out all mandatory fields (Name, DOB, Aadhar).`, 'error');
             hasValidationErrors = true;
             break;
           }
 
           const age = this.calculateAge(new Date(t.dateOfBirth));
           if (t.isPrimary && age < 18) {
-            alert(`Traveler ${i + 1} (Primary): Must be at least 18 years old to book.`);
+            this.toastService.show(`Traveler ${i + 1} (Primary): Must be at least 18 years old to book.`, 'error');
             hasValidationErrors = true;
             break;
           }
 
           if (this.pkg()?.packageType === 'Honeymoon' && age < 18) {
-            alert(`Traveler ${i + 1} (${t.fullName}): All travelers must be at least 18 years old for Honeymoon packages.`);
+            this.toastService.show(`Traveler ${i + 1} (${t.fullName}): All travelers must be at least 18 years old for Honeymoon packages.`, 'error');
             hasValidationErrors = true;
             break;
           }
 
           const aadharRegex = /^\d{12}$/;
           if (!aadharRegex.test(t.aadharCardNumber.replace(/\s/g, ''))) {
-            alert(`Traveler ${i + 1} (${t.fullName}): Aadhar Number must be exactly 12 digits.`);
+            this.toastService.show(`Traveler ${i + 1} (${t.fullName}): Aadhar Number must be exactly 12 digits.`, 'error');
             hasValidationErrors = true;
             break;
           }
 
           if (!isIndia && !t.passportNumber) {
-            alert(`Traveler ${i + 1} (${t.fullName}): Passport Number is COMPULSORY for international packages.`);
+            this.toastService.show(`Traveler ${i + 1} (${t.fullName}): Passport Number is COMPULSORY for international packages.`, 'error');
             hasValidationErrors = true;
             break;
           }
@@ -304,7 +306,7 @@ export class BookingWizardComponent implements OnInit {
           if (t.passportNumber) {
             const passportRegex = /^[A-Z0-9]{6,9}$/i;
             if (!passportRegex.test(t.passportNumber.trim())) {
-              alert(`Traveler ${i + 1} (${t.fullName}): Invalid Passport Number format.`);
+              this.toastService.show(`Traveler ${i + 1} (${t.fullName}): Invalid Passport Number format.`, 'error');
               hasValidationErrors = true;
               break;
             }
@@ -317,7 +319,7 @@ export class BookingWizardComponent implements OnInit {
         // Require Aadhar for all
         const missingDocs = this.travelers().find(t => !t.aadharFile);
         if (missingDocs) {
-          alert('Please upload Aadhar card for all travelers.');
+          this.toastService.show('Please upload Aadhar card for all travelers.', 'error');
           return;
         }
       }
@@ -386,7 +388,7 @@ export class BookingWizardComponent implements OnInit {
     this.bookingService.createBooking(formData).subscribe({
       next: (res) => {
         this.clearDraft();
-        alert('Booking Created Successfully!');
+        this.toastService.show('Booking Created Successfully!', 'success');
         this.isSubmitting.set(false);
         this.router.navigate(['/payment', res.id]);
       },

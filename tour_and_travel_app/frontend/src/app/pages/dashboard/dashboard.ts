@@ -2,6 +2,7 @@ import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { PackageService } from '../../services/package.service';
+import { ToastService } from '../../services/toast.service';
 import { TravelPackage } from '../../models/package.model';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
@@ -16,6 +17,7 @@ import { UserService } from '../../services/user.service';
 export class DashboardComponent implements OnInit, OnDestroy {
   private packageService = inject(PackageService);
   private authService = inject(AuthService);
+  toastService = inject(ToastService);
   private router = inject(Router);
   userService = inject(UserService);
 
@@ -89,7 +91,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   viewDetails(packageId: string) {
     if (!this.authService.isAuthenticated()) {
-      alert('Please log in to view package details and continue booking.');
+      this.toastService.show('Please log in to view package details and continue booking.', 'info');
       this.router.navigate(['/auth']);
     } else {
       this.router.navigate(['/package', packageId]);
