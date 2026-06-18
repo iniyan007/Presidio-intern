@@ -1,0 +1,76 @@
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+  <div class="mb-10">
+    <h1 class="font-display-lg text-display-lg mb-4 text-primary">Your Wishlist</h1>
+    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Packages you've saved for your future adventures.</p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+      <p class="mt-2 text-on-surface-variant">Loading your wishlist...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="text-center py-12">
+      <span class="material-symbols-outlined text-4xl text-error mb-2">error</span>
+      <p class="text-error font-title-md">{{ errorMessage() }}</p>
+    </div>
+  } @else if (wishlists().length === 0) {
+    <div class="text-center py-24 bg-surface-container-lowest rounded-xl border border-outline-variant/30">
+      <span class="material-symbols-outlined text-6xl text-outline mb-4">favorite_border</span>
+      <h3 class="font-title-lg text-primary mb-2">Your wishlist is empty</h3>
+      <p class="text-on-surface-variant mb-6">You haven't saved any packages yet. Start exploring to find your next adventure!</p>
+      <button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-md hover:opacity-90 transition-all" routerLink="/">Explore Packages</button>
+    </div>
+  } @else {
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      @for (wishlist of wishlists(); track wishlist.wishlistId) {
+        <div class="package-card bg-surface-container-lowest rounded-xl overflow-hidden transition-all duration-300 border border-surface-container-high group cursor-pointer hover:shadow-xl hover:-translate-y-1">
+          <div class="relative h-64 overflow-hidden">
+            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" [src]="getPrimaryImage(wishlist.package)" [alt]="wishlist.package.title">
+            
+            <button 
+              (click)="toggleWishlist(wishlist.package.id); $event.stopPropagation()"
+              class="absolute top-4 right-4 bg-white/20 backdrop-blur-md p-2 rounded-full text-white hover:bg-white hover:text-error transition-all border border-outline text-on-surface-variant z-10"
+              title="Remove from Wishlist">
+              <span class="material-symbols-outlined !text-error transition-colors duration-300" style="font-variation-settings: 'FILL' 1;">favorite</span>
+            </button>
+          </div>
+          
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-on-surface-variant font-label-md flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">location_on</span> {{ wishlist.package.destination }}, {{ wishlist.package.country }}
+              </span>
+              <div class="flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded">
+                <span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span class="font-label-md">{{ wishlist.package.avgRating > 0 ? (wishlist.package.avgRating | number:'1.1-1') : 'New' }}</span>
+              </div>
+            </div>
+            
+            <h3 class="font-title-md text-title-md text-primary mb-1">{{ wishlist.package.title }}</h3>
+            <p class="text-caption text-on-surface-variant mb-3 font-medium">by {{ wishlist.package.packagerName }}</p>
+            
+            <div class="flex items-center gap-4 text-on-surface-variant mb-4 flex-wrap">
+              <div class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">schedule</span>
+                <span class="text-caption">{{ wishlist.package.durationDays }} Days</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">category</span>
+                <span class="text-caption">{{ wishlist.package.packageType }}</span>
+              </div>
+            </div>
+            
+            <div class="flex justify-between items-center pt-4 border-t border-outline-variant/30">
+              <div>
+                <p class="text-caption text-on-surface-variant">Starting from</p>
+                <p class="font-title-md text-secondary">₹{{ getStartingPrice(wishlist.package) | number }}</p>
+              </div>
+              <button class="bg-primary text-on-primary px-5 py-2 rounded-lg font-label-md hover:opacity-90 transition-all" (click)="viewDetails(wishlist.package.id)">View Details</button>
+            </div>
+          </div>
+        </div>
+      }
+    </section>
+  }
+</main>

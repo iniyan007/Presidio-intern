@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { PackageService } from '../../services/package.service';
 import { ToastService } from '../../services/toast.service';
+import { WishlistService } from '../../services/wishlist.service';
 import { TravelPackageDetails, PackageMedia, PackageReview, PackageSeasonalPricing } from '../../models/package.model';
 import { AuthService } from '../../services/auth.service';
 import { BookingService } from '../../services/booking.service';
@@ -22,6 +23,7 @@ export class PackageDetailsComponent implements OnInit {
   private authService = inject(AuthService);
   private toastService = inject(ToastService);
   private bookingService = inject(BookingService);
+  wishlistService = inject(WishlistService);
 
   pkg = signal<TravelPackageDetails | null>(null);
   reviews = signal<PackageReview[]>([]);
@@ -37,6 +39,8 @@ export class PackageDetailsComponent implements OnInit {
     if (!this.isLoggedIn()) {
       this.router.navigate(['/auth']);
       return;
+    } else {
+      this.wishlistService.loadWishlists();
     }
 
     const packageId = this.route.snapshot.paramMap.get('id');

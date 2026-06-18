@@ -4,6 +4,7 @@ import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
+import { WishlistService } from '../../services/wishlist.service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,6 +18,7 @@ export class NavbarComponent {
   private router = inject(Router);
   userService = inject(UserService);
   private toastService = inject(ToastService);
+  wishlistService = inject(WishlistService);
 
   getProfileImageUrl(fileName: string): string {
     return `http://localhost:5082/api/Users/profile/picture/${fileName}`;
@@ -24,6 +26,7 @@ export class NavbarComponent {
 
   logout() {
     this.authService.logout();
+    this.wishlistService.clearWishlists();
     this.toastService.show('Logged out successfully', 'info');
     this.router.navigate(['/']);
   }

@@ -125,3 +125,10 @@ export interface TravelPackageDetails {
   seasonalPricings: PackageSeasonalPricing[];
   itineraryDays: ItineraryDay[];
 }
+
+export interface WishlistResponse {
+  wishlistId: string;
+  packageId: string;
+  addedAt: string;
+  package: TravelPackage;
+}

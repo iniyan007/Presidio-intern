@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { PackageService } from '../../services/package.service';
 import { ToastService } from '../../services/toast.service';
+import { WishlistService } from '../../services/wishlist.service';
 import { TravelPackage } from '../../models/package.model';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
@@ -20,6 +21,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   toastService = inject(ToastService);
   private router = inject(Router);
   userService = inject(UserService);
+  wishlistService = inject(WishlistService);
 
   packages = signal<TravelPackage[]>([]);
   isLoading = signal<boolean>(true);
@@ -40,6 +42,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.pollingInterval = setInterval(() => {
       this.loadPackages(true); // silent load
     }, 10000);
+
+    if (this.authService.isAuthenticated()) {
+      this.wishlistService.loadWishlists();
+    }
   }
 
   ngOnDestroy() {
