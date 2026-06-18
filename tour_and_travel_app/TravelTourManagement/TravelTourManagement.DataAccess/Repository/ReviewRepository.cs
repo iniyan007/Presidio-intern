@@ -35,6 +35,7 @@ public class ReviewRepository : GenericRepository<Review, Guid>, IReviewReposito
         => await _dbSet
             .Include(r => r.User)
             .Include(r => r.ReviewMedia)
+            .Include(r => r.Package)
             .Where(r => r.PackagerId == packagerId)
             .OrderByDescending(r => r.CreatedAt)
             .ToListAsync(cancellationToken);

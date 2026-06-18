@@ -55,6 +55,14 @@ public class PackagerRepository : GenericRepository<Packager, Guid>, IPackagerRe
             .FirstOrDefaultAsync(pk => pk.Id == packagerId, cancellationToken);
 
     /// <inheritdoc />
+    public async Task<Packager?> GetByCompanyNameAsync(
+        string companyName,
+        CancellationToken cancellationToken = default)
+        => await _dbSet
+            .Include(pk => pk.Packages)
+            .FirstOrDefaultAsync(pk => pk.CompanyName.ToLower() == companyName.ToLower() && pk.ApprovedAt != null && pk.DeactivatedAt == null, cancellationToken);
+
+    /// <inheritdoc />
     public async Task<Packager?> GetWithPackagesAsync(
         Guid packagerId,
         CancellationToken cancellationToken = default)

@@ -9,6 +9,7 @@ public class PackageSearchRequest
     public string? Destination { get; set; }
     public string? Country { get; set; }
     public string? PackageType { get; set; }
+    public string? PackagerName { get; set; }
 
     [Range(0, double.MaxValue)]
     public decimal? MinPrice { get; set; }

@@ -302,7 +302,7 @@ public class PackageService : IPackageService
 
     public async Task<PagedResponse<PackageSummaryResponse>> SearchPackagesAsync(PackageSearchRequest request, CancellationToken cancellationToken = default)
     {
-        string cacheKey = $"SearchPackages_{request.PageNumber}_{request.PageSize}_{request.SearchTerm}_{request.Destination}_{request.Country}_{request.PackageType}_{request.MinPrice}_{request.MaxPrice}_{request.MinDurationDays}_{request.MaxDurationDays}_{request.SortBy}";
+        string cacheKey = $"SearchPackages_{request.PageNumber}_{request.PageSize}_{request.SearchTerm}_{request.Destination}_{request.Country}_{request.PackageType}_{request.PackagerName}_{request.MinPrice}_{request.MaxPrice}_{request.MinDurationDays}_{request.MaxDurationDays}_{request.SortBy}";
         
         var cachedResponse = await _cache.GetRecordAsync<PagedResponse<PackageSummaryResponse>>(cacheKey, cancellationToken);
         if (cachedResponse != null)

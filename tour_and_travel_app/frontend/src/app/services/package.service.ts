@@ -23,6 +23,7 @@ export class PackageService {
       if (filters.PackageType) params = params.set('PackageType', filters.PackageType);
       if (filters.TravelStartDate) params = params.set('TravelStartDate', filters.TravelStartDate);
       if (filters.SortBy) params = params.set('SortBy', filters.SortBy);
+      if (filters.PackagerName) params = params.set('PackagerName', filters.PackagerName);
     }
     return this.http.get<any>(this.apiUrl, { params });
   }

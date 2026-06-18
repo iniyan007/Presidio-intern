@@ -16,6 +16,7 @@ public class ReviewResponse
     public short? GuideRating { get; set; }
     public short? ValueRating { get; set; }
     public string? Comment { get; set; }
+    public string PackageName { get; set; } = string.Empty;
     public bool IsVerifiedTraveler { get; set; }
     public string? AdminNote { get; set; }
     public DateTime CreatedAt { get; set; }

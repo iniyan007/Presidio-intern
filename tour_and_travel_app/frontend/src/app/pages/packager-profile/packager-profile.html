@@ -1,0 +1,133 @@
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+  @if (isLoading()) {
+    <div class="flex justify-center items-center py-24">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-primary"></div>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="flex flex-col items-center justify-center py-24 text-center">
+      <span class="material-symbols-outlined text-6xl text-error mb-4">error</span>
+      <h2 class="font-title-md text-error">{{ errorMessage() }}</h2>
+      <button class="mt-4 bg-primary text-on-primary px-6 py-2 rounded-lg" routerLink="/">Back to Discover</button>
+    </div>
+  } @else if (packager()) {
+    <ng-container *ngIf="packager() as p">
+      <!-- Profile Header -->
+      <section class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-8 mb-12 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+        <div class="w-32 h-32 rounded-full bg-surface-container-high flex items-center justify-center flex-shrink-0 relative z-10 border-4 border-surface-container-lowest shadow-md">
+          <span class="material-symbols-outlined text-6xl text-primary">storefront</span>
+        </div>
+        <div class="flex-1 text-center md:text-left relative z-10">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+            <h1 class="font-display-md text-display-md text-primary m-0">{{ p.companyName }}</h1>
+            <div class="flex items-center gap-2 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200">
+              <span class="material-symbols-outlined text-amber-500" style="font-variation-settings: 'FILL' 1;">star</span>
+              <span class="font-bold text-amber-900">{{ p.avgRating | number:'1.1-1' }}</span>
+              <span class="text-caption text-amber-800">({{ p.totalReviews }} reviews)</span>
+            </div>
+          </div>
+          <p class="text-body-lg text-on-surface-variant max-w-3xl mb-6">{{ p.description || 'Verified Tour Operator' }}</p>
+          <div class="flex flex-wrap items-center gap-6">
+            @if (p.websiteUrl) {
+              <a [href]="p.websiteUrl" target="_blank" class="flex items-center gap-2 text-primary hover:text-secondary transition-colors font-label-md">
+                <span class="material-symbols-outlined text-[18px]">language</span> Website
+              </a>
+            }
+            @if (p.contactEmail) {
+              <a [href]="'mailto:' + p.contactEmail" class="flex items-center gap-2 text-primary hover:text-secondary transition-colors font-label-md">
+                <span class="material-symbols-outlined text-[18px]">mail</span> Email
+              </a>
+            }
+            <div class="flex items-center gap-2 text-on-surface-variant font-label-md">
+              <span class="material-symbols-outlined text-[18px]">inventory_2</span> {{ p.totalPackagesContributed }} Packages
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Packages Section -->
+      <section class="mb-16">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="font-headline-md text-headline-md text-primary">Packages by {{ p.companyName }}</h2>
+        </div>
+        
+        @if (packages().length === 0) {
+          <div class="text-center py-12 bg-surface-container-low rounded-xl border border-outline-variant/30">
+            <span class="material-symbols-outlined text-4xl text-outline mb-2">flight_takeoff</span>
+            <p class="text-on-surface-variant">No packages currently available.</p>
+          </div>
+        } @else {
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @for (pkg of packages(); track pkg.id) {
+              <div class="package-card bg-surface-container-lowest rounded-xl overflow-hidden transition-all duration-300 border border-surface-container-high group cursor-pointer hover:shadow-xl hover:-translate-y-1" (click)="viewPackageDetails(pkg.id)">
+                <div class="relative h-56 overflow-hidden">
+                  <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" [src]="getPrimaryImage(pkg)" [alt]="pkg.title">
+                </div>
+                <div class="p-5">
+                  <div class="flex justify-between items-start mb-2">
+                    <span class="text-on-surface-variant font-label-md flex items-center gap-1">
+                      <span class="material-symbols-outlined text-sm">location_on</span> {{ pkg.destination }}
+                    </span>
+                    <div class="flex items-center gap-1">
+                      <span class="material-symbols-outlined text-amber-500 text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                      <span class="font-label-md text-amber-900">{{ pkg.avgRating > 0 ? (pkg.avgRating | number:'1.1-1') : 'New' }}</span>
+                    </div>
+                  </div>
+                  <h3 class="font-title-md text-title-md text-primary mb-3 line-clamp-1">{{ pkg.title }}</h3>
+                  <div class="flex items-center gap-4 text-on-surface-variant mb-4">
+                    <div class="flex items-center gap-1">
+                      <span class="material-symbols-outlined text-sm">schedule</span>
+                      <span class="text-caption">{{ pkg.durationDays }} Days</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <span class="material-symbols-outlined text-sm">category</span>
+                      <span class="text-caption">{{ pkg.packageType }}</span>
+                    </div>
+                  </div>
+                  <div class="flex justify-between items-center pt-3 border-t border-outline-variant/30">
+                    <div>
+                      <p class="text-[10px] uppercase text-on-surface-variant">Starting from</p>
+                      <p class="font-title-md text-secondary">₹{{ getStartingPrice(pkg) | number }}</p>
+                    </div>
+                    <button class="text-primary font-label-md hover:underline">View Details</button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <!-- Reviews Section -->
+      <section>
+        <h2 class="font-headline-md text-headline-md text-primary mb-8">Traveler Reviews</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @if (reviews().length === 0) {
+            <div class="col-span-full text-center py-8">
+              <p class="text-on-surface-variant italic">No reviews yet for this packager.</p>
+            </div>
+          } @else {
+            @for (review of reviews(); track review.id) {
+              <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 flex flex-col justify-between">
+                <div>
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <h4 class="font-label-md text-primary">{{ review.reviewerName || 'Anonymous Traveler' }}</h4>
+                      <p class="text-[10px] text-on-surface-variant uppercase mt-0.5 font-bold tracking-wider">On: {{ review.packageName || 'A Tour Package' }}</p>
+                      <div class="flex text-amber-400 text-sm mt-1">
+                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span class="ml-1 text-primary font-bold">{{ review.overallRating }}</span>
+                      </div>
+                    </div>
+                    <span class="text-caption text-on-surface-variant">{{ review.createdAt | date:'mediumDate' }}</span>
+                  </div>
+                  <p class="text-body-md text-on-surface-variant italic">"{{ review.comment || 'Left a rating without a comment.' }}"</p>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      </section>
+    </ng-container>
+  }
+</main>

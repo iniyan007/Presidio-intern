@@ -50,4 +50,12 @@ public class PackagersController : ControllerBase
         var response = await _packagerService.GetPublicPackagersAsync(request, cancellationToken);
         return Ok(response);
     }
+
+    [HttpGet("public/{name}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetPublicPackagerByName(string name, CancellationToken cancellationToken)
+    {
+        var response = await _packagerService.GetPublicPackagerByNameAsync(name, cancellationToken);
+        return Ok(response);
+    }
 }

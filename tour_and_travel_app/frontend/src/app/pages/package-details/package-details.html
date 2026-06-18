@@ -32,7 +32,7 @@
     @if (p.totalReviews > 0) {
       <span class="text-caption text-on-surface-variant">({{ p.totalReviews }} reviews)</span>
     }
-    <span class="text-on-surface-variant font-label-md border-l border-outline-variant pl-3">by {{ p.packagerName }}</span>
+    <span class="text-on-surface-variant font-label-md border-l border-outline-variant pl-3">by <a [routerLink]="['/packager', p.id]" class="hover:text-secondary hover:underline cursor-pointer">{{ p.packagerName }}</a></span>
   </div>
   <div class="flex gap-3 flex-wrap">
   <div class="flex items-center gap-1 bg-surface-container-high px-3 py-1 rounded-full text-primary font-label-md">

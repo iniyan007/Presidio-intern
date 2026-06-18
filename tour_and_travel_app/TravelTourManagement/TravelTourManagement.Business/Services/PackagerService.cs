@@ -192,6 +192,16 @@ public class PackagerService : IPackagerService
         return new TravelTourManagement.DataAccess.DTOs.PagedResponse<PublicPackagerResponse>(responseItems, totalCount, request.PageNumber, request.PageSize);
     }
 
+    public async Task<PublicPackagerResponse> GetPublicPackagerByNameAsync(string packagerName, CancellationToken cancellationToken = default)
+    {
+        var packager = await _packagerRepository.GetByCompanyNameAsync(packagerName, cancellationToken);
+        if (packager == null)
+        {
+            throw new KeyNotFoundException("Packager not found.");
+        }
+        return _mapper.Map<PublicPackagerResponse>(packager);
+    }
+
     public async Task<IEnumerable<PackagerDocumentResponse>> GetPackagerDocumentsAsync(Guid packagerId, CancellationToken cancellationToken = default)
     {
         var packager = await _packagerRepository.GetWithDocumentsAsync(packagerId, cancellationToken);

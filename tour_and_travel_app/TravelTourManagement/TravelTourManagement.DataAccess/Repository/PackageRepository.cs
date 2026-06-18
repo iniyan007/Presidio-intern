@@ -204,6 +204,12 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
             }
         }
 
+        if (!string.IsNullOrWhiteSpace(request.PackagerName))
+        {
+            var lowerPackager = request.PackagerName.ToLower();
+            query = query.Where(p => p.Packager != null && p.Packager.CompanyName.ToLower() == lowerPackager);
+        }
+
         if (request.MinDurationDays.HasValue)
             query = query.Where(p => p.DurationDays >= request.MinDurationDays.Value);
 

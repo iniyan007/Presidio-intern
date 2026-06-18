@@ -88,7 +88,7 @@
         </div>
         </div>
         <h3 class="font-title-md text-title-md text-primary mb-1">{{ pkg.title }}</h3>
-        <p class="text-caption text-on-surface-variant mb-3 font-medium">by {{ pkg.packagerName }}</p>
+        <p class="text-caption text-on-surface-variant mb-3 font-medium">by <a [routerLink]="['/packager', pkg.id]" class="hover:text-secondary hover:underline cursor-pointer" (click)="$event.stopPropagation()">{{ pkg.packagerName }}</a></p>
         <div class="flex items-center gap-4 text-on-surface-variant mb-4 flex-wrap">
         <div class="flex items-center gap-1">
         <span class="material-symbols-outlined text-sm">schedule</span>
