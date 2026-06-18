@@ -3,14 +3,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { BookingResponse, CancelBookingRequest, PlatformConfigResponse, ProcessPaymentRequest } from '../models/booking.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookingService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:5082/api/Bookings';
-  private platformUrl = 'http://localhost:5082/api/PlatformConfig';
+  private apiUrl = `${environment.apiUrl}/Bookings`;
+  private platformUrl = `${environment.apiUrl}/PlatformConfig`;
 
   getPlatformConfig(): Observable<PlatformConfigResponse> {
     return this.http.get<PlatformConfigResponse>(this.platformUrl);

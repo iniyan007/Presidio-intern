@@ -1,4 +1,4 @@
-<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+<main class="max-w-7xl mx-auto px-6 md:px-12 lg:px-12 py-12">
   <div class="mb-10">
     <h1 class="font-display-lg text-display-lg mb-4 text-primary">Your Wishlist</h1>
     <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Packages you've saved for your future adventures.</p>
@@ -29,7 +29,7 @@
             <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" [src]="getPrimaryImage(wishlist.package)" [alt]="wishlist.package.title">
             
             <button 
-              (click)="toggleWishlist(wishlist.package.id); $event.stopPropagation()"
+              (click)="toggleWishlist(wishlist.package.id, wishlist.package.title); $event.stopPropagation()"
               class="absolute top-4 right-4 bg-white/20 backdrop-blur-md p-2 rounded-full text-white hover:bg-white hover:text-error transition-all border border-outline text-on-surface-variant z-10"
               title="Remove from Wishlist">
               <span class="material-symbols-outlined !text-error transition-colors duration-300" style="font-variation-settings: 'FILL' 1;">favorite</span>

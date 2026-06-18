@@ -144,7 +144,7 @@ export class BookingWizardComponent implements OnInit {
             const season = p.seasonalPricings.find(s => s.id === seasonIdParam);
             if (season) {
               this.selectedSeason.set(season);
-              if (p.packageType === 'Group' || p.packageType === 'Pilgrimage') {
+              if (p.packageType === 'Group' || p.packageType === 'Pilgrimage' || p.packageType === 'Adventure') {
                 this.isFixedDate.set(true);
                 this.travelDate.set(season.startDate.split('T')[0]); // Ensure YYYY-MM-DD
               } else {

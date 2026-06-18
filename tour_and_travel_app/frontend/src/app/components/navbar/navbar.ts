@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
@@ -21,7 +22,7 @@ export class NavbarComponent {
   wishlistService = inject(WishlistService);
 
   getProfileImageUrl(fileName: string): string {
-    return `http://localhost:5082/api/Users/profile/picture/${fileName}`;
+    return `${environment.apiUrl}/Users/profile/picture/${fileName}`;
   }
 
   logout() {

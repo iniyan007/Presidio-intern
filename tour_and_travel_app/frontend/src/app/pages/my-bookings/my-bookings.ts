@@ -6,6 +6,7 @@ import { BookingService } from '../../services/booking.service';
 import { BookingResponse } from '../../models/booking.model';
 import { PackageService } from '../../services/package.service';
 import { ToastService } from '../../services/toast.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-my-bookings',
@@ -15,6 +16,7 @@ import { ToastService } from '../../services/toast.service';
   styleUrl: './my-bookings.css'
 })
 export class MyBookingsComponent implements OnInit {
+  environment = environment;
   bookingService = inject(BookingService);
   packageService = inject(PackageService);
   toastService = inject(ToastService);

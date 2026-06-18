@@ -5,6 +5,7 @@ import { PackagerService } from '../../services/packager.service';
 import { PublicPackagerResponse, PackagerReviewResponse } from '../../models/packager.model';
 import { PackageService } from '../../services/package.service';
 import { TravelPackage } from '../../models/package.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-packager-profile',
@@ -97,7 +98,7 @@ export class PackagerProfileComponent implements OnInit {
     if (!pkg.primaryImageUrl) {
       return 'https://lh3.googleusercontent.com/aida-public/AB6AXuCCoMzMsdBS9393A5TXkJBkEbxwXe0a18-RDlN-FdC8d3zQd3pQ04WfHxEfLXcQnuERcC2V82jfEdlQiTtSMdhhAuWKFia-1L0C-mUbwtIxZAhKPMEdXj_Z0atOnnXmUoZWYPwSFF33dxFjviNUOqQoBRCIYQyyvK36Az4cVRWQcXWakicjyqlrZ9fHv4fV4WaBmMHKV29xM4GyOwzxpZsA0g0fuiRC5Z_6CYP_VbA-dMBvI4aqOLaVRDDB4lkqbctFMmUNYNTQ1AE';
     }
-    return pkg.primaryImageUrl.startsWith('http') ? pkg.primaryImageUrl : `http://localhost:5082${pkg.primaryImageUrl}`;
+    return pkg.primaryImageUrl.startsWith('http') ? pkg.primaryImageUrl : `${environment.baseUrl}${pkg.primaryImageUrl}`;
   }
 
   getStartingPrice(pkg: TravelPackage): number {

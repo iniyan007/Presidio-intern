@@ -8,6 +8,7 @@ import { TravelPackageDetails, PackageMedia, PackageReview, PackageSeasonalPrici
 import { AuthService } from '../../services/auth.service';
 import { BookingService } from '../../services/booking.service';
 import { ReviewModalComponent } from '../../components/review-modal/review-modal';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-package-details',
@@ -88,7 +89,7 @@ export class PackageDetailsComponent implements OnInit {
     }
     const primary = p.media.find(m => m.isPrimary) || p.media[0];
     if (!primary || !primary.filePath) return 'https://lh3.googleusercontent.com/aida-public/AB6AXuCCoMzMsdBS9393A5TXkJBkEbxwXe0a18-RDlN-FdC8d3zQd3pQ04WfHxEfLXcQnuERcC2V82jfEdlQiTtSMdhhAuWKFia-1L0C-mUbwtIxZAhKPMEdXj_Z0atOnnXmUoZWYPwSFF33dxFjviNUOqQoBRCIYQyyvK36Az4cVRWQcXWakicjyqlrZ9fHv4fV4WaBmMHKV29xM4GyOwzxpZsA0g0fuiRC5Z_6CYP_VbA-dMBvI4aqOLaVRDDB4lkqbctFMmUNYNTQ1AE';
-    return primary.filePath.startsWith('http') ? primary.filePath : `http://localhost:5082${primary.filePath}`;
+    return primary.filePath.startsWith('http') ? primary.filePath : `${environment.baseUrl}${primary.filePath}`;
   }
 
   getGalleryImages(): string[] {
@@ -98,7 +99,7 @@ export class PackageDetailsComponent implements OnInit {
     const primary = p.media.find(m => m.isPrimary) || p.media[0];
     return p.media.filter(m => m.id !== primary?.id && m.filePath)
                   .slice(0, 3)
-                  .map(m => m.filePath.startsWith('http') ? m.filePath : `http://localhost:5082${m.filePath}`);
+                  .map(m => m.filePath.startsWith('http') ? m.filePath : `${environment.baseUrl}${m.filePath}`);
   }
 
   getStartingPrice(): number {

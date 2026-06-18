@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { signal } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5082/api/Auth';
+  private apiUrl = `${environment.apiUrl}/Auth`;
   private http = inject(HttpClient);
   private userService = inject(UserService);
 

@@ -7,6 +7,7 @@ import { WishlistService } from '../../services/wishlist.service';
 import { TravelPackage } from '../../models/package.model';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,6 +31,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Search & Filter State
   searchDestination = signal<string>('');
   searchDate = signal<string>('');
+  searchPackager = signal<string>('');
   selectedPackageType = signal<string>('');
   selectedSortBy = signal<string>('');
   
@@ -61,6 +63,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     
     const filters: any = {};
     if (this.searchDestination().trim()) filters.SearchTerm = this.searchDestination().trim();
+    if (this.searchPackager().trim()) filters.PackagerName = this.searchPackager().trim();
     if (this.selectedPackageType()) filters.PackageType = this.selectedPackageType();
     // Optional: map searchDate if backend supports travel date filtering
     if (this.searchDate().trim()) filters.TravelStartDate = this.searchDate().trim();
@@ -83,6 +86,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectPackageType(type: string) {
     this.selectedPackageType.set(type);
     this.loadPackages();
+  }
+
+  exploreGroupTours() {
+    this.selectPackageType('Group');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   onSearch() {
@@ -108,7 +116,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (!pkg.primaryImageUrl) {
       return 'https://lh3.googleusercontent.com/aida-public/AB6AXuCCoMzMsdBS9393A5TXkJBkEbxwXe0a18-RDlN-FdC8d3zQd3pQ04WfHxEfLXcQnuERcC2V82jfEdlQiTtSMdhhAuWKFia-1L0C-mUbwtIxZAhKPMEdXj_Z0atOnnXmUoZWYPwSFF33dxFjviNUOqQoBRCIYQyyvK36Az4cVRWQcXWakicjyqlrZ9fHv4fV4WaBmMHKV29xM4GyOwzxpZsA0g0fuiRC5Z_6CYP_VbA-dMBvI4aqOLaVRDDB4lkqbctFMmUNYNTQ1AE'; // default fallback
     }
-    return pkg.primaryImageUrl.startsWith('http') ? pkg.primaryImageUrl : `http://localhost:5082${pkg.primaryImageUrl}`;
+    return pkg.primaryImageUrl.startsWith('http') ? pkg.primaryImageUrl : `${environment.baseUrl}${pkg.primaryImageUrl}`;
   }
 
   getStartingPrice(pkg: any): number {

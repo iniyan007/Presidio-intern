@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { PublicPackagerResponse, PackagerReviewResponse } from '../models/packager.model';
 
 @Injectable({
@@ -8,7 +9,7 @@ import { PublicPackagerResponse, PackagerReviewResponse } from '../models/packag
 })
 export class PackagerService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:5082/api/Packagers';
+  private apiUrl = `${environment.apiUrl}/Packagers`;
 
   searchPublicPackagers(searchTerm: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/public?SearchTerm=${searchTerm}`);
@@ -19,6 +20,6 @@ export class PackagerService {
   }
 
   getPackagerReviews(packagerId: string): Observable<PackagerReviewResponse[]> {
-    return this.http.get<PackagerReviewResponse[]>(`http://localhost:5082/api/Packagers/${packagerId}/reviews`);
+    return this.http.get<PackagerReviewResponse[]>(`${environment.apiUrl}/Packagers/${packagerId}/reviews`);
   }
 }

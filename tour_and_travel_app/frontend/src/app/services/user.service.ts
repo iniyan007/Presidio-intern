@@ -4,13 +4,14 @@ import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import { UserProfile, UpdateProfileRequest } from '../models/user.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private http = inject(HttpClient);
-  private apiUrl = `http://localhost:5082/api/Users`;
+  private apiUrl = `${environment.apiUrl}/Users`;
 
   userProfile = signal<UserProfile | null>(null);
 

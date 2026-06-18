@@ -1,7 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ToastService } from '../../services/toast.service';
 import { UserService } from '../../services/user.service';
+import { environment } from '../../../environments/environment';
 import { UserProfile } from '../../models/user.model';
 
 @Component({
@@ -127,6 +129,6 @@ export class ProfileComponent implements OnInit {
   }
 
   getProfileImageUrl(fileName: string): string {
-    return `http://localhost:5082/api/Users/profile/picture/${fileName}`;
+    return `${environment.apiUrl}/Users/profile/picture/${fileName}`;
   }
 }

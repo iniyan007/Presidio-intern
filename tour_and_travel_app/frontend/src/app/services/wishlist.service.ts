@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { WishlistResponse } from '../models/package.model';
+import { environment } from '../../environments/environment';
 import { ToastService } from './toast.service';
 
 @Injectable({
@@ -10,7 +11,7 @@ import { ToastService } from './toast.service';
 export class WishlistService {
   private http = inject(HttpClient);
   private toastService = inject(ToastService);
-  private apiUrl = 'http://localhost:5082/api/Wishlists';
+  private apiUrl = `${environment.apiUrl}/Wishlists`;
 
   wishlistedPackageIds = signal<Set<string>>(new Set());
 
@@ -34,7 +35,7 @@ export class WishlistService {
     return this.http.get<{ success: boolean; data: WishlistResponse[] }>(this.apiUrl);
   }
 
-  toggleWishlist(packageId: string): void {
+  toggleWishlist(packageId: string, packageName?: string): void {
     this.http.post<{ success: boolean; message: string; added: boolean }>(`${this.apiUrl}/toggle/${packageId}`, {}).subscribe({
       next: (res) => {
         this.wishlistedPackageIds.update(currentSet => {
@@ -46,7 +47,12 @@ export class WishlistService {
           }
           return newSet;
         });
-        this.toastService.show(res.message, 'success');
+        
+        const toastMsg = packageName 
+          ? (res.added ? `"${packageName}" added to wishlist` : `"${packageName}" removed from wishlist`)
+          : res.message;
+          
+        this.toastService.show(toastMsg, 'success');
       },
       error: (err) => {
         this.toastService.show(err.error?.message || 'Failed to update wishlist.', 'error');

@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 import { WishlistService } from '../../services/wishlist.service';
 import { WishlistResponse } from '../../models/package.model';
 
@@ -39,8 +40,8 @@ export class WishlistComponent implements OnInit {
     });
   }
 
-  toggleWishlist(packageId: string) {
-    this.wishlistService.toggleWishlist(packageId);
+  toggleWishlist(packageId: string, packageName?: string) {
+    this.wishlistService.toggleWishlist(packageId, packageName);
     // Optimistically remove from local view
     this.wishlists.update(current => current.filter(w => w.packageId !== packageId));
   }
@@ -53,7 +54,7 @@ export class WishlistComponent implements OnInit {
     if (!pkg.primaryImageUrl) {
       return 'https://lh3.googleusercontent.com/aida-public/AB6AXuCCoMzMsdBS9393A5TXkJBkEbxwXe0a18-RDlN-FdC8d3zQd3pQ04WfHxEfLXcQnuERcC2V82jfEdlQiTtSMdhhAuWKFia-1L0C-mUbwtIxZAhKPMEdXj_Z0atOnnXmUoZWYPwSFF33dxFjviNUOqQoBRCIYQyyvK36Az4cVRWQcXWakicjyqlrZ9fHv4fV4WaBmMHKV29xM4GyOwzxpZsA0g0fuiRC5Z_6CYP_VbA-dMBvI4aqOLaVRDDB4lkqbctFMmUNYNTQ1AE';
     }
-    return pkg.primaryImageUrl.startsWith('http') ? pkg.primaryImageUrl : `http://localhost:5082${pkg.primaryImageUrl}`;
+    return pkg.primaryImageUrl.startsWith('http') ? pkg.primaryImageUrl : `${environment.baseUrl}${pkg.primaryImageUrl}`;
   }
 
   getStartingPrice(pkg: any): number {

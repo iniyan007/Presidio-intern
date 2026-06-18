@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { TravelPackageDetails, PackageReview, TravelPackage } from '../models/package.model';
+import { TravelPackage, TravelPackageDetails, PackageReview } from '../models/package.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PackageService {
-  private apiUrl = 'http://localhost:5082/api/Packages';
+  private apiUrl = `${environment.apiUrl}/Packages`;
   private http = inject(HttpClient);
 
   constructor() { }

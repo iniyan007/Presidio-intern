@@ -157,7 +157,7 @@
                               <span class="material-symbols-outlined text-on-surface-variant">description</span>
                               <div>
                                 <span class="text-sm font-label-md text-on-surface block">{{ doc.documentType }}</span>
-                                <a [href]="'http://localhost:5082/' + doc.filePath" target="_blank" class="text-xs text-primary hover:underline">{{ doc.fileName }}</a>
+                                <a [href]="environment.baseUrl + '/' + doc.filePath" target="_blank" class="text-xs text-primary hover:underline">{{ doc.fileName }}</a>
                               </div>
                             </div>
                             <span [class]="'px-2 py-0.5 rounded text-[10px] font-bold uppercase border ' + getStatusBadgeClass(doc.status)">
