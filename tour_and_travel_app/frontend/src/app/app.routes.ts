@@ -10,6 +10,7 @@ import { WishlistComponent } from './pages/wishlist/wishlist';
 import { PackagerProfileComponent } from './pages/packager-profile/packager-profile';
 import { ApplyPackagerComponent } from './pages/apply-packager/apply-packager';
 import { VerifyEmailComponent } from './pages/verify-email/verify-email';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -23,5 +24,6 @@ export const routes: Routes = [
   { path: 'wishlist', component: WishlistComponent },
   { path: 'packager/:packageId', component: PackagerProfileComponent },
   { path: 'apply-packager', component: ApplyPackagerComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: '**', redirectTo: '' }
 ];

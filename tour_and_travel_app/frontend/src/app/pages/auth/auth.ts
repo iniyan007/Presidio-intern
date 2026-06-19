@@ -2,14 +2,14 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
+  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, RouterModule],
   templateUrl: './auth.html',
   styleUrl: './auth.css'
 })
@@ -52,6 +52,18 @@ export class AuthComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.pattern('^[6-9]\\d{9}$')]],
       password: ['', [Validators.required, Validators.minLength(8)]]
+    });
+
+    this.loginForm.get('email')?.valueChanges.subscribe(val => {
+      if (val && val !== val.toLowerCase()) {
+        this.loginForm.get('email')?.patchValue(val.toLowerCase(), { emitEvent: false });
+      }
+    });
+
+    this.signupForm.get('email')?.valueChanges.subscribe(val => {
+      if (val && val !== val.toLowerCase()) {
+        this.signupForm.get('email')?.patchValue(val.toLowerCase(), { emitEvent: false });
+      }
     });
   }
 
