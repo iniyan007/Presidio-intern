@@ -7,11 +7,20 @@ public class ApplyPackagerRequest
 {
     [Required]
     public string CompanyName { get; set; } = null!;
+    
+    [Required]
     public string? BusinessLicenseNo { get; set; }
-    public string? Description { get; set; }
-    public string? ContactEmail { get; set; }
-    public string? ContactPhone { get; set; }
-    public string? WebsiteUrl { get; set; }
+    [Required]
+    public string Description { get; set; } = null!;
+    
+    [Required]
+    public string ContactEmail { get; set; } = null!;
+    
+    [Required]
+    public string ContactPhone { get; set; } = null!;
+    
+    [Required]
+    public string WebsiteUrl { get; set; } = null!;
     
     [Required]
     public IFormFile PanDocument { get; set; } = null!;

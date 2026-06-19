@@ -8,6 +8,7 @@ import { BookingWizardComponent } from './pages/booking-wizard/booking-wizard';
 import { PaymentComponent } from './pages/payment/payment';
 import { WishlistComponent } from './pages/wishlist/wishlist';
 import { PackagerProfileComponent } from './pages/packager-profile/packager-profile';
+import { ApplyPackagerComponent } from './pages/apply-packager/apply-packager';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -19,5 +20,6 @@ export const routes: Routes = [
   { path: 'bookings', component: MyBookingsComponent },
   { path: 'wishlist', component: WishlistComponent },
   { path: 'packager/:packageId', component: PackagerProfileComponent },
+  { path: 'apply-packager', component: ApplyPackagerComponent },
   { path: '**', redirectTo: '' }
 ];

@@ -22,4 +22,8 @@ export class PackagerService {
   getPackagerReviews(packagerId: string): Observable<PackagerReviewResponse[]> {
     return this.http.get<PackagerReviewResponse[]>(`${environment.apiUrl}/Packagers/${packagerId}/reviews`);
   }
+
+  applyToBecomePackager(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/apply`, formData);
+  }
 }
