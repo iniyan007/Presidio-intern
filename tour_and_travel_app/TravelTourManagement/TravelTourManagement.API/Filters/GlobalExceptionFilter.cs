@@ -36,7 +36,8 @@ namespace TravelTourManagement.API.Filters
                 ValidationException => 400,
                 ArgumentException => 400,
                 System.Text.Json.JsonException => 400,
-                InvalidOperationException => 400, 
+                InvalidOperationException => 400,
+                _ => 500
             };
         }
 

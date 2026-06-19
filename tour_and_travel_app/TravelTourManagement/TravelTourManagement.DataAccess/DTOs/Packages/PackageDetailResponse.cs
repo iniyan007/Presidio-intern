@@ -22,6 +22,11 @@ public record PackageDetailResponse(
     bool IsFeatured,
     decimal AvgRating,
     int TotalReviews,
+    decimal? AvgAccommodationRating,
+    decimal? AvgTransportRating,
+    decimal? AvgFoodRating,
+    decimal? AvgGuideRating,
+    decimal? AvgValueRating,
 
     List<string> Highlights,
     List<string> Inclusions,

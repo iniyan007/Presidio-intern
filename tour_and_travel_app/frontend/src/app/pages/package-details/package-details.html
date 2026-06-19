@@ -379,6 +379,59 @@
         Write a Review
   </button>
   </div>
+
+  @if (p.totalReviews > 0 && (p.avgAccommodationRating || p.avgTransportRating || p.avgFoodRating || p.avgGuideRating || p.avgValueRating)) {
+    <div class="bg-surface-container-lowest border border-outline-variant/50 rounded-xl p-6 mb-8 shadow-sm">
+      <h4 class="font-label-md text-primary mb-6">Rating Breakdown</h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+        @if (p.avgAccommodationRating) {
+          <div class="flex items-center justify-between gap-4">
+            <span class="text-caption text-on-surface-variant w-28">Accommodation</span>
+            <div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+              <div class="h-full bg-amber-400 rounded-full transition-all duration-1000" [style.width]="(p.avgAccommodationRating / 5) * 100 + '%'"></div>
+            </div>
+            <span class="text-caption font-bold text-primary w-8 text-right">{{ p.avgAccommodationRating | number:'1.1-1' }}</span>
+          </div>
+        }
+        @if (p.avgTransportRating) {
+          <div class="flex items-center justify-between gap-4">
+            <span class="text-caption text-on-surface-variant w-28">Transport</span>
+            <div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+              <div class="h-full bg-amber-400 rounded-full transition-all duration-1000" [style.width]="(p.avgTransportRating / 5) * 100 + '%'"></div>
+            </div>
+            <span class="text-caption font-bold text-primary w-8 text-right">{{ p.avgTransportRating | number:'1.1-1' }}</span>
+          </div>
+        }
+        @if (p.avgFoodRating) {
+          <div class="flex items-center justify-between gap-4">
+            <span class="text-caption text-on-surface-variant w-28">Food</span>
+            <div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+              <div class="h-full bg-amber-400 rounded-full transition-all duration-1000" [style.width]="(p.avgFoodRating / 5) * 100 + '%'"></div>
+            </div>
+            <span class="text-caption font-bold text-primary w-8 text-right">{{ p.avgFoodRating | number:'1.1-1' }}</span>
+          </div>
+        }
+        @if (p.avgGuideRating) {
+          <div class="flex items-center justify-between gap-4">
+            <span class="text-caption text-on-surface-variant w-28">Guide</span>
+            <div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+              <div class="h-full bg-amber-400 rounded-full transition-all duration-1000" [style.width]="(p.avgGuideRating / 5) * 100 + '%'"></div>
+            </div>
+            <span class="text-caption font-bold text-primary w-8 text-right">{{ p.avgGuideRating | number:'1.1-1' }}</span>
+          </div>
+        }
+        @if (p.avgValueRating) {
+          <div class="flex items-center justify-between gap-4">
+            <span class="text-caption text-on-surface-variant w-28">Value for Money</span>
+            <div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+              <div class="h-full bg-amber-400 rounded-full transition-all duration-1000" [style.width]="(p.avgValueRating / 5) * 100 + '%'"></div>
+            </div>
+            <span class="text-caption font-bold text-primary w-8 text-right">{{ p.avgValueRating | number:'1.1-1' }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  }
   
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
   @if (reviews().length === 0) {

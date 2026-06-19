@@ -118,6 +118,11 @@ export interface TravelPackageDetails {
   isFeatured: boolean;
   avgRating: number;
   totalReviews: number;
+  avgAccommodationRating?: number;
+  avgTransportRating?: number;
+  avgFoodRating?: number;
+  avgGuideRating?: number;
+  avgValueRating?: number;
   highlights: string[];
   inclusions: string[];
   exclusions: string[];
