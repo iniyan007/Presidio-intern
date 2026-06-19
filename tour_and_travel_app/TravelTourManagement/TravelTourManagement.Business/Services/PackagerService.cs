@@ -90,6 +90,15 @@ public class PackagerService : IPackagerService
         await ProcessDocumentAsync(request.BusinessRegistration, "Registration");
 
         var createdPackager = await _packagerRepository.AddAsync(packager, cancellationToken);
+        
+        await _notificationService.SendNotificationAsync(
+            userId,
+            "Application Submitted",
+            "Your application to become a Packager has been successfully submitted and is pending review.",
+            createdPackager.Id,
+            TravelTourManagement.DataAccess.Enums.NotificationType.system,
+            cancellationToken);
+
         return _mapper.Map<PackagerResponse>(createdPackager);
     }
 

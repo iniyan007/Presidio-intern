@@ -37,11 +37,11 @@ public class AuthController : ControllerBase
 
     [HttpPost("send-otp")]
     [Authorize]
-    public async Task<IActionResult> SendOtp(CancellationToken cancellationToken)
+    public async Task<IActionResult> SendOtp([FromBody] SendOtpRequest request, CancellationToken cancellationToken)
     {
-        var email = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("email")?.Value;
+        var email = request.Email;
         if (string.IsNullOrEmpty(email))
-            throw new System.UnauthorizedAccessException("Email not found in token.");
+            throw new System.UnauthorizedAccessException("Email is required.");
 
         await _authService.SendVerificationOtpAsync(email, cancellationToken);
         return Ok(new { message = "OTP sent successfully. Please check your email (or server console logs)." });
@@ -51,9 +51,9 @@ public class AuthController : ControllerBase
     [Authorize]
     public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequest request, CancellationToken cancellationToken)
     {
-        var email = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("email")?.Value;
+        var email = request.Email;
         if (string.IsNullOrEmpty(email))
-            throw new System.UnauthorizedAccessException("Email not found in token.");
+            throw new System.UnauthorizedAccessException("Email is required.");
 
         var response = await _authService.VerifyEmailWithOtpAsync(email, request.Otp, cancellationToken);
         return Ok(new { message = "Email verified successfully.", authResponse = response });

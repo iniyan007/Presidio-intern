@@ -53,6 +53,27 @@ export class AuthService {
     );
   }
 
+  sendOtp(): Observable<any> {
+    const email = this.getEmailFromToken();
+    return this.http.post(`${this.apiUrl}/send-otp`, { email });
+  }
+
+  verifyOtp(otp: string): Observable<any> {
+    const email = this.getEmailFromToken();
+    return this.http.post(`${this.apiUrl}/verify-otp`, { email, otp }).pipe(
+      tap((res: any) => {
+        if (res.authResponse && res.authResponse.token) {
+          localStorage.setItem('jwt_token', res.authResponse.token);
+          if (res.authResponse.refreshToken) {
+            localStorage.setItem('refresh_token', res.authResponse.refreshToken);
+          }
+          this.isAuthenticated.set(true);
+        }
+        this.userService.loadProfile().subscribe();
+      })
+    );
+  }
+
   logout() {
     localStorage.removeItem('jwt_token');
     localStorage.removeItem('refresh_token');
@@ -66,5 +87,27 @@ export class AuthService {
   
   getRefreshToken() {
     return localStorage.getItem('refresh_token');
+  }
+
+  isEmailVerified(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.EmailVerified === 'True' || payload.EmailVerified === true;
+    } catch {
+      return false;
+    }
+  }
+
+  getEmailFromToken(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.email || payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] || null;
+    } catch {
+      return null;
+    }
   }
 }

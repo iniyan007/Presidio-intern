@@ -34,8 +34,53 @@
       }
     </button>
 
-    <span class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-container-high rounded-full transition-all">notifications</span>
-    
+    <div class="relative notification-container">
+      <button class="relative flex items-center justify-center text-on-surface-variant cursor-pointer p-2 hover:bg-surface-container-high rounded-full transition-all outline-none border-none bg-transparent"
+              (click)="toggleNotification()">
+        <span class="material-symbols-outlined text-[24px]">notifications</span>
+        @if (notificationService.unreadCount() > 0) {
+          <span class="absolute top-1 right-1 bg-error text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center translate-x-1 -translate-y-1 shadow-sm">
+            {{ notificationService.unreadCount() }}
+          </span>
+        }
+      </button>
+
+      <!-- Notification Dropdown -->
+      @if (isNotificationOpen()) {
+        <div class="absolute right-0 mt-2 w-80 sm:w-96 bg-surface-container-lowest dark:bg-surface-dim shadow-xl rounded-xl border border-outline-variant overflow-hidden z-50 flex flex-col">
+          <div class="flex items-center justify-between p-4 border-b border-outline-variant bg-surface-container-low dark:bg-surface-container">
+            <h3 class="font-title-md text-title-md text-on-surface font-bold">Notifications</h3>
+            @if (notificationService.unreadCount() > 0) {
+              <button class="text-primary text-label-sm font-label-md hover:underline" (click)="markAllAsRead()">Mark all as read</button>
+            }
+          </div>
+          
+          <div class="max-h-[24rem] overflow-y-auto">
+            @if (notificationService.notifications().length === 0) {
+              <div class="p-8 text-center text-on-surface-variant font-body-md flex flex-col items-center">
+                <span class="material-symbols-outlined text-4xl mb-2 opacity-50">notifications_off</span>
+                <p>No notifications yet</p>
+              </div>
+            } @else {
+              @for (notification of notificationService.notifications(); track notification.id) {
+                <div class="p-4 border-b border-outline-variant hover:bg-surface-container-lowest dark:hover:bg-surface-container-high cursor-pointer transition-colors relative"
+                     [ngClass]="{'bg-primary/5 dark:bg-primary/10': !notification.isRead}"
+                     (click)="markAsRead(notification.id)">
+                  @if (!notification.isRead) {
+                    <div class="absolute top-4 left-2 w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(var(--primary-rgb),0.8)]"></div>
+                  }
+                  <div class="pl-4">
+                    <h4 class="font-title-sm text-title-sm text-on-surface mb-1" [ngClass]="{'font-bold': !notification.isRead}">{{ notification.title }}</h4>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-2">{{ notification.message }}</p>
+                    <span class="text-[10px] text-on-surface-variant/70">{{ notification.createdAt | date:'short' }}</span>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
     <!-- Profile Button -->
     <button routerLink="/profile" class="relative group outline-none border-none bg-transparent p-0 cursor-pointer rounded-full h-10 w-10 flex items-center justify-center overflow-hidden border-2 border-transparent hover:border-primary transition-all">
       @if (userService.userProfile()?.profilePicture) {

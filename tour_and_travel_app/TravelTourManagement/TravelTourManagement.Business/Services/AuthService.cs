@@ -143,6 +143,10 @@ public class AuthService : IAuthService
         
         var body = $"Hello {user.FullName},\n\nYour email verification code is: {otp}\n\nThis code will expire in 10 minutes.";
         await _emailService.SendEmailAsync(user.Email, "Email Verification OTP", body, cancellationToken);
+        
+        Console.WriteLine($"\n========================================");
+        Console.WriteLine($"OTP FOR VERIFICATION ({email}): {otp}");
+        Console.WriteLine($"========================================\n");
     }
 
     public async Task<AuthResponse> VerifyEmailWithOtpAsync(string email, string otp, CancellationToken cancellationToken = default)
@@ -254,8 +258,12 @@ public class AuthService : IAuthService
 
         var otp = await _otpService.GenerateAndStoreOtpAsync(email);
         
-        var body = $"Hello {user.FullName},\n\nYour password reset OTP is: {otp}\n\nThis code will expire in 10 minutes.";
+        var body = $"Hello {user.FullName},\n\nYour password reset code is: {otp}\n\nThis code will expire in 10 minutes.";
         await _emailService.SendEmailAsync(user.Email, "Password Reset OTP", body, cancellationToken);
+
+        Console.WriteLine($"\n========================================");
+        Console.WriteLine($"OTP FOR PASSWORD RESET ({email}): {otp}");
+        Console.WriteLine($"========================================\n");
     }
 
     public async Task<string> VerifyResetOtpAsync(VerifyResetOtpRequest request, CancellationToken cancellationToken = default)

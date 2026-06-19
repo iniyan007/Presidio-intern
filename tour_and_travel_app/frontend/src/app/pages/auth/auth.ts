@@ -68,7 +68,12 @@ export class AuthComponent implements OnInit {
       next: (res: any) => {
         this.isLoading.set(false);
         this.toastService.show('Logged in successfully', 'success');
-        this.router.navigate(['/']);
+        if (!this.authService.isEmailVerified()) {
+          this.authService.sendOtp().subscribe();
+          this.router.navigate(['/verify-email']);
+        } else {
+          this.router.navigate(['/']);
+        }
       },
       error: (err: any) => {
         this.isLoading.set(false);

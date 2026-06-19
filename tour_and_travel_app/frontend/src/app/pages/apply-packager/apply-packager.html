@@ -8,6 +8,7 @@
 </div>
 
 <!-- Stepper Indicator -->
+@if (!applicationStatus() && !isLoadingStatus()) {
 <div class="w-full max-w-2xl mb-12">
 <div class="flex items-center justify-between relative">
 <!-- Progress Line -->
@@ -55,8 +56,10 @@
 </div>
 </div>
 </div>
+}
 
 <!-- Form Container -->
+@if (!applicationStatus() && !isLoadingStatus()) {
 <div class="w-full max-w-3xl bg-surface-container-lowest rounded-2xl p-8 lg:p-12 shadow-[0px_4px_20px_rgba(26,54,93,0.08)] border border-surface-container-high overflow-hidden">
 <form class="relative" [formGroup]="applyForm">
 
@@ -203,5 +206,51 @@
 
 </form>
 </div>
+}
+
+<!-- Application Status Card -->
+@if (applicationStatus() && !isLoadingStatus()) {
+<div class="w-full max-w-2xl bg-surface-container-lowest rounded-2xl p-8 shadow-[0px_4px_20px_rgba(26,54,93,0.08)] border border-surface-container-high overflow-hidden text-center">
+  <div class="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-6"
+       [ngClass]="{
+         'bg-primary-container text-primary': applicationStatus().approvalStatus === 'pending',
+         'bg-error-container text-error': applicationStatus().approvalStatus === 'rejected',
+         'bg-secondary-container text-secondary': applicationStatus().approvalStatus === 'approved'
+       }">
+    <span class="material-symbols-outlined text-4xl">
+      {{ applicationStatus().approvalStatus === 'pending' ? 'pending_actions' : 
+         applicationStatus().approvalStatus === 'rejected' ? 'cancel' : 'verified' }}
+    </span>
+  </div>
+  
+  <h3 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-2">
+    Application {{ applicationStatus().approvalStatus | titlecase }}
+  </h3>
+  
+  <p class="font-body-lg text-body-lg text-on-surface-variant mb-6">
+    {{ applicationStatus().approvalStatus === 'pending' ? 'Your application has been submitted to the admin and is currently under review. We will notify you once a decision is made.' : 
+       applicationStatus().approvalStatus === 'approved' ? 'Congratulations! Your application has been approved. You are now a certified packager.' : 
+       'Unfortunately, your application was not approved at this time.' }}
+  </p>
+
+  @if (applicationStatus().reason) {
+    <div class="bg-surface p-4 rounded-xl text-left border border-outline-variant inline-block w-full max-w-lg">
+      <h4 class="font-label-md text-label-md text-on-surface font-bold mb-1">Reason:</h4>
+      <p class="font-body-md text-body-md text-on-surface-variant">{{ applicationStatus().reason }}</p>
+    </div>
+  }
+  
+  <div class="mt-8">
+    <button routerLink="/" class="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md hover:opacity-90 transition-opacity">Return to Home</button>
+  </div>
+</div>
+}
+
+@if (isLoadingStatus()) {
+  <div class="flex justify-center items-center py-20 w-full">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+  </div>
+}
+
 </section>
 </main>

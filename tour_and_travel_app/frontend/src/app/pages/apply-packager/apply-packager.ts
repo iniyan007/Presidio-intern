@@ -1,19 +1,22 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PackagerService } from '../../services/packager.service';
-import { Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-apply-packager',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './apply-packager.html',
 })
-export class ApplyPackagerComponent {
+export class ApplyPackagerComponent implements OnInit {
   private fb = inject(FormBuilder);
   private packagerService = inject(PackagerService);
   private router = inject(Router);
+
+  applicationStatus = signal<any>(null);
+  isLoadingStatus = signal(true);
 
   currentStep = signal(1);
   isSubmitting = signal(false);
@@ -31,6 +34,19 @@ export class ApplyPackagerComponent {
   panDocument: File | null = null;
   gstDocument: File | null = null;
   businessRegistration: File | null = null;
+
+  ngOnInit() {
+    this.packagerService.getMyPackagerStatus().subscribe({
+      next: (res) => {
+        this.applicationStatus.set(res);
+        this.isLoadingStatus.set(false);
+      },
+      error: () => {
+        // No application found, show the form
+        this.isLoadingStatus.set(false);
+      }
+    });
+  }
 
   nextStep(step: number) {
     if (step === 2) {

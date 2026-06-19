@@ -1,0 +1,78 @@
+<main class="flex-grow flex items-center justify-center px-margin-mobile md:px-margin-desktop animated-gradient min-h-screen">
+    <div class="relative w-full max-w-[480px]">
+        <!-- Decorative Elements -->
+        <div class="absolute -top-12 -left-12 w-32 h-32 bg-primary-fixed/30 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-secondary-fixed/20 rounded-full blur-3xl"></div>
+        
+        <!-- Verification Card -->
+        <div class="glass-panel relative z-10 p-8 md:p-12 rounded-xl shadow-[0px_4px_20px_rgba(26,54,93,0.08)] flex flex-col items-center text-center">
+            
+            <!-- TrekTrack Logo -->
+            <div class="mb-8">
+                <span class="font-display-lg text-display-lg font-bold text-primary">TourMate</span>
+            </div>
+            
+            <!-- Icon -->
+            <div class="w-20 h-20 bg-primary-fixed flex items-center justify-center rounded-full mb-6">
+                <span class="material-symbols-outlined text-primary text-4xl" data-icon="mark_email_unread" style="font-variation-settings: 'FILL' 1;">mark_email_unread</span>
+            </div>
+            
+            <!-- Messaging -->
+            <h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-3">Check your email</h1>
+            <p class="font-body-md text-body-md text-on-surface-variant max-w-[320px] mb-8">
+                We've sent a 6-digit code to your email <strong *ngIf="maskedEmail()">{{ maskedEmail() }}</strong>. Please enter it below to verify your account.
+            </p>
+            
+            <!-- OTP Input Group -->
+            <form class="w-full space-y-8" [formGroup]="otpForm" (ngSubmit)="verifyOtp()">
+                <div class="flex justify-between gap-2 md:gap-4" formArrayName="otp">
+                    @for (control of otpControls; track $index) {
+                        <input class="otp-input w-full aspect-square text-center font-title-md text-title-md border-outline-variant rounded-lg bg-surface-container-lowest focus:border-primary focus:ring-0 transition-all duration-200" 
+                               maxlength="1" required="" type="text"
+                               [formControlName]="$index"
+                               (input)="onInput($event, $index)"
+                               (keydown)="onKeyDown($event, $index)"
+                               #otpInput>
+                    }
+                </div>
+                
+                <!-- Primary Action -->
+                <button class="w-full bg-primary text-on-primary py-4 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-all active:scale-[0.98] shadow-sm disabled:opacity-50" type="submit" [disabled]="otpForm.invalid || isLoading() || isSuccess()">
+                    {{ isLoading() ? 'Verifying...' : 'Verify Account' }}
+                </button>
+            </form>
+            
+            <!-- Footer Actions -->
+            <div class="mt-8 flex flex-col items-center gap-2">
+                <p class="font-body-md text-body-md text-on-surface-variant">
+                    Didn't receive the code?
+                </p>
+                <button class="font-label-md text-label-md text-secondary hover:text-on-secondary-fixed-variant transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+                        (click)="resendOtp()" 
+                        [disabled]="timeLeft() > 0 || isResending()">
+                    {{ isResending() ? 'Sending...' : 'Resend Code' }} 
+                    <span *ngIf="timeLeft() > 0">({{ formatTime() }})</span>
+                </button>
+            </div>
+            
+            <!-- Success State -->
+            <div class="absolute inset-0 bg-surface-container-lowest rounded-xl flex flex-col items-center justify-center p-8 z-20" *ngIf="isSuccess()">
+                <div class="w-16 h-16 bg-green-100 flex items-center justify-center rounded-full mb-4">
+                    <span class="material-symbols-outlined text-green-600 text-3xl" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                </div>
+                <h2 class="font-title-md text-title-md text-primary mb-2">Verified Successfully</h2>
+                <p class="font-body-md text-body-md text-on-surface-variant mb-6">Redirecting you to your dashboard...</p>
+                <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+            
+        </div>
+        
+        <!-- Back to Login -->
+        <div class="mt-6 text-center">
+            <a class="inline-flex items-center gap-2 font-label-md text-label-md text-primary hover:underline cursor-pointer" routerLink="/auth">
+                <span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+                Back to login
+            </a>
+        </div>
+    </div>
+</main>

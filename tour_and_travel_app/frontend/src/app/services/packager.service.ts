@@ -26,4 +26,8 @@ export class PackagerService {
   applyToBecomePackager(formData: FormData): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/apply`, formData);
   }
+
+  getMyPackagerStatus(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/me/status`);
+  }
 }

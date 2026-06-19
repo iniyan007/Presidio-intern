@@ -9,10 +9,12 @@ import { PaymentComponent } from './pages/payment/payment';
 import { WishlistComponent } from './pages/wishlist/wishlist';
 import { PackagerProfileComponent } from './pages/packager-profile/packager-profile';
 import { ApplyPackagerComponent } from './pages/apply-packager/apply-packager';
+import { VerifyEmailComponent } from './pages/verify-email/verify-email';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'auth', component: AuthComponent },
+  { path: 'verify-email', component: VerifyEmailComponent },
   { path: 'package/:id', component: PackageDetailsComponent },
   { path: 'package/:id/book', component: BookingWizardComponent },
   { path: 'payment/:id', component: PaymentComponent },
