@@ -28,23 +28,88 @@ public class PackagerRepository : GenericRepository<Packager, Guid>, IPackagerRe
     /// <remarks>
     /// "Approved" is determined by <c>ApprovedAt != null</c> and <c>DeactivatedAt == null</c>.
     /// </remarks>
-    public async Task<IReadOnlyList<Packager>> GetApprovedPackagersAsync(
-        CancellationToken cancellationToken = default)
-        => await _dbSet
-            .Where(pk => pk.ApprovedAt != null && pk.DeactivatedAt == null)
-            .OrderByDescending(pk => pk.AvgRating)
-            .ToListAsync(cancellationToken);
+    public async Task<IReadOnlyList<Packager>> GetApprovedPackagersAsync(string? searchTerm = null, string? sortOrder = null, CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.Where(pk => pk.ApprovedAt != null && pk.DeactivatedAt == null);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var term = searchTerm.ToLower();
+            query = query.Where(pk => 
+                pk.CompanyName.ToLower().Contains(term) || 
+                (pk.BusinessLicenseNo != null && pk.BusinessLicenseNo.ToLower().Contains(term)) || 
+                pk.ContactEmail.ToLower().Contains(term));
+        }
+
+        if (sortOrder?.ToLower() == "oldest")
+        {
+            query = query.OrderBy(pk => pk.ApprovedAt);
+        }
+        else
+        {
+            // Default to newest approved first
+            query = query.OrderByDescending(pk => pk.ApprovedAt);
+        }
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Packager>> GetDeactivatedPackagersAsync(string? searchTerm = null, string? sortOrder = null, CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.Where(pk => pk.DeactivatedAt != null);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var term = searchTerm.ToLower();
+            query = query.Where(pk => 
+                pk.CompanyName.ToLower().Contains(term) || 
+                (pk.BusinessLicenseNo != null && pk.BusinessLicenseNo.ToLower().Contains(term)) || 
+                pk.ContactEmail.ToLower().Contains(term));
+        }
+
+        if (sortOrder?.ToLower() == "oldest")
+        {
+            query = query.OrderBy(pk => pk.DeactivatedAt);
+        }
+        else
+        {
+            // Default to newest deactivated first
+            query = query.OrderByDescending(pk => pk.DeactivatedAt);
+        }
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
 
     /// <inheritdoc />
     /// <remarks>
     /// "Pending" is determined by <c>ApprovedAt == null</c> and <c>DeactivatedAt == null</c>.
     /// </remarks>
-    public async Task<IReadOnlyList<Packager>> GetPendingApprovalAsync(
-        CancellationToken cancellationToken = default)
-        => await _dbSet
-            .Where(pk => pk.ApprovedAt == null && pk.DeactivatedAt == null)
-            .OrderBy(pk => pk.CreatedAt)
-            .ToListAsync(cancellationToken);
+    public async Task<IReadOnlyList<Packager>> GetPendingApprovalAsync(string? searchTerm = null, string? sortOrder = null, CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.Where(pk => pk.ApprovedAt == null && pk.DeactivatedAt == null);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var term = searchTerm.ToLower();
+            query = query.Where(pk => 
+                pk.CompanyName.ToLower().Contains(term) || 
+                (pk.BusinessLicenseNo != null && pk.BusinessLicenseNo.ToLower().Contains(term)) || 
+                pk.ContactEmail.ToLower().Contains(term));
+        }
+
+        if (sortOrder?.ToLower() == "oldest")
+        {
+            query = query.OrderBy(pk => pk.CreatedAt);
+        }
+        else
+        {
+            // Default to newest first
+            query = query.OrderByDescending(pk => pk.CreatedAt);
+        }
+
+        return await query.ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<Packager?> GetWithDocumentsAsync(

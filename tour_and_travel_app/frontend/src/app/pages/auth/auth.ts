@@ -84,7 +84,11 @@ export class AuthComponent implements OnInit {
           this.authService.sendOtp().subscribe();
           this.router.navigate(['/verify-email']);
         } else {
-          this.router.navigate(['/']);
+          if (this.authService.getUserRole() === 'Admin') {
+            this.router.navigate(['/admin/dashboard']);
+          } else {
+            this.router.navigate(['/']);
+          }
         }
       },
       error: (err: any) => {

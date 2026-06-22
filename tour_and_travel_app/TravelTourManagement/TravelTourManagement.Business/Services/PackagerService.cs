@@ -176,10 +176,101 @@ public class PackagerService : IPackagerService
         return _mapper.Map<PackagerResponse>(packager);
     }
 
-    public async Task<IEnumerable<PackagerResponse>> GetPendingPackagersAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<PackagerResponse>> GetPendingPackagersAsync(string? searchTerm = null, string? sortOrder = null, CancellationToken cancellationToken = default)
     {
-        var pendingPackagers = await _packagerRepository.GetPendingApprovalAsync(cancellationToken);
+        var pendingPackagers = await _packagerRepository.GetPendingApprovalAsync(searchTerm, sortOrder, cancellationToken);
         return _mapper.Map<IEnumerable<PackagerResponse>>(pendingPackagers);
+    }
+
+    public async Task<IEnumerable<PackagerResponse>> GetApprovedPackagersAsync(string? searchTerm = null, string? sortOrder = null, CancellationToken cancellationToken = default)
+    {
+        var approvedPackagers = await _packagerRepository.GetApprovedPackagersAsync(searchTerm, sortOrder, cancellationToken);
+        return _mapper.Map<IEnumerable<PackagerResponse>>(approvedPackagers);
+    }
+
+    public async Task<IEnumerable<PackagerResponse>> GetDeactivatedPackagersAsync(string? searchTerm = null, string? sortOrder = null, CancellationToken cancellationToken = default)
+    {
+        var deactivatedPackagers = await _packagerRepository.GetDeactivatedPackagersAsync(searchTerm, sortOrder, cancellationToken);
+        return _mapper.Map<IEnumerable<PackagerResponse>>(deactivatedPackagers);
+    }
+
+    public async Task<PackagerResponse> DeactivatePackagerAsync(Guid packagerId, Guid adminUserId, string reason, CancellationToken cancellationToken = default)
+    {
+        var packager = await _packagerRepository.GetByIdAsync(packagerId, cancellationToken);
+        if (packager == null)
+        {
+            throw new KeyNotFoundException("Packager not found.");
+        }
+
+        if (packager.ApprovedAt == null)
+        {
+            throw new InvalidOperationException("Cannot deactivate a packager that is not approved.");
+        }
+
+        if (packager.DeactivatedAt != null)
+        {
+            throw new InvalidOperationException("Packager is already deactivated.");
+        }
+
+        var adminUser = await _userRepository.GetByIdAsync(adminUserId, cancellationToken);
+        if (adminUser == null)
+        {
+            throw new UnauthorizedAccessException("Admin user not found.");
+        }
+
+        packager.DeactivatedAt = DateTime.UtcNow;
+        packager.DeactivationReason = reason;
+        packager.UpdatedAt = DateTime.UtcNow;
+
+        await _packagerRepository.UpdateAsync(packager, cancellationToken);
+        await _packagerRepository.UpdateStatusRawAsync(packagerId, "deactivated", cancellationToken);
+
+        await _notificationService.SendNotificationAsync(
+            packager.UserId,
+            "Packager Account Deactivated",
+            $"Your packager account has been deactivated. Reason: {reason}",
+            packager.Id,
+            TravelTourManagement.DataAccess.Enums.NotificationType.system,
+            cancellationToken);
+
+        return _mapper.Map<PackagerResponse>(packager);
+    }
+
+    public async Task<PackagerResponse> ReactivatePackagerAsync(Guid packagerId, Guid adminUserId, CancellationToken cancellationToken = default)
+    {
+        var packager = await _packagerRepository.GetByIdAsync(packagerId, cancellationToken);
+        if (packager == null)
+        {
+            throw new KeyNotFoundException("Packager not found.");
+        }
+
+        if (packager.DeactivatedAt == null)
+        {
+            throw new InvalidOperationException("Packager is not deactivated.");
+        }
+
+        var adminUser = await _userRepository.GetByIdAsync(adminUserId, cancellationToken);
+        if (adminUser == null)
+        {
+            throw new UnauthorizedAccessException("Admin user not found.");
+        }
+
+        packager.DeactivatedAt = null;
+        packager.DeactivationReason = null;
+        packager.UpdatedAt = DateTime.UtcNow;
+
+        await _packagerRepository.UpdateAsync(packager, cancellationToken);
+        await _packagerRepository.UpdateStatusRawAsync(packagerId, "approved", cancellationToken);
+
+        await _notificationService.SendNotificationAsync(
+            packager.UserId,
+            "Packager Account Reactivated",
+            "Great news! Your packager account has been reactivated and you can now manage your packages.",
+            packager.Id,
+            TravelTourManagement.DataAccess.Enums.NotificationType.system,
+            cancellationToken);
+
+        return _mapper.Map<PackagerResponse>(packager);
     }
 
     public async Task<PackagerResponse> GetMyPackagerStatusAsync(Guid userId, CancellationToken cancellationToken = default)

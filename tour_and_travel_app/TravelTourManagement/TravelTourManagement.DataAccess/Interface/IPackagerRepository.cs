@@ -19,10 +19,13 @@ public interface IPackagerRepository : IRepository<Packager, Guid>
     Task<Packager?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
 
     /// <summary>Returns all packagers whose approval status is <c>approved</c>.</summary>
-    Task<IReadOnlyList<Packager>> GetApprovedPackagersAsync(CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Packager>> GetApprovedPackagersAsync(string? searchTerm = null, string? sortOrder = null, CancellationToken cancellationToken = default);
+
+    /// <summary>Returns all packagers whose status is <c>deactivated</c>.</summary>
+    Task<IReadOnlyList<Packager>> GetDeactivatedPackagersAsync(string? searchTerm = null, string? sortOrder = null, CancellationToken cancellationToken = default);
 
     /// <summary>Returns all packagers whose status is <c>pending</c> approval.</summary>
-    Task<IReadOnlyList<Packager>> GetPendingApprovalAsync(CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Packager>> GetPendingApprovalAsync(string? searchTerm = null, string? sortOrder = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves a packager by their company name.

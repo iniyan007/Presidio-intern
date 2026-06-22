@@ -2,6 +2,18 @@
 <div class="flex items-center gap-12">
 <span class="font-display-lg text-2xl font-bold text-primary dark:text-primary-fixed cursor-pointer tracking-tight" routerLink="/">TourMate</span>
 <nav class="hidden md:flex gap-8 items-center">
+@if (authService.getUserRole() === 'Admin') {
+<a routerLink="/admin/dashboard" 
+   routerLinkActive="active" 
+   #rlaDash="routerLinkActive"
+   [ngClass]="rlaDash.isActive ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary' : 'text-on-surface-variant dark:text-outline'"
+   class="font-body-md text-body-md pb-1 hover:text-primary transition-colors cursor-pointer">Dashboard</a>
+<a routerLink="/admin/packagers" 
+   routerLinkActive="active" 
+   #rlaPackagers="routerLinkActive"
+   [ngClass]="rlaPackagers.isActive ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary' : 'text-on-surface-variant dark:text-outline'"
+   class="font-body-md text-body-md pb-1 hover:text-primary transition-colors cursor-pointer">Packagers</a>
+} @else {
 <a routerLink="/" 
    routerLinkActive="active" 
    #rlaHome="routerLinkActive"
@@ -15,6 +27,7 @@
    [ngClass]="rlaBook.isActive ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary' : 'text-on-surface-variant dark:text-outline'"
    class="font-body-md text-body-md pb-1 hover:text-primary transition-colors cursor-pointer">My Bookings</a>
 }
+}
 </nav>
 </div>
 <div class="flex items-center gap-6">
@@ -24,6 +37,7 @@
   <button routerLink="/auth" [queryParams]="{tab: 'signup'}" class="font-label-md text-label-md bg-secondary text-on-secondary px-7 py-2.5 rounded-full shadow-md hover:shadow-lg hover:bg-secondary/90 hover:-translate-y-0.5 transition-all duration-300">Sign Up</button>
 } @else {
   <div class="flex items-center gap-3">
+    @if (authService.getUserRole() !== 'Admin') {
     <!-- Wishlist Cart Button -->
     <button routerLink="/wishlist" class="relative flex items-center justify-center text-on-surface-variant cursor-pointer p-2 hover:bg-surface-container-high rounded-full transition-all outline-none border-none bg-transparent">
       <span class="material-symbols-outlined text-[24px]">favorite</span>
@@ -33,6 +47,7 @@
         </span>
       }
     </button>
+    }
 
     <div class="relative notification-container">
       <button class="relative flex items-center justify-center text-on-surface-variant cursor-pointer p-2 hover:bg-surface-container-high rounded-full transition-all outline-none border-none bg-transparent"

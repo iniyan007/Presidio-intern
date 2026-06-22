@@ -1,0 +1,278 @@
+<main class="flex-1 px-4 sm:px-6 lg:px-8 py-8 space-y-8 max-w-7xl mx-auto w-full">
+<!-- Section: System Overview -->
+<section class="space-y-6">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary">System Overview</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Real-time platform performance and core controls.</p>
+</div>
+<div class="flex items-center gap-2 bg-surface-container px-4 py-2 rounded-lg text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined">calendar_today</span>
+                        Last 30 Days
+                    </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-gutter">
+<!-- Revenue Card -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-[0px_4px_20px_rgba(26,54,93,0.08)] hover:-translate-y-1 transition-transform">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary-fixed/30 rounded-lg">
+<span class="material-symbols-outlined text-primary">payments</span>
+</div>
+<span class="flex items-center text-on-tertiary-container font-label-md text-[12px] bg-tertiary-fixed/40 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
+                                +12.4%
+                            </span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Total Platform Revenue</p>
+<h3 class="font-headline-lg text-headline-lg text-primary">{{ revenue() | currency:'INR':'symbol':'1.0-0' }}</h3>
+</div>
+<!-- Bookings Card -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-[0px_4px_20px_rgba(26,54,93,0.08)] hover:-translate-y-1 transition-transform">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary-fixed/30 rounded-lg">
+<span class="material-symbols-outlined text-primary">confirmation_number</span>
+</div>
+<span class="flex items-center text-on-tertiary-container font-label-md text-[12px] bg-tertiary-fixed/40 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
+                                +8.2%
+                            </span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Total Bookings</p>
+<h3 class="font-headline-lg text-headline-lg text-primary">{{ bookings() | number }}</h3>
+</div>
+<!-- Active Packagers Card -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-[0px_4px_20px_rgba(26,54,93,0.08)] hover:-translate-y-1 transition-transform">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary-fixed/30 rounded-lg">
+<span class="material-symbols-outlined text-primary">travel_explore</span>
+</div>
+<span class="flex items-center text-error font-label-md text-[12px] bg-error-container/40 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_down</span>
+                                -2.1%
+                            </span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Active Packagers</p>
+<h3 class="font-headline-lg text-headline-lg text-primary">{{ activePackagersCount() | number }}</h3>
+</div>
+<!-- Platform Fee Control Card -->
+<div class="bg-primary-container p-6 rounded-xl border border-primary text-on-primary-container shadow-lg flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-center mb-4">
+<h4 class="font-title-md text-title-md text-on-primary">Platform Fee</h4>
+<span class="font-display-lg text-2xl text-on-tertiary-container font-bold">{{ platformFee() }}%</span>
+</div>
+<input class="w-full h-2 bg-primary-fixed/20 rounded-lg appearance-none cursor-pointer accent-on-tertiary-container mb-4" max="25" min="1" step="0.1" type="range" [(ngModel)]="platformFee" (ngModelChange)="platformFee.set($event)">
+
+<div class="flex justify-between items-center mb-4 mt-6">
+<h4 class="font-title-md text-title-md text-on-primary">GST Tax</h4>
+<span class="font-display-lg text-2xl text-on-tertiary-container font-bold">{{ gstPercent() }}%</span>
+</div>
+<input class="w-full h-2 bg-primary-fixed/20 rounded-lg appearance-none cursor-pointer accent-on-tertiary-container mb-6" max="30" min="0" step="0.1" type="range" [(ngModel)]="gstPercent" (ngModelChange)="gstPercent.set($event)">
+</div>
+<button (click)="updateGlobalFee()" [disabled]="isUpdatingFee()" class="w-full bg-secondary text-on-secondary font-label-md text-label-md py-3 rounded-xl hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+                            @if (isUpdatingFee()) { <div class="inline-block animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-on-secondary"></div> }
+                            Update Global Settings
+                        </button>
+</div>
+</div>
+</section>
+<!-- Section: Pending Requests -->
+<section class="bg-surface-container-lowest rounded-2xl border border-outline-variant overflow-hidden shadow-[0px_4px_20px_rgba(26,54,93,0.08)]">
+<div class="p-6 border-b border-outline-variant flex flex-col md:flex-row md:items-center justify-between gap-4">
+<h2 class="font-title-md text-title-md text-primary">Pending Packager Requests</h2>
+<div class="flex gap-3">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container rounded-lg border-none focus:ring-2 focus:ring-primary w-full md:w-64 text-label-md" placeholder="Search applicants..." type="text" [ngModel]="searchTerm()" (ngModelChange)="onSearchChange($event)">
+</div>
+<button (click)="toggleSort()" class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg hover:bg-surface-container transition-colors text-label-md font-label-md">
+<span class="material-symbols-outlined text-[20px]">sort</span>
+                            {{ sortOrder() === 'newest' ? 'Newest First' : 'Oldest First' }}
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+  <table class="w-full text-left border-collapse">
+    <thead>
+    <tr class="bg-surface-container-low border-b border-outline-variant">
+    <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Company Name</th>
+    <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">License No</th>
+    <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Request Date</th>
+    <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Status</th>
+    <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant text-right">Actions</th>
+    </tr>
+    </thead>
+    <tbody class="divide-y divide-outline-variant">
+      @if (isLoading()) {
+        <tr>
+          <td colspan="5" class="px-6 py-8 text-center text-on-surface-variant">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mb-2"></div>
+            <p>Loading pending applications...</p>
+          </td>
+        </tr>
+      } @else if (pendingPackagers().length === 0) {
+        <tr>
+          <td colspan="5" class="px-6 py-8 text-center text-on-surface-variant">
+            No pending applications at this time.
+          </td>
+        </tr>
+      } @else {
+        @for (packager of pendingPackagers(); track packager.id) {
+          <!-- Data Row -->
+          <tr class="hover:bg-surface-container-low/50 transition-colors group">
+          <td class="px-6 py-4">
+          <p class="font-label-md text-label-md text-primary">{{ packager.companyName }}</p>
+          <p class="font-caption text-caption text-on-surface-variant">{{ packager.contactEmail }}</p>
+          </td>
+          <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{{ packager.businessLicenseNo }}</td>
+          <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{{ packager.createdAt | date:'mediumDate' }}</td>
+          <td class="px-6 py-4">
+          <span class="px-3 py-1 bg-tertiary-fixed/40 text-on-tertiary-container text-caption font-label-md rounded-full">{{ packager.approvalStatus }}</span>
+          </td>
+          <td class="px-6 py-4 text-right">
+          <button (click)="openReviewModal(packager)" class="px-4 py-2 bg-primary/10 text-primary font-label-md rounded-lg hover:bg-primary/20 transition-colors flex items-center gap-2 ml-auto">
+            <span class="material-symbols-outlined text-[18px]">find_in_page</span>
+            Review Documents
+          </button>
+          </td>
+          </tr>
+          <!-- Rejection Reason Row (Dynamic) -->
+          @if (activeRejectRowId() === packager.id) {
+          <tr class="bg-error-container/5">
+          <td class="px-6 py-4" colspan="5">
+          <div class="flex flex-col gap-3">
+          <label class="font-label-md text-label-md text-error">Rejection Reason for {{ packager.companyName }}</label>
+          <div class="flex flex-col sm:flex-row gap-3">
+          <textarea [(ngModel)]="rejectReason" (ngModelChange)="rejectReason.set($event)" class="flex-1 bg-surface-container-lowest border border-outline-variant rounded-lg p-3 text-body-md focus:ring-1 focus:ring-error focus:border-error outline-none resize-none" placeholder="Explain why this application is being rejected..." rows="2"></textarea>
+          <button (click)="confirmRejection(packager.id)" [disabled]="isRejecting()" class="self-end px-6 py-2 bg-error text-on-error rounded-lg font-label-md hover:opacity-90 disabled:opacity-50 flex items-center gap-2">
+            @if (isRejecting()) { <div class="inline-block animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div> } Confirm
+          </button>
+          </div>
+          </div>
+          </td>
+          </tr>
+          }
+        }
+      }
+    </tbody>
+  </table>
+</div>
+</section>
+
+</main>
+
+<!-- Document Review Modal -->
+@if (isReviewModalOpen()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim/50 backdrop-blur-sm">
+  <div class="bg-surface-container-lowest w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+    <!-- Header -->
+    <div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+      <div>
+        <h2 class="font-title-lg text-title-lg text-primary">Review Packager Application</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant">{{ selectedPackagerForReview()?.companyName }}</p>
+      </div>
+      <button (click)="closeReviewModal()" class="p-2 text-on-surface-variant hover:text-error hover:bg-error-container/20 rounded-full transition-colors">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6 overflow-y-auto flex-1">
+      <!-- Contact Details -->
+      <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-surface-container/30 p-4 rounded-xl border border-outline-variant">
+        <div>
+          <p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Contact Phone</p>
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px] text-primary">phone</span>
+            <p class="font-body-md text-body-md text-on-surface">{{ selectedPackagerForReview()?.contactPhone || 'N/A' }}</p>
+          </div>
+        </div>
+        <div>
+          <p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Website URL</p>
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px] text-primary">language</span>
+            @if (selectedPackagerForReview()?.websiteUrl) {
+              <a [href]="selectedPackagerForReview()?.websiteUrl" target="_blank" class="font-body-md text-body-md text-primary hover:underline break-all">{{ selectedPackagerForReview()?.websiteUrl }}</a>
+            } @else {
+              <p class="font-body-md text-body-md text-on-surface">N/A</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <h3 class="font-title-md text-title-md text-on-surface mb-4">Required Documents</h3>
+      
+      @if (isDocumentsLoading()) {
+        <div class="flex flex-col items-center justify-center py-8">
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mb-4"></div>
+          <p class="text-on-surface-variant font-body-md">Fetching secure documents...</p>
+        </div>
+      } @else if (packagerDocuments().length === 0) {
+        <div class="bg-error-container/20 p-4 rounded-xl border border-error/20 flex gap-3 text-error">
+          <span class="material-symbols-outlined">warning</span>
+          <p class="font-body-md text-body-md">This applicant has not uploaded any documents. You cannot approve this application.</p>
+        </div>
+      } @else {
+        <div class="space-y-4">
+          @for (doc of packagerDocuments(); track doc.id) {
+            <div class="flex items-center justify-between p-4 rounded-xl border transition-colors"
+                 [ngClass]="viewedDocumentIds().has(doc.id) ? 'bg-primary-container/20 border-primary/30' : 'bg-surface-container border-outline-variant hover:border-primary/50'">
+              <div class="flex items-center gap-4">
+                <div class="p-2 rounded-lg" [ngClass]="viewedDocumentIds().has(doc.id) ? 'bg-primary/10 text-primary' : 'bg-surface-container-high text-on-surface-variant'">
+                  <span class="material-symbols-outlined">
+                    {{ viewedDocumentIds().has(doc.id) ? 'mark_email_read' : 'description' }}
+                  </span>
+                </div>
+                <div>
+                  <h4 class="font-title-sm text-title-sm text-on-surface">{{ doc.documentType }}</h4>
+                  <p class="font-caption text-caption text-on-surface-variant">{{ doc.originalFilename || doc.fileName }}</p>
+                </div>
+              </div>
+              
+              <button (click)="markDocumentViewed(doc.id, doc.fileUrl)" class="px-4 py-2 text-primary font-label-md hover:bg-primary/10 rounded-lg transition-colors flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">visibility</span>
+                View
+              </button>
+            </div>
+          }
+        </div>
+
+        @if (!canApprove()) {
+          <div class="mt-6 bg-tertiary-container/30 p-4 rounded-xl flex gap-3 items-start">
+            <span class="material-symbols-outlined text-tertiary">info</span>
+            <p class="font-body-sm text-body-sm text-on-surface-variant">You must explicitly click 'View' on all uploaded documents to review them before the Approve button unlocks.</p>
+          </div>
+        }
+
+        @if (activeRejectRowId()) {
+          <div class="mt-6 bg-error-container/10 p-4 rounded-xl border border-error/20">
+            <label class="font-label-md text-label-md text-error mb-2 block">Reason for Rejection</label>
+            <textarea [(ngModel)]="rejectReason" (ngModelChange)="rejectReason.set($event)" class="w-full bg-surface-container-lowest border border-error/30 rounded-lg p-3 text-body-md focus:ring-1 focus:ring-error focus:border-error outline-none resize-none" placeholder="Provide details to the applicant..." rows="3"></textarea>
+            <div class="flex justify-end mt-3 gap-2">
+              <button (click)="activeRejectRowId.set(null)" class="px-4 py-2 text-on-surface-variant hover:bg-surface-container rounded-lg font-label-md">Cancel</button>
+              <button (click)="confirmRejectionFromModal()" [disabled]="isRejecting()" class="px-4 py-2 bg-error text-on-error rounded-lg font-label-md hover:opacity-90 disabled:opacity-50 flex items-center gap-2">
+                @if (isRejecting()) { <div class="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div> }
+                Confirm Rejection
+              </button>
+            </div>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Footer Actions -->
+    @if (!activeRejectRowId()) {
+      <div class="p-6 border-t border-outline-variant bg-surface-container-low flex justify-end gap-3">
+        <button (click)="triggerRejectFromModal()" [disabled]="isDocumentsLoading()" class="px-6 py-2.5 text-error hover:bg-error-container/20 font-label-md rounded-xl transition-colors disabled:opacity-50">
+          Reject Application
+        </button>
+        <button (click)="approveFromModal()" [disabled]="!canApprove() || isApproving()" class="px-6 py-2.5 bg-primary text-on-primary font-label-md rounded-xl hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 disabled:bg-surface-container-highest disabled:text-on-surface-variant flex items-center gap-2">
+          @if (isApproving()) { <div class="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-current"></div> }
+          <span class="material-symbols-outlined text-[18px]">verified</span>
+          Approve Packager
+        </button>
+      </div>
+    }
+  </div>
+</div>
+}

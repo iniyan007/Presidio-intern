@@ -11,16 +11,42 @@ namespace TravelTourManagement.API.Controllers;
 public class AdminController : ControllerBase
 {
     private readonly IPackagerService _packagerService;
+    private readonly TravelTourManagement.DataAccess.Interface.IRepository<TravelTourManagement.DataAccess.Entities.Booking, Guid> _bookingRepository;
+    private readonly TravelTourManagement.DataAccess.Interface.IRepository<TravelTourManagement.DataAccess.Entities.Packager, Guid> _packagerRepository;
 
-    public AdminController(IPackagerService packagerService)
+    public AdminController(IPackagerService packagerService, 
+                           TravelTourManagement.DataAccess.Interface.IRepository<TravelTourManagement.DataAccess.Entities.Booking, Guid> bookingRepository,
+                           TravelTourManagement.DataAccess.Interface.IRepository<TravelTourManagement.DataAccess.Entities.Packager, Guid> packagerRepository)
     {
         _packagerService = packagerService;
+        _bookingRepository = bookingRepository;
+        _packagerRepository = packagerRepository;
+    }
+
+    [HttpGet("analytics")]
+    public async Task<IActionResult> GetAnalytics(CancellationToken cancellationToken)
+    {
+        var bookings = await _bookingRepository.GetAllAsync(cancellationToken);
+        var packagers = await _packagerRepository.GetAllAsync(cancellationToken);
+
+        var paidBookings = bookings.Where(b => b.PaymentStatus == TravelTourManagement.DataAccess.Enums.PaymentStatus.Paid).ToList();
+        
+        var totalRevenue = paidBookings.Sum(b => b.PlatformFeeAmount);
+        var totalBookings = paidBookings.Count;
+        var activePackagers = packagers.Count(p => p.ApprovedAt != null && p.DeactivatedAt == null);
+
+        return Ok(new
+        {
+            TotalRevenue = totalRevenue,
+            TotalBookings = totalBookings,
+            ActivePackagers = activePackagers
+        });
     }
 
     [HttpPost("packagers/{id:guid}/approve")]
     public async Task<IActionResult> ApprovePackager(Guid id, CancellationToken cancellationToken)
     {
-        var adminUserIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var adminUserIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? User.FindFirst("sub")?.Value;
         if (string.IsNullOrEmpty(adminUserIdString) || !Guid.TryParse(adminUserIdString, out var adminUserId))
         {
             return Unauthorized("Admin User ID not found in token.");
@@ -38,7 +64,7 @@ public class AdminController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var adminUserIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var adminUserIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? User.FindFirst("sub")?.Value;
         if (string.IsNullOrEmpty(adminUserIdString) || !Guid.TryParse(adminUserIdString, out var adminUserId))
         {
             return Unauthorized("Admin User ID not found in token.");
@@ -49,9 +75,49 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet("packagers/pending")]
-    public async Task<IActionResult> GetPendingPackagers(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetPendingPackagers([FromQuery] string? search, [FromQuery] string? sort, CancellationToken cancellationToken)
     {
-        var response = await _packagerService.GetPendingPackagersAsync(cancellationToken);
+        var response = await _packagerService.GetPendingPackagersAsync(search, sort, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpGet("packagers/approved")]
+    public async Task<IActionResult> GetApprovedPackagers([FromQuery] string? search, [FromQuery] string? sort, CancellationToken cancellationToken)
+    {
+        var response = await _packagerService.GetApprovedPackagersAsync(search, sort, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPost("packagers/{id:guid}/deactivate")]
+    public async Task<IActionResult> DeactivatePackager(Guid id, [FromBody] TravelTourManagement.DataAccess.DTOs.Packagers.RejectPackagerRequest request, CancellationToken cancellationToken)
+    {
+        var adminIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(adminIdClaim) || !Guid.TryParse(adminIdClaim, out Guid adminUserId))
+        {
+            return Unauthorized("Admin User ID not found in token.");
+        }
+
+        var response = await _packagerService.DeactivatePackagerAsync(id, adminUserId, request.Reason, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpGet("packagers/deactivated")]
+    public async Task<IActionResult> GetDeactivatedPackagers([FromQuery] string? search, [FromQuery] string? sort, CancellationToken cancellationToken)
+    {
+        var response = await _packagerService.GetDeactivatedPackagersAsync(search, sort, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPost("packagers/{id:guid}/activate")]
+    public async Task<IActionResult> ReactivatePackager(Guid id, CancellationToken cancellationToken)
+    {
+        var adminIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(adminIdClaim) || !Guid.TryParse(adminIdClaim, out Guid adminUserId))
+        {
+            return Unauthorized("Admin User ID not found in token.");
+        }
+
+        var response = await _packagerService.ReactivatePackagerAsync(id, adminUserId, cancellationToken);
         return Ok(response);
     }
 

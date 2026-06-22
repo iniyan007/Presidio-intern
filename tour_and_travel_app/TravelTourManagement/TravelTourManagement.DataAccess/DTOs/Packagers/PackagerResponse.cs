@@ -15,5 +15,6 @@ public record PackagerResponse(
     string? Reason,
     decimal AvgRating,
     int TotalReviews,
-    DateTime CreatedAt
+    DateTime CreatedAt,
+    DateTime? DeactivatedAt
 );

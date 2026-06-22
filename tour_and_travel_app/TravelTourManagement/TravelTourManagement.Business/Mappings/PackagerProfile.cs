@@ -25,7 +25,8 @@ public class PackagerProfile : Profile
                 src.DeactivationReason,
                 src.AvgRating,
                 src.TotalReviews,
-                src.CreatedAt
+                src.CreatedAt,
+                src.DeactivatedAt
             ));
 
         CreateMap<Packager, PublicPackagerResponse>()

@@ -11,6 +11,9 @@ import { PackagerProfileComponent } from './pages/packager-profile/packager-prof
 import { ApplyPackagerComponent } from './pages/apply-packager/apply-packager';
 import { VerifyEmailComponent } from './pages/verify-email/verify-email';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard';
+import { AdminPackagersComponent } from './pages/admin-packagers/admin-packagers';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -25,5 +28,7 @@ export const routes: Routes = [
   { path: 'packager/:packageId', component: PackagerProfileComponent },
   { path: 'apply-packager', component: ApplyPackagerComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [adminGuard] },
+  { path: 'admin/packagers', component: AdminPackagersComponent, canActivate: [adminGuard] },
   { path: '**', redirectTo: '' }
 ];

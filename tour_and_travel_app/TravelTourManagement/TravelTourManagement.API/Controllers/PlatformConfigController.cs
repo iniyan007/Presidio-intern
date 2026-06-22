@@ -31,7 +31,7 @@ public class PlatformConfigController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateConfig([FromBody] UpdatePlatformConfigRequest request, CancellationToken cancellationToken)
     {
-        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? User.FindFirst("sub")?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var adminUserId))
             return Unauthorized("User ID not found in token.");
 
