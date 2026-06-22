@@ -61,3 +61,8 @@ export interface PlatformConfigResponse {
   updatedBy: string | null;
   updatedAt: string;
 }
+
+export interface VerifyDocumentRequest {
+  isVerified: boolean;
+  rejectionReason: string | null;
+}

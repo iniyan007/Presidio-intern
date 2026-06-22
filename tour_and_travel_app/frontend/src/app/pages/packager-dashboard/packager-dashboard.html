@@ -1,0 +1,171 @@
+<main class="min-h-[calc(100vh-80px)] p-4 md:p-8 overflow-x-hidden max-w-7xl mx-auto w-full">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary">Operations Overview</h1>
+<p class="font-body-md text-on-surface-variant">Welcome back, Traveler. Here's what's happening today.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface-container-lowest border border-outline-variant text-primary px-6 py-2.5 rounded-full font-label-md text-label-md hover:bg-surface-variant transition-all">
+                        View Public Profile
+                    </button>
+</div>
+</div>
+<!-- Bento Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-[0px_4px_20px_rgba(26,54,93,0.08)] border border-outline-variant/30 flex flex-col justify-between hover:-translate-y-1 transition-transform cursor-default">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-primary-fixed/20 rounded-xl text-primary">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="text-emerald-600 font-label-md text-caption bg-emerald-50 px-2 py-1 rounded">+{{ revenueGrowth() }}%</span>
+</div>
+<div>
+<p class="font-label-md text-outline mb-1">Total Revenue</p>
+<h3 class="font-headline-lg text-title-md text-primary">{{ totalRevenue() | currency:'INR' }}</h3>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-[0px_4px_20px_rgba(26,54,93,0.08)] border border-outline-variant/30 flex flex-col justify-between hover:-translate-y-1 transition-transform cursor-default">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-secondary-fixed/50 rounded-xl text-secondary">
+<span class="material-symbols-outlined">pending_actions</span>
+</div>
+<span class="text-secondary font-bold font-label-md text-caption bg-secondary-fixed px-2 py-1 rounded">Urgent</span>
+</div>
+<div>
+<p class="font-label-md text-outline mb-1">Pending Approvals</p>
+<h3 class="font-headline-lg text-title-md text-primary">{{ pendingApprovals() }} Bookings</h3>
+</div>
+</div>
+
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-[0px_4px_20px_rgba(26,54,93,0.08)] border border-outline-variant/30 flex flex-col justify-between hover:-translate-y-1 transition-transform cursor-default">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-surface-variant rounded-xl text-on-surface-variant">
+<span class="material-symbols-outlined">star</span>
+</div>
+</div>
+<div>
+<p class="font-label-md text-outline mb-1">Avg Rating</p>
+<h3 class="font-headline-lg text-title-md text-primary">{{ avgRating() | number:'1.1-1' }} / 5.0</h3>
+</div>
+</div>
+</div>
+<!-- Dashboard Content Split -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<!-- My Packages Section -->
+<div class="xl:col-span-2 space-y-6">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-lg text-title-md text-primary">My Packages</h2>
+<button class="text-primary font-label-md text-label-md flex items-center gap-1 hover:underline">
+                            View All <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+@for (pkg of myPackages(); track pkg.id) {
+  <div class="bg-surface-container-lowest rounded-2xl overflow-hidden border border-outline-variant shadow-sm hover:shadow-lg transition-all group">
+  <div class="h-48 w-full relative overflow-hidden">
+  <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" [src]="pkg.imageUrl" [alt]="pkg.title">
+  <div class="absolute top-4 left-4 text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full" [ngClass]="pkg.status === 'Active' ? 'bg-emerald-500' : 'bg-secondary'">{{ pkg.status }}</div>
+  </div>
+  <div class="p-6">
+  <h3 class="font-title-md text-title-md text-primary mb-2">{{ pkg.title }}</h3>
+  <div class="flex items-center gap-4 text-outline font-label-md text-caption mb-4">
+  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> {{ pkg.durationDays }} Days</span>
+  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">group</span> {{ pkg.slotsLeft ? pkg.slotsLeft + ' Slots left' : 'Not Published' }}</span>
+  </div>
+  <div class="flex items-center justify-between border-t border-outline-variant pt-4">
+  <span class="text-secondary font-bold text-title-md">{{ pkg.price | currency:'INR':'symbol':'1.0-0' }} <span class="text-caption font-normal text-outline">/person</span></span>
+  <button class="text-primary p-2 hover:bg-primary-fixed/20 rounded-full transition-all">
+  <span class="material-symbols-outlined">edit</span>
+  </button>
+  </div>
+  </div>
+  </div>
+}
+</div>
+</div>
+<!-- Recent Bookings Section -->
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-lg text-title-md text-primary">Recent Bookings</h2>
+<button class="text-primary font-label-md text-label-md hover:underline" (click)="openViewAllModal()">View All</button>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant p-4 space-y-4 shadow-sm">
+@for (booking of recentBookings(); track booking.id) {
+  <div class="flex items-center gap-4 p-3 hover:bg-surface-container rounded-xl transition-all cursor-pointer"
+       (click)="onBookingClick(booking)">
+  <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold" [ngClass]="[booking.bgColor, booking.textColor]">{{ booking.initials }}</div>
+  <div class="flex-1 min-w-0">
+  <p class="font-label-md text-label-md text-primary truncate">{{ booking.customerName }}</p>
+  <p class="text-caption text-outline truncate">{{ booking.packageTitle }}</p>
+  </div>
+  <div class="text-right shrink-0">
+  <p class="font-label-md text-label-md text-primary">{{ booking.amount | currency:'INR':'symbol':'1.0-0' }}</p>
+  <span class="text-[10px] font-bold px-2 py-0.5 rounded uppercase flex flex-col gap-1 items-end">
+        <span [ngClass]="booking.status === 'Paid' ? 'text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded' : 'text-on-tertiary-fixed-variant bg-tertiary-fixed px-2 py-0.5 rounded'">{{ booking.status }}</span>
+        @if (booking.bookingStatus === 'DocumentUnderReview') {
+           <span class="bg-error-container text-error px-2 py-0.5 rounded">Doc Review</span>
+        }
+  </span>
+  </div>
+  </div>
+}
+<button routerLink="/packager/manage-bookings" class="w-full py-3 text-primary font-label-md text-label-md border-t border-outline-variant/30 mt-2 hover:bg-surface-container-low transition-all">
+                            Manage All Bookings
+                        </button>
+</div>
+</div>
+</div>
+</main>
+
+<!-- Actionable Bookings Modal (View All) -->
+@if (isViewAllModalOpen()) {
+  <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fade-in-up">
+    <div class="absolute inset-0 bg-surface-dim/80 backdrop-blur-sm" (click)="closeViewAllModal()"></div>
+    
+    <div class="bg-surface-container-lowest rounded-3xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col relative z-10 overflow-hidden">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-outline-variant/30">
+        <div>
+          <h2 class="font-headline-sm text-primary">Actionable Bookings</h2>
+          <p class="text-caption text-outline">Bookings that are Paid and have Documents under review.</p>
+        </div>
+        <button class="text-on-surface-variant hover:bg-surface-variant p-2 rounded-full transition-colors" (click)="closeViewAllModal()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- Bookings List -->
+      <div class="flex-1 overflow-auto p-6 bg-surface-container-low">
+        @if (actionableBookings().length === 0) {
+          <div class="text-center py-12">
+            <span class="material-symbols-outlined text-[48px] text-outline opacity-50 mb-4">check_circle</span>
+            <p class="font-body-md text-on-surface-variant">You're all caught up! No actionable bookings found.</p>
+          </div>
+        } @else {
+          <div class="space-y-4">
+            @for (booking of actionableBookings(); track booking.id) {
+              <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant p-4 flex items-center justify-between hover:shadow-md transition-all cursor-pointer"
+                   (click)="onBookingClick(booking)">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold" [ngClass]="[booking.bgColor, booking.textColor]">{{ booking.initials }}</div>
+                  <div>
+                    <h3 class="font-title-md text-primary mb-1">{{ booking.customerName }}</h3>
+                    <p class="text-caption text-outline">{{ booking.packageTitle }}</p>
+                  </div>
+                </div>
+                <div class="text-right flex flex-col items-end gap-1">
+                  <span class="font-title-md text-secondary">{{ booking.amount | currency:'INR':'symbol':'1.0-0' }}</span>
+                  <div class="flex gap-2">
+                    <span class="text-[10px] font-bold uppercase text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">{{ booking.status }}</span>
+                    <span class="text-[10px] font-bold uppercase text-error bg-error-container px-2 py-0.5 rounded">Doc Review</span>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

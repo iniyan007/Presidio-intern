@@ -14,6 +14,9 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard';
 import { AdminPackagersComponent } from './pages/admin-packagers/admin-packagers';
 import { adminGuard } from './guards/admin.guard';
+import { packagerGuard } from './guards/packager.guard';
+import { PackagerDashboardComponent } from './pages/packager-dashboard/packager-dashboard';
+import { ManageBookingsComponent } from './pages/manage-bookings/manage-bookings';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -25,6 +28,8 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'bookings', component: MyBookingsComponent },
   { path: 'wishlist', component: WishlistComponent },
+  { path: 'packager/dashboard', component: PackagerDashboardComponent, canActivate: [packagerGuard] },
+  { path: 'packager/manage-bookings', component: ManageBookingsComponent, canActivate: [packagerGuard] },
   { path: 'packager/:packageId', component: PackagerProfileComponent },
   { path: 'apply-packager', component: ApplyPackagerComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },

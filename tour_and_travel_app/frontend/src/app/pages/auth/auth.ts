@@ -86,6 +86,8 @@ export class AuthComponent implements OnInit {
         } else {
           if (this.authService.getUserRole() === 'Admin') {
             this.router.navigate(['/admin/dashboard']);
+          } else if (this.authService.getUserRole() === 'Packager') {
+            this.router.navigate(['/packager/dashboard']);
           } else {
             this.router.navigate(['/']);
           }

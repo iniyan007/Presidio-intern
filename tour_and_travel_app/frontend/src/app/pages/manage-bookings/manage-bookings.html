@@ -1,0 +1,291 @@
+<main class="min-h-[calc(100vh-80px)] p-4 md:p-8 overflow-x-hidden max-w-7xl mx-auto w-full">
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
+    <div>
+      <h1 class="font-headline-lg text-headline-lg text-primary mb-2">Manage Bookings</h1>
+      <p class="font-body-md text-on-surface-variant">Review travel documents and confirm passenger bookings.</p>
+    </div>
+    <div class="w-full md:w-72">
+      <label class="block font-label-md text-caption text-outline mb-1">Select Package</label>
+      <select 
+        class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl p-3 text-primary focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none"
+        [ngModel]="selectedPackageId()" 
+        (ngModelChange)="onPackageSelect($event)">
+        <option [value]="null" disabled selected>-- Choose a Package --</option>
+        @for (pkg of myPackages(); track pkg.id) {
+          <option [value]="pkg.id">{{ pkg.title }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (!selectedPackageId()) {
+    @if (isLoadingAll()) {
+      <div class="flex items-center justify-center p-12 mt-8">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+      </div>
+    } @else if (recentAllBookings().length > 0) {
+      <div class="mt-8">
+        <div class="flex items-center gap-3 mb-6">
+          <span class="material-symbols-outlined text-secondary text-[28px]">schedule</span>
+          <h2 class="font-headline-md text-title-lg text-primary">Recent Bookings (All Packages)</h2>
+        </div>
+        <div class="grid grid-cols-1 gap-6">
+          @for (booking of recentAllBookings(); track booking.id) {
+            <div class="bg-surface-container-lowest border border-outline-variant/50 rounded-2xl p-6 shadow-sm">
+                <!-- Booking Header -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant/30 pb-4 mb-4">
+                  <div>
+                    <div class="flex items-center gap-3 mb-1">
+                      <span class="font-bold text-title-md text-primary">Booking #{{ booking.bookingReference }}</span>
+                      <span class="text-xs font-bold uppercase px-2 py-1 rounded-full"
+                        [ngClass]="{
+                          'bg-primary-fixed text-primary': booking.status === 'Pending',
+                          'bg-error-container text-error': booking.status === 'DocumentUnderReview',
+                          'bg-emerald-100 text-emerald-800': booking.status === 'Confirmed',
+                          'bg-surface-variant text-on-surface-variant': booking.status === 'Cancelled'
+                        }">
+                        {{ booking.status }}
+                      </span>
+                    </div>
+                    <p class="text-caption text-outline">
+                      <span class="font-bold text-secondary mr-2">{{ booking.packageTitle }}</span>
+                      Booked on {{ booking.bookedAt | date:'mediumDate' }} • {{ booking.adultCount }} Adults, {{ booking.childCount }} Children
+                    </p>
+                  </div>
+                  
+                  <div class="flex flex-col items-end">
+                    <p class="font-title-lg text-secondary">{{ booking.totalAmount | currency:'INR' }}</p>
+                    <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded"
+                      [ngClass]="booking.paymentStatus === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-tertiary-fixed text-on-tertiary-fixed'">
+                      {{ booking.paymentStatus }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Travelers & Documents -->
+                <div class="space-y-4">
+                  @for (traveler of booking.travelers; track traveler.id) {
+                    <div class="bg-surface-container/30 rounded-xl p-4">
+                      <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-outline text-[20px]">person</span>
+                        <h4 class="font-title-sm text-primary">{{ traveler.fullName }}</h4>
+                        @if (traveler.isPrimary) {
+                          <span class="bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded font-bold uppercase">Primary</span>
+                        }
+                      </div>
+
+                      @if (!traveler.documents || traveler.documents.length === 0) {
+                        <p class="text-caption text-outline italic ml-7">No documents uploaded yet.</p>
+                      } @else {
+                        <div class="flex flex-wrap gap-3 ml-7">
+                          @for (doc of traveler.documents; track doc.id) {
+                            <div class="flex items-center gap-3 bg-surface-container-lowest border border-outline-variant/40 p-3 rounded-lg w-full md:w-auto">
+                              <span class="material-symbols-outlined text-[32px]" [ngClass]="doc.status === 'Verified' ? 'text-emerald-500' : (doc.status === 'Rejected' ? 'text-error' : 'text-secondary')">
+                                {{ doc.status === 'Verified' ? 'verified' : (doc.status === 'Rejected' ? 'error' : 'description') }}
+                              </span>
+                              <div class="flex-1 min-w-[150px]">
+                                <p class="font-label-md text-sm text-primary mb-0.5 truncate">{{ doc.documentType }}</p>
+                                <p class="text-[10px] uppercase font-bold" [ngClass]="doc.status === 'Verified' ? 'text-emerald-600' : (doc.status === 'Rejected' ? 'text-error' : 'text-secondary')">{{ doc.status }}</p>
+                              </div>
+                              <button class="bg-primary-container text-on-primary-container hover:bg-primary hover:text-white px-4 py-1.5 rounded-lg text-sm transition-colors"
+                                      (click)="openDocumentViewer(doc, traveler.fullName)">
+                                View
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+
+                <!-- Booking Actions -->
+                <div class="mt-6 flex justify-end gap-3">
+                  <button class="px-6 py-2.5 rounded-full font-label-md transition-all text-primary border border-outline-variant hover:bg-surface-variant"
+                          (click)="onPackageSelect(booking.packageId)">
+                    Manage Full Package
+                  </button>
+                  <button class="px-6 py-2.5 rounded-full font-label-md transition-all flex items-center gap-2"
+                          [ngClass]="canConfirmBooking(booking) ? 'bg-primary text-white hover:bg-primary/90 shadow-md hover:shadow-lg hover:-translate-y-0.5' : 'bg-surface-variant text-on-surface-variant/50 cursor-not-allowed'"
+                          [disabled]="!canConfirmBooking(booking)"
+                          (click)="confirmBooking(booking.id)">
+                    <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                    Confirm Booking
+                  </button>
+                </div>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="bg-surface-container-lowest p-12 rounded-3xl text-center border border-outline-variant/30 mt-8">
+        <span class="material-symbols-outlined text-[64px] text-outline opacity-50 mb-4">inventory_2</span>
+        <h3 class="font-title-lg text-title-lg text-primary mb-2">No Bookings Found</h3>
+        <p class="text-on-surface-variant">There are currently no bookings across any of your packages.</p>
+      </div>
+    }
+  } @else if (isLoading()) {
+    <div class="flex items-center justify-center p-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+    </div>
+  } @else if (groupedBookings().length === 0) {
+    <div class="bg-surface-container-lowest p-12 rounded-3xl text-center border border-outline-variant/30">
+      <span class="material-symbols-outlined text-[64px] text-outline opacity-50 mb-4">event_busy</span>
+      <h3 class="font-title-lg text-title-lg text-primary mb-2">No Bookings Yet</h3>
+      <p class="text-on-surface-variant">There are currently no bookings for the selected package.</p>
+    </div>
+  } @else {
+    <div class="space-y-12">
+      @for (group of groupedBookings(); track group.travelDate) {
+        <div>
+          <div class="flex items-center gap-3 mb-6">
+            <span class="material-symbols-outlined text-secondary text-[28px]">calendar_month</span>
+            <h2 class="font-headline-md text-title-lg text-primary">Travel Date: {{ group.travelDate | date:'mediumDate' }}</h2>
+            <span class="bg-secondary-fixed text-on-secondary-fixed text-caption px-3 py-1 rounded-full font-bold">
+              {{ group.bookings.length }} Bookings
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 gap-6">
+            @for (booking of group.bookings; track booking.id) {
+              <div class="bg-surface-container-lowest border border-outline-variant/50 rounded-2xl p-6 shadow-sm">
+                <!-- Booking Header -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant/30 pb-4 mb-4">
+                  <div>
+                    <div class="flex items-center gap-3 mb-1">
+                      <span class="font-bold text-title-md text-primary">Booking #{{ booking.bookingReference }}</span>
+                      <span class="text-xs font-bold uppercase px-2 py-1 rounded-full"
+                        [ngClass]="{
+                          'bg-primary-fixed text-primary': booking.status === 'Pending',
+                          'bg-error-container text-error': booking.status === 'DocumentUnderReview',
+                          'bg-emerald-100 text-emerald-800': booking.status === 'Confirmed',
+                          'bg-surface-variant text-on-surface-variant': booking.status === 'Cancelled'
+                        }">
+                        {{ booking.status }}
+                      </span>
+                    </div>
+                    <p class="text-caption text-outline">
+                      Booked on {{ booking.bookedAt | date:'mediumDate' }} • {{ booking.adultCount }} Adults, {{ booking.childCount }} Children
+                    </p>
+                  </div>
+                  
+                  <div class="flex flex-col items-end">
+                    <p class="font-title-lg text-secondary">{{ booking.totalAmount | currency:'INR' }}</p>
+                    <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded"
+                      [ngClass]="booking.paymentStatus === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-tertiary-fixed text-on-tertiary-fixed'">
+                      {{ booking.paymentStatus }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Travelers & Documents -->
+                <div class="space-y-4">
+                  @for (traveler of booking.travelers; track traveler.id) {
+                    <div class="bg-surface-container/30 rounded-xl p-4">
+                      <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-outline text-[20px]">person</span>
+                        <h4 class="font-title-sm text-primary">{{ traveler.fullName }}</h4>
+                        @if (traveler.isPrimary) {
+                          <span class="bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded font-bold uppercase">Primary</span>
+                        }
+                      </div>
+
+                      @if (!traveler.documents || traveler.documents.length === 0) {
+                        <p class="text-caption text-outline italic ml-7">No documents uploaded yet.</p>
+                      } @else {
+                        <div class="flex flex-wrap gap-3 ml-7">
+                          @for (doc of traveler.documents; track doc.id) {
+                            <div class="flex items-center gap-3 bg-surface-container-lowest border border-outline-variant/40 p-3 rounded-lg w-full md:w-auto">
+                              <span class="material-symbols-outlined text-[32px]" [ngClass]="doc.status === 'Verified' ? 'text-emerald-500' : (doc.status === 'Rejected' ? 'text-error' : 'text-secondary')">
+                                {{ doc.status === 'Verified' ? 'verified' : (doc.status === 'Rejected' ? 'error' : 'description') }}
+                              </span>
+                              <div class="flex-1 min-w-[150px]">
+                                <p class="font-label-md text-sm text-primary mb-0.5 truncate">{{ doc.documentType }}</p>
+                                <p class="text-[10px] uppercase font-bold" [ngClass]="doc.status === 'Verified' ? 'text-emerald-600' : (doc.status === 'Rejected' ? 'text-error' : 'text-secondary')">{{ doc.status }}</p>
+                              </div>
+                              <button class="bg-primary-container text-on-primary-container hover:bg-primary hover:text-white px-4 py-1.5 rounded-lg text-sm transition-colors"
+                                      (click)="openDocumentViewer(doc, traveler.fullName)">
+                                View
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+
+                <!-- Booking Actions -->
+                <div class="mt-6 flex justify-end">
+                  <button class="px-6 py-2.5 rounded-full font-label-md transition-all flex items-center gap-2"
+                          [ngClass]="canConfirmBooking(booking) ? 'bg-primary text-white hover:bg-primary/90 shadow-md hover:shadow-lg hover:-translate-y-0.5' : 'bg-surface-variant text-on-surface-variant/50 cursor-not-allowed'"
+                          [disabled]="!canConfirmBooking(booking)"
+                          (click)="confirmBooking(booking.id)">
+                    <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                    Confirm Booking
+                  </button>
+                </div>
+
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</main>
+
+<!-- Document Viewer Modal -->
+@if (selectedDocument()) {
+  <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+    <div class="absolute inset-0 bg-surface-dim/80 backdrop-blur-sm" (click)="closeDocumentViewer()"></div>
+    
+    <div class="bg-surface-container-lowest rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative z-10 overflow-hidden animate-fade-in-up">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-outline-variant/30">
+        <div>
+          <h2 class="font-headline-sm text-primary">{{ selectedDocument()!.doc.documentType }}</h2>
+          <p class="text-caption text-outline">Traveler: {{ selectedDocument()!.travelerName }}</p>
+        </div>
+        <button class="text-on-surface-variant hover:bg-surface-variant p-2 rounded-full transition-colors" (click)="closeDocumentViewer()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- Document Content -->
+      <div class="flex-1 overflow-auto p-6 bg-surface-container-low flex items-center justify-center min-h-[300px]">
+        @if (selectedDocument()!.doc.filePath.toLowerCase().endsWith('.pdf')) {
+          <iframe [src]="getSafeDocumentUrl(selectedDocument()!.doc)" class="w-full h-[60vh] rounded-xl border border-outline-variant"></iframe>
+        } @else {
+          <img [src]="getDocumentUrl(selectedDocument()!.doc)" alt="Document" class="max-w-full max-h-[60vh] object-contain rounded-xl shadow-md border border-outline-variant/50">
+        }
+      </div>
+
+      <!-- Action Footer -->
+      @if (selectedDocument()!.doc.status !== 'Verified') {
+        <div class="p-6 border-t border-outline-variant/30 bg-surface-container-lowest flex flex-col sm:flex-row gap-4 items-center justify-between">
+          <div class="w-full sm:w-1/2">
+            <input type="text" placeholder="Reason for rejection (if rejecting)" 
+                   class="w-full bg-surface-container border border-outline-variant rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all"
+                   [ngModel]="rejectionReason()" (ngModelChange)="rejectionReason.set($event)">
+          </div>
+          <div class="flex gap-3 w-full sm:w-auto">
+            <button class="flex-1 sm:flex-none px-6 py-2 rounded-full text-error border border-error hover:bg-error/10 transition-colors font-label-md"
+                    (click)="verifyDocument(false)">
+              Reject
+            </button>
+            <button class="flex-1 sm:flex-none px-6 py-2 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-md hover:shadow-lg transition-all font-label-md"
+                    (click)="verifyDocument(true)">
+              Verify
+            </button>
+          </div>
+        </div>
+      } @else {
+        <div class="p-6 border-t border-outline-variant/30 bg-emerald-50 flex items-center justify-center gap-2 text-emerald-800">
+          <span class="material-symbols-outlined">verified</span>
+          <span class="font-bold">This document has been successfully verified.</span>
+        </div>
+      }
+    </div>
+  </div>
+}

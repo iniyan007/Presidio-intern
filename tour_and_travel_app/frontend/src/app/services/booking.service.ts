@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { BookingResponse, CancelBookingRequest, PlatformConfigResponse, ProcessPaymentRequest } from '../models/booking.model';
+import { BookingResponse, CancelBookingRequest, PlatformConfigResponse, ProcessPaymentRequest, VerifyDocumentRequest } from '../models/booking.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -23,6 +23,10 @@ export class BookingService {
 
   getMyBookings(): Observable<BookingResponse[]> {
     return this.http.get<BookingResponse[]>(`${this.apiUrl}/my-bookings`);
+  }
+
+  getBookingsByPackageId(packageId: string): Observable<BookingResponse[]> {
+    return this.http.get<BookingResponse[]>(`${this.apiUrl}/package/${packageId}`);
   }
 
   cancelBooking(id: string, request: CancelBookingRequest): Observable<any> {
@@ -56,5 +60,13 @@ export class BookingService {
     // so we need to construct it carefully.
     const baseUrl = this.apiUrl.replace('/api/Bookings', '');
     return this.http.post<{ success: boolean, paths: string[] }>(`${baseUrl}/api/Reviews/upload-media`, formData);
+  }
+
+  verifyDocument(documentId: string, request: VerifyDocumentRequest): Observable<any> {
+    return this.http.put(`${this.apiUrl}/documents/${documentId}/verify`, request);
+  }
+
+  verifyBooking(id: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}/verify`, {});
   }
 }

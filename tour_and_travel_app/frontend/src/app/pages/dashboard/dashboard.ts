@@ -35,6 +35,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectedPackageType = signal<string>('');
   selectedSortBy = signal<string>('');
   
+  minDate = new Date().toISOString().split('T')[0];
+  
   private pollingInterval: any;
 
   ngOnInit() {
