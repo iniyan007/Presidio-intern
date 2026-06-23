@@ -36,4 +36,8 @@ export class PackageService {
   getPackageReviews(packageId: string): Observable<PackageReview[]> {
     return this.http.get<PackageReview[]>(`${this.apiUrl}/${packageId}/reviews`);
   }
+
+  createPackage(formData: FormData): Observable<any> {
+    return this.http.post<any>(this.apiUrl, formData);
+  }
 }

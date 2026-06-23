@@ -1,0 +1,7 @@
+--- NEW CREATION REQUEST ---
+Request Title: 'Romantic Bali Honeymoon Retreat'
+Normalized Request Title: 'Romantic Bali Honeymoon Retreat'
+Packager Id: 00d9f102-a979-4e40-9616-911f339824aa
+Existing Packages Count: 7
+Checking against existing title: 'Romantic Bali Honeymoon Retreat', Normalized: 'Romantic Bali Honeymoon Retreat'
+MATCH FOUND! Throwing ValidationException.

@@ -41,6 +41,19 @@ public class PackageService : IPackageService
             throw new UnauthorizedAccessException("Only approved packagers can create packages.");
         }
 
+        var existingPackages = await _packageRepository.GetByPackagerIdAsync(packager.Id, cancellationToken);
+        var normalize = (string? s) => s == null ? "" : System.Text.RegularExpressions.Regex.Replace(s, @"\s+", " ").Trim();
+        var normalizedRequestTitle = normalize(request.Title);
+        
+        foreach (var p in existingPackages)
+        {
+            var normalizedExistingTitle = normalize(p.Title);
+            if (string.Equals(normalizedExistingTitle, normalizedRequestTitle, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new System.ComponentModel.DataAnnotations.ValidationException($"A package with the title '{request.Title}' already exists in your account.");
+            }
+        }
+
         var package = _mapper.Map<Package>(request);
         package.PackagerId = packager.Id;
         package.PackageMedia = new List<PackageMedium>();
@@ -238,6 +251,25 @@ public class PackageService : IPackageService
 
         if (package.PackagerId != packager.Id)
             throw new UnauthorizedAccessException("You do not own this package.");
+
+        // Check for duplicate title
+        if (!string.Equals(package.Title, request.Title, StringComparison.OrdinalIgnoreCase))
+        {
+            var existingPackages = await _packageRepository.GetByPackagerIdAsync(packager.Id, cancellationToken);
+            var normalize = (string? s) => s == null ? "" : System.Text.RegularExpressions.Regex.Replace(s, @"\s+", " ").Trim();
+            var normalizedRequestTitle = normalize(request.Title);
+            
+            foreach (var p in existingPackages)
+            {
+                if (p.Id == package.Id) continue; // Skip the current package
+                
+                var normalizedExistingTitle = normalize(p.Title);
+                if (string.Equals(normalizedExistingTitle, normalizedRequestTitle, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new System.ComponentModel.DataAnnotations.ValidationException($"A package with the title '{request.Title}' already exists in your account.");
+                }
+            }
+        }
 
         package.Title = request.Title;
         package.Description = request.Description;
