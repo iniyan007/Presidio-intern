@@ -62,7 +62,7 @@ public class PackagerServiceTests
         _packagerRepoMock.Setup(x => x.AddAsync(It.IsAny<Packager>(), It.IsAny<CancellationToken>())).ReturnsAsync((Packager p, CancellationToken c) => p);
 
         var request = new ApplyPackagerRequest { CompanyName = "Company", BusinessLicenseNo = "123", Description = "Desc", ContactEmail = "email", ContactPhone = "phone", WebsiteUrl = "url" };
-        var expectedResponse = new PackagerResponse(Guid.NewGuid(), userId, "Company", "123", "Desc", "email", "phone", "url", "pending", null, 0, 0, DateTime.UtcNow);
+        var expectedResponse = new PackagerResponse(Guid.NewGuid(), userId, "Company", "123", "Desc", "email", "phone", "url", "pending", null, 0, 0, DateTime.UtcNow, null);
         _mapperMock.Setup(x => x.Map<PackagerResponse>(It.IsAny<Packager>())).Returns(expectedResponse);
 
         var result = await _packagerService.ApplyToBecomePackagerAsync(userId, request);
@@ -108,7 +108,7 @@ public class PackagerServiceTests
         _packagerRepoMock.Setup(x => x.GetByIdAsync(packager.Id, It.IsAny<CancellationToken>())).ReturnsAsync(packager);
         _userRepoMock.Setup(x => x.GetByIdAsync(adminId, It.IsAny<CancellationToken>())).ReturnsAsync(new User { Id = adminId });
 
-        var expectedResponse = new PackagerResponse(packager.Id, packager.UserId, "Company", "123", "Desc", "email", "phone", "url", "approved", null, 0, 0, DateTime.UtcNow);
+        var expectedResponse = new PackagerResponse(packager.Id, packager.UserId, "Company", "123", "Desc", "email", "phone", "url", "approved", null, 0, 0, DateTime.UtcNow, null);
         _mapperMock.Setup(x => x.Map<PackagerResponse>(It.IsAny<Packager>())).Returns(expectedResponse);
 
         var result = await _packagerService.ApprovePackagerAsync(packager.Id, adminId);
@@ -148,7 +148,7 @@ public class PackagerServiceTests
         _packagerRepoMock.Setup(x => x.GetByIdAsync(packager.Id, It.IsAny<CancellationToken>())).ReturnsAsync(packager);
         _userRepoMock.Setup(x => x.GetByIdAsync(adminId, It.IsAny<CancellationToken>())).ReturnsAsync(new User { Id = adminId });
 
-        var expectedResponse = new PackagerResponse(packager.Id, packager.UserId, "Company", "123", "Desc", "email", "phone", "url", "deactivated", "Not enough experience.", 0, 0, DateTime.UtcNow);
+        var expectedResponse = new PackagerResponse(packager.Id, packager.UserId, "Company", "123", "Desc", "email", "phone", "url", "deactivated", "Not enough experience.", 0, 0, DateTime.UtcNow, DateTime.UtcNow);
         _mapperMock.Setup(x => x.Map<PackagerResponse>(It.IsAny<Packager>())).Returns(expectedResponse);
 
         var result = await _packagerService.RejectPackagerAsync(packager.Id, adminId, "Not enough experience.");
@@ -166,9 +166,9 @@ public class PackagerServiceTests
     public async Task GetPendingPackagersAsync_ReturnsMappedList()
     {
         var list = new List<Packager> { new Packager() };
-        var responses = new List<PackagerResponse> { new PackagerResponse(Guid.NewGuid(), Guid.NewGuid(), "Company", "123", "Desc", "email", "phone", "url", "pending", null, 0, 0, DateTime.UtcNow) };
+        var responses = new List<PackagerResponse> { new PackagerResponse(Guid.NewGuid(), Guid.NewGuid(), "Company", "123", "Desc", "email", "phone", "url", "pending", null, 0, 0, DateTime.UtcNow, null) };
 
-        _packagerRepoMock.Setup(x => x.GetPendingApprovalAsync(It.IsAny<CancellationToken>())).ReturnsAsync(list);
+        _packagerRepoMock.Setup(x => x.GetPendingApprovalAsync(null, null, It.IsAny<CancellationToken>())).ReturnsAsync(list);
         _mapperMock.Setup(x => x.Map<IEnumerable<PackagerResponse>>(list)).Returns(responses);
 
         var result = await _packagerService.GetPendingPackagersAsync();
@@ -187,7 +187,7 @@ public class PackagerServiceTests
     public async Task GetMyPackagerStatusAsync_Found_ReturnsMappedResponse()
     {
         var packager = new Packager();
-        var response = new PackagerResponse(Guid.NewGuid(), Guid.NewGuid(), "Company", "123", "Desc", "email", "phone", "url", "pending", null, 0, 0, DateTime.UtcNow);
+        var response = new PackagerResponse(Guid.NewGuid(), Guid.NewGuid(), "Company", "123", "Desc", "email", "phone", "url", "pending", null, 0, 0, DateTime.UtcNow, null);
 
         _packagerRepoMock.Setup(x => x.GetByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(packager);
         _mapperMock.Setup(x => x.Map<PackagerResponse>(packager)).Returns(response);

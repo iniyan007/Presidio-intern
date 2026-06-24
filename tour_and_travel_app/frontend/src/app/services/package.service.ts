@@ -40,4 +40,16 @@ export class PackageService {
   createPackage(formData: FormData): Observable<any> {
     return this.http.post<any>(this.apiUrl, formData);
   }
+
+  getMyPackages(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/me`);
+  }
+
+  getMyPackageById(id: string): Observable<TravelPackageDetails> {
+    return this.http.get<TravelPackageDetails>(`${this.apiUrl}/me/${id}`);
+  }
+
+  updateFullPackage(id: string, formData: FormData): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/me/${id}`, formData);
+  }
 }

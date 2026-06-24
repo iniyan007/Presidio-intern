@@ -136,7 +136,7 @@ public class PaymentServiceTests
         _bookingRepoMock.Setup(x => x.GetWithFullDetailsAsync(booking.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(booking);
 
-        var expectedResponse = new BookingResponse(booking.Id, userId, booking.PackageId, booking.BookingReference, 1, 0, 0, 500, 500, "Paid", new DateOnly(2025, 1, 1), new DateOnly(2025, 1, 5), null, DateTime.UtcNow, null, null, new System.Collections.Generic.List<BookingTravelerResponse>());
+        var expectedResponse = new BookingResponse(booking.Id, userId, booking.PackageId, booking.BookingReference, 1, 0, 0, 500, 500, "Paid", "Confirmed", new DateOnly(2025, 1, 1), new DateOnly(2025, 1, 5), null, DateTime.UtcNow, null, null, new System.Collections.Generic.List<BookingTravelerResponse>());
         _mapperMock.Setup(x => x.Map<BookingResponse>(booking)).Returns(expectedResponse);
 
         var request = new ProcessPaymentRequest { Amount = 500, PaymentMethod = "Card", TransactionId = "TXN123" };

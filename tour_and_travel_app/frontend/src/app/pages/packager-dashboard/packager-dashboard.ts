@@ -39,9 +39,9 @@ export class PackagerDashboardComponent {
   }
 
   private loadDashboardData(packagerName: string) {
-    this.packageService.getPackages({ PackagerName: packagerName }).subscribe({
+    this.packageService.getMyPackages().subscribe({
       next: (res) => {
-        const packages = res.items || res; // depending on pagination wrapper
+        const packages = res; // getMyPackages returns an array directly
         
         const packageList = packages.map((pkg: any) => {
           let imgUrl = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCCoMzMsdBS9393A5TXkJBkEbxwXe0a18-RDlN-FdC8d3zQd3pQ04WfHxEfLXcQnuERcC2V82jfEdlQiTtSMdhhAuWKFia-1L0C-mUbwtIxZAhKPMEdXj_Z0atOnnXmUoZWYPwSFF33dxFjviNUOqQoBRCIYQyyvK36Az4cVRWQcXWakicjyqlrZ9fHv4fV4WaBmMHKV29xM4GyOwzxpZsA0g0fuiRC5Z_6CYP_VbA-dMBvI4aqOLaVRDDB4lkqbctFMmUNYNTQ1AE'; // default
@@ -53,7 +53,7 @@ export class PackagerDashboardComponent {
             id: pkg.id,
             title: pkg.title,
             durationDays: pkg.durationDays,
-            status: 'Active', // Mock status for now, as it's not in SummaryResponse
+            status: pkg.status || 'Active', // Use actual status, fallback to Active
             slotsLeft: pkg.pendingSeats || 0,
             price: pkg.startingPrice,
             imageUrl: imgUrl
@@ -139,5 +139,9 @@ export class PackagerDashboardComponent {
 
   closeViewAllModal() {
     this.isViewAllModalOpen.set(false);
+  }
+
+  onEditPackage(packageId: string) {
+    this.router.navigate(['/packager/edit-package', packageId]);
   }
 }

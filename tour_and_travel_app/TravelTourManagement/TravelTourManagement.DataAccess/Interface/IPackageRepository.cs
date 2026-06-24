@@ -34,6 +34,12 @@ public interface IPackageRepository : IRepository<Package, Guid>
     /// </summary>
     Task<Package?> GetWithFullDetailsAsync(Guid packageId, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Explicitly deletes all nested collections of a package from the database context.
+    /// This avoids EF Core graph tracking issues when replacing collections.
+    /// </summary>
+    Task DeletePackageCollectionsAsync(Package package, bool preservePublishedData = false, CancellationToken cancellationToken = default);
+
     
     Task<IReadOnlyList<Package>> GetAllPublishedWithFullDetailsAsync(CancellationToken cancellationToken = default);
 

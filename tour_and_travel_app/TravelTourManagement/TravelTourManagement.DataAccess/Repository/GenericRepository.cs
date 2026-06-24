@@ -53,7 +53,10 @@ public class GenericRepository<TEntity, TKey> : IRepository<TEntity, TKey>
     /// <inheritdoc />
     public virtual async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        _dbSet.Update(entity);
+        if (_context.Entry(entity).State == EntityState.Detached)
+        {
+            _dbSet.Update(entity);
+        }
         await _context.SaveChangesAsync(cancellationToken);
         return entity;
     }

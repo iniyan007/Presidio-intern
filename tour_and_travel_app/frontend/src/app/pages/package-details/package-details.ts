@@ -102,6 +102,24 @@ export class PackageDetailsComponent implements OnInit {
                   .map(m => m.filePath.startsWith('http') ? m.filePath : `${environment.baseUrl}${m.filePath}`);
   }
 
+  isGalleryModalOpen = false;
+
+  openGalleryModal() {
+    this.isGalleryModalOpen = true;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeGalleryModal() {
+    this.isGalleryModalOpen = false;
+    document.body.style.overflow = 'auto';
+  }
+
+  getAllImages(): string[] {
+    const p = this.pkg();
+    if (!p || !p.media) return [];
+    return p.media.map(m => m.filePath.startsWith('http') ? m.filePath : `${environment.baseUrl}${m.filePath}`);
+  }
+
   getStartingPrice(): number {
     const p = this.pkg();
     if (!p || !p.seasonalPricings || p.seasonalPricings.length === 0) return 0;

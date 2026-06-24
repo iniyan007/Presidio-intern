@@ -3,6 +3,7 @@ export interface TravelPackage {
   packagerName: string;
   title: string;
   packageType: string;
+  status: string;
   destination: string;
   country: string;
   durationDays: number;
@@ -18,7 +19,10 @@ export interface TravelPackage {
 
 export interface PackageMedia {
   id: string;
+  fileName: string;
   filePath: string;
+  mimeType: string | null;
+  category: string;
   caption: string | null;
   isPrimary: boolean;
   displayOrder: number;
@@ -105,6 +109,7 @@ export interface TravelPackageDetails {
   packagerName: string;
   title: string;
   packageType: string;
+  status: string;
   description: string | null;
   destination: string;
   country: string;

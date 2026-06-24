@@ -148,4 +148,60 @@ public class PackagesController : ControllerBase
         var result = await _packageService.GetPackageRevenueAsync(userId, role, id, cancellationToken);
         return Ok(result);
     }
+
+    [HttpGet("me")]
+    [Authorize(Roles = "Packager")]
+    public async Task<IActionResult> GetMyPackages(CancellationToken cancellationToken)
+    {
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("User ID not found in token.");
+
+        var packages = await _packageService.GetMyPackagesAsync(userId, cancellationToken);
+        return Ok(packages);
+    }
+
+    [HttpGet("me/{id}")]
+    [Authorize(Roles = "Packager")]
+    public async Task<IActionResult> GetMyPackageById(Guid id, CancellationToken cancellationToken)
+    {
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("User ID not found in token.");
+
+        var package = await _packageService.GetMyPackageByIdAsync(userId, id, cancellationToken);
+        return Ok(package);
+    }
+
+    [HttpPut("me/{id}")]
+    [Authorize(Roles = "Packager")]
+    [TypeFilter(typeof(TravelTourManagement.API.Filters.IdempotentAttribute))]
+    public async Task<IActionResult> UpdateFullPackage(Guid id, [FromForm] CreatePackageCombinedRequest request, CancellationToken cancellationToken)
+    {
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            throw new UnauthorizedAccessException("User ID not found in token.");
+
+        CreatePackageRequest packageData;
+        try
+        {
+            packageData = System.Text.Json.JsonSerializer.Deserialize<CreatePackageRequest>(request.PackageData, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+        }
+        catch (System.Text.Json.JsonException ex)
+        {
+            throw new ArgumentException($"Invalid JSON in PackageData: {ex.Message}", ex);
+        }
+
+        var context = new ValidationContext(packageData, serviceProvider: null, items: null);
+        var results = new List<ValidationResult>();
+        bool isValid = Validator.TryValidateObject(packageData, context, results, true);
+        if (!isValid)
+        {
+            var errors = string.Join(" | ", results.Select(r => r.ErrorMessage));
+            throw new ValidationException($"Validation failed: {errors}");
+        }
+
+        await _packageService.UpdateFullPackageAsync(userId, id, packageData, request.MediaFiles, cancellationToken);
+        return Ok(new { success = true, message = "Package fully updated successfully." });
+    }
 }

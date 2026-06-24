@@ -129,7 +129,7 @@ public class ReviewServiceTests
         _packagerRepoMock.Setup(x => x.GetByIdAsync(packagerId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(packager);
 
-        var expectedResponse = new ReviewResponse(Guid.NewGuid(), booking.Id, userId, "Name", 5, null, null, null, null, null, "Great!", true, null, DateTime.UtcNow, new List<ReviewMediaResponse>());
+        var expectedResponse = new ReviewResponse { Id = Guid.NewGuid(), BookingId = booking.Id, UserId = userId, ReviewerName = "Name", OverallRating = 5, AccommodationRating = null, TransportRating = null, FoodRating = null, GuideRating = null, ValueRating = null, Comment = "Great!", IsVerifiedTraveler = true, AdminNote = null, CreatedAt = DateTime.UtcNow, Media = new List<ReviewMediaResponse>() };
         _mapperMock.Setup(x => x.Map<ReviewResponse>(It.IsAny<Review>())).Returns(expectedResponse);
 
         var request = new CreateReviewRequest(booking.Id, 5, null, null, null, null, null, "Great!", new List<string>());
@@ -160,7 +160,7 @@ public class ReviewServiceTests
     {
         var packageId = Guid.NewGuid();
         var reviews = new List<Review> { new Review() };
-        var responses = new List<ReviewResponse> { new ReviewResponse(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "", 5, null, null, null, null, null, null, true, null, DateTime.UtcNow, new List<ReviewMediaResponse>()) };
+        var responses = new List<ReviewResponse> { new ReviewResponse { Id = Guid.NewGuid(), BookingId = Guid.NewGuid(), UserId = Guid.NewGuid(), ReviewerName = "", OverallRating = 5, AccommodationRating = null, TransportRating = null, FoodRating = null, GuideRating = null, ValueRating = null, Comment = null, IsVerifiedTraveler = true, AdminNote = null, CreatedAt = DateTime.UtcNow, Media = new List<ReviewMediaResponse>() } };
 
         _reviewRepoMock.Setup(x => x.GetByPackageIdAsync(packageId, It.IsAny<CancellationToken>())).ReturnsAsync(reviews);
         _mapperMock.Setup(x => x.Map<IReadOnlyList<ReviewResponse>>(reviews)).Returns(responses);
@@ -175,7 +175,7 @@ public class ReviewServiceTests
     {
         var packagerId = Guid.NewGuid();
         var reviews = new List<Review> { new Review() };
-        var responses = new List<ReviewResponse> { new ReviewResponse(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "", 5, null, null, null, null, null, null, true, null, DateTime.UtcNow, new List<ReviewMediaResponse>()) };
+        var responses = new List<ReviewResponse> { new ReviewResponse { Id = Guid.NewGuid(), BookingId = Guid.NewGuid(), UserId = Guid.NewGuid(), ReviewerName = "", OverallRating = 5, AccommodationRating = null, TransportRating = null, FoodRating = null, GuideRating = null, ValueRating = null, Comment = null, IsVerifiedTraveler = true, AdminNote = null, CreatedAt = DateTime.UtcNow, Media = new List<ReviewMediaResponse>() } };
 
         _reviewRepoMock.Setup(x => x.GetByPackagerIdAsync(packagerId, It.IsAny<CancellationToken>())).ReturnsAsync(reviews);
         _mapperMock.Setup(x => x.Map<IReadOnlyList<ReviewResponse>>(reviews)).Returns(responses);

@@ -35,6 +35,8 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
         CancellationToken cancellationToken = default)
         => await _dbSet
             .Where(p => p.PackagerId == packagerId)
+            .Include(p => p.PackageMedia)
+            .Include(p => p.PackageSeasonalPricings)
             .OrderByDescending(p => p.CreatedAt)
             .ToListAsync(cancellationToken);
 
@@ -87,6 +89,32 @@ public class PackageRepository : GenericRepository<Package, Guid>, IPackageRepos
             .Include(p => p.Packager)
             .Include(p => p.Reviews)
             .FirstOrDefaultAsync(p => p.Id == packageId, cancellationToken);
+
+    /// <inheritdoc />
+    public Task DeletePackageCollectionsAsync(Package package, bool preservePublishedData = false, CancellationToken cancellationToken = default)
+    {
+        _context.PackageHighlights.RemoveRange(package.PackageHighlights);
+        _context.PackageInclusions.RemoveRange(package.PackageInclusions);
+        _context.PackageMedia.RemoveRange(package.PackageMedia);
+        
+        if (!preservePublishedData)
+        {
+            _context.PackageSeasonalPricings.RemoveRange(package.PackageSeasonalPricings);
+            
+            foreach (var day in package.ItineraryDays)
+            {
+                _context.ItineraryActivities.RemoveRange(day.ItineraryActivities);
+                _context.ItineraryDayMeals.RemoveRange(day.ItineraryDayMeals);
+                _context.PackageAccommodations.RemoveRange(day.PackageAccommodations);
+                _context.PackageTransports.RemoveRange(day.PackageTransports);
+            }
+            _context.ItineraryDays.RemoveRange(package.ItineraryDays);
+        }
+
+        _context.PackageMedia.RemoveRange(package.PackageMedia);
+        
+        return Task.CompletedTask;
+    }
 
     public async Task<IReadOnlyList<Package>> GetAllPublishedWithFullDetailsAsync(
         CancellationToken cancellationToken = default)

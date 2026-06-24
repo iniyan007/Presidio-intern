@@ -38,7 +38,7 @@ public class PackagerRepository : GenericRepository<Packager, Guid>, IPackagerRe
             query = query.Where(pk => 
                 pk.CompanyName.ToLower().Contains(term) || 
                 (pk.BusinessLicenseNo != null && pk.BusinessLicenseNo.ToLower().Contains(term)) || 
-                pk.ContactEmail.ToLower().Contains(term));
+                (pk.ContactEmail != null && pk.ContactEmail.ToLower().Contains(term)));
         }
 
         if (sortOrder?.ToLower() == "oldest")
@@ -64,7 +64,7 @@ public class PackagerRepository : GenericRepository<Packager, Guid>, IPackagerRe
             query = query.Where(pk => 
                 pk.CompanyName.ToLower().Contains(term) || 
                 (pk.BusinessLicenseNo != null && pk.BusinessLicenseNo.ToLower().Contains(term)) || 
-                pk.ContactEmail.ToLower().Contains(term));
+                (pk.ContactEmail != null && pk.ContactEmail.ToLower().Contains(term)));
         }
 
         if (sortOrder?.ToLower() == "oldest")
@@ -95,7 +95,7 @@ public class PackagerRepository : GenericRepository<Packager, Guid>, IPackagerRe
             query = query.Where(pk => 
                 pk.CompanyName.ToLower().Contains(term) || 
                 (pk.BusinessLicenseNo != null && pk.BusinessLicenseNo.ToLower().Contains(term)) || 
-                pk.ContactEmail.ToLower().Contains(term));
+                (pk.ContactEmail != null && pk.ContactEmail.ToLower().Contains(term)));
         }
 
         if (sortOrder?.ToLower() == "oldest")

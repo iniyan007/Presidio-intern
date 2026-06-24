@@ -23,4 +23,8 @@ public interface IPackageService
 
     Task<TravelTourManagement.DataAccess.DTOs.Packages.PackageDetailResponse> GetPublishedPackageByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<PackageRevenueResponse> GetPackageRevenueAsync(Guid userId, string role, Guid packageId, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse>> GetMyPackagesAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<TravelTourManagement.DataAccess.DTOs.Packages.PackageDetailResponse> GetMyPackageByIdAsync(Guid userId, Guid packageId, CancellationToken cancellationToken = default);
+    Task UpdateFullPackageAsync(Guid userId, Guid packageId, CreatePackageRequest request, List<IFormFile>? mediaFiles = null, CancellationToken cancellationToken = default);
 }

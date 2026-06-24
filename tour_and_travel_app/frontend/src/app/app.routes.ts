@@ -32,6 +32,7 @@ export const routes: Routes = [
   { path: 'packager/dashboard', component: PackagerDashboardComponent, canActivate: [packagerGuard] },
   { path: 'packager/manage-bookings', component: ManageBookingsComponent, canActivate: [packagerGuard] },
   { path: 'packager/create-package', component: CreatePackageComponent, canActivate: [packagerGuard] },
+  { path: 'packager/edit-package/:id', component: CreatePackageComponent, canActivate: [packagerGuard] },
   { path: 'packager/:packageId', component: PackagerProfileComponent },
   { path: 'apply-packager', component: ApplyPackagerComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },

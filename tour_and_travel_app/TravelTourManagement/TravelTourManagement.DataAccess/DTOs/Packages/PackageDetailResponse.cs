@@ -9,6 +9,7 @@ public record PackageDetailResponse(
     string PackagerName,
     string Title,
     string PackageType,
+    string Status,
     string? Description,
     string Destination,
     string Country,
@@ -38,7 +39,10 @@ public record PackageDetailResponse(
 
 public record PackageMediaDto(
     Guid Id,
+    string FileName,
     string FilePath,
+    string? MimeType,
+    string Category,
     string? Caption,
     bool IsPrimary,
     int DisplayOrder

@@ -55,7 +55,7 @@ public record CreatePackageRequest(
                     var earliestStartDate = validStartDates.Min();
                     var tenMonthsFromNow = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(10));
                     
-                    if (earliestStartDate < tenMonthsFromNow)
+                    if (!isFlexibleDatePackage && earliestStartDate < tenMonthsFromNow)
                     {
                         results.Add(new ValidationResult("For international packages, the start date (earliest seasonal pricing) must be at least 10 months ahead of the current date.", new[] { nameof(SeasonalPricing) }));
                     }
@@ -93,6 +93,7 @@ public record CreatePackageMediaRequest(
 );
 
 public record CreatePackagePricingRequest(
+    Guid? Id,
     [Required] string SeasonName,
     DateOnly? StartDate,
     DateOnly? EndDate,

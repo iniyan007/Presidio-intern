@@ -202,7 +202,7 @@ public class PackageServiceTests
     public async Task GetPublishedPackageByIdAsync_ValidPackage_ReturnsResponse()
     {
         var package = new Package { Id = Guid.NewGuid(), Status = PackageStatus.Published };
-        var response = new PackageDetailResponse(package.Id, Guid.NewGuid(), "Name", "Title", "Type", null, "Dest", "Country", null, 1, 0, 10, 0, null, null, false, 0, 0, new List<string>(), new List<string>(), new List<string>(), new List<PackageMediaDto>(), new List<PackageSeasonalPricingDto>(), new List<ItineraryDayDto>());
+        var response = new PackageDetailResponse(package.Id, Guid.NewGuid(), "Name", "Title", "Type", "Status", null, "Dest", "Country", null, 1, 0, 10, 0, null, null, false, 0, 0, null, null, null, null, null, new List<string>(), new List<string>(), new List<string>(), new List<PackageMediaDto>(), new List<PackageSeasonalPricingDto>(), new List<ItineraryDayDto>());
 
         _packageRepoMock.Setup(x => x.GetWithFullDetailsAsync(package.Id, It.IsAny<CancellationToken>())).ReturnsAsync(package);
         _mapperMock.Setup(x => x.Map<PackageDetailResponse>(package)).Returns(response);

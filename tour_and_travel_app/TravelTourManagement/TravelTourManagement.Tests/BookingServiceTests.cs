@@ -72,7 +72,7 @@ public class BookingServiceTests
 
         _mapperMock.Setup(m => m.Map<BookingResponse>(It.IsAny<Booking>())).Returns((Booking b) => new BookingResponse(
             b.Id, b.UserId, b.PackageId, b.BookingReference, b.AdultCount, b.ChildCount, b.InfantCount,
-            b.TotalAmount, b.PaidAmount, b.PaymentStatus.ToString(), b.TravelDate, b.ReturnDate,
+            b.TotalAmount, b.PaidAmount, b.PaymentStatus.ToString(), b.Status.ToString(), b.TravelDate, b.ReturnDate,
             b.SpecialRequests, b.BookedAt, b.CancelledAt, b.CancellationReason, new List<BookingTravelerResponse>()
         ));
 

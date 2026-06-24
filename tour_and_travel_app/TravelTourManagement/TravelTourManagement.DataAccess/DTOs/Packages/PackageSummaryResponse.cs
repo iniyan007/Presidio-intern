@@ -8,6 +8,7 @@ public record PackageSummaryResponse(
     string PackagerName,
     string Title,
     string PackageType,
+    string Status,
     string Destination,
     string Country,
     int DurationDays,
