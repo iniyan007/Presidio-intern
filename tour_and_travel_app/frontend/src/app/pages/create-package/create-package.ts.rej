@@ -1,0 +1,21 @@
+@@ -530,17 +539,11 @@
+     }
+   }
+ 
+-  // Submission
+-  onSubmit(status: 'Draft' | 'Published') {
+-    if (this.isSubmitting) return;
+-    this.packageForm.patchValue({ status });
+-
+-    if (this.packageForm.invalid && status === 'Published') {
++  // Publish Modal
++  openPublishModal() {
++    if (this.packageForm.invalid) {
+       this.toastService.show('Please fill out all required fields correctly to publish.', 'error');
+-      // Mark all as touched to show validation errors
+       this.packageForm.markAllAsTouched();
+       return;
+     }
+ 
+-    const formValue = this.packageForm.value;
+-    

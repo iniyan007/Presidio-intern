@@ -314,11 +314,11 @@
 <h3 class="font-title-md text-title-md text-on-background flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">map</span> Detailed Itinerary
 </h3>
- 
+@if (!isPublished) {
 <button type="button" class="flex items-center gap-1 text-primary font-label-md text-label-md hover:bg-primary/5 px-3 py-1.5 rounded-lg transition-colors" (click)="addItineraryDay()">
 <span class="material-symbols-outlined text-[18px]">add</span> Add Day
 </button>
-
+}
 </div>
 
 
@@ -342,7 +342,7 @@
     </div>
 }
 
- 
+@if (!isPublished) {
 <div formArrayName="itinerary" class="flex flex-col gap-4">
     @for (day of itinerary.controls; track day; let dayIndex = $index) {
         <div [formGroupName]="dayIndex" class="border border-outline-variant rounded-xl overflow-hidden">
@@ -458,6 +458,7 @@
         <p class="text-caption text-error italic">You must add at least one day to the itinerary.</p>
     }
 </div>
+}
 </section>
 
 <!-- Action Buttons -->
@@ -465,7 +466,7 @@
 @if (!isPublished) {
     <button class="px-6 py-3 border border-primary text-primary font-label-md text-label-md rounded-full hover:bg-primary/5 transition-colors disabled:opacity-50" (click)="onSubmit('Draft')" [disabled]="isSubmitting">Save Draft</button>
 }
-<button type="button" class="px-6 py-3 bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full hover:bg-secondary-container/90 transition-colors shadow-sm disabled:opacity-50 flex items-center gap-2" (click)="openPublishModal()" [disabled]="isSubmitting">
+<button class="px-6 py-3 bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full hover:bg-secondary-container/90 transition-colors shadow-sm disabled:opacity-50 flex items-center gap-2" (click)="onSubmit('Published')" [disabled]="isSubmitting">
     @if (isSubmitting) {
         <span class="animate-spin material-symbols-outlined text-[18px]">sync</span>
     }
@@ -482,33 +483,5 @@
 @if (!isPublished) {
     <button class="px-4 py-2 text-primary font-label-md text-label-md" (click)="onSubmit('Draft')" [disabled]="isSubmitting">Save Draft</button>
 }
-<button type="button" class="px-6 py-2 bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full shadow-sm" (click)="openPublishModal()" [disabled]="isSubmitting">Publish</button>
+<button class="px-6 py-2 bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full shadow-sm" (click)="onSubmit('Published')" [disabled]="isSubmitting">Publish</button>
 </div>
-
-<!-- Publish Confirmation Modal -->
-@if (showPublishModal) {
-    <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div class="bg-surface rounded-2xl shadow-lg max-w-md w-full p-6">
-            <h3 class="text-title-lg font-title-lg text-on-surface mb-4">Confirm Publishing</h3>
-            
-            <p class="text-body-md text-on-surface-variant mb-6">
-                You are about to publish this package. Please note that once a package is published, its basic details (like title, destination, itinerary, etc.) <strong>cannot be edited</strong>. You will only be able to add new seasonal pricing and images.
-            </p>
-            
-            <div class="flex items-start gap-3 mb-8">
-                <input type="checkbox" id="understandCheckbox" [checked]="publishUnderstandChecked" (change)="publishUnderstandChecked = !publishUnderstandChecked" class="mt-1 w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary">
-                <label for="understandCheckbox" class="text-body-md text-on-surface cursor-pointer select-none">
-                    I understand that published packages cannot be edited.
-                </label>
-            </div>
-            
-            <div class="flex justify-end gap-4">
-                <button type="button" class="px-5 py-2.5 text-primary font-label-md hover:bg-primary/5 rounded-full transition-colors" (click)="closePublishModal()">Cancel</button>
-                <button type="button" class="px-5 py-2.5 bg-primary text-on-primary font-label-md rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50" [disabled]="!publishUnderstandChecked || isSubmitting" (click)="confirmPublish()">
-                    Publish Package
-                </button>
-            </div>
-        </div>
-    </div>
-}
-

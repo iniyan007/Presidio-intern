@@ -34,9 +34,6 @@ export class CreatePackageComponent implements OnInit {
   existingItinerary: any[] = [];
   minDate = new Date().toISOString().split('T')[0];
 
-  showPublishModal = false;
-  publishUnderstandChecked = false;
-
   activeSection = 'basic-details';
   private sections = ['basic-details', 'logistics', 'highlights', 'media', 'pricing', 'itinerary'];
   
@@ -142,12 +139,6 @@ export class CreatePackageComponent implements OnInit {
           type: pkg.packageType,
           status: pkg.status
         });
-
-        if (this.isPublished) {
-          ['title', 'description', 'destination', 'country', 'city', 'durationDays', 'durationNights', 'maxCapacity', 'minAge', 'cancellationPolicy', 'type'].forEach(field => {
-            this.packageForm.get(field)?.disable();
-          });
-        }
 
         // Highlights
         this.highlights.clear();
@@ -531,28 +522,29 @@ export class CreatePackageComponent implements OnInit {
     }
   }
 
-    // Publish Modal
-  openPublishModal() {
-    if (this.packageForm.invalid) {
+  // Submission
+  onSubmit(status: 'Draft' | 'Active') {
+    if (this.isSubmitting) return;
+    this.packageForm.patchValue({ status });
+
+    if (this.packageForm.invalid && status === 'Active') {
       this.toastService.show('Please fill out all required fields correctly to publish.', 'error');
+      // Mark all as touched to show validation errors
       this.packageForm.markAllAsTouched();
       return;
     }
-    
-    // Check validation rules from API for frontend pre-validation
-    const formValue = this.packageForm.getRawValue();
-    const isFlexibleDate = ['Honeymoon', 'Private', 'Family'].includes(formValue.type);
-    let hasValidationError = false;
 
-    if (formValue.seasonalPricing && formValue.seasonalPricing.length > 0) {
+    const formValue = this.packageForm.value;
+    
+    if (status === 'Active') {
+      // Check validation rules from API
+      const isFlexibleDate = ['Honeymoon', 'Private', 'Family'].includes(formValue.type);
+      let hasValidationError = false;
+
+      if (formValue.seasonalPricing && formValue.seasonalPricing.length > 0) {
       for (const pricing of formValue.seasonalPricing) {
         if (!isFlexibleDate && (!pricing.startDate || !pricing.endDate)) {
           this.toastService.show(`Start Date and End Date are required for ${formValue.type} packages in Seasonal Pricing.`, 'error');
-          hasValidationError = true;
-          break;
-        }
-        if (pricing.startDate && pricing.endDate && new Date(pricing.endDate) < new Date(pricing.startDate)) {
-          this.toastService.show('End Date cannot be earlier than Start Date in Seasonal Pricing.', 'error');
           hasValidationError = true;
           break;
         }
@@ -580,29 +572,9 @@ export class CreatePackageComponent implements OnInit {
       }
     }
 
-    if (!hasValidationError) {
-      this.showPublishModal = true;
-      this.publishUnderstandChecked = false;
+      if (hasValidationError) return;
     }
-  }
 
-  closePublishModal() {
-    this.showPublishModal = false;
-  }
-
-  confirmPublish() {
-    if (this.publishUnderstandChecked) {
-      this.closePublishModal();
-      this.onSubmit('Published');
-    }
-  }
-
-  // Submission
-  onSubmit(status: 'Draft' | 'Published') {
-    if (this.isSubmitting) return;
-    this.packageForm.patchValue({ status });
-
-    const formValue = this.packageForm.getRawValue();
     this.isSubmitting = true;
 
     // Prepare CreatePackageRequest JSON
