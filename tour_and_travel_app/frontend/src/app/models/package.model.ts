@@ -50,6 +50,7 @@ export interface ItineraryActivity {
   durationMinutes: number | null;
   isOptional: boolean;
   extraCost: number;
+  daySession?: string;
 }
 
 export interface ItineraryMeal {
@@ -57,6 +58,7 @@ export interface ItineraryMeal {
   description: string | null;
   venue: string | null;
   isIncluded: boolean;
+  mealType?: string;
 }
 
 export interface ItineraryAccommodation {
@@ -79,8 +81,9 @@ export interface ItineraryTransport {
   dropPoint: string;
   pickupTime: string;
   dropTime: string;
-  distanceKm: number;
+  distanceKm: number | null;
   notes: string | null;
+  transportMode?: string;
 }
 
 export interface ItineraryDay {

@@ -60,6 +60,17 @@
                             View All <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
 </button>
 </div>
+@if (myPackages().length === 0) {
+    <div class="col-span-full flex flex-col items-center justify-center p-12 bg-surface-container-lowest rounded-2xl border border-outline-variant border-dashed text-center">
+        <span class="material-symbols-outlined text-[48px] text-primary/40 mb-4">tour</span>
+        <h3 class="font-title-lg text-primary mb-2">No Packages Yet</h3>
+        <p class="font-body-md text-on-surface-variant max-w-sm mb-6">Create your very first travel package and publish it to the world to start receiving bookings!</p>
+        <button routerLink="/packager/create-package" class="bg-primary text-on-primary px-6 py-3 rounded-full font-label-md hover:bg-primary/90 transition-colors shadow-sm flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+            Create a Package
+        </button>
+    </div>
+} @else {
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 @for (pkg of myPackages(); track pkg.id) {
   <div class="bg-surface-container-lowest rounded-2xl overflow-hidden border border-outline-variant shadow-sm hover:shadow-lg transition-all group">
@@ -83,6 +94,7 @@
   </div>
 }
 </div>
+}
 </div>
 <!-- Recent Bookings Section -->
 <div class="space-y-6">
@@ -91,6 +103,13 @@
 <button class="text-primary font-label-md text-label-md hover:underline" (click)="openViewAllModal()">View All</button>
 </div>
 <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant p-4 space-y-4 shadow-sm">
+@if (recentBookings().length === 0) {
+    <div class="flex flex-col items-center justify-center p-8 text-center border border-dashed border-outline-variant rounded-xl bg-surface-container-low/50">
+        <span class="material-symbols-outlined text-[40px] text-primary/40 mb-3">airplane_ticket</span>
+        <h3 class="font-title-md text-primary mb-1">No Bookings Yet</h3>
+        <p class="font-body-md text-on-surface-variant">Once customers start booking your published packages, they will appear here.</p>
+    </div>
+}
 @for (booking of recentBookings(); track booking.id) {
   <div class="flex items-center gap-4 p-3 hover:bg-surface-container rounded-xl transition-all cursor-pointer"
        (click)="onBookingClick(booking)">

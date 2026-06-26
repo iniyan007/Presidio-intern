@@ -81,14 +81,16 @@ public record ItineraryActivityDto(
     string? Location,
     int? DurationMinutes,
     bool IsOptional,
-    decimal ExtraCost
+    decimal ExtraCost,
+    string? DaySession
 );
 
 public record ItineraryMealDto(
     Guid Id,
     string? Description,
     string? Venue,
-    bool IsIncluded
+    bool IsIncluded,
+    string? MealType
 );
 
 public record ItineraryAccommodationDto(
@@ -112,5 +114,6 @@ public record ItineraryTransportDto(
     TimeSpan? PickupTime,
     TimeSpan? DropTime,
     decimal? DistanceKm,
-    string? Notes
+    string? Notes,
+    string? TransportMode
 );

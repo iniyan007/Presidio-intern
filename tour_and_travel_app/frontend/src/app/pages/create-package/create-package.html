@@ -46,7 +46,7 @@
 </h3>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 <div class="col-span-1 md:col-span-2 flex flex-col gap-2">
-<label class="font-label-md text-label-md text-on-surface">Package Title *</label>
+<label class="font-label-md text-label-md text-on-surface">Package Title <span class="text-error">*</span></label>
 <input class="w-full px-4 py-3 rounded-lg border focus:ring-1 outline-none transition-all font-body-md text-body-md bg-transparent"
        [ngClass]="packageForm.get('title')?.invalid && packageForm.get('title')?.touched ? 'border-error focus:border-error focus:ring-error' : 'border-outline-variant focus:border-primary focus:ring-primary'"
        placeholder="e.g. Alpine Grand Traverse" type="text" formControlName="title" [readonly]="isPublished">
@@ -55,13 +55,13 @@
 }
 </div>
 <div class="flex flex-col gap-2">
-<label class="font-label-md text-label-md text-on-surface">Destination Region *</label>
+<label class="font-label-md text-label-md text-on-surface">Destination Region <span class="text-error">*</span></label>
 <input class="w-full px-4 py-3 rounded-lg border focus:ring-1 outline-none transition-all font-body-md text-body-md bg-transparent"
        [ngClass]="packageForm.get('destination')?.invalid && packageForm.get('destination')?.touched ? 'border-error focus:border-error focus:ring-error' : 'border-outline-variant focus:border-primary focus:ring-primary'"
        placeholder="e.g. Swiss Alps" type="text" formControlName="destination" [readonly]="isPublished">
 </div>
 <div class="flex flex-col gap-2">
-<label class="font-label-md text-label-md text-on-surface">Primary Country *</label>
+<label class="font-label-md text-label-md text-on-surface">Primary Country <span class="text-error">*</span></label>
 <select class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-transparent appearance-none" formControlName="country" [attr.disabled]="isPublished ? true : null">
     @for (country of countries; track country) {
         <option [value]="country">{{ country }}</option>
@@ -73,7 +73,7 @@
 <input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-transparent" placeholder="e.g. Interlaken" type="text" formControlName="city" [readonly]="isPublished">
 </div>
 <div class="flex flex-col gap-2">
-<label class="font-label-md text-label-md text-on-surface">Tour Type *</label>
+<label class="font-label-md text-label-md text-on-surface">Tour Type <span class="text-error">*</span></label>
 <select class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-transparent appearance-none" formControlName="type" [attr.disabled]="isPublished ? true : null">
     @for (type of metadataEnums?.packageTypes; track type) {
         <option [value]="type">{{ type }}</option>
@@ -94,23 +94,23 @@
 </h3>
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
 <div class="flex flex-col gap-2">
-<label class="font-label-md text-label-md text-on-surface">Days *</label>
-<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-transparent" type="number" formControlName="durationDays" [readonly]="isPublished">
+<label class="font-label-md text-label-md text-on-surface">Days <span class="text-error">*</span></label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-transparent" type="number" formControlName="durationDays" min="1" [readonly]="isPublished">
 </div>
 <div class="flex flex-col gap-2">
 <label class="font-label-md text-label-md text-on-surface">Nights</label>
-<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-transparent" type="number" formControlName="durationNights" [readonly]="isPublished">
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-transparent" type="number" formControlName="durationNights" min="0" [readonly]="isPublished">
 </div>
 <div class="flex flex-col gap-2">
-<label class="font-label-md text-label-md text-on-surface">Max Capacity *</label>
-<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-transparent" type="number" formControlName="maxCapacity" [readonly]="isPublished">
+<label class="font-label-md text-label-md text-on-surface">Max Capacity <span class="text-error">*</span></label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-transparent" type="number" formControlName="maxCapacity" min="1" [readonly]="isPublished">
 </div>
 <div class="flex flex-col gap-2">
 <label class="font-label-md text-label-md text-on-surface">Min Age</label>
-<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-transparent" type="number" formControlName="minAge" [readonly]="isPublished">
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-transparent" type="number" formControlName="minAge" min="0" [readonly]="isPublished">
 </div>
 <div class="col-span-1 md:col-span-4 flex flex-col gap-2 mt-2">
-<label class="font-label-md text-label-md text-on-surface">Cancellation Policy</label>
+<label class="font-label-md text-label-md text-on-surface">Cancellation Policy <span class="text-error">*</span></label>
 <textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-transparent resize-none" placeholder="Define refund windows and penalties..." rows="3" formControlName="cancellationPolicy" [readonly]="isPublished"></textarea>
 @if (packageForm.get('country')?.value?.toLowerCase() !== 'india') {
     <p class="text-caption text-secondary flex items-center gap-1 mt-1">
@@ -265,7 +265,7 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="flex flex-col gap-2">
-                    <label class="font-label-md text-label-md text-on-surface">Season Name *</label>
+                    <label class="font-label-md text-label-md text-on-surface">Season Name <span class="text-error">*</span></label>
                     <input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-surface-container-lowest" type="text" formControlName="seasonName" placeholder="e.g. Winter Special">
                 </div>
                 <div class="flex flex-col gap-2">
@@ -280,20 +280,20 @@
                     }
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label class="font-label-md text-label-md text-on-surface">Base Price (₹) *</label>
-                    <input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-surface-container-lowest" type="number" formControlName="basePrice">
+                    <label class="font-label-md text-label-md text-on-surface">Base Price (₹) <span class="text-error">*</span></label>
+                    <input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-surface-container-lowest" type="number" formControlName="basePrice" min="0">
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="font-label-md text-label-md text-on-surface">Child Price (₹)</label>
-                    <input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-surface-container-lowest" type="number" formControlName="childPrice">
+                    <input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-surface-container-lowest" type="number" formControlName="childPrice" min="0">
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="font-label-md text-label-md text-on-surface">Discount (%)</label>
-                    <input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-surface-container-lowest" type="number" formControlName="discountPercent">
+                    <input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-surface-container-lowest" type="number" formControlName="discountPercent" min="0" max="100">
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label class="font-label-md text-label-md text-on-surface">Available Slots *</label>
-                    <input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-surface-container-lowest" type="number" formControlName="availableSlots">
+                    <label class="font-label-md text-label-md text-on-surface">Available Slots <span class="text-error">*</span></label>
+                    <input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-surface-container-lowest" type="number" formControlName="availableSlots" min="1">
                 </div>
                 <div class="flex items-center gap-3 pt-8">
                     <input type="checkbox" formControlName="isActive" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary">
@@ -343,6 +343,7 @@
 }
 
  
+@if (!isPublished) {
 <div formArrayName="itinerary" class="flex flex-col gap-4">
     @for (day of itinerary.controls; track day; let dayIndex = $index) {
         <div [formGroupName]="dayIndex" class="border border-outline-variant rounded-xl overflow-hidden">
@@ -368,7 +369,7 @@
                 </div>
 
                 <!-- Accommodations & Transport -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+                <div class="grid grid-cols-1 gap-6 mt-2">
                     <!-- Accommodations -->
                     <div formArrayName="accommodations" class="flex flex-col gap-3">
                         <div class="flex justify-between items-center border-b border-outline-variant/30 pb-2">
@@ -376,9 +377,23 @@
                             <button type="button" class="text-primary hover:bg-primary/5 p-1 rounded transition-colors" (click)="addAccommodation(dayIndex)"><span class="material-symbols-outlined text-[16px]">add</span></button>
                         </div>
                         @for (acc of getAccommodations(dayIndex).controls; track acc; let accIndex = $index) {
-                            <div [formGroupName]="accIndex" class="flex items-center gap-2">
-                                <input class="flex-1 px-3 py-2 rounded-lg border border-outline-variant font-body-md text-body-md bg-transparent" placeholder="Hotel Name" formControlName="hotelName">
-                                <button type="button" class="text-error hover:bg-error/10 p-2 rounded transition-colors" (click)="removeAccommodation(dayIndex, accIndex)"><span class="material-symbols-outlined text-[18px]">close</span></button>
+                            <div [formGroupName]="accIndex" class="flex flex-col gap-3 p-3 bg-surface-container-lowest rounded-md border border-outline-variant/50">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-label-md text-label-md text-on-surface font-semibold">Stay {{accIndex + 1}}</span>
+                                    <button type="button" class="text-error hover:bg-error/10 p-1 rounded transition-colors" (click)="removeAccommodation(dayIndex, accIndex)"><span class="material-symbols-outlined text-[18px]">close</span></button>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <input class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Hotel Name *" formControlName="hotelName">
+                                    <input class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Hotel Address" formControlName="hotelAddress">
+                                    <input type="number" min="1" max="7" class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Star Rating (1-7)" formControlName="starRating">
+                                    <input class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Room Type" formControlName="roomType">
+                                    <div class="flex gap-2 w-full">
+                                        <input type="time" class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent flex-1" placeholder="Check In" formControlName="checkInTime" title="Check In Time">
+                                        <input type="time" class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent flex-1" placeholder="Check Out" formControlName="checkOutTime" title="Check Out Time">
+                                    </div>
+                                    <input class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Amenities (comma separated)" formControlName="amenities">
+                                    <input class="md:col-span-2 px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Notes" formControlName="notes">
+                                </div>
                             </div>
                         }
                     </div>
@@ -390,9 +405,31 @@
                             <button type="button" class="text-primary hover:bg-primary/5 p-1 rounded transition-colors" (click)="addTransport(dayIndex)"><span class="material-symbols-outlined text-[16px]">add</span></button>
                         </div>
                         @for (trans of getTransports(dayIndex).controls; track trans; let transIndex = $index) {
-                            <div [formGroupName]="transIndex" class="flex items-center gap-2">
-                                <input class="flex-1 px-3 py-2 rounded-lg border border-outline-variant font-body-md text-body-md bg-transparent" placeholder="Transport details" formControlName="vehicleDescription">
-                                <button type="button" class="text-error hover:bg-error/10 p-2 rounded transition-colors" (click)="removeTransport(dayIndex, transIndex)"><span class="material-symbols-outlined text-[18px]">close</span></button>
+                            <div [formGroupName]="transIndex" class="flex flex-col gap-3 p-3 bg-surface-container-lowest rounded-md border border-outline-variant/50">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-label-md text-label-md text-on-surface font-semibold">Leg {{transIndex + 1}}</span>
+                                    <button type="button" class="text-error hover:bg-error/10 p-1 rounded transition-colors" (click)="removeTransport(dayIndex, transIndex)"><span class="material-symbols-outlined text-[18px]">close</span></button>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <select class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" formControlName="transportMode">
+                                        <option value="bus">Bus / Coach</option>
+                                        <option value="flight">Flight</option>
+                                        <option value="train">Train</option>
+                                        <option value="car">Car / Taxi</option>
+                                        <option value="cruise">Cruise / Boat</option>
+                                        <option value="ferry">Ferry</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                    <input class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Vehicle Description" formControlName="vehicleDescription">
+                                    <input class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Pickup Point *" formControlName="pickupPoint">
+                                    <input class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Drop Point *" formControlName="dropPoint">
+                                    <div class="flex gap-2 w-full">
+                                        <input type="time" class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent flex-1" placeholder="Pickup Time" formControlName="pickupTime" title="Pickup Time">
+                                        <input type="time" class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent flex-1" placeholder="Drop Time" formControlName="dropTime" title="Drop Time">
+                                    </div>
+                                    <input type="number" min="0" class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Distance (km)" formControlName="distanceKm">
+                                    <input class="md:col-span-2 px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Notes" formControlName="notes">
+                                </div>
                             </div>
                         }
                     </div>
@@ -412,20 +449,32 @@
                         <!-- Activities List -->
                         <div formArrayName="activities" class="flex flex-col gap-2">
                             @for (act of getActivities(dayIndex).controls; track act; let actIndex = $index) {
-                                <div [formGroupName]="actIndex" class="flex gap-4 items-start">
-                                    <span class="material-symbols-outlined text-primary text-[20px] mt-2">hiking</span>
-                                    <input class="flex-1 px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-surface-container-lowest" placeholder="Activity name" formControlName="activityTitle">
-                                    <select class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-surface-container-lowest w-32" formControlName="activityType">
-                                        <option value="sightseeing">Sightseeing</option>
-                                        <option value="adventure">Adventure</option>
-                                        <option value="leisure">Leisure</option>
-                                        <option value="culture">Culture</option>
-                                    </select>
-                                    <div class="flex flex-col gap-1 items-center justify-center">
-                                        <label class="text-[10px] uppercase font-bold text-outline">Optional?</label>
-                                        <input type="checkbox" formControlName="isOptional" class="rounded text-primary focus:ring-primary w-4 h-4">
+                                <div [formGroupName]="actIndex" class="flex flex-col gap-3 p-3 bg-surface-container-lowest rounded-md border border-outline-variant/50">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center gap-2">
+                                            <span class="material-symbols-outlined text-primary text-[18px]">hiking</span>
+                                            <span class="font-label-md text-label-md text-on-surface font-semibold">Activity {{actIndex + 1}}</span>
+                                        </div>
+                                        <button type="button" class="text-error hover:bg-error/10 p-1 rounded transition-colors" (click)="removeActivity(dayIndex, actIndex)"><span class="material-symbols-outlined text-[18px]">close</span></button>
                                     </div>
-                                    <button type="button" class="text-error hover:bg-error/10 p-2 rounded transition-colors mt-0.5" (click)="removeActivity(dayIndex, actIndex)"><span class="material-symbols-outlined text-[16px]">close</span></button>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <input class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Activity Title *" formControlName="activityTitle">
+                                        <select class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" formControlName="daySession">
+                                            <option value="morning">Morning</option>
+                                            <option value="afternoon">Afternoon</option>
+                                            <option value="evening">Evening</option>
+                                            <option value="night">Night</option>
+                                        </select>
+                                        <input class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Activity Type *" formControlName="activityType">
+                                        <input class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Location" formControlName="location">
+                                        <input type="number" min="0" class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Duration (mins)" formControlName="durationMinutes">
+                                        <input type="number" min="0" class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Extra Cost (₹)" formControlName="extraCost">
+                                        <textarea class="md:col-span-2 px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Activity Description" formControlName="description" rows="2"></textarea>
+                                    </div>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <input type="checkbox" formControlName="isOptional" class="rounded text-primary focus:ring-primary w-4 h-4 cursor-pointer" id="opt-{{dayIndex}}-{{actIndex}}">
+                                        <label class="text-[12px] font-bold text-on-surface cursor-pointer" for="opt-{{dayIndex}}-{{actIndex}}">Is Optional?</label>
+                                    </div>
                                 </div>
                             }
                         </div>
@@ -433,19 +482,27 @@
                         <!-- Meals List -->
                         <div formArrayName="meals" class="flex flex-col gap-2 mt-2">
                             @for (meal of getMeals(dayIndex).controls; track meal; let mealIndex = $index) {
-                                <div [formGroupName]="mealIndex" class="flex gap-4 items-start">
-                                    <span class="material-symbols-outlined text-secondary text-[20px] mt-2">restaurant</span>
-                                    <input class="flex-1 px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-surface-container-lowest" placeholder="Meal description" formControlName="description" [readonly]="isPublished">
-                                    <select class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-surface-container-lowest w-32" formControlName="mealType">
-                                        @for (type of metadataEnums?.mealTypes; track type) {
-                                            <option [value]="type">{{ type }}</option>
-                                        }
-                                    </select>
-                                    <div class="flex flex-col gap-1 items-center justify-center">
-                                        <label class="text-[10px] uppercase font-bold text-outline">Included?</label>
-                                        <input type="checkbox" formControlName="isIncluded" class="rounded text-secondary focus:ring-secondary w-4 h-4">
+                                <div [formGroupName]="mealIndex" class="flex flex-col gap-3 p-3 bg-surface-container-lowest rounded-md border border-outline-variant/50">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center gap-2">
+                                            <span class="material-symbols-outlined text-secondary text-[18px]">restaurant</span>
+                                            <span class="font-label-md text-label-md text-on-surface font-semibold">Meal {{mealIndex + 1}}</span>
+                                        </div>
+                                        <button type="button" class="text-error hover:bg-error/10 p-1 rounded transition-colors" (click)="removeMeal(dayIndex, mealIndex)"><span class="material-symbols-outlined text-[18px]">close</span></button>
                                     </div>
-                                    <button type="button" class="text-error hover:bg-error/10 p-2 rounded transition-colors mt-0.5" (click)="removeMeal(dayIndex, mealIndex)"><span class="material-symbols-outlined text-[16px]">close</span></button>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <select class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" formControlName="mealType">
+                                            @for (type of metadataEnums?.mealTypes; track type) {
+                                                <option [value]="type.toLowerCase()">{{ type }}</option>
+                                            }
+                                        </select>
+                                        <input class="px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Venue / Restaurant" formControlName="venue" [readonly]="isPublished">
+                                        <input class="md:col-span-2 px-3 py-2 rounded-md border border-outline-variant font-body-md text-body-md bg-transparent w-full" placeholder="Meal description" formControlName="description" [readonly]="isPublished">
+                                    </div>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <input type="checkbox" formControlName="isIncluded" class="rounded text-secondary focus:ring-secondary w-4 h-4 cursor-pointer" id="meal-opt-{{dayIndex}}-{{mealIndex}}">
+                                        <label class="text-[12px] font-bold text-on-surface cursor-pointer" for="meal-opt-{{dayIndex}}-{{mealIndex}}">Is Included?</label>
+                                    </div>
                                 </div>
                             }
                         </div>
@@ -458,6 +515,7 @@
         <p class="text-caption text-error italic">You must add at least one day to the itinerary.</p>
     }
 </div>
+}
 </section>
 
 <!-- Action Buttons -->

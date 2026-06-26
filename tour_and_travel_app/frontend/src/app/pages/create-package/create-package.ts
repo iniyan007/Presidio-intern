@@ -1,4 +1,6 @@
-import { Component, inject, HostListener, OnInit } from '@angular/core';
+import { Component, inject, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -14,7 +16,7 @@ import { environment } from '../../../environments/environment';
   templateUrl: './create-package.html',
   styleUrl: './create-package.css'
 })
-export class CreatePackageComponent implements OnInit {
+export class CreatePackageComponent implements OnInit, OnDestroy {
   packageForm: FormGroup;
   mediaFiles: { file: File, preview: string, category: string, isPrimary: boolean, caption: string }[] = [];
   
@@ -26,6 +28,7 @@ export class CreatePackageComponent implements OnInit {
   private metadataService = inject(MetadataService);
   
   isSubmitting = false;
+  private autoSaveSub?: Subscription;
   
   isEditMode = false;
   packageId: string | null = null;
@@ -77,11 +80,73 @@ export class CreatePackageComponent implements OnInit {
 
     this.route.paramMap.subscribe(params => {
       this.packageId = params.get('id');
+      const draftKey = 'tourmate_draft_' + (this.packageId || 'new');
+      
       if (this.packageId) {
         this.isEditMode = true;
-        this.loadPackageData(this.packageId);
+        const savedDraft = localStorage.getItem(draftKey);
+        if (savedDraft && confirm('You have unsaved edits from a previous session. Would you like to restore them?')) {
+           try {
+             const draft = JSON.parse(savedDraft);
+             // Need to fetch status to set isPublished
+             this.packageService.getMyPackageById(this.packageId).subscribe(pkg => {
+                this.isPublished = pkg.status === 'Published';
+             });
+             this.restoreDraft(draft);
+           } catch(e) {
+             this.loadPackageData(this.packageId);
+           }
+        } else {
+          localStorage.removeItem(draftKey);
+          this.loadPackageData(this.packageId);
+        }
+      } else {
+        const savedDraft = localStorage.getItem(draftKey);
+        if (savedDraft && confirm('You have unsaved changes from a previous session. Would you like to restore them?')) {
+           try {
+             const draft = JSON.parse(savedDraft);
+             this.restoreDraft(draft);
+           } catch(e) {
+             localStorage.removeItem(draftKey);
+           }
+        } else {
+           localStorage.removeItem(draftKey);
+        }
       }
+
+      this.autoSaveSub = this.packageForm.valueChanges.pipe(debounceTime(1000)).subscribe(val => {
+        localStorage.setItem(draftKey, JSON.stringify(val));
+      });
     });
+  }
+
+  ngOnDestroy() {
+    if (this.autoSaveSub) {
+      this.autoSaveSub.unsubscribe();
+    }
+  }
+
+  restoreDraft(draft: any) {
+    this.highlights.clear();
+    draft.highlights?.forEach(() => this.addHighlight());
+    
+    this.inclusions.clear();
+    draft.inclusions?.forEach(() => this.addInclusion());
+    
+    this.seasonalPricing.clear();
+    draft.seasonalPricing?.forEach(() => this.addSeasonalPricing());
+
+    this.itinerary.clear();
+    draft.itinerary?.forEach((day: any, i: number) => {
+      this.addItineraryDay();
+      
+      day.activities?.forEach(() => this.addActivity(i));
+      day.meals?.forEach(() => this.addMeal(i));
+      day.accommodations?.forEach(() => this.addAccommodation(i));
+      day.transports?.forEach(() => this.addTransport(i));
+    });
+
+    this.packageForm.patchValue(draft);
   }
   
   @HostListener('window:scroll')
@@ -127,6 +192,7 @@ export class CreatePackageComponent implements OnInit {
         this.seasonalPricing.clear();
         this.itinerary.clear();
 
+        this.isPublished = pkg.status === 'Published';
         // Basic details
         this.packageForm.patchValue({
           title: pkg.title,
@@ -227,7 +293,7 @@ export class CreatePackageComponent implements OnInit {
               sequenceOrder: [a.sequenceOrder, Validators.required],
               activityTitle: [a.activityTitle, Validators.required],
               description: [a.description],
-              activityType: [a.activityType?.toLowerCase() || 'sightseeing'],
+              activityType: [a.activityType, Validators.required],
               location: [a.location],
               durationMinutes: [a.durationMinutes],
               isOptional: [a.isOptional],
@@ -295,7 +361,7 @@ export class CreatePackageComponent implements OnInit {
         if (this.highlights.length === 0) this.addHighlight();
         if (this.inclusions.length === 0) this.addInclusion();
         if (this.seasonalPricing.length === 0) this.addSeasonalPricing();
-        if (this.itinerary.length === 0) this.addItineraryDay();
+        if (this.itinerary.length === 0 && !this.isPublished) this.addItineraryDay();
       },
       error: (err) => {
         this.toastService.show('Failed to load package data.', 'error');
@@ -405,7 +471,7 @@ export class CreatePackageComponent implements OnInit {
       sequenceOrder: [activities.length + 1, Validators.required],
       activityTitle: ['', Validators.required],
       description: [''],
-      activityType: ['sightseeing'],
+      activityType: ['', Validators.required],
       location: [''],
       durationMinutes: [null],
       isOptional: [false],
@@ -544,7 +610,10 @@ export class CreatePackageComponent implements OnInit {
     const isFlexibleDate = ['Honeymoon', 'Private', 'Family'].includes(formValue.type);
     let hasValidationError = false;
 
-    if (formValue.seasonalPricing && formValue.seasonalPricing.length > 0) {
+    if (!formValue.seasonalPricing || formValue.seasonalPricing.length === 0) {
+      this.toastService.show('You must add at least one Pricing Season to publish a package.', 'error');
+      hasValidationError = true;
+    } else {
       for (const pricing of formValue.seasonalPricing) {
         if (!isFlexibleDate && (!pricing.startDate || !pricing.endDate)) {
           this.toastService.show(`Start Date and End Date are required for ${formValue.type} packages in Seasonal Pricing.`, 'error');
@@ -578,6 +647,12 @@ export class CreatePackageComponent implements OnInit {
         this.toastService.show('International packages Cancellation Policy must mention "3 months" restriction.', 'error');
         hasValidationError = true;
       }
+    }
+
+
+    if (formValue.durationDays !== formValue.itinerary.length) {
+      this.toastService.show(`The detailed itinerary must have exactly ${formValue.durationDays} days to match the package duration. Currently it has ${formValue.itinerary.length} days.`, 'error');
+      hasValidationError = true;
     }
 
     if (!hasValidationError) {

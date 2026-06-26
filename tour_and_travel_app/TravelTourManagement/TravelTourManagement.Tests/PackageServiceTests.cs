@@ -389,7 +389,7 @@ public class PackageServiceTests
         { 
             SeasonalPricing = new List<TravelTourManagement.DataAccess.DTOs.Packages.CreatePackagePricingRequest>
             {
-                new TravelTourManagement.DataAccess.DTOs.Packages.CreatePackagePricingRequest("Summer", null, null, 1000, 0, 0, 10, true)
+                new TravelTourManagement.DataAccess.DTOs.Packages.CreatePackagePricingRequest(null, "Summer", null, null, 1000, 0, 0, 10, true)
             }
         };
 

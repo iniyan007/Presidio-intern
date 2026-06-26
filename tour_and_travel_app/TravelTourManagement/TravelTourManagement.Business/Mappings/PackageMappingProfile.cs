@@ -157,13 +157,15 @@ public class PackageMappingProfile : Profile
                         a.Location,
                         a.DurationMinutes,
                         a.IsOptional,
-                        a.ExtraCost
+                        a.ExtraCost,
+                        a.DaySession.ToString()
                     )).ToList(),
                     (d.ItineraryDayMeals ?? Enumerable.Empty<ItineraryDayMeal>()).Select(m => new ItineraryMealDto(
                         m.Id,
                         m.Description,
                         m.Venue,
-                        m.IsIncluded
+                        m.IsIncluded,
+                        m.MealType.ToString()
                     )).ToList(),
                     (d.PackageAccommodations ?? Enumerable.Empty<PackageAccommodation>()).Select(a => new ItineraryAccommodationDto(
                         a.Id,
@@ -185,7 +187,8 @@ public class PackageMappingProfile : Profile
                         t.PickupTime.HasValue ? t.PickupTime.Value.ToTimeSpan() : null,
                         t.DropTime.HasValue ? t.DropTime.Value.ToTimeSpan() : null,
                         t.DistanceKm,
-                        t.Notes
+                        t.Notes,
+                        t.TransportMode.ToString()
                     )).ToList()
                 )).ToList()
             ));
