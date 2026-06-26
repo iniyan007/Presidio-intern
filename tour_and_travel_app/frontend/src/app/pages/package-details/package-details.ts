@@ -7,6 +7,7 @@ import { WishlistService } from '../../services/wishlist.service';
 import { TravelPackageDetails, PackageMedia, PackageReview, PackageSeasonalPricing } from '../../models/package.model';
 import { AuthService } from '../../services/auth.service';
 import { BookingService } from '../../services/booking.service';
+import { ChatService } from '../../services/chat.service';
 import { ReviewModalComponent } from '../../components/review-modal/review-modal';
 import { environment } from '../../../environments/environment';
 
@@ -164,6 +165,39 @@ export class PackageDetailsComponent implements OnInit {
       this.loadReviews(this.pkg()!.id);
       this.loadPackage(this.pkg()!.id); // Reload package to update averages
     }
+  }
+
+  private chatService = inject(ChatService);
+  isChatLoading = signal(false);
+
+  startChat() {
+    if (!this.isLoggedIn()) {
+      this.router.navigate(['/auth']);
+      return;
+    }
+    
+    if (this.authService.getUserRole() === 'Packager') {
+      this.toastService.show('Packagers cannot chat with themselves.', 'error');
+      return;
+    }
+
+    const p = this.pkg();
+    if (!p) return;
+
+    this.isChatLoading.set(true);
+    this.chatService.getOrInitializeThread({
+      packagerId: p.packagerId,
+      packageId: p.id
+    }).subscribe({
+      next: (res) => {
+        this.isChatLoading.set(false);
+        this.router.navigate(['/chat'], { queryParams: { threadId: res.id } });
+      },
+      error: (err) => {
+        this.isChatLoading.set(false);
+        this.toastService.show('Failed to start chat.', 'error');
+      }
+    });
   }
 }
  

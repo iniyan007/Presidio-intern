@@ -7,6 +7,7 @@ import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 import { WishlistService } from '../../services/wishlist.service';
 import { NotificationService } from '../../services/notification.service';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-navbar',
@@ -22,6 +23,7 @@ export class NavbarComponent {
   private toastService = inject(ToastService);
   wishlistService = inject(WishlistService);
   notificationService = inject(NotificationService);
+  chatService = inject(ChatService);
   private eRef = inject(ElementRef);
 
   isNotificationOpen = signal(false);
@@ -31,10 +33,23 @@ export class NavbarComponent {
       if (this.authService.isAuthenticated()) {
         this.notificationService.loadNotifications();
         this.notificationService.startConnection();
+        
+        const token = localStorage.getItem('jwt_token');
+        if (token) {
+          this.chatService.startConnection(token);
+          this.chatService.getThreads().subscribe({
+            next: (threads) => this.chatService.threads.set(threads)
+          });
+        }
       } else {
         this.notificationService.stopConnection();
+        this.chatService.stopConnection();
       }
     });
+  }
+
+  get unreadChatCount(): number {
+    return this.chatService.threads().reduce((acc, t) => acc + t.unreadCount, 0);
   }
 
   toggleNotification() {

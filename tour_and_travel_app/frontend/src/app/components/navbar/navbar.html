@@ -66,6 +66,16 @@
     </button>
     }
 
+    <!-- Chat Button -->
+    <button routerLink="/chat" class="relative flex items-center justify-center text-on-surface-variant cursor-pointer p-2 hover:bg-surface-container-high rounded-full transition-all outline-none border-none bg-transparent">
+      <span class="material-symbols-outlined text-[24px]">forum</span>
+      @if (unreadChatCount > 0) {
+        <span class="absolute top-1 right-1 bg-primary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center translate-x-1 -translate-y-1 shadow-sm">
+          {{ unreadChatCount }}
+        </span>
+      }
+    </button>
+
     <div class="relative notification-container">
       <button class="relative flex items-center justify-center text-on-surface-variant cursor-pointer p-2 hover:bg-surface-container-high rounded-full transition-all outline-none border-none bg-transparent"
               (click)="toggleNotification()">

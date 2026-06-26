@@ -18,6 +18,7 @@ import { packagerGuard } from './guards/packager.guard';
 import { PackagerDashboardComponent } from './pages/packager-dashboard/packager-dashboard';
 import { ManageBookingsComponent } from './pages/manage-bookings/manage-bookings';
 import { CreatePackageComponent } from './pages/create-package/create-package';
+import { ChatComponent } from './pages/chat/chat';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -38,5 +39,6 @@ export const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [adminGuard] },
   { path: 'admin/packagers', component: AdminPackagersComponent, canActivate: [adminGuard] },
+  { path: 'chat', component: ChatComponent },
   { path: '**', redirectTo: '' }
 ];
