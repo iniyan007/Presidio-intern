@@ -1,4 +1,5 @@
 import { Component, effect, inject, signal } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PackageService } from '../../services/package.service';
@@ -29,7 +30,7 @@ export class ManageBookingsComponent {
   selectedPackageId = signal<string | null>(null);
   
   // Bookings grouped by seasonal price / travel date
-  groupedBookings = signal<{ travelDate: string, bookings: BookingResponse[] }[]>([]);
+  groupedBookings = signal<{ travelDate: string, seasonName?: string, bookings: BookingResponse[] }[]>([]);
   isLoading = signal<boolean>(false);
 
   // Recent bookings across all packages
@@ -44,15 +45,15 @@ export class ManageBookingsComponent {
     effect(() => {
       const profile = this.userService.userProfile();
       if (profile && profile.fullName) {
-        this.loadPackages(profile.fullName);
+        this.loadPackages();
       }
     });
   }
 
-  private loadPackages(packagerName: string) {
-    this.packageService.getPackages({ PackagerName: packagerName }).subscribe({
+  private loadPackages() {
+    this.packageService.getMyPackages().subscribe({
       next: (res) => {
-        const pkgs = res.items || res;
+        const pkgs = res;
         this.myPackages.set(pkgs);
         
         // If a packageId is passed in query params, auto-select it
@@ -108,26 +109,41 @@ export class ManageBookingsComponent {
     this.loadBookingsForPackage(packageId);
   }
 
+
   private loadBookingsForPackage(packageId: string) {
     this.isLoading.set(true);
-    this.bookingService.getBookingsByPackageId(packageId).subscribe({
-      next: (bookings: BookingResponse[]) => {
+    
+    forkJoin({
+      bookings: this.bookingService.getBookingsByPackageId(packageId),
+      pkgDetails: this.packageService.getPackageById(packageId)
+    }).subscribe({
+      next: (res) => {
+        const bookings = res.bookings;
+        const pkgDetails = res.pkgDetails;
+        
         // Group by travel date, excluding cancelled AND unpaid bookings
         const grouped: { [key: string]: BookingResponse[] } = {};
         
-        const validBookings = bookings.filter(b => !(b.status === 'Cancelled' && b.paymentStatus === 'Unpaid'));
+        const validBookings = bookings.filter((b: any) => !(b.status === 'Cancelled' && b.paymentStatus === 'Unpaid'));
 
-        validBookings.forEach(b => {
+        validBookings.forEach((b: any) => {
           if (!grouped[b.travelDate]) {
             grouped[b.travelDate] = [];
           }
           grouped[b.travelDate].push(b);
         });
 
-        const groupedArray = Object.keys(grouped).map(date => ({
-          travelDate: date,
-          bookings: grouped[date]
-        })).sort((a, b) => new Date(b.travelDate).getTime() - new Date(a.travelDate).getTime());
+        const groupedArray = Object.keys(grouped).map(date => {
+          // Find season name matching travelDate
+          const season = pkgDetails.seasonalPricings?.find((s: any) => s.startDate === date);
+          const seasonName = season ? season.seasonName : undefined;
+
+          return {
+            travelDate: date,
+            seasonName: seasonName,
+            bookings: grouped[date]
+          };
+        }).sort((a, b) => new Date(b.travelDate).getTime() - new Date(a.travelDate).getTime());
 
         this.groupedBookings.set(groupedArray);
         this.isLoading.set(false);

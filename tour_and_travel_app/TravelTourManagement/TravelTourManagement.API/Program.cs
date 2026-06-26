@@ -214,6 +214,8 @@ if (app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
+
 app.UseRateLimiter();
 
 app.UseCors("FrontendPolicy");

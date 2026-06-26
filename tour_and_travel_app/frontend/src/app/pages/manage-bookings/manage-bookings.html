@@ -140,7 +140,9 @@
         <div>
           <div class="flex items-center gap-3 mb-6">
             <span class="material-symbols-outlined text-secondary text-[28px]">calendar_month</span>
-            <h2 class="font-headline-md text-title-lg text-primary">Travel Date: {{ group.travelDate | date:'mediumDate' }}</h2>
+            <h2 class="font-headline-md text-title-lg text-primary">Travel Date: {{ group.travelDate | date:'mediumDate' }}
+              @if (group.seasonName) { <span class="text-secondary ml-1">({{ group.seasonName }})</span> }
+            </h2>
             <span class="bg-secondary-fixed text-on-secondary-fixed text-caption px-3 py-1 rounded-full font-bold">
               {{ group.bookings.length }} Bookings
             </span>
@@ -180,14 +182,26 @@
 
                 <!-- Travelers & Documents -->
                 <div class="space-y-4">
+                  @if (booking.specialRequests) {
+                    <div class="bg-tertiary-fixed/30 rounded-lg p-3 text-sm text-on-surface mb-4 border border-tertiary-fixed">
+                      <span class="font-bold text-tertiary">Special Requests:</span> {{ booking.specialRequests }}
+                    </div>
+                  }
                   @for (traveler of booking.travelers; track traveler.id) {
                     <div class="bg-surface-container/30 rounded-xl p-4">
-                      <div class="flex items-center gap-2 mb-3">
+                      <div class="flex items-center gap-2 mb-1">
                         <span class="material-symbols-outlined text-outline text-[20px]">person</span>
                         <h4 class="font-title-sm text-primary">{{ traveler.fullName }}</h4>
                         @if (traveler.isPrimary) {
                           <span class="bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded font-bold uppercase">Primary</span>
                         }
+                      </div>
+
+                      <div class="ml-7 mb-4 text-[12px] text-on-surface-variant flex flex-wrap gap-x-4 gap-y-1">
+                        @if (traveler.dateOfBirth) { <span><span class="font-bold">DOB:</span> {{ traveler.dateOfBirth | date:'mediumDate' }}</span> }
+                        @if (traveler.gender) { <span><span class="font-bold">Gender:</span> {{ traveler.gender }}</span> }
+                        @if (traveler.mealPreference) { <span><span class="font-bold">Meal:</span> {{ traveler.mealPreference }}</span> }
+                        @if (traveler.aadharCardNumber) { <span><span class="font-bold">Aadhar:</span> {{ traveler.aadharCardNumber }}</span> }
                       </div>
 
                       @if (!traveler.documents || traveler.documents.length === 0) {

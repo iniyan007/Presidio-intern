@@ -57,8 +57,14 @@ export class PackageDetailsComponent implements OnInit {
     this.isLoading.set(true);
     this.packageService.getPackageById(id).subscribe({
       next: (data) => {
+        if (data.seasonalPricings && data.seasonalPricings.length > 0) {
+          data.seasonalPricings.sort((a: any, b: any) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+        }
         this.pkg.set(data);
         this.loadReviews(id);
+        if (data.seasonalPricings && data.seasonalPricings.length > 0) {
+          this.selectedSeason.set(data.seasonalPricings[0]);
+        }
       },
       error: (err) => {
         console.error(err);
