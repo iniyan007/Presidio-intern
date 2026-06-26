@@ -501,6 +501,21 @@
     </app-review-modal>
   }
   
+  <!-- Floating Chat Button -->
+  <button 
+    (click)="startChat()"
+    [disabled]="isChatLoading()"
+    class="fixed bottom-6 right-6 z-50 bg-primary text-on-primary w-14 h-14 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 hover:bg-primary-hover transition-all flex items-center justify-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group">
+    @if (isChatLoading()) {
+      <span class="material-symbols-outlined text-[28px] animate-spin">progress_activity</span>
+    } @else {
+      <span class="material-symbols-outlined text-[28px]">chat</span>
+      <span class="absolute right-[4.5rem] bg-surface-container-highest text-on-surface text-label-sm font-label-md px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-md pointer-events-none">
+        Chat with Packager
+      </span>
+    }
+  </button>
+  
   </ng-container>
 }
 </main>

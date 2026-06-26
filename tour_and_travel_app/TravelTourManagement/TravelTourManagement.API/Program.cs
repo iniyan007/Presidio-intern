@@ -111,6 +111,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TravelTourManagement.DataAccess.Interface.IUserContextService, TravelTourManagement.API.Services.UserContextService>();
 
 // Add SignalR and its dispatcher
+builder.Services.AddSingleton<Microsoft.AspNetCore.SignalR.IUserIdProvider, TravelTourManagement.API.Providers.CustomUserIdProvider>();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<TravelTourManagement.Business.Interface.INotificationDispatcher, TravelTourManagement.API.Services.SignalRNotificationDispatcher>();
 builder.Services.AddScoped<TravelTourManagement.Business.Interface.IMessageDispatcher, TravelTourManagement.API.Services.SignalRMessageDispatcher>();

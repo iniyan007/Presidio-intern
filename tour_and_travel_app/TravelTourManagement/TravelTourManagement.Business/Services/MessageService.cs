@@ -130,7 +130,7 @@ public class MessageService : IMessageService
                 SenderRole = m.SenderRole,
                 Body = m.Body,
                 IsRead = m.IsRead,
-                SentAt = m.SentAt
+                SentAt = DateTime.SpecifyKind(m.SentAt, DateTimeKind.Utc)
             })
             .ToListAsync(cancellationToken);
 
@@ -180,7 +180,7 @@ public class MessageService : IMessageService
                     SenderRole = lastMessage.SenderRole,
                     Body = lastMessage.Body,
                     IsRead = lastMessage.IsRead,
-                    SentAt = lastMessage.SentAt
+                    SentAt = DateTime.SpecifyKind(lastMessage.SentAt, DateTimeKind.Utc)
                 };
             }
 
@@ -235,8 +235,8 @@ public class MessageService : IMessageService
             PackagerName = thread.Packager.CompanyName,
             PackagerProfilePicture = thread.Packager.User.ProfilePicture ?? string.Empty,
             PackageTitle = thread.Package?.Title,
-            CreatedAt = thread.CreatedAt,
-            LastMessageAt = thread.LastMessageAt
+            CreatedAt = DateTime.SpecifyKind(thread.CreatedAt, DateTimeKind.Utc),
+            LastMessageAt = thread.LastMessageAt.HasValue ? DateTime.SpecifyKind(thread.LastMessageAt.Value, DateTimeKind.Utc) : null
         };
     }
 }
