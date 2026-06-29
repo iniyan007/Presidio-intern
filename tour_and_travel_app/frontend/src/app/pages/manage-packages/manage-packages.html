@@ -1,0 +1,60 @@
+<main class="min-h-[calc(100vh-80px)] p-4 md:p-8 max-w-7xl mx-auto w-full">
+  <!-- Header Section -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <div>
+      <div class="flex items-center gap-2 mb-2">
+        <button routerLink="/packager/dashboard" class="text-on-surface-variant hover:bg-surface-variant p-2 rounded-full transition-colors flex items-center justify-center -ml-2">
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <h1 class="font-headline-lg text-headline-lg text-primary">Manage Packages</h1>
+      </div>
+      <p class="font-body-md text-on-surface-variant">View and edit all your travel packages in one place.</p>
+    </div>
+    <div class="flex gap-3">
+      <button routerLink="/packager/create-package" class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-md text-label-md hover:bg-primary/90 transition-all shadow-sm flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">add</span>
+        Create a Package
+      </button>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="flex justify-center p-12">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>
+  } @else if (myPackages().length === 0) {
+    <div class="flex flex-col items-center justify-center p-12 bg-surface-container-lowest rounded-2xl border border-outline-variant border-dashed text-center">
+        <span class="material-symbols-outlined text-[48px] text-primary/40 mb-4">tour</span>
+        <h3 class="font-title-lg text-primary mb-2">No Packages Yet</h3>
+        <p class="font-body-md text-on-surface-variant max-w-sm mb-6">Create your very first travel package and publish it to the world to start receiving bookings!</p>
+        <button routerLink="/packager/create-package" class="bg-primary text-on-primary px-6 py-3 rounded-full font-label-md hover:bg-primary/90 transition-colors shadow-sm flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+            Create a Package
+        </button>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      @for (pkg of myPackages(); track pkg.id) {
+        <div class="bg-surface-container-lowest rounded-2xl overflow-hidden border border-outline-variant shadow-sm hover:shadow-lg transition-all group flex flex-col">
+          <div class="h-48 w-full relative overflow-hidden shrink-0">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" [src]="pkg.imageUrl || 'assets/placeholder-image.jpg'" [alt]="pkg.title">
+            <div class="absolute top-4 left-4 text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full" [ngClass]="pkg.status === 'Active' ? 'bg-emerald-500' : 'bg-secondary'">{{ pkg.status || 'Draft' }}</div>
+          </div>
+          <div class="p-5 flex-1 flex flex-col">
+            <h3 class="font-title-md text-title-md text-primary mb-2 line-clamp-2">{{ pkg.title }}</h3>
+            <div class="flex items-center gap-4 text-outline font-label-md text-caption mb-4">
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> {{ pkg.durationDays }} Days</span>
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">group</span> {{ pkg.slotsLeft ? pkg.slotsLeft + ' Slots left' : 'No slots' }}</span>
+            </div>
+            <div class="mt-auto pt-4 border-t border-outline-variant flex items-center justify-between">
+              <span class="text-secondary font-bold text-title-md">{{ pkg.price | currency:'INR':'symbol':'1.0-0' }} <span class="text-caption font-normal text-outline">/person</span></span>
+              <button class="text-primary p-2 hover:bg-primary-fixed/20 rounded-full transition-all" (click)="onEditPackage(pkg.id)" title="Edit Package">
+                <span class="material-symbols-outlined">edit</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</main>

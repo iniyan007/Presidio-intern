@@ -6,7 +6,7 @@
 <p class="font-body-md text-on-surface-variant">Welcome back, Traveler. Here's what's happening today.</p>
 </div>
 <div class="flex gap-3">
-<button class="bg-surface-container-lowest border border-outline-variant text-primary px-6 py-2.5 rounded-full font-label-md text-label-md hover:bg-surface-variant transition-all">
+<button [routerLink]="['/packager', 'view']" [queryParams]="{name: packagerName()}" [disabled]="!packagerName()" class="bg-surface-container-lowest border border-outline-variant text-primary px-6 py-2.5 rounded-full font-label-md text-label-md hover:bg-surface-variant transition-all disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
                         View Public Profile
                     </button>
 </div>
@@ -56,9 +56,11 @@
 <div class="xl:col-span-2 space-y-6">
 <div class="flex items-center justify-between">
 <h2 class="font-headline-lg text-title-md text-primary">My Packages</h2>
-<button class="text-primary font-label-md text-label-md flex items-center gap-1 hover:underline">
-                            View All <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
+@if (totalPackagesCount() > 4) {
+    <button routerLink="/packager/manage-packages" class="text-primary font-label-md text-label-md flex items-center gap-1 hover:underline">
+        View All <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+    </button>
+}
 </div>
 @if (myPackages().length === 0) {
     <div class="col-span-full flex flex-col items-center justify-center p-12 bg-surface-container-lowest rounded-2xl border border-outline-variant border-dashed text-center">
@@ -129,9 +131,11 @@
   </div>
   </div>
 }
+@if (recentBookings().length > 0) {
 <button routerLink="/packager/manage-bookings" class="w-full py-3 text-primary font-label-md text-label-md border-t border-outline-variant/30 mt-2 hover:bg-surface-container-low transition-all">
                             Manage All Bookings
                         </button>
+}
 </div>
 </div>
 </div>

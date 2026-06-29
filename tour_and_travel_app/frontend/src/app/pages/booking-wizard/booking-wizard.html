@@ -11,27 +11,27 @@
   }
 
   <!-- Progress Stepper -->
-  <div class="mb-12">
-    <div class="flex items-center justify-between max-w-3xl mx-auto">
-      <div class="flex flex-col items-center gap-2 group cursor-pointer" (click)="setStep(1)">
-        <div [ngClass]="step() > 1 ? 'bg-[#10b981]' : (step() === 1 ? 'bg-primary' : 'bg-surface-container-highest text-on-surface-variant')" class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold transition-all">
-          @if (step() > 1) { <span class="material-symbols-outlined">check</span> } @else { 1 }
+  <div class="mb-8 md:mb-12 px-2 sm:px-0">
+    <div class="flex items-start sm:items-center justify-between max-w-3xl mx-auto">
+      <div class="flex flex-col items-center gap-2 group cursor-pointer w-20 sm:w-auto" (click)="setStep(1)">
+        <div [ngClass]="step() > 1 ? 'bg-[#10b981]' : (step() === 1 ? 'bg-primary' : 'bg-surface-container-highest text-on-surface-variant')" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white font-bold transition-all text-sm sm:text-base">
+          @if (step() > 1) { <span class="material-symbols-outlined text-[16px] sm:text-[24px]">check</span> } @else { 1 }
         </div>
-        <span [ngClass]="step() > 1 ? 'text-[#10b981]' : (step() === 1 ? 'text-primary' : 'text-on-surface-variant')" class="font-label-md text-label-md font-bold">Traveler Details</span>
+        <span [ngClass]="step() > 1 ? 'text-[#10b981]' : (step() === 1 ? 'text-primary' : 'text-on-surface-variant')" class="font-label-md text-[10px] sm:text-label-md font-bold text-center leading-tight sm:leading-normal">Traveler<br class="sm:hidden"> Details</span>
       </div>
-      <div class="flex-1 h-[2px] bg-outline-variant mx-4 mb-6"></div>
+      <div class="flex-1 h-[2px] bg-outline-variant mx-2 sm:mx-4 mt-4 sm:mt-0 sm:mb-6"></div>
       
-      <div class="flex flex-col items-center gap-2 group cursor-pointer" (click)="step() >= 2 ? setStep(2) : null">
-        <div [ngClass]="step() > 2 ? 'bg-[#10b981]' : (step() === 2 ? 'bg-primary text-white' : 'bg-surface-container-highest text-on-surface-variant')" class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all">
-          @if (step() > 2) { <span class="material-symbols-outlined">check</span> } @else { 2 }
+      <div class="flex flex-col items-center gap-2 group cursor-pointer w-20 sm:w-auto" (click)="step() >= 2 ? setStep(2) : null">
+        <div [ngClass]="step() > 2 ? 'bg-[#10b981]' : (step() === 2 ? 'bg-primary text-white' : 'bg-surface-container-highest text-on-surface-variant')" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold transition-all text-sm sm:text-base">
+          @if (step() > 2) { <span class="material-symbols-outlined text-[16px] sm:text-[24px]">check</span> } @else { 2 }
         </div>
-        <span [ngClass]="step() > 2 ? 'text-[#10b981]' : (step() === 2 ? 'text-primary font-bold' : 'text-on-surface-variant')" class="font-label-md text-label-md">Document Upload</span>
+        <span [ngClass]="step() > 2 ? 'text-[#10b981]' : (step() === 2 ? 'text-primary font-bold' : 'text-on-surface-variant')" class="font-label-md text-[10px] sm:text-label-md text-center leading-tight sm:leading-normal">Document<br class="sm:hidden"> Upload</span>
       </div>
-      <div class="flex-1 h-[2px] bg-outline-variant mx-4 mb-6"></div>
+      <div class="flex-1 h-[2px] bg-outline-variant mx-2 sm:mx-4 mt-4 sm:mt-0 sm:mb-6"></div>
       
-      <div class="flex flex-col items-center gap-2 group cursor-pointer" (click)="step() >= 3 ? setStep(3) : null">
-        <div [ngClass]="step() === 3 ? 'bg-primary text-white' : 'bg-surface-container-highest text-on-surface-variant'" class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all">3</div>
-        <span [ngClass]="step() === 3 ? 'text-primary font-bold' : 'text-on-surface-variant'" class="font-label-md text-label-md">Review & Pay</span>
+      <div class="flex flex-col items-center gap-2 group cursor-pointer w-20 sm:w-auto" (click)="step() >= 3 ? setStep(3) : null">
+        <div [ngClass]="step() === 3 ? 'bg-primary text-white' : 'bg-surface-container-highest text-on-surface-variant'" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold transition-all text-sm sm:text-base">3</div>
+        <span [ngClass]="step() === 3 ? 'text-primary font-bold' : 'text-on-surface-variant'" class="font-label-md text-[10px] sm:text-label-md text-center leading-tight sm:leading-normal">Review<br class="sm:hidden"> & Pay</span>
       </div>
     </div>
   </div>
@@ -80,10 +80,11 @@
 
           <!-- Traveler List -->
           <div class="space-y-6">
-            <div class="flex items-center justify-between">
-              <h2 class="font-headline-lg text-headline-lg text-primary">Travelers 
+            <div class="flex flex-wrap items-center justify-between gap-4">
+              <h2 class="font-headline-lg text-headline-lg text-primary flex items-baseline flex-wrap">
+                Travelers 
                 @if (selectedSeason()) {
-                  <span class="text-label-md font-normal text-on-surface-variant ml-2 border-l border-outline-variant pl-2">
+                  <span class="text-label-md font-normal text-on-surface-variant ml-2 border-l border-outline-variant pl-2 mt-1">
                     {{ maxAllowedTravelers() }} slots available
                   </span>
                 }
@@ -91,7 +92,7 @@
               <button (click)="addTraveler()" 
                       [disabled]="selectedSeason() ? travelers().length >= maxAllowedTravelers() : true"
                       [ngClass]="(selectedSeason() && travelers().length < maxAllowedTravelers()) ? 'text-primary hover:opacity-80' : 'text-on-surface-variant opacity-50 cursor-not-allowed'"
-                      class="flex items-center gap-2 font-bold transition-all">
+                      class="flex items-center gap-2 font-bold transition-all whitespace-nowrap">
                 <span class="material-symbols-outlined">add_circle</span> Add Traveler
               </button>
             </div>

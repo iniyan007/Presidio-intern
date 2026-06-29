@@ -57,9 +57,14 @@
   </div>
   
   <!-- Bento Grid Image Gallery -->
-  <div class="grid grid-cols-4 grid-rows-2 gap-3 h-[400px] md:h-[500px]">
-  <div class="col-span-3 row-span-2 rounded-xl overflow-hidden relative group">
+  <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-3 h-[300px] md:h-[500px]">
+  <div class="md:col-span-3 md:row-span-2 rounded-xl overflow-hidden relative group">
   <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" [src]="getPrimaryImage()" [alt]="p.title">
+  @if (getGalleryImages().length > 0) {
+    <button class="md:hidden absolute bottom-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full text-white text-label-sm font-label-md z-10" (click)="openGalleryModal()">
+      + More Photos
+    </button>
+  }
   <button 
     (click)="wishlistService.toggleWishlist(p.id, p.title); $event.stopPropagation()"
     class="absolute top-4 right-4 bg-white/20 backdrop-blur-md p-2 rounded-full text-white hover:bg-white hover:text-error transition-all border border-outline text-on-surface-variant z-10"
@@ -71,12 +76,12 @@
   </div>
   
   @if (getGalleryImages().length > 0) {
-    <div class="col-span-1 row-span-1 rounded-xl overflow-hidden group">
+    <div class="hidden md:block col-span-1 row-span-1 rounded-xl overflow-hidden group">
       <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" [src]="getGalleryImages()[0] || getPrimaryImage()">
     </div>
   }
   @if (getGalleryImages().length > 1) {
-    <div class="col-span-1 row-span-1 rounded-xl overflow-hidden relative group cursor-pointer" (click)="openGalleryModal()">
+    <div class="hidden md:block col-span-1 row-span-1 rounded-xl overflow-hidden relative group cursor-pointer" (click)="openGalleryModal()">
     <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" [src]="getGalleryImages()[1] || getPrimaryImage()">
     <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
     <span class="text-white font-label-md">+ More Photos</span>

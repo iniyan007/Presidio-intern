@@ -27,6 +27,7 @@ export class NavbarComponent {
   private eRef = inject(ElementRef);
 
   isNotificationOpen = signal(false);
+  isMobileMenuOpen = signal(false);
 
   constructor() {
     effect(() => {
@@ -54,6 +55,18 @@ export class NavbarComponent {
 
   toggleNotification() {
     this.isNotificationOpen.set(!this.isNotificationOpen());
+    // Close mobile menu if open
+    if (this.isMobileMenuOpen()) {
+      this.isMobileMenuOpen.set(false);
+    }
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen.set(!this.isMobileMenuOpen());
+    // Close notifications if open
+    if (this.isNotificationOpen()) {
+      this.isNotificationOpen.set(false);
+    }
   }
 
   @HostListener('document:click', ['$event'])
@@ -62,6 +75,13 @@ export class NavbarComponent {
       const clickedInside = this.eRef.nativeElement.querySelector('.notification-container')?.contains(event.target);
       if (!clickedInside) {
         this.isNotificationOpen.set(false);
+      }
+    }
+    if (this.isMobileMenuOpen()) {
+      const clickedInsideMenu = this.eRef.nativeElement.querySelector('.mobile-menu-container')?.contains(event.target);
+      const clickedHamburger = this.eRef.nativeElement.querySelector('.hamburger-btn')?.contains(event.target);
+      if (!clickedInsideMenu && !clickedHamburger) {
+        this.isMobileMenuOpen.set(false);
       }
     }
   }

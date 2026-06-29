@@ -19,6 +19,7 @@ import { PackagerDashboardComponent } from './pages/packager-dashboard/packager-
 import { ManageBookingsComponent } from './pages/manage-bookings/manage-bookings';
 import { CreatePackageComponent } from './pages/create-package/create-package';
 import { ChatComponent } from './pages/chat/chat';
+import { ManagePackagesComponent } from './pages/manage-packages/manage-packages';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -31,6 +32,7 @@ export const routes: Routes = [
   { path: 'bookings', component: MyBookingsComponent },
   { path: 'wishlist', component: WishlistComponent },
   { path: 'packager/dashboard', component: PackagerDashboardComponent, canActivate: [packagerGuard] },
+  { path: 'packager/manage-packages', component: ManagePackagesComponent, canActivate: [packagerGuard] },
   { path: 'packager/manage-bookings', component: ManageBookingsComponent, canActivate: [packagerGuard] },
   { path: 'packager/create-package', component: CreatePackageComponent, canActivate: [packagerGuard] },
   { path: 'packager/edit-package/:id', component: CreatePackageComponent, canActivate: [packagerGuard] },

@@ -131,6 +131,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     } catch(err) { }
   }
 
+  clearActiveThread() {
+    this.activeThreadId.set(null);
+    this.chatService.activeThreadId.set(null);
+  }
+
   getActiveThread(): MessageThreadResponse | undefined {
     return this.threads().find(t => t.id === this.activeThreadId());
   }

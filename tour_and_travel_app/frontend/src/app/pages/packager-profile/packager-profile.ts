@@ -29,12 +29,19 @@ export class PackagerProfileComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const packageId = params.get('packageId');
-      if (packageId) {
-        this.loadPackagerProfileByPackageId(packageId);
-      } else {
-        this.errorMessage.set('Invalid package ID.');
-        this.isLoading.set(false);
-      }
+      
+      this.route.queryParamMap.subscribe(queryParams => {
+        const name = queryParams.get('name');
+        
+        if (name) {
+          this.loadProfile(name);
+        } else if (packageId && packageId !== 'view') {
+          this.loadPackagerProfileByPackageId(packageId);
+        } else {
+          this.errorMessage.set('Invalid profile link.');
+          this.isLoading.set(false);
+        }
+      });
     });
   }
 
@@ -44,51 +51,54 @@ export class PackagerProfileComponent implements OnInit {
     // 1. First fetch the package to get the packager name
     this.packageService.getPackageById(packageId).subscribe({
       next: (pkgDetails) => {
-        const packagerName = pkgDetails.packagerName;
-        
-        // 2. Fetch the packager details using the existing search API
-        this.packagerService.searchPublicPackagers(packagerName).subscribe({
-          next: (res: any) => {
-            const items = res.items ? res.items : (res.data ? res.data : res);
-            if (items && items.length > 0) {
-              const packager = items[0];
-              this.packager.set(packager);
-              
-              // 3. Fetch packages for this packager
-              this.packageService.getPackages({ PackagerName: packager.companyName }).subscribe({
-                next: (pkgRes: any) => {
-                  const pkgs = pkgRes.items ? pkgRes.items : (pkgRes.data ? pkgRes.data : pkgRes);
-                  this.packages.set(pkgs || []);
-                },
-                error: (err: any) => console.error('Failed to load packager packages', err)
-              });
-
-              // 4. Fetch reviews using the ID
-              this.packagerService.getPackagerReviews(packager.id).subscribe({
-                next: (reviewsRes: PackagerReviewResponse[]) => {
-                  this.reviews.set(reviewsRes);
-                  this.isLoading.set(false);
-                },
-                error: (err: any) => {
-                  console.error('Failed to load packager reviews', err);
-                  this.isLoading.set(false);
-                }
-              });
-            } else {
-              this.errorMessage.set('Could not find packager details.');
-              this.isLoading.set(false);
-            }
-          },
-          error: (err: any) => {
-            console.error('Failed to search packager', err);
-            this.errorMessage.set('Could not search packager details.');
-            this.isLoading.set(false);
-          }
-        });
+        this.loadProfile(pkgDetails.packagerName);
       },
       error: (err: any) => {
         console.error('Failed to load package details', err);
         this.errorMessage.set('Could not load package to find packager.');
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  loadProfile(packagerName: string) {
+    this.isLoading.set(true);
+    // 2. Fetch the packager details using the existing search API
+    this.packagerService.searchPublicPackagers(packagerName).subscribe({
+      next: (res: any) => {
+        const items = res.items ? res.items : (res.data ? res.data : res);
+        if (items && items.length > 0) {
+          const packager = items[0];
+          this.packager.set(packager);
+          
+          // 3. Fetch packages for this packager
+          this.packageService.getPackages({ PackagerName: packager.companyName }).subscribe({
+            next: (pkgRes: any) => {
+              const pkgs = pkgRes.items ? pkgRes.items : (pkgRes.data ? pkgRes.data : pkgRes);
+              this.packages.set(pkgs || []);
+            },
+            error: (err: any) => console.error('Failed to load packager packages', err)
+          });
+
+          // 4. Fetch reviews using the ID
+          this.packagerService.getPackagerReviews(packager.id).subscribe({
+            next: (reviewsRes: PackagerReviewResponse[]) => {
+              this.reviews.set(reviewsRes);
+              this.isLoading.set(false);
+            },
+            error: (err: any) => {
+              console.error('Failed to load packager reviews', err);
+              this.isLoading.set(false);
+            }
+          });
+        } else {
+          this.errorMessage.set('Could not find packager details.');
+          this.isLoading.set(false);
+        }
+      },
+      error: (err: any) => {
+        console.error('Failed to search packager', err);
+        this.errorMessage.set('Could not search packager details.');
         this.isLoading.set(false);
       }
     });

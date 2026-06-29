@@ -74,6 +74,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    window.scrollTo(0, 0);
     this.loadMetadata();
     // Set initial active section correctly if page starts scrolled down
     setTimeout(() => this.onWindowScroll(), 100);

@@ -4,12 +4,12 @@ import { PackageService } from '../../services/package.service';
 import { BookingService } from '../../services/booking.service';
 import { UserService } from '../../services/user.service';
 import { environment } from '../../../environments/environment';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-packager-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './packager-dashboard.html',
   styleUrl: './packager-dashboard.css'
 })
@@ -20,9 +20,12 @@ export class PackagerDashboardComponent {
   avgRating = signal<number>(0);
 
   myPackages = signal<any[]>([]);
+  totalPackagesCount = signal<number>(0);
   recentBookings = signal<any[]>([]);
   actionableBookings = signal<any[]>([]);
   isViewAllModalOpen = signal(false);
+  packagerId = signal<string | null>(null);
+  packagerName = signal<string | null>(null);
 
   private packageService = inject(PackageService);
   private bookingService = inject(BookingService);
@@ -33,6 +36,8 @@ export class PackagerDashboardComponent {
     effect(() => {
       const profile = this.userService.userProfile();
       if (profile && profile.fullName) {
+        this.packagerId.set(profile.id || null);
+        this.packagerName.set(profile.fullName);
         this.loadDashboardData(profile.fullName);
       }
     });
@@ -60,7 +65,8 @@ export class PackagerDashboardComponent {
           };
         });
 
-        this.myPackages.set(packageList);
+        this.totalPackagesCount.set(packageList.length);
+        this.myPackages.set(packageList.slice(0, 4));
 
         // Calculate average rating
         const totalRating = packages.reduce((sum: number, pkg: any) => sum + (pkg.avgRating || 0), 0);
