@@ -17,7 +17,7 @@ public class UserProfile : Profile
                 src.ProfilePicture,
                 src.IsActive,
                 src.IsEmailVerified,
-                src.PackagerUser != null && src.PackagerUser.ApprovedAt != null && src.PackagerUser.DeactivatedAt == null
+                src.PackagerUser != null && src.PackagerUser.ApprovedAt != null
             ));
     }
 }

@@ -32,6 +32,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   viewedDocumentIds = signal<Set<string>>(new Set());
   isDocumentsLoading = signal<boolean>(false);
   revenue = signal<number>(0);
+  gstCollected = signal<number>(0);
   bookings = signal<number>(0);
   activePackagersCount = signal<number>(0);
   
@@ -70,6 +71,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.adminService.getAnalytics().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         this.revenue.set(res.totalRevenue || 0);
+        this.gstCollected.set(res.totalGst || 0);
         this.bookings.set(res.totalBookings || 0);
         this.activePackagersCount.set(res.activePackagers || 0);
       }
@@ -97,6 +99,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.adminService.getAnalytics().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         this.revenue.set(res.totalRevenue || 0);
+        this.gstCollected.set(res.totalGst || 0);
         this.bookings.set(res.totalBookings || 0);
         this.activePackagersCount.set(res.activePackagers || 0);
       },

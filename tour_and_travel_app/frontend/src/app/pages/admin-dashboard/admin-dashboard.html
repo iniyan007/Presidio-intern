@@ -11,20 +11,26 @@
                         Last 30 Days
                     </div>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-gutter">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
 <!-- Revenue Card -->
 <div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-[0px_4px_20px_rgba(26,54,93,0.08)] hover:-translate-y-1 transition-transform">
 <div class="flex justify-between items-start mb-4">
 <div class="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-primary-fixed/30 rounded-lg">
 <span class="material-symbols-outlined text-primary">payments</span>
 </div>
-<span class="flex items-center text-on-tertiary-container font-label-md text-[12px] bg-tertiary-fixed/40 px-2 py-0.5 rounded">
-<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
-                                +12.4%
-                            </span>
 </div>
 <p class="font-label-md text-label-md text-on-surface-variant mb-1">Total Platform Revenue</p>
 <h3 class="font-headline-lg text-headline-lg text-primary">{{ revenue() | currency:'INR':'symbol':'1.0-0' }}</h3>
+</div>
+<!-- GST Collected Card -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-[0px_4px_20px_rgba(26,54,93,0.08)] hover:-translate-y-1 transition-transform">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-tertiary-fixed/30 rounded-lg">
+<span class="material-symbols-outlined text-tertiary">receipt_long</span>
+</div>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Total GST Collected</p>
+<h3 class="font-headline-lg text-headline-lg text-primary">{{ gstCollected() | currency:'INR':'symbol':'1.0-0' }}</h3>
 </div>
 <!-- Bookings Card -->
 <div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-[0px_4px_20px_rgba(26,54,93,0.08)] hover:-translate-y-1 transition-transform">
@@ -32,10 +38,6 @@
 <div class="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-primary-fixed/30 rounded-lg">
 <span class="material-symbols-outlined text-primary">confirmation_number</span>
 </div>
-<span class="flex items-center text-on-tertiary-container font-label-md text-[12px] bg-tertiary-fixed/40 px-2 py-0.5 rounded">
-<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
-                                +8.2%
-                            </span>
 </div>
 <p class="font-label-md text-label-md text-on-surface-variant mb-1">Total Bookings</p>
 <h3 class="font-headline-lg text-headline-lg text-primary">{{ bookings() | number }}</h3>
@@ -46,10 +48,6 @@
 <div class="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-primary-fixed/30 rounded-lg">
 <span class="material-symbols-outlined text-primary">travel_explore</span>
 </div>
-<span class="flex items-center text-error font-label-md text-[12px] bg-error-container/40 px-2 py-0.5 rounded">
-<span class="material-symbols-outlined text-[14px] mr-1">trending_down</span>
-                                -2.1%
-                            </span>
 </div>
 <p class="font-label-md text-label-md text-on-surface-variant mb-1">Active Packagers</p>
 <h3 class="font-headline-lg text-headline-lg text-primary">{{ activePackagersCount() | number }}</h3>

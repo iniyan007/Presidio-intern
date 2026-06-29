@@ -10,6 +10,7 @@ using AutoMapper;
 using TravelTourManagement.Business.Interface;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace TravelTourManagement.Business.Services;
 
@@ -19,13 +20,29 @@ public class PackagerService : IPackagerService
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
     private readonly INotificationService _notificationService;
+    private readonly IPackageRepository _packageRepository;
+    private readonly IBookingRepository _bookingRepository;
+    private readonly IRepository<PackageSeasonalPricing, Guid> _seasonalPricingRepository;
+    private readonly IDistributedCache _cache;
 
-    public PackagerService(IPackagerRepository packagerRepository, IUserRepository userRepository, IMapper mapper, INotificationService notificationService)
+    public PackagerService(
+        IPackagerRepository packagerRepository, 
+        IUserRepository userRepository, 
+        IMapper mapper, 
+        INotificationService notificationService,
+        IPackageRepository packageRepository,
+        IBookingRepository bookingRepository,
+        IRepository<PackageSeasonalPricing, Guid> seasonalPricingRepository,
+        IDistributedCache cache)
     {
         _packagerRepository = packagerRepository;
         _userRepository = userRepository;
         _mapper = mapper;
         _notificationService = notificationService;
+        _packageRepository = packageRepository;
+        _bookingRepository = bookingRepository;
+        _seasonalPricingRepository = seasonalPricingRepository;
+        _cache = cache;
     }
 
     public async Task<PackagerResponse> ApplyToBecomePackagerAsync(Guid userId, ApplyPackagerRequest request, CancellationToken cancellationToken = default)
@@ -224,6 +241,64 @@ public class PackagerService : IPackagerService
 
         await _packagerRepository.UpdateAsync(packager, cancellationToken);
         await _packagerRepository.UpdateStatusRawAsync(packagerId, "deactivated", cancellationToken);
+
+        // 1. Fetch all packages belonging to the packager
+        var packages = await _packageRepository.GetByPackagerIdAsync(packagerId, cancellationToken);
+        
+        // 2. Change Status of Published or PendingReview to Archived
+        var packagesToArchive = packages.Where(p => p.Status == TravelTourManagement.DataAccess.Enums.PackageStatus.Published || p.Status == TravelTourManagement.DataAccess.Enums.PackageStatus.PendingReview).ToList();
+        foreach (var pkg in packagesToArchive)
+        {
+            pkg.Status = TravelTourManagement.DataAccess.Enums.PackageStatus.Archived;
+            pkg.UpdatedAt = DateTime.UtcNow;
+            await _packageRepository.UpdateAsync(pkg, cancellationToken);
+        }
+
+        // 3. Fetch all active bookings for these packages
+        foreach (var pkg in packages)
+        {
+            var bookings = await _bookingRepository.GetByPackageIdAsync(pkg.Id, cancellationToken);
+            var activeBookings = bookings.Where(b => b.Status == TravelTourManagement.DataAccess.Enums.BookingStatus.Pending || 
+                                                     b.Status == TravelTourManagement.DataAccess.Enums.BookingStatus.DocumentUnderReview || 
+                                                     b.Status == TravelTourManagement.DataAccess.Enums.BookingStatus.Confirmed).ToList();
+            
+            foreach (var booking in activeBookings)
+            {
+                // 4. Cancel bookings and mark as Refunded
+                booking.Status = TravelTourManagement.DataAccess.Enums.BookingStatus.Cancelled;
+                booking.CancellationReason = "Packager Account Deactivated";
+                if (booking.PaymentStatus == TravelTourManagement.DataAccess.Enums.PaymentStatus.Paid)
+                {
+                    booking.PaymentStatus = TravelTourManagement.DataAccess.Enums.PaymentStatus.Refunded;
+                }
+                booking.CancelledAt = DateTime.UtcNow;
+                booking.UpdatedAt = DateTime.UtcNow;
+                
+                await _bookingRepository.UpdateAsync(booking, cancellationToken);
+
+                // Restore slots
+                var seatConsumingTravelers = booking.AdultCount + booking.ChildCount;
+                var pricing = await _seasonalPricingRepository.GetByIdAsync(booking.SeasonalPricingId, cancellationToken);
+                if (pricing != null)
+                {
+                    pricing.AvailableSlots += seatConsumingTravelers;
+                    await _seasonalPricingRepository.UpdateAsync(pricing, cancellationToken);
+                }
+                pkg.CurrentBookings -= seatConsumingTravelers;
+                if (pkg.CurrentBookings < 0) pkg.CurrentBookings = 0;
+                await _packageRepository.UpdateAsync(pkg, cancellationToken);
+                await _cache.RemoveAsync($"Package_{pkg.Id}", cancellationToken);
+
+                // 5. Send cancellation and refund notification to travelers
+                await _notificationService.SendNotificationAsync(
+                    booking.UserId,
+                    "Booking Cancelled - Packager Deactivated",
+                    $"Unfortunately, the packager for your upcoming trip '{pkg.Title}' has been deactivated. Your booking has been cancelled and we will process a refund for your ticket shortly. We sincerely apologize for the inconvenience.",
+                    booking.Id,
+                    TravelTourManagement.DataAccess.Enums.NotificationType.booking,
+                    cancellationToken);
+            }
+        }
 
         await _notificationService.SendNotificationAsync(
             packager.UserId,

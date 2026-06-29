@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PackageService } from '../../services/package.service';
 import { BookingService } from '../../services/booking.service';
 import { UserService } from '../../services/user.service';
+import { PackagerService } from '../../services/packager.service';
 import { environment } from '../../../environments/environment';
 import { Router, RouterModule } from '@angular/router';
 
@@ -28,10 +29,12 @@ export class PackagerDashboardComponent {
   isViewAllModalOpen = signal(false);
   packagerId = signal<string | null>(null);
   packagerName = signal<string | null>(null);
+  deactivationInfo = signal<{ deactivatedAt: string, reason: string } | null>(null);
 
   private packageService = inject(PackageService);
   private bookingService = inject(BookingService);
   private userService = inject(UserService);
+  private packagerService = inject(PackagerService);
   private router = inject(Router);
 
   constructor() {
@@ -46,6 +49,13 @@ export class PackagerDashboardComponent {
   }
 
   private loadDashboardData(packagerName: string) {
+    this.packagerService.getMyPackagerStatus().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (status) => {
+        if (status.deactivatedAt) {
+          this.deactivationInfo.set({ deactivatedAt: status.deactivatedAt, reason: status.reason || 'No specific reason provided.' });
+        }
+      }
+    });
     this.packageService.getMyPackages().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         const packages = res; // getMyPackages returns an array directly

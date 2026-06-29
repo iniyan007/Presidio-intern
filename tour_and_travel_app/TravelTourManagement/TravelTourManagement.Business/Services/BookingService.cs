@@ -100,6 +100,11 @@ public class BookingService : IBookingService
         booking.CancelledAt = DateTime.UtcNow;
         booking.CancellationReason = request.CancellationReason;
 
+        if (booking.PaymentStatus == PaymentStatus.Paid)
+        {
+            booking.PaymentStatus = PaymentStatus.Refunded;
+        }
+
         await RestoreBookingSlotsAsync(booking, cancellationToken);
         
         await _bookingRepository.UpdateAsync(booking, cancellationToken);

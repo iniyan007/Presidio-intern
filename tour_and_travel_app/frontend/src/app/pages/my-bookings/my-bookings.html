@@ -98,6 +98,11 @@
               
               <textarea [(ngModel)]="cancellationReason" placeholder="Please provide a reason for cancellation" class="w-full p-3 rounded-lg border border-error/30 bg-white focus:outline-none focus:ring-1 focus:ring-error mb-4" rows="2"></textarea>
               
+              <label class="flex items-start gap-2 mb-4 cursor-pointer">
+                <input type="checkbox" [ngModel]="isPolicyAware()" (ngModelChange)="isPolicyAware.set($event)" class="mt-1 border-error/30 rounded text-error focus:ring-error">
+                <span class="text-body-sm text-on-surface-variant">I have read the cancellation policy and I understand the refund terms.</span>
+              </label>
+              
               <div class="flex items-center gap-3">
                 <button (click)="cancelBooking(booking.id)" class="bg-error text-white px-5 py-2 rounded-full font-label-md shadow hover:shadow-lg transition-all">Confirm Cancellation</button>
                 <button (click)="isCancelling.set(null)" class="text-on-surface-variant hover:text-on-surface font-label-md px-4 py-2">Keep Booking</button>

@@ -33,6 +33,7 @@ export class MyBookingsComponent implements OnInit {
   // Cancellation State
   isCancelling = signal<string | null>(null);
   cancellationReason = signal<string>('');
+  isPolicyAware = signal<boolean>(false);
   
   // Document Reupload State
   isUploading = signal<string | null>(null); // Document ID
@@ -104,6 +105,7 @@ export class MyBookingsComponent implements OnInit {
   initiateCancel(bookingId: string) {
     this.isCancelling.set(bookingId);
     this.cancellationReason.set('');
+    this.isPolicyAware.set(false);
   }
 
   cancelBooking(bookingId: string) {
@@ -112,7 +114,10 @@ export class MyBookingsComponent implements OnInit {
       return;
     }
 
-    if (!confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) return;
+    if (!this.isPolicyAware()) {
+      this.toastService.show('Please confirm you are aware of the cancellation and refund policy.', 'error');
+      return;
+    }
 
     this.bookingService.cancelBooking(bookingId, { reason: this.cancellationReason() }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {

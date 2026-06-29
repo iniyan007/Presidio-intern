@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastService } from '../../services/toast.service';
 import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
 import { UserProfile } from '../../models/user.model';
 
@@ -17,6 +18,7 @@ import { UserProfile } from '../../models/user.model';
 export class ProfileComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   userService = inject(UserService);
+  authService = inject(AuthService);
   private fb = inject(FormBuilder);
 
   isEditing = signal<boolean>(false);

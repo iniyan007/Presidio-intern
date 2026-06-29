@@ -103,7 +103,7 @@ public class AuthService : IAuthService
         else 
         {
             var packager = await _packagerRepository.GetByUserIdAsync(user.Id, cancellationToken);
-            if (packager != null && packager.ApprovedAt != null && packager.DeactivatedAt == null)
+            if (packager != null && packager.ApprovedAt != null)
             {
                 role = "Packager";
                             }
@@ -182,7 +182,7 @@ public class AuthService : IAuthService
         else 
         {
             var packager = await _packagerRepository.GetByUserIdAsync(user.Id, cancellationToken);
-            if (packager != null && packager.ApprovedAt != null && packager.DeactivatedAt == null)
+            if (packager != null && packager.ApprovedAt != null)
             {
                 role = "Packager";
             }
@@ -227,7 +227,7 @@ public class AuthService : IAuthService
         else 
         {
             var packager = await _packagerRepository.GetByUserIdAsync(user.Id, cancellationToken);
-            if (packager != null && packager.ApprovedAt != null && packager.DeactivatedAt == null)
+            if (packager != null && packager.ApprovedAt != null)
             {
                 role = "Packager";
             }

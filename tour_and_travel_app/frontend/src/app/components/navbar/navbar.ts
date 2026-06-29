@@ -8,6 +8,7 @@ import { ToastService } from '../../services/toast.service';
 import { WishlistService } from '../../services/wishlist.service';
 import { NotificationService } from '../../services/notification.service';
 import { ChatService } from '../../services/chat.service';
+import { PackagerService } from '../../services/packager.service';
 
 @Component({
   selector: 'app-navbar',
@@ -25,9 +26,11 @@ export class NavbarComponent {
   notificationService = inject(NotificationService);
   chatService = inject(ChatService);
   private eRef = inject(ElementRef);
+  private packagerService = inject(PackagerService);
 
   isNotificationOpen = signal(false);
   isMobileMenuOpen = signal(false);
+  isPackagerDeactivated = signal(false);
 
   constructor() {
     effect(() => {
@@ -40,6 +43,17 @@ export class NavbarComponent {
           this.chatService.startConnection(token);
           this.chatService.getThreads().subscribe({
             next: (threads) => this.chatService.threads.set(threads)
+          });
+        }
+
+        if (this.authService.getUserRole() === 'Packager') {
+          this.packagerService.getMyPackagerStatus().subscribe({
+            next: (status) => {
+              if (status.deactivatedAt) {
+                this.isPackagerDeactivated.set(true);
+              }
+            },
+            error: () => {}
           });
         }
       } else {

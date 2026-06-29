@@ -32,12 +32,14 @@ public class AdminController : ControllerBase
         var paidBookings = bookings.Where(b => b.PaymentStatus == TravelTourManagement.DataAccess.Enums.PaymentStatus.Paid).ToList();
         
         var totalRevenue = paidBookings.Sum(b => b.PlatformFeeAmount);
+        var totalGst = paidBookings.Sum(b => b.TaxAmount);
         var totalBookings = paidBookings.Count;
         var activePackagers = packagers.Count(p => p.ApprovedAt != null && p.DeactivatedAt == null);
 
         return Ok(new
         {
             TotalRevenue = totalRevenue,
+            TotalGst = totalGst,
             TotalBookings = totalBookings,
             ActivePackagers = activePackagers
         });

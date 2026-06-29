@@ -260,6 +260,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
           } else {
             pkg.seasonalPricings?.forEach(sp => {
               this.seasonalPricing.push(this.fb.group({
+                id: [sp.id],
                 seasonName: [sp.seasonName, Validators.required],
                 startDate: [sp.startDate],
                 endDate: [sp.endDate],
@@ -421,6 +422,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
 
   addSeasonalPricing() {
     this.seasonalPricing.push(this.fb.group({
+      id: [null],
       seasonName: ['', Validators.required],
       startDate: [null],
       endDate: [null],

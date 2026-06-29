@@ -90,7 +90,7 @@
             <label class="text-caption text-on-surface-variant block mb-1">Account Role</label>
             <div class="font-body-lg text-on-surface flex items-center gap-2">
               <span class="material-symbols-outlined text-primary">badge</span>
-              {{ userService.userProfile()?.isPackager ? 'Travel Packager' : 'Traveler' }}
+              {{ authService.getUserRole() === 'Admin' ? 'System Admin' : (userService.userProfile()?.isPackager ? 'Travel Packager' : 'Traveler') }}
             </div>
           </div>
         </div>
