@@ -1,4 +1,5 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, OnInit, computed, inject, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -29,6 +30,7 @@ interface TravelerForm {
   styleUrls: ['./booking-wizard.css']
 })
 export class BookingWizardComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private packageService = inject(PackageService);
@@ -107,7 +109,7 @@ export class BookingWizardComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     const seasonIdParam = this.route.snapshot.queryParamMap.get('seasonId');
     if (id) {
-      this.packageService.getPackageById(id).subscribe({
+      this.packageService.getPackageById(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (p: TravelPackageDetails) => {
           this.pkg.set(p);
 
@@ -162,7 +164,7 @@ export class BookingWizardComponent implements OnInit {
         error: () => this.router.navigate(['/'])
       });
 
-      this.bookingService.getPlatformConfig().subscribe({
+      this.bookingService.getPlatformConfig().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (config) => this.platformConfig.set(config),
         error: (err) => console.error('Failed to load platform config', err)
       });
@@ -385,7 +387,7 @@ export class BookingWizardComponent implements OnInit {
       if (t.passportFile) formData.append('documentFiles', t.passportFile);
     });
 
-    this.bookingService.createBooking(formData).subscribe({
+    this.bookingService.createBooking(formData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         this.clearDraft();
         this.toastService.show('Booking Created Successfully!', 'success');

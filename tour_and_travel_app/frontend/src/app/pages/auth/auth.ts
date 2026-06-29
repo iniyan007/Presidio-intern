@@ -1,4 +1,5 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, signal, OnInit, DestroyRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -14,6 +15,7 @@ import { ToastService } from '../../services/toast.service';
   styleUrl: './auth.css'
 })
 export class AuthComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   isLoginTab = signal<boolean>(true);
   loginForm: FormGroup;
   signupForm: FormGroup;
@@ -32,7 +34,7 @@ export class AuthComponent implements OnInit {
   private toastService = inject(ToastService);
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
       if (params['tab'] === 'signup') {
         this.isLoginTab.set(false);
       } else {
@@ -54,13 +56,13 @@ export class AuthComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(8)]]
     });
 
-    this.loginForm.get('email')?.valueChanges.subscribe(val => {
+    this.loginForm.get('email')?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(val => {
       if (val && val !== val.toLowerCase()) {
         this.loginForm.get('email')?.patchValue(val.toLowerCase(), { emitEvent: false });
       }
     });
 
-    this.signupForm.get('email')?.valueChanges.subscribe(val => {
+    this.signupForm.get('email')?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(val => {
       if (val && val !== val.toLowerCase()) {
         this.signupForm.get('email')?.patchValue(val.toLowerCase(), { emitEvent: false });
       }
@@ -76,12 +78,12 @@ export class AuthComponent implements OnInit {
     this.errorMessage.set('');
     this.successMessage.set('');
     
-    this.authService.login(this.loginForm.value).subscribe({
+    this.authService.login(this.loginForm.value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         this.isLoading.set(false);
         this.toastService.show('Logged in successfully', 'success');
         if (!this.authService.isEmailVerified()) {
-          this.authService.sendOtp().subscribe();
+          this.authService.sendOtp().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
           this.router.navigate(['/verify-email']);
         } else {
           if (this.authService.getUserRole() === 'Admin') {
@@ -113,7 +115,7 @@ export class AuthComponent implements OnInit {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    this.authService.register(this.signupForm.value).subscribe({
+    this.authService.register(this.signupForm.value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         this.isLoading.set(false);
         this.toastService.show('Registration successful! Please login.', 'success');

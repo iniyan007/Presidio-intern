@@ -1,4 +1,5 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -13,6 +14,7 @@ import { ToastService } from '../../services/toast.service';
   templateUrl: './payment.html'
 })
 export class PaymentComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private bookingService = inject(BookingService);
@@ -30,7 +32,7 @@ export class PaymentComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       // Find the booking in user's bookings to get the total amount
-      this.bookingService.getMyBookings().subscribe({
+      this.bookingService.getMyBookings().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (bookings) => {
           const found = bookings.find(b => b.id === id);
           if (found) {
@@ -64,7 +66,7 @@ export class PaymentComponent implements OnInit {
       transactionId: 'TXN-' + Math.random().toString(36).substring(2, 10).toUpperCase()
     };
 
-    this.bookingService.processPayment(b.id, request).subscribe({
+    this.bookingService.processPayment(b.id, request).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.isProcessing.set(false);
         this.toastService.show('Payment successful! Your booking is confirmed.', 'success');

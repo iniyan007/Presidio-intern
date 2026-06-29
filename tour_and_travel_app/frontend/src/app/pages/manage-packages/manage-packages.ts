@@ -1,4 +1,5 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, effect, inject, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PackageService } from '../../services/package.service';
 import { UserService } from '../../services/user.service';
@@ -12,6 +13,7 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './manage-packages.html'
 })
 export class ManagePackagesComponent {
+  private destroyRef = inject(DestroyRef);
   myPackages = signal<any[]>([]);
   isLoading = signal(true);
 
@@ -30,7 +32,7 @@ export class ManagePackagesComponent {
 
   private loadPackages() {
     this.isLoading.set(true);
-    this.packageService.getMyPackages().subscribe({
+    this.packageService.getMyPackages().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         const packages = res;
         const packageList = packages.map((pkg: any) => {

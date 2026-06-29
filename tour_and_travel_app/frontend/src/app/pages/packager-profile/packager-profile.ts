@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { PackagerService } from '../../services/packager.service';
@@ -14,6 +15,7 @@ import { environment } from '../../../environments/environment';
   templateUrl: './packager-profile.html'
 })
 export class PackagerProfileComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private packagerService = inject(PackagerService);
@@ -27,10 +29,10 @@ export class PackagerProfileComponent implements OnInit {
   errorMessage = signal<string>('');
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
       const packageId = params.get('packageId');
       
-      this.route.queryParamMap.subscribe(queryParams => {
+      this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(queryParams => {
         const name = queryParams.get('name');
         
         if (name) {
@@ -49,7 +51,7 @@ export class PackagerProfileComponent implements OnInit {
     this.isLoading.set(true);
     
     // 1. First fetch the package to get the packager name
-    this.packageService.getPackageById(packageId).subscribe({
+    this.packageService.getPackageById(packageId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (pkgDetails) => {
         this.loadProfile(pkgDetails.packagerName);
       },
@@ -64,7 +66,7 @@ export class PackagerProfileComponent implements OnInit {
   loadProfile(packagerName: string) {
     this.isLoading.set(true);
     // 2. Fetch the packager details using the existing search API
-    this.packagerService.searchPublicPackagers(packagerName).subscribe({
+    this.packagerService.searchPublicPackagers(packagerName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         const items = res.items ? res.items : (res.data ? res.data : res);
         if (items && items.length > 0) {
@@ -72,7 +74,7 @@ export class PackagerProfileComponent implements OnInit {
           this.packager.set(packager);
           
           // 3. Fetch packages for this packager
-          this.packageService.getPackages({ PackagerName: packager.companyName }).subscribe({
+          this.packageService.getPackages({ PackagerName: packager.companyName }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next: (pkgRes: any) => {
               const pkgs = pkgRes.items ? pkgRes.items : (pkgRes.data ? pkgRes.data : pkgRes);
               this.packages.set(pkgs || []);
@@ -81,7 +83,7 @@ export class PackagerProfileComponent implements OnInit {
           });
 
           // 4. Fetch reviews using the ID
-          this.packagerService.getPackagerReviews(packager.id).subscribe({
+          this.packagerService.getPackagerReviews(packager.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next: (reviewsRes: PackagerReviewResponse[]) => {
               this.reviews.set(reviewsRes);
               this.isLoading.set(false);

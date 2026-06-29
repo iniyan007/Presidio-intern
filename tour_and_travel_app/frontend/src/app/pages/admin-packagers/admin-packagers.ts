@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
@@ -13,6 +14,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   templateUrl: './admin-packagers.html',
 })
 export class AdminPackagersComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private adminService = inject(AdminService);
   private toastService = inject(ToastService);
 
@@ -35,7 +37,7 @@ export class AdminPackagersComponent implements OnInit {
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
-    ).subscribe(() => {
+    ).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.loadPackagers();
     });
 
@@ -52,7 +54,7 @@ export class AdminPackagersComponent implements OnInit {
   loadPackagers() {
     this.isLoading.set(true);
     if (this.activeTab() === 'active') {
-      this.adminService.getApprovedPackagers(this.searchTerm(), this.sortOrder()).subscribe({
+      this.adminService.getApprovedPackagers(this.searchTerm(), this.sortOrder()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res: any) => {
           this.packagers.set(Array.isArray(res) ? res : (res.data || []));
           this.isLoading.set(false);
@@ -63,7 +65,7 @@ export class AdminPackagersComponent implements OnInit {
         }
       });
     } else {
-      this.adminService.getDeactivatedPackagers(this.searchTerm(), this.sortOrder()).subscribe({
+      this.adminService.getDeactivatedPackagers(this.searchTerm(), this.sortOrder()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res: any) => {
           this.packagers.set(Array.isArray(res) ? res : (res.data || []));
           this.isLoading.set(false);
@@ -104,7 +106,7 @@ export class AdminPackagersComponent implements OnInit {
     }
 
     this.isDeactivating.set(true);
-    this.adminService.deactivatePackager(id, reason).subscribe({
+    this.adminService.deactivatePackager(id, reason).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.toastService.show('Packager deactivated successfully', 'success');
         this.isDeactivating.set(false);
@@ -129,7 +131,7 @@ export class AdminPackagersComponent implements OnInit {
 
   confirmActivation(id: string) {
     this.isActivating.set(true);
-    this.adminService.activatePackager(id).subscribe({
+    this.adminService.activatePackager(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.toastService.show('Packager activated successfully', 'success');
         this.isActivating.set(false);

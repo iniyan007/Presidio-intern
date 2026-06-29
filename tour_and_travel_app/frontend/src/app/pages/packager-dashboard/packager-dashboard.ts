@@ -1,4 +1,5 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, effect, inject, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PackageService } from '../../services/package.service';
 import { BookingService } from '../../services/booking.service';
@@ -14,6 +15,7 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './packager-dashboard.css'
 })
 export class PackagerDashboardComponent {
+  private destroyRef = inject(DestroyRef);
   totalRevenue = signal<number>(0);
   revenueGrowth = signal<number>(0);
   pendingApprovals = signal<number>(0);
@@ -44,7 +46,7 @@ export class PackagerDashboardComponent {
   }
 
   private loadDashboardData(packagerName: string) {
-    this.packageService.getMyPackages().subscribe({
+    this.packageService.getMyPackages().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         const packages = res; // getMyPackages returns an array directly
         
@@ -84,7 +86,7 @@ export class PackagerDashboardComponent {
         }
 
         packages.forEach((pkg: any) => {
-          this.bookingService.getBookingsByPackageId(pkg.id).subscribe({
+          this.bookingService.getBookingsByPackageId(pkg.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next: (bookings: any[]) => {
               bookings.forEach(b => {
                 allBookings.push({

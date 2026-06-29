@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, OnInit, OnDestroy, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { PackageService } from '../../services/package.service';
@@ -17,6 +18,7 @@ import { environment } from '../../../environments/environment';
   styleUrl: './dashboard.css'
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  private destroyRef = inject(DestroyRef);
   private packageService = inject(PackageService);
   private authService = inject(AuthService);
   toastService = inject(ToastService);
@@ -71,7 +73,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.searchDate().trim()) filters.TravelStartDate = this.searchDate().trim();
     if (this.selectedSortBy()) filters.SortBy = this.selectedSortBy();
 
-    this.packageService.getPackages(filters).subscribe({
+    this.packageService.getPackages(filters).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         // Handle pagination response or direct array
         const pkgs = res.items ? res.items : (res.data ? res.data : res);

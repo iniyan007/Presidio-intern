@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { PackageService } from '../../services/package.service';
@@ -19,6 +20,7 @@ import { environment } from '../../../environments/environment';
   styleUrl: './package-details.css'
 })
 export class PackageDetailsComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private packageService = inject(PackageService);
@@ -56,7 +58,7 @@ export class PackageDetailsComponent implements OnInit {
 
   loadPackage(id: string) {
     this.isLoading.set(true);
-    this.packageService.getPackageById(id).subscribe({
+    this.packageService.getPackageById(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         if (data.seasonalPricings && data.seasonalPricings.length > 0) {
           data.seasonalPricings.sort((a: any, b: any) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
@@ -76,7 +78,7 @@ export class PackageDetailsComponent implements OnInit {
   }
 
   loadReviews(packageId: string) {
-    this.packageService.getPackageReviews(packageId).subscribe({
+    this.packageService.getPackageReviews(packageId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         this.reviews.set(res);
         this.isLoading.set(false);
@@ -137,7 +139,7 @@ export class PackageDetailsComponent implements OnInit {
     const packageId = this.pkg()?.id;
     if (!packageId) return;
 
-    this.bookingService.getMyBookings().subscribe({
+    this.bookingService.getMyBookings().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (bookings) => {
         // Find a booking for this package that is Confirmed or Completed
         const eligibleBooking = bookings.find(b => 
@@ -188,7 +190,7 @@ export class PackageDetailsComponent implements OnInit {
     this.chatService.getOrInitializeThread({
       packagerId: p.packagerId,
       packageId: p.id
-    }).subscribe({
+    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         this.isChatLoading.set(false);
         this.router.navigate(['/chat'], { queryParams: { threadId: res.id } });

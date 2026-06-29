@@ -1,4 +1,5 @@
-import { Component, effect, inject, signal, ViewChild, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, effect, inject, signal, ViewChild, ElementRef, OnDestroy, OnInit, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
@@ -15,6 +16,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './chat.css'
 })
 export class ChatComponent implements OnInit, OnDestroy {
+  private destroyRef = inject(DestroyRef);
   private chatService = inject(ChatService);
   public userService = inject(UserService);
   private route = inject(ActivatedRoute);
@@ -54,7 +56,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.loadThreads();
     
     // Check if opened with a specific thread ID
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
       if (params['threadId']) {
         // give it a short delay to load threads first
         setTimeout(() => this.selectThread(params['threadId']), 500);
@@ -71,7 +73,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   loadThreads() {
-    this.chatService.getThreads().subscribe({
+    this.chatService.getThreads().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (threads) => this.chatService.threads.set(threads)
     });
   }
@@ -85,10 +87,10 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatService.joinThread(threadId);
 
     // Fetch messages
-    this.chatService.getThreadMessages(threadId).subscribe({
+    this.chatService.getThreadMessages(threadId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (msgs) => {
         this.chatService.currentThreadMessages.set(msgs);
-        this.chatService.markAsRead(threadId).subscribe(() => {
+        this.chatService.markAsRead(threadId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
            // Update local unread count
            const currentThreads = this.threads();
            const updated = currentThreads.map(t => {
@@ -112,7 +114,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       body: this.newMessage().trim()
     };
 
-    this.chatService.sendMessage(request).subscribe({
+    this.chatService.sendMessage(request).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (msg) => {
         this.newMessage.set('');
         // Append locally for immediate UI update

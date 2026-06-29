@@ -17,8 +17,6 @@ export class ToastService {
   show(message: string, type: 'success' | 'error' | 'info' = 'info') {
     const id = ++this.idCounter;
     this.toasts.update(current => [...current, { id, message, type }]);
-
-    // Auto dismiss after 3 seconds
     setTimeout(() => this.startClose(id), 2700);
   }
 

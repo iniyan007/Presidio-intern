@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, inject, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -38,6 +39,7 @@ import { ToastService } from '../../services/toast.service';
   `]
 })
 export class VerifyEmailComponent implements OnInit, OnDestroy {
+  private destroyRef = inject(DestroyRef);
   otpForm: FormGroup;
   timeLeft = signal<number>(50);
   timerInterval: any;
@@ -75,7 +77,7 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
     if (profile?.email) {
       this.maskedEmail.set(this.maskEmailString(profile.email));
     } else {
-      this.userService.loadProfile().subscribe(res => {
+      this.userService.loadProfile().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res => {
          if (res?.email) this.maskedEmail.set(this.maskEmailString(res.email));
       });
     }
@@ -144,7 +146,7 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
     if (this.timeLeft() > 0) return;
     
     this.isResending.set(true);
-    this.authService.sendOtp().subscribe({
+    this.authService.sendOtp().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.isResending.set(false);
         this.toastService.show('OTP sent successfully', 'success');
@@ -164,7 +166,7 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
     const otpString = otpArray.join('');
     
     this.isLoading.set(true);
-    this.authService.verifyOtp(otpString).subscribe({
+    this.authService.verifyOtp(otpString).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.isLoading.set(false);
         this.isSuccess.set(true);

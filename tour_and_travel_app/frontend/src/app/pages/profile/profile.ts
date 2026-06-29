@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastService } from '../../services/toast.service';
@@ -14,6 +15,7 @@ import { UserProfile } from '../../models/user.model';
   styleUrl: './profile.css'
 })
 export class ProfileComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   userService = inject(UserService);
   private fb = inject(FormBuilder);
 
@@ -37,7 +39,7 @@ export class ProfileComponent implements OnInit {
 
   loadProfile() {
     this.isLoading.set(true);
-    this.userService.loadProfile().subscribe({
+    this.userService.loadProfile().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (profile) => {
         this.isLoading.set(false);
         this.profileForm.patchValue({
@@ -76,9 +78,9 @@ export class ProfileComponent implements OnInit {
     this.errorMessage.set(null);
     this.successMessage.set(null);
 
-    this.userService.updateProfile(this.profileForm.value).subscribe({
+    this.userService.updateProfile(this.profileForm.value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
-        this.userService.loadProfile().subscribe(); // Reload to sync state
+        this.userService.loadProfile().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(); // Reload to sync state
         this.isLoading.set(false);
         this.isEditing.set(false);
         this.successMessage.set('Profile updated successfully!');
@@ -99,9 +101,9 @@ export class ProfileComponent implements OnInit {
         return;
       }
       this.isLoading.set(true);
-      this.userService.uploadProfilePicture(file).subscribe({
+      this.userService.uploadProfilePicture(file).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: () => {
-          this.userService.loadProfile().subscribe();
+          this.userService.loadProfile().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
           this.isLoading.set(false);
           this.successMessage.set('Profile picture updated!');
           setTimeout(() => this.successMessage.set(null), 3000);
@@ -116,9 +118,9 @@ export class ProfileComponent implements OnInit {
 
   removePicture() {
     this.isLoading.set(true);
-    this.userService.removeProfilePicture().subscribe({
+    this.userService.removeProfilePicture().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
-        this.userService.loadProfile().subscribe();
+        this.userService.loadProfile().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
         this.isLoading.set(false);
       },
       error: (err) => {

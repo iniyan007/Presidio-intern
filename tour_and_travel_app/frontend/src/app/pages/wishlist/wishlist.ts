@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
@@ -12,6 +13,7 @@ import { WishlistResponse } from '../../models/package.model';
   templateUrl: './wishlist.html'
 })
 export class WishlistComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   wishlistService = inject(WishlistService);
   private router = inject(Router);
 
@@ -25,7 +27,7 @@ export class WishlistComponent implements OnInit {
 
   loadWishlists() {
     this.isLoading.set(true);
-    this.wishlistService.getWishlists().subscribe({
+    this.wishlistService.getWishlists().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         this.wishlists.set(res.data || []);
         // Also update the service's Set for consistency

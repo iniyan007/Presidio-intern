@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PackagerService } from '../../services/packager.service';
@@ -11,6 +12,7 @@ import { RouterModule, Router } from '@angular/router';
   templateUrl: './apply-packager.html',
 })
 export class ApplyPackagerComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private fb = inject(FormBuilder);
   private packagerService = inject(PackagerService);
   private router = inject(Router);
@@ -36,7 +38,7 @@ export class ApplyPackagerComponent implements OnInit {
   businessRegistration: File | null = null;
 
   ngOnInit() {
-    this.packagerService.getMyPackagerStatus().subscribe({
+    this.packagerService.getMyPackagerStatus().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         this.applicationStatus.set(res);
         this.isLoadingStatus.set(false);
@@ -112,7 +114,7 @@ export class ApplyPackagerComponent implements OnInit {
     formData.append('GstDocument', this.gstDocument);
     formData.append('BusinessRegistration', this.businessRegistration);
 
-    this.packagerService.applyToBecomePackager(formData).subscribe({
+    this.packagerService.applyToBecomePackager(formData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.isSubmitting.set(false);
         this.router.navigate(['/']);

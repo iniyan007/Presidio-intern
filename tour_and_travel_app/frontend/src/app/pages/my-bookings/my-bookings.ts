@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +17,7 @@ import { environment } from '../../../environments/environment';
   styleUrl: './my-bookings.css'
 })
 export class MyBookingsComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   environment = environment;
   bookingService = inject(BookingService);
   packageService = inject(PackageService);
@@ -43,7 +45,7 @@ export class MyBookingsComponent implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    this.bookingService.getMyBookings().subscribe({
+    this.bookingService.getMyBookings().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         this.bookings.set(res);
         this.fetchPackageTitles(res);
@@ -60,7 +62,7 @@ export class MyBookingsComponent implements OnInit {
     const uniqueIds = Array.from(new Set(bookingsList.map(b => b.packageId)));
     uniqueIds.forEach(id => {
       if (!this.packageTitles()[id]) {
-        this.packageService.getPackageById(id).subscribe({
+        this.packageService.getPackageById(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
           next: (pkg) => {
             this.packageTitles.update(t => ({ ...t, [id]: pkg.title }));
           }
@@ -84,7 +86,7 @@ export class MyBookingsComponent implements OnInit {
   }
 
   downloadTicket(bookingId: string) {
-    this.bookingService.downloadTicket(bookingId).subscribe({
+    this.bookingService.downloadTicket(bookingId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -112,7 +114,7 @@ export class MyBookingsComponent implements OnInit {
 
     if (!confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) return;
 
-    this.bookingService.cancelBooking(bookingId, { reason: this.cancellationReason() }).subscribe({
+    this.bookingService.cancelBooking(bookingId, { reason: this.cancellationReason() }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.toastService.show('Booking cancelled successfully.', 'success');
         this.isCancelling.set(null);
@@ -129,7 +131,7 @@ export class MyBookingsComponent implements OnInit {
     if (!file) return;
 
     this.isUploading.set(documentId);
-    this.bookingService.reuploadDocument(documentId, file).subscribe({
+    this.bookingService.reuploadDocument(documentId, file).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.toastService.show('Document re-uploaded successfully.', 'success');
         this.isUploading.set(null);

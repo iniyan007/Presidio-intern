@@ -1,4 +1,5 @@
-import { Component, inject, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, HostListener, OnInit, OnDestroy, DestroyRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -17,6 +18,7 @@ import { environment } from '../../../environments/environment';
   styleUrl: './create-package.css'
 })
 export class CreatePackageComponent implements OnInit, OnDestroy {
+  private destroyRef = inject(DestroyRef);
   packageForm: FormGroup;
   mediaFiles: { file: File, preview: string, category: string, isPrimary: boolean, caption: string }[] = [];
   
@@ -79,7 +81,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
     // Set initial active section correctly if page starts scrolled down
     setTimeout(() => this.onWindowScroll(), 100);
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
       this.packageId = params.get('id');
       const draftKey = 'tourmate_draft_' + (this.packageId || 'new');
       
@@ -90,7 +92,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
            try {
              const draft = JSON.parse(savedDraft);
              // Need to fetch status to set isPublished
-             this.packageService.getMyPackageById(this.packageId).subscribe(pkg => {
+             this.packageService.getMyPackageById(this.packageId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(pkg => {
                 this.isPublished = pkg.status === 'Published';
              });
              this.restoreDraft(draft);
@@ -115,7 +117,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
         }
       }
 
-      this.autoSaveSub = this.packageForm.valueChanges.pipe(debounceTime(1000)).subscribe(val => {
+      this.autoSaveSub = this.packageForm.valueChanges.pipe(debounceTime(1000)).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(val => {
         localStorage.setItem(draftKey, JSON.stringify(val));
       });
     });
@@ -176,16 +178,16 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
   }
   
   loadMetadata() {
-    this.metadataService.getCountries().subscribe({
+    this.metadataService.getCountries().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => setTimeout(() => this.countries = res)
     });
-    this.metadataService.getEnums().subscribe({
+    this.metadataService.getEnums().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => setTimeout(() => this.metadataEnums = res)
     });
   }
 
   loadPackageData(id: string) {
-    this.packageService.getMyPackageById(id).subscribe({
+    this.packageService.getMyPackageById(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (pkg) => {
         // Clear default empty arrays
         this.highlights.clear();
@@ -752,7 +754,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
     });
 
     if (this.isEditMode && this.packageId) {
-      this.packageService.updateFullPackage(this.packageId, formData).subscribe({
+      this.packageService.updateFullPackage(this.packageId, formData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res) => {
           this.toastService.show(`Package ${status === 'Draft' ? 'draft updated' : 'published'} successfully!`, 'success');
           this.router.navigate(['/packager/dashboard']);
@@ -763,7 +765,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      this.packageService.createPackage(formData).subscribe({
+      this.packageService.createPackage(formData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res) => {
           this.toastService.show(`Package ${status === 'Draft' ? 'saved as draft' : 'published'} successfully!`, 'success');
           this.router.navigate(['/packager/dashboard']);

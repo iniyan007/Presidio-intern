@@ -1,4 +1,5 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, signal, OnInit, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,6 +13,7 @@ import { ToastService } from '../../services/toast.service';
   templateUrl: './forgot-password.html',
 })
 export class ForgotPasswordComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private toastService = inject(ToastService);
@@ -38,7 +40,7 @@ export class ForgotPasswordComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.emailForm.get('email')?.valueChanges.subscribe(val => {
+    this.emailForm.get('email')?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(val => {
       if (val && val !== val.toLowerCase()) {
         this.emailForm.get('email')?.patchValue(val.toLowerCase(), { emitEvent: false });
       }
@@ -52,7 +54,7 @@ export class ForgotPasswordComponent implements OnInit {
     this.errorMessage.set('');
     const userEmail = this.emailForm.value.email;
 
-    this.authService.forgotPassword(userEmail).subscribe({
+    this.authService.forgotPassword(userEmail).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         this.isLoading.set(false);
         this.email.set(userEmail);
@@ -72,7 +74,7 @@ export class ForgotPasswordComponent implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.authService.verifyResetOtp(this.email(), this.otpForm.value.otp).subscribe({
+    this.authService.verifyResetOtp(this.email(), this.otpForm.value.otp).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         this.isLoading.set(false);
         this.resetToken.set(res.resetToken);
@@ -104,7 +106,7 @@ export class ForgotPasswordComponent implements OnInit {
       newPassword: newPassword
     };
 
-    this.authService.resetPassword(payload).subscribe({
+    this.authService.resetPassword(payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.isLoading.set(false);
         this.toastService.show('Password reset successfully!', 'success');

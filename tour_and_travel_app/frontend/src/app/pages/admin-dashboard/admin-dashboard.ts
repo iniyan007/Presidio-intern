@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, OnInit, OnDestroy, signal, DestroyRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
@@ -14,6 +15,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   templateUrl: './admin-dashboard.html',
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
+  private destroyRef = inject(DestroyRef);
   private adminService = inject(AdminService);
   private toastService = inject(ToastService);
   private pollingInterval: any;
@@ -45,7 +47,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
-    ).subscribe(() => {
+    ).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.loadPendingPackagers();
     });
 
@@ -65,7 +67,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   refreshDataSilently() {
-    this.adminService.getAnalytics().subscribe({
+    this.adminService.getAnalytics().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         this.revenue.set(res.totalRevenue || 0);
         this.bookings.set(res.totalBookings || 0);
@@ -73,7 +75,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.adminService.getPendingPackagers(this.searchTerm(), this.sortOrder()).subscribe({
+    this.adminService.getPendingPackagers(this.searchTerm(), this.sortOrder()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         const newPackagers = Array.isArray(res) ? res : (res.data || []);
         const currentCount = this.pendingPackagers().length;
@@ -92,7 +94,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   loadAnalytics() {
-    this.adminService.getAnalytics().subscribe({
+    this.adminService.getAnalytics().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         this.revenue.set(res.totalRevenue || 0);
         this.bookings.set(res.totalBookings || 0);
@@ -103,7 +105,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   loadConfig() {
-    this.adminService.getPlatformConfig().subscribe({
+    this.adminService.getPlatformConfig().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         if (res) {
           this.platformFee.set(res.platformFeePercent || 0);
@@ -126,7 +128,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
   loadPendingPackagers() {
     this.isLoading.set(true);
-    this.adminService.getPendingPackagers(this.searchTerm(), this.sortOrder()).subscribe({
+    this.adminService.getPendingPackagers(this.searchTerm(), this.sortOrder()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         this.pendingPackagers.set(Array.isArray(res) ? res : (res.data || []));
         this.isLoading.set(false);
@@ -140,7 +142,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
   approvePackager(id: string) {
     this.isApproving.set(true);
-    this.adminService.approvePackager(id).subscribe({
+    this.adminService.approvePackager(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.toastService.show('Packager approved successfully!', 'success');
         this.pendingPackagers.update(list => list.filter(p => p.id !== id));
@@ -170,7 +172,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     this.isRejecting.set(true);
-    this.adminService.rejectPackager(id, this.rejectReason()).subscribe({
+    this.adminService.rejectPackager(id, this.rejectReason()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.toastService.show('Packager application rejected.', 'success');
         this.pendingPackagers.update(list => list.filter(p => p.id !== id));
@@ -192,7 +194,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
   updateGlobalFee() {
     this.isUpdatingFee.set(true);
-    this.adminService.updatePlatformConfig(this.platformFee(), this.gstPercent()).subscribe({
+    this.adminService.updatePlatformConfig(this.platformFee(), this.gstPercent()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.isUpdatingFee.set(false);
         this.toastService.show(`Platform settings updated successfully!`, 'success');
@@ -212,7 +214,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.rejectReason.set('');
     this.activeRejectRowId.set(null);
 
-    this.adminService.getPackagerDocuments(packager.id).subscribe({
+    this.adminService.getPackagerDocuments(packager.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (docs) => {
         this.packagerDocuments.set(docs || []);
         this.isDocumentsLoading.set(false);

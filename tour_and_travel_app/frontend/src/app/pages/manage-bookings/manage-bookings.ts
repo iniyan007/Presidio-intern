@@ -1,4 +1,5 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, effect, inject, signal, DestroyRef } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,6 +20,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './manage-bookings.css'
 })
 export class ManageBookingsComponent {
+  private destroyRef = inject(DestroyRef);
   private packageService = inject(PackageService);
   private bookingService = inject(BookingService);
   private userService = inject(UserService);
@@ -51,13 +53,13 @@ export class ManageBookingsComponent {
   }
 
   private loadPackages() {
-    this.packageService.getMyPackages().subscribe({
+    this.packageService.getMyPackages().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         const pkgs = res;
         this.myPackages.set(pkgs);
         
         // If a packageId is passed in query params, auto-select it
-        this.route.queryParams.subscribe(params => {
+        this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
           const pid = params['packageId'];
           if (pid && pkgs.find((p: any) => p.id === pid)) {
             this.onPackageSelect(pid);
@@ -81,7 +83,7 @@ export class ManageBookingsComponent {
     }
 
     packages.forEach((pkg: any) => {
-      this.bookingService.getBookingsByPackageId(pkg.id).subscribe({
+      this.bookingService.getBookingsByPackageId(pkg.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (bookings: BookingResponse[]) => {
           const formattedBookings = bookings.map(b => ({ ...b, packageTitle: pkg.title }));
           allBookings.push(...formattedBookings);
@@ -116,7 +118,7 @@ export class ManageBookingsComponent {
     forkJoin({
       bookings: this.bookingService.getBookingsByPackageId(packageId),
       pkgDetails: this.packageService.getPackageById(packageId)
-    }).subscribe({
+    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         const bookings = res.bookings;
         const pkgDetails = res.pkgDetails;
@@ -186,7 +188,7 @@ export class ManageBookingsComponent {
       rejectionReason: isVerified ? null : this.rejectionReason().trim()
     };
 
-    this.bookingService.verifyDocument(data.doc.id, request).subscribe({
+    this.bookingService.verifyDocument(data.doc.id, request).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.toastService.show(`Document successfully ${isVerified ? 'verified' : 'rejected'}.`, 'success');
         this.closeDocumentViewer();
@@ -224,7 +226,7 @@ export class ManageBookingsComponent {
   }
 
   confirmBooking(bookingId: string) {
-    this.bookingService.verifyBooking(bookingId).subscribe({
+    this.bookingService.verifyBooking(bookingId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.toastService.show('Booking confirmed successfully.', 'success');
         if (this.selectedPackageId()) {
