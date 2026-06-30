@@ -759,7 +759,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
       this.packageService.updateFullPackage(this.packageId, formData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res) => {
           this.toastService.show(`Package ${status === 'Draft' ? 'draft updated' : 'published'} successfully!`, 'success');
-          this.router.navigate(['/packager/dashboard']);
+          this.router.navigate(['/agency/dashboard']);
         },
         error: (err) => {
           this.toastService.show(err.error?.message || 'Failed to update package.', 'error');
@@ -770,7 +770,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
       this.packageService.createPackage(formData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res) => {
           this.toastService.show(`Package ${status === 'Draft' ? 'saved as draft' : 'published'} successfully!`, 'success');
-          this.router.navigate(['/packager/dashboard']);
+          this.router.navigate(['/agency/dashboard']);
         },
         error: (err) => {
           this.toastService.show(err.error?.message || 'Failed to create package.', 'error');

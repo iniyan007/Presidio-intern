@@ -6,7 +6,7 @@
 <p class="font-body-md text-on-surface-variant">Welcome back, Traveler. Here's what's happening today.</p>
 </div>
 <div class="flex gap-3">
-<button [routerLink]="['/packager', 'view']" [queryParams]="{name: packagerName()}" [disabled]="!packagerName()" class="bg-surface-container-lowest border border-outline-variant text-primary px-6 py-2.5 rounded-full font-label-md text-label-md hover:bg-surface-variant transition-all disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
+<button [routerLink]="['/agency', 'view']" [queryParams]="{name: packagerName()}" [disabled]="!packagerName()" class="bg-surface-container-lowest border border-outline-variant text-primary px-6 py-2.5 rounded-full font-label-md text-label-md hover:bg-surface-variant transition-all disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
                         View Public Profile
                     </button>
 </div>
@@ -77,7 +77,7 @@
 <div class="flex items-center justify-between">
 <h2 class="font-headline-lg text-title-md text-primary">My Packages</h2>
 @if (totalPackagesCount() > 4) {
-    <button routerLink="/packager/manage-packages" class="text-primary font-label-md text-label-md flex items-center gap-1 hover:underline">
+    <button routerLink="/agency/manage-packages" class="text-primary font-label-md text-label-md flex items-center gap-1 hover:underline">
         View All <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
     </button>
 }
@@ -88,7 +88,7 @@
         <h3 class="font-title-lg text-primary mb-2">No Packages Yet</h3>
         <p class="font-body-md text-on-surface-variant max-w-sm mb-6">Create your very first travel package and publish it to the world to start receiving bookings!</p>
         @if (!deactivationInfo()) {
-        <button routerLink="/packager/create-package" class="bg-primary text-on-primary px-6 py-3 rounded-full font-label-md hover:bg-primary/90 transition-colors shadow-sm flex items-center gap-2">
+        <button routerLink="/agency/create-package" class="bg-primary text-on-primary px-6 py-3 rounded-full font-label-md hover:bg-primary/90 transition-colors shadow-sm flex items-center gap-2">
             <span class="material-symbols-outlined text-[18px]">add</span>
             Create a Package
         </button>
@@ -159,7 +159,7 @@
   </div>
 }
 @if (recentBookings().length > 0) {
-<button routerLink="/packager/manage-bookings" class="w-full py-3 text-primary font-label-md text-label-md border-t border-outline-variant/30 mt-2 hover:bg-surface-container-low transition-all">
+<button routerLink="/agency/manage-bookings" class="w-full py-3 text-primary font-label-md text-label-md border-t border-outline-variant/30 mt-2 hover:bg-surface-container-low transition-all">
                             Manage All Bookings
                         </button>
 }

@@ -2,23 +2,23 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { PackagerService } from '../../services/packager.service';
+import { AgencyService } from '../../services/agency.service';
 import { PublicPackagerResponse, PackagerReviewResponse } from '../../models/packager.model';
 import { PackageService } from '../../services/package.service';
 import { TravelPackage } from '../../models/package.model';
 import { environment } from '../../../environments/environment';
 
 @Component({
-  selector: 'app-packager-profile',
+  selector: 'app-agency-profile',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './packager-profile.html'
+  templateUrl: './agency-profile.html'
 })
-export class PackagerProfileComponent implements OnInit {
+export class AgencyProfileComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private packagerService = inject(PackagerService);
+  private packagerService = inject(AgencyService);
   private packageService = inject(PackageService);
 
   packager = signal<PublicPackagerResponse | null>(null);
@@ -115,7 +115,12 @@ export class PackagerProfileComponent implements OnInit {
 
   getProfileImage(url?: string): string | null {
     if (!url) return null;
-    return url.startsWith('http') ? url : `${environment.baseUrl}${url}`;
+    return url.startsWith('http') ? url : `${environment.apiUrl}/Users/profile/picture/${url}`;
+  }
+
+  formatWebsiteUrl(url: string): string {
+    if (!url) return '';
+    return url.startsWith('http://') || url.startsWith('https://') ? url : `https://${url}`;
   }
 
   getStartingPrice(pkg: TravelPackage): number {

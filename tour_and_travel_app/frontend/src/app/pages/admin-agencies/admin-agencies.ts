@@ -8,12 +8,12 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-admin-packagers',
+  selector: 'app-admin-agencies',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './admin-packagers.html',
+  templateUrl: './admin-agencies.html',
 })
-export class AdminPackagersComponent implements OnInit {
+export class AdminAgenciesComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private adminService = inject(AdminService);
   private toastService = inject(ToastService);
@@ -60,7 +60,7 @@ export class AdminPackagersComponent implements OnInit {
           this.isLoading.set(false);
         },
         error: () => {
-          this.toastService.show('Failed to load active packagers', 'error');
+          this.toastService.show('Failed to load active agencies', 'error');
           this.isLoading.set(false);
         }
       });

@@ -179,7 +179,7 @@ export class PackageDetailsComponent implements OnInit {
     }
     
     if (this.authService.getUserRole() === 'Packager') {
-      this.toastService.show('Packagers cannot chat with themselves.', 'error');
+      this.toastService.show('Agencies cannot chat with themselves.', 'error');
       return;
     }
 

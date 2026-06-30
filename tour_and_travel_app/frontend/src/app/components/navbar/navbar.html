@@ -19,12 +19,12 @@
    [ngClass]="rlaPackagers.isActive ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary' : 'text-on-surface-variant dark:text-outline'"
    class="font-body-md text-body-md pb-1 hover:text-primary transition-colors cursor-pointer">Packagers</a>
 } @else if (authService.getUserRole() === 'Packager') {
-<a routerLink="/packager/dashboard" 
+<a routerLink="/agency/dashboard" 
    routerLinkActive="active" 
    #rlaPackagerDash="routerLinkActive"
    [ngClass]="rlaPackagerDash.isActive ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary' : 'text-on-surface-variant dark:text-outline'"
    class="font-body-md text-body-md pb-1 hover:text-primary transition-colors cursor-pointer">Dashboard</a>
-<a routerLink="/packager/manage-bookings" 
+<a routerLink="/agency/manage-bookings" 
    routerLinkActive="active" 
    #rlaManageBookings="routerLinkActive"
    [ngClass]="rlaManageBookings.isActive ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary' : 'text-on-surface-variant dark:text-outline'"
@@ -56,7 +56,7 @@
     <div class="flex items-center gap-1 md:gap-3">
       <!-- ALWAYS VISIBLE ICONS (MOBILE & DESKTOP) -->
       @if (authService.getUserRole() === 'Packager' && !isPackagerDeactivated()) {
-        <button routerLink="/packager/create-package" class="bg-primary text-on-primary px-3 py-1.5 md:px-6 md:py-2.5 rounded-full font-label-md text-[10px] md:text-label-md hover:opacity-90 transition-all flex items-center gap-1 md:gap-2">
+        <button routerLink="/agency/create-package" class="bg-primary text-on-primary px-3 py-1.5 md:px-6 md:py-2.5 rounded-full font-label-md text-[10px] md:text-label-md hover:opacity-90 transition-all flex items-center gap-1 md:gap-2">
           <span class="material-symbols-outlined text-[16px] md:text-[20px]">add_circle</span>
           <span class="hidden md:inline">Create Package</span>
           <span class="md:hidden">Create</span>
@@ -163,8 +163,8 @@
       <a routerLink="/admin/dashboard" routerLinkActive="text-primary font-bold" class="font-body-md text-on-surface-variant hover:text-primary py-2" (click)="isMobileMenuOpen.set(false)">Dashboard</a>
       <a routerLink="/admin/packagers" routerLinkActive="text-primary font-bold" class="font-body-md text-on-surface-variant hover:text-primary py-2" (click)="isMobileMenuOpen.set(false)">Packagers</a>
     } @else if (authService.getUserRole() === 'Packager') {
-      <a routerLink="/packager/dashboard" routerLinkActive="text-primary font-bold" class="font-body-md text-on-surface-variant hover:text-primary py-2" (click)="isMobileMenuOpen.set(false)">Dashboard</a>
-      <a routerLink="/packager/manage-bookings" routerLinkActive="text-primary font-bold" class="font-body-md text-on-surface-variant hover:text-primary py-2" (click)="isMobileMenuOpen.set(false)">Manage Bookings</a>
+      <a routerLink="/agency/dashboard" routerLinkActive="text-primary font-bold" class="font-body-md text-on-surface-variant hover:text-primary py-2" (click)="isMobileMenuOpen.set(false)">Dashboard</a>
+      <a routerLink="/agency/manage-bookings" routerLinkActive="text-primary font-bold" class="font-body-md text-on-surface-variant hover:text-primary py-2" (click)="isMobileMenuOpen.set(false)">Manage Bookings</a>
     } @else {
       <a routerLink="/" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="text-primary font-bold" class="font-body-md text-on-surface-variant hover:text-primary py-2" (click)="isMobileMenuOpen.set(false)">Discover</a>
       @if (authService.isAuthenticated()) {

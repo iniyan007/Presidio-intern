@@ -54,9 +54,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   applyForPackager() {
     this.isCareersModalOpen.set(false);
     if (this.authService.isAuthenticated() && this.authService.getUserRole() === 'Packager') {
-      this.toastService.show('You are already a registered Packager!', 'info');
+      this.toastService.show('You are already a registered Agency!', 'info');
     } else {
-      this.router.navigate(['/apply-packager']);
+      this.router.navigate(['/apply-agency']);
     }
   }
   

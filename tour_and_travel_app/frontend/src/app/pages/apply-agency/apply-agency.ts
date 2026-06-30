@@ -2,19 +2,19 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PackagerService } from '../../services/packager.service';
+import { AgencyService } from '../../services/agency.service';
 import { RouterModule, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-apply-packager',
+  selector: 'app-apply-agency',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './apply-packager.html',
+  templateUrl: './apply-agency.html',
 })
-export class ApplyPackagerComponent implements OnInit {
+export class ApplyAgencyComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private fb = inject(FormBuilder);
-  private packagerService = inject(PackagerService);
+  private packagerService = inject(AgencyService);
   private router = inject(Router);
 
   applicationStatus = signal<any>(null);
@@ -119,7 +119,7 @@ export class ApplyPackagerComponent implements OnInit {
         this.isSubmitting.set(false);
         this.router.navigate(['/']);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.isSubmitting.set(false);
         this.errorMessage.set(err.error?.message || 'Failed to submit application.');
       }

@@ -8,7 +8,7 @@ import { ToastService } from '../../services/toast.service';
 import { WishlistService } from '../../services/wishlist.service';
 import { NotificationService } from '../../services/notification.service';
 import { ChatService } from '../../services/chat.service';
-import { PackagerService } from '../../services/packager.service';
+import { AgencyService } from '../../services/agency.service';
 
 @Component({
   selector: 'app-navbar',
@@ -26,7 +26,7 @@ export class NavbarComponent {
   notificationService = inject(NotificationService);
   chatService = inject(ChatService);
   private eRef = inject(ElementRef);
-  private packagerService = inject(PackagerService);
+  private packagerService = inject(AgencyService);
 
   isNotificationOpen = signal(false);
   isMobileMenuOpen = signal(false);

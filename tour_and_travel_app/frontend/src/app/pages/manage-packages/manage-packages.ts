@@ -62,6 +62,6 @@ export class ManagePackagesComponent {
   }
 
   onEditPackage(packageId: string) {
-    this.router.navigate(['/packager/edit-package', packageId]);
+    this.router.navigate(['/agency/edit-package', packageId]);
   }
 }

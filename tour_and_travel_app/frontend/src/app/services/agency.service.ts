@@ -7,7 +7,7 @@ import { PublicPackagerResponse, PackagerReviewResponse } from '../models/packag
 @Injectable({
   providedIn: 'root'
 })
-export class PackagerService {
+export class AgencyService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/Packagers`;
 

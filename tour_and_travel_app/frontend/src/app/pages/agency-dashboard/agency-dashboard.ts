@@ -4,18 +4,18 @@ import { CommonModule } from '@angular/common';
 import { PackageService } from '../../services/package.service';
 import { BookingService } from '../../services/booking.service';
 import { UserService } from '../../services/user.service';
-import { PackagerService } from '../../services/packager.service';
+import { AgencyService } from '../../services/agency.service';
 import { environment } from '../../../environments/environment';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-packager-dashboard',
+  selector: 'app-agency-dashboard',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './packager-dashboard.html',
-  styleUrl: './packager-dashboard.css'
+  templateUrl: './agency-dashboard.html',
+  styleUrl: './agency-dashboard.css'
 })
-export class PackagerDashboardComponent {
+export class AgencyDashboardComponent {
   private destroyRef = inject(DestroyRef);
   totalRevenue = signal<number>(0);
   revenueGrowth = signal<number>(0);
@@ -34,7 +34,7 @@ export class PackagerDashboardComponent {
   private packageService = inject(PackageService);
   private bookingService = inject(BookingService);
   private userService = inject(UserService);
-  private packagerService = inject(PackagerService);
+  private packagerService = inject(AgencyService);
   private router = inject(Router);
 
   constructor() {
@@ -149,7 +149,7 @@ export class PackagerDashboardComponent {
 
   onBookingClick(booking: any) {
     this.isViewAllModalOpen.set(false);
-    this.router.navigate(['/packager/manage-bookings'], { queryParams: { packageId: booking.packageId } });
+    this.router.navigate(['/agency/manage-bookings'], { queryParams: { packageId: booking.packageId } });
   }
 
   openViewAllModal() {
@@ -161,6 +161,6 @@ export class PackagerDashboardComponent {
   }
 
   onEditPackage(packageId: string) {
-    this.router.navigate(['/packager/edit-package', packageId]);
+    this.router.navigate(['/agency/edit-package', packageId]);
   }
 }
