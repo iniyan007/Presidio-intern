@@ -119,7 +119,7 @@ export class MyBookingsComponent implements OnInit {
       return;
     }
 
-    this.bookingService.cancelBooking(bookingId, { reason: this.cancellationReason() }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    this.bookingService.cancelBooking(bookingId, { cancellationReason: this.cancellationReason() }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.toastService.show('Booking cancelled successfully.', 'success');
         this.isCancelling.set(null);

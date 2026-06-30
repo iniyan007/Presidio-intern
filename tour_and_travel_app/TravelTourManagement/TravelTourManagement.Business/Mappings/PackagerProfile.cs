@@ -31,6 +31,8 @@ public class PackagerProfile : Profile
 
         CreateMap<Packager, PublicPackagerResponse>()
             .ForMember(dest => dest.TotalPackagesContributed, opt => opt.MapFrom(src => 
-                src.Packages != null ? src.Packages.Count(p => p.Status == TravelTourManagement.DataAccess.Enums.PackageStatus.Published) : 0));
+                src.Packages != null ? src.Packages.Count(p => p.Status == TravelTourManagement.DataAccess.Enums.PackageStatus.Published) : 0))
+            .ForMember(dest => dest.ProfilePhotoUrl, opt => opt.MapFrom(src => 
+                src.User != null ? src.User.ProfilePicture : null));
     }
 }

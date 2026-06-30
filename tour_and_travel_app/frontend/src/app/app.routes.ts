@@ -20,11 +20,12 @@ import { ManageBookingsComponent } from './pages/manage-bookings/manage-bookings
 import { CreatePackageComponent } from './pages/create-package/create-package';
 import { ChatComponent } from './pages/chat/chat';
 import { ManagePackagesComponent } from './pages/manage-packages/manage-packages';
+import { guestGuard } from './guards/guest.guard';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
-  { path: 'auth', component: AuthComponent },
-  { path: 'verify-email', component: VerifyEmailComponent },
+  { path: 'auth', component: AuthComponent, canActivate: [guestGuard] },
+  { path: 'verify-email', component: VerifyEmailComponent, canActivate: [guestGuard] },
   { path: 'package/:id', component: PackageDetailsComponent },
   { path: 'package/:id/book', component: BookingWizardComponent },
   { path: 'payment/:id', component: PaymentComponent },
@@ -38,7 +39,7 @@ export const routes: Routes = [
   { path: 'packager/edit-package/:id', component: CreatePackageComponent, canActivate: [packagerGuard] },
   { path: 'packager/:packageId', component: PackagerProfileComponent },
   { path: 'apply-packager', component: ApplyPackagerComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [guestGuard] },
   { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [adminGuard] },
   { path: 'admin/packagers', component: AdminPackagersComponent, canActivate: [adminGuard] },
   { path: 'chat', component: ChatComponent },

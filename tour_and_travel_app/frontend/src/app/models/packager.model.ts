@@ -7,6 +7,7 @@ export interface PublicPackagerResponse {
   avgRating: number;
   totalReviews: number;
   totalPackagesContributed: number;
+  profilePhotoUrl?: string;
 }
 
 export interface PackagerReviewResponse {

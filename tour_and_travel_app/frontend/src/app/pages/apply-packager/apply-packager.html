@@ -213,13 +213,13 @@
 <div class="w-full max-w-2xl bg-surface-container-lowest rounded-2xl p-8 shadow-[0px_4px_20px_rgba(26,54,93,0.08)] border border-surface-container-high overflow-hidden text-center">
   <div class="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-6"
        [ngClass]="{
-         'bg-primary-container text-primary': applicationStatus().approvalStatus === 'pending',
-         'bg-error-container text-error': applicationStatus().approvalStatus === 'rejected',
-         'bg-secondary-container text-secondary': applicationStatus().approvalStatus === 'approved'
+         'bg-primary-container text-primary': applicationStatus().approvalStatus.toLowerCase() === 'pending',
+         'bg-error-container text-error': applicationStatus().approvalStatus.toLowerCase() === 'rejected',
+         'bg-secondary-container text-secondary': applicationStatus().approvalStatus.toLowerCase() === 'approved'
        }">
     <span class="material-symbols-outlined text-4xl">
-      {{ applicationStatus().approvalStatus === 'pending' ? 'pending_actions' : 
-         applicationStatus().approvalStatus === 'rejected' ? 'cancel' : 'verified' }}
+      {{ applicationStatus().approvalStatus.toLowerCase() === 'pending' ? 'pending_actions' : 
+         applicationStatus().approvalStatus.toLowerCase() === 'rejected' ? 'cancel' : 'verified' }}
     </span>
   </div>
   
@@ -228,8 +228,8 @@
   </h3>
   
   <p class="font-body-lg text-body-lg text-on-surface-variant mb-6">
-    {{ applicationStatus().approvalStatus === 'pending' ? 'Your application has been submitted to the admin and is currently under review. We will notify you once a decision is made.' : 
-       applicationStatus().approvalStatus === 'approved' ? 'Congratulations! Your application has been approved. You are now a certified packager.' : 
+    {{ applicationStatus().approvalStatus.toLowerCase() === 'pending' ? 'Your application has been submitted to the admin and is currently under review. We will notify you once a decision is made.' : 
+       applicationStatus().approvalStatus.toLowerCase() === 'approved' ? 'Congratulations! Your application has been approved. You are now a certified packager.' : 
        'Unfortunately, your application was not approved at this time.' }}
   </p>
 

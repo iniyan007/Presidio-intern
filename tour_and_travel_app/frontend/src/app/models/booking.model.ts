@@ -44,7 +44,7 @@ export interface BookingResponse {
 }
 
 export interface CancelBookingRequest {
-  reason: string;
+  cancellationReason: string;
 }
 
 export interface ProcessPaymentRequest {

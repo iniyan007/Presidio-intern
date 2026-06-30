@@ -37,6 +37,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectedPackageType = signal<string>('');
   selectedSortBy = signal<string>('');
   
+  // Footer Modals
+  isPolicyModalOpen = signal<boolean>(false);
+  isCareersModalOpen = signal<boolean>(false);
+
+  openPolicyModal(event: Event) {
+    event.preventDefault();
+    this.isPolicyModalOpen.set(true);
+  }
+
+  openCareersModal(event: Event) {
+    event.preventDefault();
+    this.isCareersModalOpen.set(true);
+  }
+
+  applyForPackager() {
+    this.isCareersModalOpen.set(false);
+    if (this.authService.isAuthenticated() && this.authService.getUserRole() === 'Packager') {
+      this.toastService.show('You are already a registered Packager!', 'info');
+    } else {
+      this.router.navigate(['/apply-packager']);
+    }
+  }
+  
   minDate = new Date().toISOString().split('T')[0];
   
   private pollingInterval: any;

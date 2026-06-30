@@ -110,7 +110,8 @@ export class PackagerDashboardComponent {
                   bookingStatus: b.status, // e.g. 'DocumentUnderReview'
                   bgColor: b.paymentStatus === 'Paid' ? 'bg-secondary-fixed' : 'bg-primary-fixed',
                   textColor: b.paymentStatus === 'Paid' ? 'text-secondary' : 'text-primary',
-                  createdAt: b.bookedAt || b.createdAt
+                  createdAt: b.bookedAt || b.createdAt,
+                  cancellationReason: b.cancellationReason
                 });
 
                 if (b.paymentStatus === 'Paid') revenue += b.totalAmount;

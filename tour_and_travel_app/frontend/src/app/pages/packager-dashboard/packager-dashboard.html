@@ -143,6 +143,9 @@
   <div class="flex-1 min-w-0">
   <p class="font-label-md text-label-md text-primary truncate">{{ booking.customerName }}</p>
   <p class="text-caption text-outline truncate">{{ booking.packageTitle }}</p>
+  @if (booking.bookingStatus === 'Cancelled' && booking.cancellationReason) {
+    <p class="text-[10px] text-error mt-0.5 truncate"><span class="font-bold">Reason:</span> {{ booking.cancellationReason }}</p>
+  }
   </div>
   <div class="text-right shrink-0">
   <p class="font-label-md text-label-md text-primary">{{ booking.amount | currency:'INR':'symbol':'1.0-0' }}</p>

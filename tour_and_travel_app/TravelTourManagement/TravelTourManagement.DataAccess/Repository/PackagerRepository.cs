@@ -125,6 +125,7 @@ public class PackagerRepository : GenericRepository<Packager, Guid>, IPackagerRe
         CancellationToken cancellationToken = default)
         => await _dbSet
             .Include(pk => pk.Packages)
+            .Include(pk => pk.User)
             .FirstOrDefaultAsync(pk => pk.CompanyName.ToLower() == companyName.ToLower() && pk.ApprovedAt != null && pk.DeactivatedAt == null, cancellationToken);
 
     /// <inheritdoc />
@@ -142,6 +143,7 @@ public class PackagerRepository : GenericRepository<Packager, Guid>, IPackagerRe
         var query = _dbSet
             .Where(pk => pk.ApprovedAt != null && pk.DeactivatedAt == null)
             .Include(pk => pk.Packages)
+            .Include(pk => pk.User)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))

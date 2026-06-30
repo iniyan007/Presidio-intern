@@ -60,7 +60,10 @@ export class NotificationService {
       .catch(err => console.error('Error connecting to Notification Hub', err));
 
     this.hubConnection.on('ReceiveNotification', (notification: AppNotification) => {
-      this.notifications.update(current => [notification, ...current]);
+      this.notifications.update(current => {
+        if (current.some(n => n.id === notification.id)) return current;
+        return [notification, ...current];
+      });
       this.toastService.show(notification.title, 'success');
     });
   }

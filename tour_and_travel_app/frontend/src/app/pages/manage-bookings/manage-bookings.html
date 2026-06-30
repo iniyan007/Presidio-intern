@@ -42,7 +42,7 @@
                           'bg-primary-fixed text-primary': booking.status === 'Pending',
                           'bg-error-container text-error': booking.status === 'DocumentUnderReview',
                           'bg-emerald-100 text-emerald-800': booking.status === 'Confirmed',
-                          'bg-surface-variant text-on-surface-variant': booking.status === 'Cancelled'
+                          'bg-error-container text-error font-bold': booking.status === 'Cancelled'
                         }">
                         {{ booking.status }}
                       </span>
@@ -51,6 +51,11 @@
                       <span class="font-bold text-secondary mr-2">{{ booking.packageTitle }}</span>
                       Booked on {{ booking.bookedAt | date:'mediumDate' }} • {{ booking.adultCount }} Adults, {{ booking.childCount }} Children
                     </p>
+                    @if (booking.status === 'Cancelled' && booking.cancellationReason) {
+                      <p class="mt-2 text-sm text-error bg-error/5 p-2 rounded border border-error/20 inline-block">
+                        <span class="font-bold">Cancellation Reason:</span> {{ booking.cancellationReason }}
+                      </p>
+                    }
                   </div>
                   
                   <div class="flex flex-col items-end">

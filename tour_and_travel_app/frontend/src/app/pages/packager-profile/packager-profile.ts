@@ -113,6 +113,11 @@ export class PackagerProfileComponent implements OnInit {
     return pkg.primaryImageUrl.startsWith('http') ? pkg.primaryImageUrl : `${environment.baseUrl}${pkg.primaryImageUrl}`;
   }
 
+  getProfileImage(url?: string): string | null {
+    if (!url) return null;
+    return url.startsWith('http') ? url : `${environment.baseUrl}${url}`;
+  }
+
   getStartingPrice(pkg: TravelPackage): number {
     return pkg.startingPrice || 0;
   }

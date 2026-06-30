@@ -12,4 +12,5 @@ public class PublicPackagerResponse
     public decimal AvgRating { get; set; }
     public int TotalReviews { get; set; }
     public int TotalPackagesContributed { get; set; }
+    public string? ProfilePhotoUrl { get; set; }
 }
