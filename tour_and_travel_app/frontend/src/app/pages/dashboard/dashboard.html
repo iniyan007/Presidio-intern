@@ -99,7 +99,7 @@
         </div>
         </div>
         <h3 class="font-title-md text-title-md text-primary mb-1">{{ pkg.title }}</h3>
-        <p class="text-caption text-on-surface-variant mb-3 font-medium">by <a [routerLink]="['/agency', pkg.id]" class="hover:text-secondary hover:underline cursor-pointer" (click)="$event.stopPropagation()">{{ pkg.packagerName }}</a></p>
+        <p class="text-caption text-on-surface-variant mb-3 font-medium">by <a class="hover:text-secondary hover:underline cursor-pointer" (click)="goToAgency($event, pkg.id)">{{ pkg.packagerName }}</a></p>
         <div class="flex items-center gap-4 text-on-surface-variant mb-4 flex-wrap">
         <div class="flex items-center gap-1">
         <span class="material-symbols-outlined text-sm">schedule</span>
@@ -115,7 +115,7 @@
             <span class="text-caption text-secondary font-medium">Departs: {{ pkg.earliestDepartureDate | date:'mediumDate' }}</span>
           </div>
         }
-        @if (pkg.packageType === 'Group' || pkg.packageType === 'Adventure') {
+        @if (pkg.packageType === 'Group' || pkg.packageType === 'Adventure' || pkg.packageType === 'Pilgrimage') {
           <div class="flex items-center gap-1 w-full mt-1">
             <span class="material-symbols-outlined text-sm text-error">event_seat</span>
             <span class="text-caption text-error font-bold">Only {{ pkg.pendingSeats }} seats left!</span>

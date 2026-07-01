@@ -83,75 +83,20 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
 
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
       this.packageId = params.get('id');
-      const draftKey = 'tourmate_draft_' + (this.packageId || 'new');
       
       if (this.packageId) {
         this.isEditMode = true;
-        const savedDraft = localStorage.getItem(draftKey);
-        if (savedDraft && confirm('You have unsaved edits from a previous session. Would you like to restore them?')) {
-           try {
-             const draft = JSON.parse(savedDraft);
-             // Need to fetch status to set isPublished
-             this.packageService.getMyPackageById(this.packageId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(pkg => {
-                this.isPublished = pkg.status === 'Published';
-             });
-             this.restoreDraft(draft);
-           } catch(e) {
-             this.loadPackageData(this.packageId);
-           }
-        } else {
-          localStorage.removeItem(draftKey);
-          this.loadPackageData(this.packageId);
-        }
+        this.loadPackageData(this.packageId);
       } else {
-        const savedDraft = localStorage.getItem(draftKey);
-        if (savedDraft && confirm('You have unsaved changes from a previous session. Would you like to restore them?')) {
-           try {
-             const draft = JSON.parse(savedDraft);
-             this.restoreDraft(draft);
-           } catch(e) {
-             localStorage.removeItem(draftKey);
-           }
-        } else {
-           localStorage.removeItem(draftKey);
-        }
+        this.isEditMode = false;
       }
-
-      this.autoSaveSub = this.packageForm.valueChanges.pipe(debounceTime(1000)).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(val => {
-        localStorage.setItem(draftKey, JSON.stringify(val));
-      });
     });
   }
 
   ngOnDestroy() {
-    if (this.autoSaveSub) {
-      this.autoSaveSub.unsubscribe();
-    }
   }
 
-  restoreDraft(draft: any) {
-    this.highlights.clear();
-    draft.highlights?.forEach(() => this.addHighlight());
-    
-    this.inclusions.clear();
-    draft.inclusions?.forEach(() => this.addInclusion());
-    
-    this.seasonalPricing.clear();
-    draft.seasonalPricing?.forEach(() => this.addSeasonalPricing());
 
-    this.itinerary.clear();
-    draft.itinerary?.forEach((day: any, i: number) => {
-      this.addItineraryDay();
-      
-      day.activities?.forEach(() => this.addActivity(i));
-      day.meals?.forEach(() => this.addMeal(i));
-      day.accommodations?.forEach(() => this.addAccommodation(i));
-      day.transports?.forEach(() => this.addTransport(i));
-    });
-
-    this.packageForm.patchValue(draft);
-  }
-  
   @HostListener('window:scroll')
   onWindowScroll() {
     let currentSection = this.sections[0];
@@ -179,10 +124,10 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
   
   loadMetadata() {
     this.metadataService.getCountries().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (res) => setTimeout(() => this.countries = res)
+      next: (res) => this.countries = res
     });
     this.metadataService.getEnums().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (res) => setTimeout(() => this.metadataEnums = res)
+      next: (res) => this.metadataEnums = res
     });
   }
 
@@ -275,10 +220,13 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
 
           // Itinerary
           this.itinerary.clear();
+          console.log('API Response pkg.itineraryDays:', pkg.itineraryDays);
+          
           if (this.isPublished) {
             this.existingItinerary = pkg.itineraryDays || [];
           } else {
             pkg.itineraryDays?.forEach(day => {
+              console.log('Mapping day:', day);
 
           const dayGroup = this.fb.group({
             dayNumber: [day.dayNumber, Validators.required],
@@ -364,10 +312,13 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
         // Ensure at least one empty item if arrays are empty
         if (this.highlights.length === 0) this.addHighlight();
         if (this.inclusions.length === 0) this.addInclusion();
-        if (this.seasonalPricing.length === 0) this.addSeasonalPricing();
+        if (this.seasonalPricing.length === 0 && (!this.isPublished || this.existingPricings.length === 0)) this.addSeasonalPricing();
         if (this.itinerary.length === 0 && !this.isPublished) this.addItineraryDay();
+        
+        console.log('Final form value after loadPackageData:', this.packageForm.value);
       },
       error: (err) => {
+        console.error('Error loading package data', err);
         this.toastService.show('Failed to load package data.', 'error');
       }
     });
@@ -615,7 +566,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
     const isFlexibleDate = ['Honeymoon', 'Private', 'Family'].includes(formValue.type);
     let hasValidationError = false;
 
-    if (!formValue.seasonalPricing || formValue.seasonalPricing.length === 0) {
+    if ((!formValue.seasonalPricing || formValue.seasonalPricing.length === 0) && (!this.isPublished || this.existingPricings.length === 0)) {
       this.toastService.show('You must add at least one Pricing Season to publish a package.', 'error');
       hasValidationError = true;
     } else {
@@ -655,8 +606,9 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
     }
 
 
-    if (formValue.durationDays !== formValue.itinerary.length) {
-      this.toastService.show(`The detailed itinerary must have exactly ${formValue.durationDays} days to match the package duration. Currently it has ${formValue.itinerary.length} days.`, 'error');
+    const itineraryLength = this.isPublished ? this.existingItinerary.length : formValue.itinerary.length;
+    if (formValue.durationDays !== itineraryLength) {
+      this.toastService.show(`The detailed itinerary must have exactly ${formValue.durationDays} days to match the package duration. Currently it has ${itineraryLength} days.`, 'error');
       hasValidationError = true;
     }
 
@@ -694,22 +646,30 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
       category: m.category
     }));
 
-    const isFlexibleDateType = ['Honeymoon', 'Private', 'Family'].includes(formValue.type);
-
     const packageData = {
       ...formValue,
-      seasonalPricing: formValue.seasonalPricing.map((p: any) => ({
-        id: p.id || null,
-        seasonName: p.seasonName,
-        startDate: p.startDate,
-        endDate: p.endDate,
-        basePrice: p.basePrice,
-        childPrice: p.childPrice,
-        discountPercent: p.discountPercent,
-        availableSlots: p.availableSlots,
-        isActive: p.isActive
-      })),
-      itinerary: isFlexibleDateType ? [] : formValue.itinerary,
+      seasonalPricing: formValue.seasonalPricing.map((p: any) => {
+        if (!p.seasonName || p.seasonName.trim() === '') p.seasonName = 'Draft Season';
+        if (p.basePrice == null) p.basePrice = 0.01;
+        if (p.availableSlots == null) p.availableSlots = 10;
+        
+        if (formValue.type === 'Honeymoon') {
+          p.availableSlots = 2;
+        }
+        
+        return {
+          id: p.id || null,
+          seasonName: p.seasonName,
+          startDate: p.startDate,
+          endDate: p.endDate,
+          basePrice: p.basePrice,
+          childPrice: p.childPrice,
+          discountPercent: p.discountPercent,
+          availableSlots: p.availableSlots,
+          isActive: p.isActive
+        };
+      }),
+      itinerary: formValue.itinerary,
       media: mediaMetadata
     };
     
@@ -737,6 +697,10 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
         if (!p.seasonName || p.seasonName.trim() === '') p.seasonName = 'Draft Season';
         if (p.basePrice == null) p.basePrice = 0;
         if (p.availableSlots == null) p.availableSlots = 10;
+        
+        if (packageData.type === 'Honeymoon') {
+          p.availableSlots = 2;
+        }
       });
       
       packageData.itinerary = packageData.itinerary.filter((day: any) => day.title && day.title.trim() !== '');
@@ -752,7 +716,9 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
     formData.append('PackageData', JSON.stringify(packageData));
     
     this.mediaFiles.forEach(m => {
-      formData.append('MediaFiles', m.file);
+      if (m.file.size > 0) {
+        formData.append('MediaFiles', m.file);
+      }
     });
 
     if (this.isEditMode && this.packageId) {

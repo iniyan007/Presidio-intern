@@ -59,6 +59,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.router.navigate(['/apply-agency']);
     }
   }
+
+  goToAgency(event: Event, packageId: string) {
+    event.stopPropagation();
+    this.router.navigate(['/agency', packageId]);
+  }
   
   minDate = new Date().toISOString().split('T')[0];
   
