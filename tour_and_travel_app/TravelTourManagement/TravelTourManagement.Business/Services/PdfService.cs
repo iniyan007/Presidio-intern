@@ -32,12 +32,14 @@ public class PdfService : IPdfService
     private void ComposeHeader(IContainer container, Booking booking)
     {
         var titleStyle = TextStyle.Default.FontSize(20).SemiBold().FontColor(Colors.Blue.Darken2);
+        var appNameStyle = TextStyle.Default.FontSize(24).ExtraBold().FontColor(Colors.Blue.Darken4);
 
         container.Row(row =>
         {
             row.RelativeItem().Column(column =>
             {
-                column.Item().Text("CONFIRMED BOOKING TICKET").Style(titleStyle);
+                column.Item().Text("Tourmate").Style(appNameStyle);
+                column.Item().PaddingTop(5).Text("CONFIRMED BOOKING TICKET").Style(titleStyle);
                 column.Item().Text($"Reference No: {booking.BookingReference}").FontSize(14).SemiBold();
                 column.Item().Text($"Booking Date: {booking.BookedAt:MMM dd, yyyy}");
             });
@@ -49,6 +51,10 @@ public class PdfService : IPdfService
         container.PaddingVertical(1, Unit.Centimetre).Column(column =>
         {
             column.Spacing(20);
+
+            // Greetings
+            column.Item().Text($"Hello {booking.User?.FullName ?? "Traveler"},").FontSize(16).SemiBold();
+            column.Item().Text("Thank you for choosing Tourmate! We are thrilled to confirm your upcoming trip. Below you will find all the details regarding your travel and accommodation.").FontSize(12);
 
             // Package & Travel Details
             column.Item().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).PaddingBottom(5).Text("Travel Details").SemiBold().FontSize(14);
@@ -97,12 +103,16 @@ public class PdfService : IPdfService
 
     private void ComposeFooter(IContainer container)
     {
-        container.AlignCenter().Text(x =>
+        container.Column(column => 
         {
-            x.Span("Page ");
-            x.CurrentPageNumber();
-            x.Span(" of ");
-            x.TotalPages();
+            column.Item().AlignCenter().Text("Have a safe and wonderful journey!").FontSize(14).Italic().FontColor(Colors.Grey.Darken2);
+            column.Item().PaddingTop(10).AlignCenter().Text(x =>
+            {
+                x.Span("Page ");
+                x.CurrentPageNumber();
+                x.Span(" of ");
+                x.TotalPages();
+            });
         });
     }
 }

@@ -84,7 +84,7 @@
                   <!-- Data Row -->
                   <tr class="hover:bg-surface-container-low/50 transition-colors group">
                     <td class="px-6 py-4">
-                      <p class="font-label-md text-label-md text-primary">{{ packager.companyName }}</p>
+                      <a [routerLink]="['/agency', 'view']" [queryParams]="{name: packager.companyName}" class="font-label-md text-label-md text-primary hover:underline cursor-pointer block">{{ packager.companyName }}</a>
                       <p class="font-caption text-caption text-on-surface-variant">{{ packager.contactEmail }}</p>
                       @if (packager.contactPhone) {
                         <p class="font-caption text-caption text-on-surface-variant">{{ packager.contactPhone }}</p>
@@ -108,10 +108,24 @@
                     <td class="px-6 py-4 text-right">
                       <div class="flex justify-end gap-2">
                         @if (activeTab() === 'active') {
+                          <!-- Docs Button -->
+                          <button 
+                              (click)="openDocsModal(packager)"
+                              class="px-4 py-2 rounded-lg font-label-md text-label-md border border-outline text-on-surface hover:bg-surface-container-high transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">description</span>
+                            Docs
+                          </button>
+                          <!-- Chat Button -->
+                          <button 
+                              (click)="startChat(packager.id)"
+                              class="px-4 py-2 rounded-lg font-label-md text-label-md border border-primary text-primary hover:bg-primary hover:text-on-primary transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">chat</span>
+                            Chat
+                          </button>
                           <!-- Deactivate Button -->
                           <button 
                               (click)="startDeactivation(packager.id)"
-                              class="px-4 py-2 rounded-lg font-label-md text-label-md border-2 border-error text-error hover:bg-error hover:text-on-error transition-colors flex items-center gap-2">
+                              class="px-4 py-2 rounded-lg font-label-md text-label-md border border-error text-error hover:bg-error hover:text-on-error transition-colors flex items-center gap-2">
                             <span class="material-symbols-outlined text-[18px]">block</span>
                             Deactivate
                           </button>
@@ -204,3 +218,59 @@
       </section>
   
 </main>
+
+<!-- Document Viewer Modal -->
+@if (isDocsModalOpen()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim/50 backdrop-blur-sm">
+  <div class="bg-surface-container-lowest w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+    <!-- Header -->
+    <div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+      <div>
+        <h2 class="font-title-lg text-title-lg text-primary">Agency Documents</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant">{{ selectedPackagerForDocs()?.companyName }}</p>
+      </div>
+      <button (click)="closeDocsModal()" class="p-2 text-on-surface-variant hover:text-error hover:bg-error-container/20 rounded-full transition-colors">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6 overflow-y-auto flex-1">
+      <h3 class="font-title-md text-title-md text-on-surface mb-4">Uploaded Documents</h3>
+      
+      @if (isDocumentsLoading()) {
+        <div class="flex flex-col items-center justify-center py-8">
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mb-4"></div>
+          <p class="text-on-surface-variant font-body-md">Fetching secure documents...</p>
+        </div>
+      } @else if (packagerDocuments().length === 0) {
+        <div class="bg-surface-container p-8 rounded-xl flex flex-col items-center text-center gap-3">
+          <span class="material-symbols-outlined text-[48px] text-on-surface-variant">description</span>
+          <p class="font-body-md text-body-md text-on-surface-variant">No documents available for this agency.</p>
+        </div>
+      } @else {
+        <div class="space-y-4">
+          @for (doc of packagerDocuments(); track doc.id) {
+            <div class="flex items-center justify-between p-4 rounded-xl border bg-surface-container border-outline-variant transition-colors hover:border-primary/50">
+              <div class="flex items-center gap-4">
+                <div class="p-2 rounded-lg bg-surface-container-high text-on-surface-variant">
+                  <span class="material-symbols-outlined">description</span>
+                </div>
+                <div>
+                  <h4 class="font-title-sm text-title-sm text-on-surface">{{ doc.documentType }}</h4>
+                  <p class="font-caption text-caption text-on-surface-variant">{{ doc.originalFilename || doc.fileName }}</p>
+                </div>
+              </div>
+              
+              <button (click)="viewDocument(doc.fileUrl)" class="px-4 py-2 text-primary font-label-md hover:bg-primary/10 rounded-lg transition-colors flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">visibility</span>
+                View
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>
+}

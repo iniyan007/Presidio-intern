@@ -140,7 +140,7 @@
                   </div>
                   <div class="space-y-1">
                     <label class="font-label-md text-label-md text-on-surface-variant">Passport Number 
-                      @if (pkg()?.country?.toLowerCase() !== 'india') {
+                      @if (pkg()?.country?.trim()?.toLowerCase() !== 'india') {
                         <span class="text-error">*</span>
                       }
                     </label>
@@ -185,7 +185,7 @@
                   <!-- Passport Upload -->
                   <div class="space-y-3">
                     <label class="font-label-md text-label-md">Passport Scan
-                      @if (pkg()?.country?.toLowerCase() !== 'india') {
+                      @if (pkg()?.country?.trim()?.toLowerCase() !== 'india') {
                         <span class="text-error">*</span>
                       }
                     </label>

@@ -1,22 +1,27 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
 import { ToastService } from '../../services/toast.service';
+import { ChatService } from '../../services/chat.service';
+import { environment } from '../../../environments/environment';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-agencies',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './admin-agencies.html',
 })
 export class AdminAgenciesComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private adminService = inject(AdminService);
   private toastService = inject(ToastService);
+  private chatService = inject(ChatService);
+  private router = inject(Router);
 
   activeTab = signal<'active' | 'deactivated'>('active');
   packagers = signal<any[]>([]);
@@ -32,6 +37,12 @@ export class AdminAgenciesComponent implements OnInit {
   
   activeActivateRowId = signal<string | null>(null);
   isActivating = signal<boolean>(false);
+
+  // Documents Modal State
+  isDocsModalOpen = signal<boolean>(false);
+  selectedPackagerForDocs = signal<any | null>(null);
+  packagerDocuments = signal<any[]>([]);
+  isDocumentsLoading = signal<boolean>(false);
 
   ngOnInit() {
     this.searchSubject.pipe(
@@ -144,5 +155,45 @@ export class AdminAgenciesComponent implements OnInit {
         this.isActivating.set(false);
       }
     });
+  }
+
+  startChat(packagerId: string) {
+    this.chatService.getOrInitializeThread({ packagerId }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (thread) => {
+        this.router.navigate(['/chat'], { queryParams: { threadId: thread.id } });
+      },
+      error: (err) => {
+        console.error(err);
+        this.toastService.show('Failed to start chat with packager', 'error');
+      }
+    });
+  }
+
+  openDocsModal(packager: any) {
+    this.selectedPackagerForDocs.set(packager);
+    this.isDocsModalOpen.set(true);
+    this.packagerDocuments.set([]);
+    this.isDocumentsLoading.set(true);
+
+    this.adminService.getPackagerDocuments(packager.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (docs) => {
+        this.packagerDocuments.set(docs || []);
+        this.isDocumentsLoading.set(false);
+      },
+      error: () => {
+        this.toastService.show('Failed to fetch documents', 'error');
+        this.isDocumentsLoading.set(false);
+      }
+    });
+  }
+
+  closeDocsModal() {
+    this.isDocsModalOpen.set(false);
+    this.selectedPackagerForDocs.set(null);
+  }
+
+  viewDocument(fileUrl: string) {
+    const fullUrl = fileUrl.startsWith('http') ? fileUrl : `${environment.baseUrl}${fileUrl}`;
+    window.open(fullUrl, '_blank');
   }
 }

@@ -267,7 +267,7 @@ export class BookingWizardComponent implements OnInit {
           return;
         }
 
-        const isIndia = this.pkg()?.country?.toLowerCase() === 'india';
+        const isIndia = this.pkg()?.country?.trim().toLowerCase() === 'india';
         let hasValidationErrors = false;
 
         for (let i = 0; i < this.travelers().length; i++) {
@@ -325,7 +325,7 @@ export class BookingWizardComponent implements OnInit {
           return;
         }
 
-        const isIndia = this.pkg()?.country?.toLowerCase() === 'india';
+        const isIndia = this.pkg()?.country?.trim().toLowerCase() === 'india';
         if (!isIndia) {
           const missingPassport = this.travelers().find(t => !t.passportFile);
           if (missingPassport) {

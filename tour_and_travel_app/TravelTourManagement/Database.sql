@@ -875,8 +875,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trg_update_current_bookings
-    AFTER INSERT OR UPDATE OF status ON bookings FOR EACH ROW
     EXECUTE FUNCTION fn_update_current_bookings();
 
 
