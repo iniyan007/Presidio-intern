@@ -184,7 +184,11 @@
                   
                   <!-- Passport Upload -->
                   <div class="space-y-3">
-                    <label class="font-label-md text-label-md">Passport Scan</label>
+                    <label class="font-label-md text-label-md">Passport Scan
+                      @if (pkg()?.country?.toLowerCase() !== 'india') {
+                        <span class="text-error">*</span>
+                      }
+                    </label>
                     @if (traveler.passportFile) {
                       <div class="border-2 border-dashed border-outline-variant rounded-xl p-6 flex flex-col items-center justify-center bg-surface-bright group hover:border-primary transition-colors">
                         <div class="flex items-center gap-3 bg-secondary-container/10 p-3 rounded-lg w-full">

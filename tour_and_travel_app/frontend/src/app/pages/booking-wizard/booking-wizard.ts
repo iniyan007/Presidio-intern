@@ -258,12 +258,12 @@ export class BookingWizardComponent implements OnInit {
         }
 
         const season = this.selectedSeason()!;
-        const selectedDate = new Date(this.travelDate());
-        const startDate = new Date(season.startDate);
-        const endDate = new Date(season.endDate);
+        const selectedDateStr = this.travelDate();
+        const startDateStr = season.startDate.split('T')[0];
+        const endDateStr = season.endDate.split('T')[0];
 
-        if (selectedDate < startDate || selectedDate > endDate) {
-          this.toastService.show('Travel Date must be within the selected season range: ' + season.startDate + ' to ' + season.endDate, 'error');
+        if (selectedDateStr < startDateStr || selectedDateStr > endDateStr) {
+          this.toastService.show('Travel Date must be within the selected season range: ' + startDateStr + ' to ' + endDateStr, 'error');
           return;
         }
 
@@ -323,6 +323,15 @@ export class BookingWizardComponent implements OnInit {
         if (missingDocs) {
           this.toastService.show('Please upload Aadhar card for all travelers.', 'error');
           return;
+        }
+
+        const isIndia = this.pkg()?.country?.toLowerCase() === 'india';
+        if (!isIndia) {
+          const missingPassport = this.travelers().find(t => !t.passportFile);
+          if (missingPassport) {
+            this.toastService.show('Passport scan is mandatory for all travelers on international packages.', 'error');
+            return;
+          }
         }
       }
     }
@@ -390,7 +399,6 @@ export class BookingWizardComponent implements OnInit {
     this.bookingService.createBooking(formData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         this.clearDraft();
-        this.toastService.show('Booking Created Successfully!', 'success');
         this.isSubmitting.set(false);
         this.router.navigate(['/payment', res.id]);
       },

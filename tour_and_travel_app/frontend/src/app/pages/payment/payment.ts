@@ -69,7 +69,6 @@ export class PaymentComponent implements OnInit {
     this.bookingService.processPayment(b.id, request).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.isProcessing.set(false);
-        this.toastService.show('Payment successful! Your booking is confirmed.', 'success');
         this.router.navigate(['/bookings']);
       },
       error: (err) => {
