@@ -112,7 +112,11 @@
         @if (pkg.earliestDepartureDate) {
           <div class="flex items-center gap-1 w-full mt-1">
             <span class="material-symbols-outlined text-sm text-secondary">calendar_month</span>
-            <span class="text-caption text-secondary font-medium">Departs: {{ pkg.earliestDepartureDate | date:'mediumDate' }}</span>
+            @if (pkg.packageType === 'Honeymoon' || pkg.packageType === 'Family' || pkg.packageType === 'Private') {
+              <span class="text-caption text-secondary font-medium">Available from: {{ pkg.earliestDepartureDate | date:'mediumDate' }}</span>
+            } @else {
+              <span class="text-caption text-secondary font-medium">Departs: {{ pkg.earliestDepartureDate | date:'mediumDate' }}</span>
+            }
           </div>
         }
         @if (pkg.packageType === 'Group' || pkg.packageType === 'Adventure' || pkg.packageType === 'Pilgrimage') {
@@ -120,7 +124,12 @@
             <span class="material-symbols-outlined text-sm text-error">event_seat</span>
             <span class="text-caption text-error font-bold">Only {{ pkg.pendingSeats }} seats left!</span>
           </div>
-        } @else {
+        } @else if (pkg.packageType === 'Family' || pkg.packageType === 'Private') {
+          <div class="flex items-center gap-1 w-full mt-1">
+            <span class="material-symbols-outlined text-sm text-primary">event_seat</span>
+            <span class="text-caption text-primary font-medium">{{ pkg.maxCapacity }} bookable seats</span>
+          </div>
+        } @else if (pkg.packageType !== 'Honeymoon') {
           <div class="flex items-center gap-1 w-full mt-1">
             <span class="material-symbols-outlined text-sm text-primary">event_seat</span>
             <span class="text-caption text-primary font-medium">{{ pkg.pendingSeats }} bookable seats</span>

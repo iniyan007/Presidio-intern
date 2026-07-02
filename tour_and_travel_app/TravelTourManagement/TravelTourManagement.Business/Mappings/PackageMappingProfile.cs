@@ -106,7 +106,8 @@ public class PackageMappingProfile : Profile
                     : null,
                 src.PackageSeasonalPricings != null && src.PackageSeasonalPricings.Any(p => p.IsActive)
                     ? src.PackageSeasonalPricings.Where(p => p.IsActive).Max(p => p.EndDate)
-                    : null
+                    : null,
+                src.MaxCapacity
             ));
 
         // 3. Entity -> DTO (Package Detail)

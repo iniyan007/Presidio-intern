@@ -15,6 +15,7 @@ export interface TravelPackage {
   pendingSeats: number;
   earliestDepartureDate: string | null;
   availableUntil: string | null;
+  maxCapacity: number;
 }
 
 export interface PackageMedia {

@@ -19,5 +19,6 @@ public record PackageSummaryResponse(
     decimal StartingPrice,
     int PendingSeats,
     DateOnly? EarliestDepartureDate,
-    DateOnly? AvailableUntil
+    DateOnly? AvailableUntil,
+    int MaxCapacity
 );
