@@ -63,4 +63,12 @@ public class ReviewRepository : GenericRepository<Review, Guid>, IReviewReposito
         CancellationToken cancellationToken = default)
         => await _dbSet
             .AnyAsync(r => r.UserId == userId && r.BookingId == bookingId, cancellationToken);
+
+    public override async Task<Review?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(r => r.User)
+            .Include(r => r.ReviewMedia)
+            .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
+    }
 }

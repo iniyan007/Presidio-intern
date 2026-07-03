@@ -105,6 +105,7 @@ export interface PackageReview {
   overallRating: number;
   comment: string | null;
   createdAt: string;
+  media?: { id: string; filePath: string }[];
 }
 
 export interface TravelPackageDetails {

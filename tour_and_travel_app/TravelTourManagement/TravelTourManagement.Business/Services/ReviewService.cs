@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -72,7 +73,14 @@ public class ReviewService : IReviewService
             Comment = request.Comment,
             IsVerifiedTraveler = true,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
+            ReviewMedia = request.MediaFilePaths?.Select(path => new ReviewMedium
+            {
+                Id = Guid.NewGuid(),
+                FilePath = path,
+                FileName = System.IO.Path.GetFileName(path),
+                UploadedAt = DateTime.UtcNow
+            }).ToList() ?? new List<ReviewMedium>()
         };
 
         if (review.PackagerId == Guid.Empty)

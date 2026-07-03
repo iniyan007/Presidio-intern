@@ -80,9 +80,10 @@ export class AgencyDashboardComponent {
         this.totalPackagesCount.set(packageList.length);
         this.myPackages.set(packageList.slice(0, 4));
 
-        // Calculate average rating
-        const totalRating = packages.reduce((sum: number, pkg: any) => sum + (pkg.avgRating || 0), 0);
-        this.avgRating.set(packages.length ? totalRating / packages.length : 0);
+        // Calculate average rating based only on packages that have reviews
+        const packagesWithReviews = packages.filter((pkg: any) => (pkg.totalReviews || 0) > 0);
+        const totalRating = packagesWithReviews.reduce((sum: number, pkg: any) => sum + (pkg.avgRating || 0), 0);
+        this.avgRating.set(packagesWithReviews.length ? totalRating / packagesWithReviews.length : 0);
 
         // Fetch bookings for each package
         let allBookings: any[] = [];

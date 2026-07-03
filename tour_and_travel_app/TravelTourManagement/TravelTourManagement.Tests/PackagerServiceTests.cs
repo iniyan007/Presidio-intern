@@ -24,6 +24,10 @@ public class PackagerServiceTests
     private Mock<IUserRepository> _userRepoMock;
     private Mock<IMapper> _mapperMock;
     private Mock<INotificationService> _notificationServiceMock;
+    private Mock<IPackageRepository> _packageRepoMock;
+    private Mock<IBookingRepository> _bookingRepoMock;
+    private Mock<IRepository<PackageSeasonalPricing, Guid>> _seasonalPricingRepoMock;
+    private Mock<Microsoft.Extensions.Caching.Distributed.IDistributedCache> _cacheMock;
     private PackagerService _packagerService;
 
     [SetUp]
@@ -33,12 +37,20 @@ public class PackagerServiceTests
         _userRepoMock = new Mock<IUserRepository>();
         _mapperMock = new Mock<IMapper>();
         _notificationServiceMock = new Mock<INotificationService>();
+        _packageRepoMock = new Mock<IPackageRepository>();
+        _bookingRepoMock = new Mock<IBookingRepository>();
+        _seasonalPricingRepoMock = new Mock<IRepository<PackageSeasonalPricing, Guid>>();
+        _cacheMock = new Mock<Microsoft.Extensions.Caching.Distributed.IDistributedCache>();
 
         _packagerService = new PackagerService(
             _packagerRepoMock.Object,
             _userRepoMock.Object,
             _mapperMock.Object,
-            _notificationServiceMock.Object
+            _notificationServiceMock.Object,
+            _packageRepoMock.Object,
+            _bookingRepoMock.Object,
+            _seasonalPricingRepoMock.Object,
+            _cacheMock.Object
         );
     }
 

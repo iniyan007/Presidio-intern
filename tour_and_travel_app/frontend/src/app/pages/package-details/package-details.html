@@ -488,6 +488,13 @@
       <span class="text-caption text-on-surface-variant">{{ review.createdAt | date:'mediumDate' }}</span>
       </div>
       <p class="text-body-md text-on-surface-variant italic mb-4">"{{ review.comment || 'Left a rating without a comment.' }}"</p>
+      @if (review.media && review.media.length > 0) {
+        <div class="flex gap-2 mt-4 overflow-x-auto pb-2 custom-scrollbar">
+          @for (m of review.media; track m.id) {
+            <img [src]="getReviewImageUrl(m.filePath)" (click)="openReviewGallery(m.filePath, review)" class="w-20 h-20 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity border border-outline-variant/50">
+          }
+        </div>
+      }
       </div>
       </div>
     }
@@ -504,6 +511,48 @@
       (close)="showReviewModal.set(false)" 
       (submitted)="onReviewSubmitted()">
     </app-review-modal>
+  }
+  
+  @if (isReviewGalleryModalOpen) {
+    <div class="fixed inset-0 z-[110] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 md:p-12" (click)="closeReviewGallery()">
+      <div class="w-full max-w-4xl flex flex-col md:flex-row bg-surface-container-lowest rounded-xl overflow-hidden h-full max-h-[80vh] md:max-h-[600px] shadow-2xl relative" (click)="$event.stopPropagation()">
+        
+        <!-- Close button (mobile absolute) -->
+        <button (click)="closeReviewGallery()" class="absolute top-4 right-4 z-10 md:hidden bg-black/50 text-white p-2 rounded-full backdrop-blur-md">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+
+        <!-- Image side -->
+        <div class="w-full md:w-2/3 bg-black flex items-center justify-center min-h-[300px]">
+          <img [src]="selectedReviewImage" class="max-w-full max-h-full object-contain">
+        </div>
+
+        <!-- Info side -->
+        <div class="w-full md:w-1/3 p-6 md:p-8 flex flex-col overflow-y-auto">
+          <div class="flex justify-between items-start mb-6">
+            <div>
+              <h4 class="font-label-lg text-primary mb-1">{{ selectedReviewInfo?.reviewerName || 'Anonymous Traveler' }}</h4>
+              <div class="flex text-amber-400 text-sm">
+                <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span class="ml-1 text-primary font-bold">{{ selectedReviewInfo?.overallRating }}</span>
+              </div>
+            </div>
+            <button (click)="closeReviewGallery()" class="hidden md:block text-on-surface-variant hover:text-primary transition-colors">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          
+          <div class="mb-4">
+            <span class="text-caption text-on-surface-variant mb-2 block">Review</span>
+            <p class="text-body-md text-on-surface-variant italic">"{{ selectedReviewInfo?.comment || 'Left a rating without a comment.' }}"</p>
+          </div>
+
+          <div class="mt-auto pt-6">
+             <span class="text-caption text-on-surface-variant">Posted on {{ selectedReviewInfo?.createdAt | date:'mediumDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   }
   
   <!-- Floating Chat Button -->

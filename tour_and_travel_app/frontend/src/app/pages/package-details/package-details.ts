@@ -129,6 +129,28 @@ export class PackageDetailsComponent implements OnInit {
     return p.media.map(m => m.filePath.startsWith('http') ? m.filePath : `${environment.baseUrl}${m.filePath}`);
   }
 
+  isReviewGalleryModalOpen = false;
+  selectedReviewImage = '';
+  selectedReviewInfo: PackageReview | null = null;
+
+  openReviewGallery(imageUrl: string, review: PackageReview) {
+    this.selectedReviewImage = imageUrl.startsWith('http') ? imageUrl : `${environment.baseUrl}${imageUrl}`;
+    this.selectedReviewInfo = review;
+    this.isReviewGalleryModalOpen = true;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeReviewGallery() {
+    this.isReviewGalleryModalOpen = false;
+    this.selectedReviewImage = '';
+    this.selectedReviewInfo = null;
+    document.body.style.overflow = 'auto';
+  }
+
+  getReviewImageUrl(path: string): string {
+    return path.startsWith('http') ? path : `${environment.baseUrl}${path}`;
+  }
+
   getStartingPrice(): number {
     const p = this.pkg();
     if (!p || !p.seasonalPricings || p.seasonalPricings.length === 0) return 0;
