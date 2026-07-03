@@ -23,6 +23,11 @@ public class PackagersController : ControllerBase
     [Authorize]
     public async Task<IActionResult> ApplyToBecomePackager([FromForm] ApplyPackagerRequest request, CancellationToken cancellationToken)
     {
+        var role = User.FindFirst(ClaimTypes.Role)?.Value;
+        if (role == "Admin")
+        {
+            return BadRequest(new { message = "Administrators cannot apply to become packagers." });
+        }
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             throw new UnauthorizedAccessException("User ID not found in token.");

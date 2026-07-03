@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AgencyService } from '../../services/agency.service';
 import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-apply-agency',
@@ -16,9 +17,11 @@ export class ApplyAgencyComponent implements OnInit {
   private fb = inject(FormBuilder);
   private packagerService = inject(AgencyService);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   applicationStatus = signal<any>(null);
   isLoadingStatus = signal(true);
+  isAdmin = signal(false);
 
   currentStep = signal(1);
   isSubmitting = signal(false);
@@ -38,6 +41,12 @@ export class ApplyAgencyComponent implements OnInit {
   businessRegistration: File | null = null;
 
   ngOnInit() {
+    if (this.authService.getUserRole() === 'Admin') {
+      this.isAdmin.set(true);
+      this.isLoadingStatus.set(false);
+      return;
+    }
+
     this.packagerService.getMyPackagerStatus().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         this.applicationStatus.set(res);
