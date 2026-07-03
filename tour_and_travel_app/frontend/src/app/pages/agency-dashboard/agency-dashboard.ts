@@ -50,7 +50,10 @@ export class AgencyDashboardComponent {
 
   private loadDashboardData(packagerName: string) {
     this.packagerService.getMyPackagerStatus().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (status) => {
+      next: (status: any) => {
+        if (status.companyName) {
+          this.packagerName.set(status.companyName);
+        }
         if (status.deactivatedAt) {
           this.deactivationInfo.set({ deactivatedAt: status.deactivatedAt, reason: status.reason || 'No specific reason provided.' });
         }
@@ -115,7 +118,9 @@ export class AgencyDashboardComponent {
                   cancellationReason: b.cancellationReason
                 });
 
-                if (b.paymentStatus === 'Paid') revenue += b.totalAmount;
+                if (b.paymentStatus === 'Paid' && (b.status === 'Confirmed' || b.status === 'Completed')) {
+                  revenue += b.totalAmount;
+                }
                 if (b.status === 'DocumentUnderReview') pending++;
               });
 
