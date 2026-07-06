@@ -13,23 +13,41 @@
 <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Explore handpicked travel experiences tailored for adventurers, groups, and seekers of serenity.</p>
 </div>
 <!-- Enhanced Search Bar -->
-<div class="bg-surface-container-lowest p-4 rounded-xl shadow-[0px_4px_20px_rgba(26,54,93,0.08)] max-w-4xl mx-auto flex flex-col md:flex-row gap-4">
-<div class="flex-1 flex items-center px-4 py-3 md:py-0 border-b border-outline-variant/30 md:border-b-0 md:border-r">
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-[0px_4px_20px_rgba(26,54,93,0.08)] max-w-4xl mx-auto flex flex-col lg:flex-row gap-4">
+<div class="flex-1 flex items-center px-4 py-3 lg:py-0 border-b border-outline-variant/30 lg:border-b-0 lg:border-r relative">
 <span class="material-symbols-outlined text-primary mr-3">travel_explore</span>
-<input class="w-full border-none focus:ring-0 bg-transparent text-body-md font-body-md outline-none" placeholder="Where to?" type="text" (input)="searchDestination.set($any($event.target).value)">
+<input class="w-full border-none focus:ring-0 bg-transparent text-body-md font-body-md outline-none" placeholder="Where to?" type="text" [value]="searchDestination()" (input)="searchDestination.set($any($event.target).value)" (blur)="closeLocationDropdown()">
+<!-- Location Autocomplete Dropdown -->
+@if (showLocationDropdown() && locationSuggestions().length > 0) {
+  <div class="absolute top-full left-0 right-0 mt-2 bg-surface rounded-xl shadow-xl border border-outline-variant z-50 overflow-hidden">
+    <ul class="max-h-60 overflow-y-auto">
+      @for (suggestion of locationSuggestions(); track suggestion.name) {
+        <li class="px-4 py-3 hover:bg-surface-container cursor-pointer flex flex-col border-b border-outline-variant/30 last:border-0 transition-colors" (click)="selectLocation(suggestion)">
+          <span class="font-label-md text-on-surface">{{ suggestion.name }}</span>
+          <span class="text-caption text-on-surface-variant truncate">{{ suggestion.display_name }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+}
 </div>
-<div class="flex-1 flex items-center px-4 py-3 md:py-0 border-b border-outline-variant/30 md:border-b-0 md:border-r">
+<div class="flex-1 flex items-center px-4 py-3 lg:py-0 border-b border-outline-variant/30 lg:border-b-0 lg:border-r">
 <span class="material-symbols-outlined text-primary mr-3">calendar_month</span>
-<input class="w-full border-none focus:ring-0 bg-transparent text-body-md font-body-md outline-none" placeholder="When?" type="date" [min]="minDate" (input)="searchDate.set($any($event.target).value)">
+<input class="w-full border-none focus:ring-0 bg-transparent text-body-md font-body-md outline-none" placeholder="When?" type="date" [min]="minDate" [value]="searchDate()" (input)="searchDate.set($any($event.target).value)">
 </div>
-<div class="flex-1 flex items-center px-4 py-3 md:py-0 border-b border-outline-variant/30 md:border-b-0 md:border-r">
+<div class="flex-1 flex items-center px-4 py-3 lg:py-0 border-b border-outline-variant/30 lg:border-b-0 lg:border-r">
 <span class="material-symbols-outlined text-primary mr-3">storefront</span>
-<input class="w-full border-none focus:ring-0 bg-transparent text-body-md font-body-md outline-none" placeholder="Agency Name" type="text" (input)="searchPackager.set($any($event.target).value)">
+<input class="w-full border-none focus:ring-0 bg-transparent text-body-md font-body-md outline-none" placeholder="Agency Name" type="text" [value]="searchPackager()" (input)="searchPackager.set($any($event.target).value)">
 </div>
 
-<button class="bg-secondary text-on-secondary px-8 py-3 rounded-lg font-label-md flex items-center justify-center gap-2 hover:opacity-95 transition-all" (click)="onSearch()">
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 px-4 py-3 lg:py-0 w-full lg:w-auto">
+<button class="bg-surface-container-high text-on-surface px-4 py-3 rounded-lg font-label-md flex items-center justify-center hover:bg-surface-container-highest transition-all w-full sm:w-auto" (click)="clearFilters()" title="Clear Filters">
+<span class="material-symbols-outlined">clear_all</span>
+</button>
+<button class="bg-secondary text-on-secondary px-8 py-3 rounded-lg font-label-md flex items-center justify-center gap-2 hover:opacity-95 transition-all w-full sm:w-auto flex-1" (click)="onSearch()">
 <span class="material-symbols-outlined">search</span> Search
-                </button>
+</button>
+</div>
 </div>
 </section>
 <!-- Filters Section -->

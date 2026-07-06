@@ -8,6 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PackageService } from '../../services/package.service';
 import { ToastService } from '../../services/toast.service';
 import { MetadataService, MetadataEnums } from '../../services/metadata.service';
+import { LocationService, LocationSuggestion } from '../../services/location.service';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -28,6 +29,10 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private toastService = inject(ToastService);
   private metadataService = inject(MetadataService);
+  private locationService = inject(LocationService);
+  
+  locationSuggestions: LocationSuggestion[] = [];
+  showLocationDropdown = false;
   
   isSubmitting = false;
   private autoSaveSub?: Subscription;
@@ -91,6 +96,43 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
         this.isEditMode = false;
       }
     });
+
+    this.packageForm.get('destination')?.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef),
+      debounceTime(400)
+    ).subscribe(query => {
+      if (!query || query.length < 2) {
+        this.locationSuggestions = [];
+        this.showLocationDropdown = false;
+        return;
+      }
+      this.locationService.searchLocation(query).subscribe(suggestions => {
+        this.locationSuggestions = suggestions;
+        this.showLocationDropdown = suggestions.length > 0;
+      });
+    });
+  }
+
+  selectLocation(suggestion: LocationSuggestion) {
+    const locationName = suggestion.address.city || suggestion.address.town || suggestion.address.village || suggestion.name;
+    this.packageForm.patchValue({
+      destination: locationName
+    });
+    
+    // Automatically fill country if available
+    if (suggestion.address.country) {
+      this.packageForm.patchValue({
+        country: suggestion.address.country
+      });
+    }
+
+    this.showLocationDropdown = false;
+  }
+
+  closeLocationDropdown() {
+    setTimeout(() => {
+      this.showLocationDropdown = false;
+    }, 200);
   }
 
   ngOnDestroy() {

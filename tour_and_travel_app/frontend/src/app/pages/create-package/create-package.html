@@ -54,11 +54,24 @@
     <p class="text-error text-caption">Title is required (max 200 chars).</p>
 }
 </div>
-<div class="flex flex-col gap-2">
+<div class="flex flex-col gap-2 relative">
 <label class="font-label-md text-label-md text-on-surface">Destination Region <span class="text-error">*</span></label>
 <input class="w-full px-4 py-3 rounded-lg border focus:ring-1 outline-none transition-all font-body-md text-body-md bg-transparent"
        [ngClass]="packageForm.get('destination')?.invalid && packageForm.get('destination')?.touched ? 'border-error focus:border-error focus:ring-error' : 'border-outline-variant focus:border-primary focus:ring-primary'"
-       placeholder="e.g. Swiss Alps" type="text" formControlName="destination" [readonly]="isPublished">
+       placeholder="e.g. Swiss Alps" type="text" formControlName="destination" [readonly]="isPublished" (blur)="closeLocationDropdown()">
+<!-- Location Autocomplete Dropdown -->
+@if (showLocationDropdown && locationSuggestions.length > 0) {
+  <div class="absolute top-full left-0 right-0 mt-1 bg-surface rounded-xl shadow-xl border border-outline-variant z-50 overflow-hidden">
+    <ul class="max-h-60 overflow-y-auto">
+      @for (suggestion of locationSuggestions; track suggestion.name) {
+        <li class="px-4 py-3 hover:bg-surface-container cursor-pointer flex flex-col border-b border-outline-variant/30 last:border-0 transition-colors" (click)="selectLocation(suggestion)">
+          <span class="font-label-md text-on-surface">{{ suggestion.name }}</span>
+          <span class="text-caption text-on-surface-variant truncate">{{ suggestion.display_name }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+}
 </div>
 <div class="flex flex-col gap-2">
 <label class="font-label-md text-label-md text-on-surface">Primary Country <span class="text-error">*</span></label>

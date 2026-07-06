@@ -1,5 +1,5 @@
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Component, inject, OnInit, OnDestroy, signal, DestroyRef } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal, DestroyRef, ChangeDetectorRef } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { PackageService } from '../../services/package.service';
@@ -9,6 +9,8 @@ import { TravelPackage } from '../../models/package.model';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { environment } from '../../../environments/environment';
+import { LocationService, LocationSuggestion } from '../../services/location.service';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,19 +27,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   userService = inject(UserService);
   wishlistService = inject(WishlistService);
+  private locationService = inject(LocationService);
+  private cdr = inject(ChangeDetectorRef);
 
   packages = signal<TravelPackage[]>([]);
   isLoading = signal<boolean>(true);
   errorMessage = signal<string>('');
-  
-  // Search & Filter State
+
   searchDestination = signal<string>('');
   searchDate = signal<string>('');
   searchPackager = signal<string>('');
   selectedPackageType = signal<string>('');
   selectedSortBy = signal<string>('');
   
-  // Footer Modals
+  locationSuggestions = signal<LocationSuggestion[]>([]);
+  showLocationDropdown = signal<boolean>(false);
+  
   isPolicyModalOpen = signal<boolean>(false);
   isCareersModalOpen = signal<boolean>(false);
 
@@ -80,6 +85,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.authService.isAuthenticated()) {
       this.wishlistService.loadWishlists();
     }
+
+    toObservable(this.searchDestination).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap(query => {
+        if (!query || query.length < 2) {
+          this.locationSuggestions.set([]);
+          this.showLocationDropdown.set(false);
+          return [];
+        }
+        return this.locationService.searchLocation(query);
+      })
+    ).subscribe(suggestions => {
+      this.locationSuggestions.set(suggestions);
+      this.showLocationDropdown.set(suggestions.length > 0);
+      this.cdr.detectChanges();
+    });
+  }
+
+  selectLocation(suggestion: LocationSuggestion) {
+    const locationName = suggestion.address.city || suggestion.address.town || suggestion.address.village || suggestion.name;
+    this.searchDestination.set(locationName);
+    this.showLocationDropdown.set(false);
+  }
+
+  closeLocationDropdown() {
+    setTimeout(() => {
+      this.showLocationDropdown.set(false);
+    }, 200);
   }
 
   ngOnDestroy() {
@@ -97,20 +132,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.searchDestination().trim()) filters.SearchTerm = this.searchDestination().trim();
     if (this.searchPackager().trim()) filters.PackagerName = this.searchPackager().trim();
     if (this.selectedPackageType()) filters.PackageType = this.selectedPackageType();
-    // Optional: map searchDate if backend supports travel date filtering
     if (this.searchDate().trim()) filters.TravelStartDate = this.searchDate().trim();
     if (this.selectedSortBy()) filters.SortBy = this.selectedSortBy();
 
     this.packageService.getPackages(filters).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
-        // Handle pagination response or direct array
         const pkgs = res.items ? res.items : (res.data ? res.data : res);
         this.packages.set(pkgs || []);
         this.isLoading.set(false);
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.errorMessage.set('Failed to load packages');
         this.isLoading.set(false);
+        this.cdr.detectChanges();
       }
     });
   }
@@ -126,6 +161,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onSearch() {
+    this.loadPackages();
+  }
+
+  clearFilters() {
+    this.searchDestination.set('');
+    this.searchDate.set('');
+    this.searchPackager.set('');
+    this.selectedPackageType.set('');
+    this.selectedSortBy.set('');
     this.loadPackages();
   }
 
