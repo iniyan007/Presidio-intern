@@ -84,7 +84,7 @@ export class NavbarComponent {
   }
 
   @HostListener('document:click', ['$event'])
-  clickout(event: any) {
+  clickout(event: MouseEvent) {
     if (this.isNotificationOpen()) {
       const clickedInside = this.eRef.nativeElement.querySelector('.notification-container')?.contains(event.target);
       if (!clickedInside) {

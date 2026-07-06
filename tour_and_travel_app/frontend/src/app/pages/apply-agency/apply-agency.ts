@@ -29,11 +29,11 @@ export class ApplyAgencyComponent implements OnInit {
 
   applyForm: FormGroup = this.fb.group({
     companyName: ['', Validators.required],
-    businessLicenseNo: ['', Validators.required],
+    businessLicenseNo: ['', [Validators.required, Validators.minLength(5)]],
     contactEmail: ['', [Validators.required, Validators.email]],
-    contactPhone: ['', Validators.required],
-    websiteUrl: ['', Validators.required],
-    description: ['', Validators.required]
+    contactPhone: ['', [Validators.required, Validators.pattern(/^\\d{10}$/)]],
+    websiteUrl: ['', [Validators.required, Validators.pattern(/^(https?:\\/\\/)?([\\da-z.-]+)\\.([a-z.]{2,6})([/\\w .-]*)*\\/?$/)]],
+    description: ['', [Validators.required, Validators.minLength(20)]]
   });
 
   panDocument: File | null = null;
@@ -66,7 +66,7 @@ export class ApplyAgencyComponent implements OnInit {
         return;
       }
       if (this.applyForm.get('businessLicenseNo')?.invalid) {
-        this.errorMessage.set('Business License Number is required.');
+        this.errorMessage.set('A valid Business License Number (min 5 characters) is required.');
         return;
       }
       if (!this.panDocument || !this.gstDocument || !this.businessRegistration) {
@@ -76,13 +76,20 @@ export class ApplyAgencyComponent implements OnInit {
     }
     
     if (step === 3) {
-      if (
-        this.applyForm.get('contactEmail')?.invalid ||
-        this.applyForm.get('contactPhone')?.invalid ||
-        this.applyForm.get('websiteUrl')?.invalid ||
-        this.applyForm.get('description')?.invalid
-      ) {
-        this.errorMessage.set('All contact information fields are required.');
+      if (this.applyForm.get('contactEmail')?.invalid) {
+        this.errorMessage.set('A valid Email is required.');
+        return;
+      }
+      if (this.applyForm.get('contactPhone')?.invalid) {
+        this.errorMessage.set('A valid 10-digit Phone Number is required.');
+        return;
+      }
+      if (this.applyForm.get('websiteUrl')?.invalid) {
+        this.errorMessage.set('A valid Website URL is required.');
+        return;
+      }
+      if (this.applyForm.get('description')?.invalid) {
+        this.errorMessage.set('A valid Description (min 20 characters) is required.');
         return;
       }
     }

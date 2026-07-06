@@ -605,6 +605,21 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
       }
     }
 
+    if (Math.abs(formValue.durationDays - formValue.durationNights) > 1) {
+      this.toastService.show('The difference between Days and Nights cannot be greater than 1.', 'error');
+      hasValidationError = true;
+    }
+
+    if (formValue.seasonalPricing && formValue.seasonalPricing.length > 0) {
+      for (const pricing of formValue.seasonalPricing) {
+        if (pricing.childPrice != null && pricing.childPrice > pricing.basePrice) {
+          this.toastService.show('Child Price cannot be greater than Base Price.', 'error');
+          hasValidationError = true;
+          break;
+        }
+      }
+    }
+
 
     const itineraryLength = this.isPublished ? this.existingItinerary.length : formValue.itinerary.length;
     if (formValue.durationDays !== itineraryLength) {

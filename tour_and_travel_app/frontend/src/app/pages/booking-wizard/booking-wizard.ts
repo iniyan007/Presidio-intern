@@ -279,7 +279,21 @@ export class BookingWizardComponent implements OnInit {
             break;
           }
 
-          const age = this.calculateAge(new Date(t.dateOfBirth));
+          const nameRegex = /^[a-zA-Z\s]+$/;
+          if (!nameRegex.test(t.fullName.trim())) {
+            this.toastService.show(`Traveler ${i + 1}: Name can only contain alphabets and spaces.`, 'error');
+            hasValidationErrors = true;
+            break;
+          }
+
+          const dobDate = new Date(t.dateOfBirth);
+          if (dobDate > new Date()) {
+            this.toastService.show(`Traveler ${i + 1}: Date of Birth cannot be in the future.`, 'error');
+            hasValidationErrors = true;
+            break;
+          }
+
+          const age = this.calculateAge(dobDate);
           if (t.isPrimary && age < 18) {
             this.toastService.show(`Traveler ${i + 1} (Primary): Must be at least 18 years old to book.`, 'error');
             hasValidationErrors = true;
