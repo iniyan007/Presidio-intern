@@ -59,6 +59,22 @@
                 <span class="material-symbols-outlined text-sm">category</span>
                 <span class="text-caption">{{ wishlist.package.packageType }}</span>
               </div>
+              @if (wishlist.package.packageType === 'Family') {
+                <div class="flex items-center gap-1 w-full mt-1">
+                  <span class="material-symbols-outlined text-sm text-primary">group</span>
+                  <span class="text-caption text-primary font-medium">3 - 10 travelers per booking</span>
+                </div>
+              } @else if (wishlist.package.packageType === 'Private') {
+                <div class="flex items-center gap-1 w-full mt-1">
+                  <span class="material-symbols-outlined text-sm text-primary">group</span>
+                  <span class="text-caption text-primary font-medium">1 - 4 travelers per booking</span>
+                </div>
+              } @else if (wishlist.package.packageType === 'Honeymoon') {
+                <div class="flex items-center gap-1 w-full mt-1">
+                  <span class="material-symbols-outlined text-sm text-primary">favorite</span>
+                  <span class="text-caption text-primary font-medium">Exactly 2 travelers per booking</span>
+                </div>
+              }
             </div>
             
             <div class="flex justify-between items-center pt-4 border-t border-outline-variant/30">

@@ -67,8 +67,13 @@ export class BookingWizardComponent implements OnInit {
     const season = this.selectedSeason();
     if (!season) return 0;
     let slots = season.availableSlots;
-    if (this.pkg()?.packageType === 'Honeymoon') {
+    const pkgType = this.pkg()?.packageType;
+    if (pkgType === 'Honeymoon') {
       slots = Math.min(slots, 2);
+    } else if (pkgType === 'Family') {
+      slots = Math.min(slots, 10);
+    } else if (pkgType === 'Private') {
+      slots = Math.min(slots, 4);
     }
     return slots;
   });
@@ -132,13 +137,23 @@ export class BookingWizardComponent implements OnInit {
             } catch (e) { }
           }
 
-          if (!loadedTravelersFromDraft && p.packageType === 'Honeymoon') {
-            if (this.travelers().length === 1) {
-              this.travelers.update(t => [...t, {
-                fullName: '', dateOfBirth: '', gender: 'Female', nationality: 'Indian',
-                passportNumber: '', aadharCardNumber: '', mealPreference: 'Vegetarian',
-                isPrimary: false, passportFile: null, aadharFile: null
-              }]);
+          if (!loadedTravelersFromDraft) {
+            if (p.packageType === 'Honeymoon') {
+              if (this.travelers().length === 1) {
+                this.travelers.update(t => [...t, {
+                  fullName: '', dateOfBirth: '', gender: 'Female', nationality: 'Indian',
+                  passportNumber: '', aadharCardNumber: '', mealPreference: 'Vegetarian',
+                  isPrimary: false, passportFile: null, aadharFile: null
+                }]);
+              }
+            } else if (p.packageType === 'Family') {
+              while (this.travelers().length < 3) {
+                this.travelers.update(t => [...t, {
+                  fullName: '', dateOfBirth: '', gender: 'Male', nationality: 'Indian',
+                  passportNumber: '', aadharCardNumber: '', mealPreference: 'Vegetarian',
+                  isPrimary: false, passportFile: null, aadharFile: null
+                }]);
+              }
             }
           }
 
@@ -193,10 +208,18 @@ export class BookingWizardComponent implements OnInit {
 
   removeTraveler(index: number) {
     if (index === 0) return; // Cannot remove primary
-    if (this.pkg()?.packageType === 'Honeymoon' && index === 1) {
-      this.toastService.show('Honeymoon packages require exactly 2 travelers. The second traveler cannot be removed.', 'error');
+    const pkgType = this.pkg()?.packageType;
+    const currentLength = this.travelers().length;
+    
+    if (pkgType === 'Honeymoon' && currentLength <= 2) {
+      this.toastService.show('Honeymoon packages require exactly 2 travelers.', 'error');
       return;
     }
+    if (pkgType === 'Family' && currentLength <= 3) {
+      this.toastService.show('Family packages require a minimum of 3 travelers.', 'error');
+      return;
+    }
+    
     this.travelers.update(t => t.filter((_, i) => i !== index));
   }
 
@@ -248,8 +271,25 @@ export class BookingWizardComponent implements OnInit {
           return;
         }
 
-        if (this.pkg()?.packageType === 'Honeymoon') {
+        const pkgType = this.pkg()?.packageType;
+        const totalTravelers = this.travelers().length;
+
+        if (pkgType === 'Honeymoon') {
+          if (totalTravelers !== 2) {
+            this.toastService.show('Honeymoon packages require exactly 2 travelers per booking.', 'error');
+            return;
+          }
           this.infantCount.set(0);
+        } else if (pkgType === 'Family') {
+          if (totalTravelers < 3 || totalTravelers > 10) {
+            this.toastService.show('Family packages require 3 to 10 travelers per booking.', 'error');
+            return;
+          }
+        } else if (pkgType === 'Private') {
+          if (totalTravelers < 1 || totalTravelers > 4) {
+            this.toastService.show('Private packages require 1 to 4 travelers per booking.', 'error');
+            return;
+          }
         }
 
         if (this.infantCount() > 10) {

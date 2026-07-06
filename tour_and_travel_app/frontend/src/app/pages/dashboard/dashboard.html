@@ -1,6 +1,5 @@
 
 <main class="max-w-7xl mx-auto px-6 md:px-12 lg:px-12 py-12">
-<!-- Hero Section & Search -->
 <section class="mb-16">
 <div class="text-center mb-10">
 <h1 class="font-display-lg text-display-lg mb-4 text-primary">
@@ -12,17 +11,15 @@
 </h1>
 <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Explore handpicked travel experiences tailored for adventurers, groups, and seekers of serenity.</p>
 </div>
-<!-- Enhanced Search Bar -->
 <div class="bg-surface-container-lowest p-4 rounded-xl shadow-[0px_4px_20px_rgba(26,54,93,0.08)] max-w-4xl mx-auto flex flex-col lg:flex-row gap-4">
 <div class="flex-1 flex items-center px-4 py-3 lg:py-0 border-b border-outline-variant/30 lg:border-b-0 lg:border-r relative">
 <span class="material-symbols-outlined text-primary mr-3">travel_explore</span>
-<input class="w-full border-none focus:ring-0 bg-transparent text-body-md font-body-md outline-none" placeholder="Where to?" type="text" [value]="searchDestination()" (input)="searchDestination.set($any($event.target).value)" (blur)="closeLocationDropdown()">
-<!-- Location Autocomplete Dropdown -->
+<input class="w-full border-none focus:ring-0 bg-transparent text-body-md font-body-md outline-none" placeholder="Where to?" type="text" [value]="searchDestination()" (input)="onSearchDestinationInput($any($event.target).value)" (blur)="closeLocationDropdown()" (keyup.enter)="onSearch()">
 @if (showLocationDropdown() && locationSuggestions().length > 0) {
   <div class="absolute top-full left-0 right-0 mt-2 bg-surface rounded-xl shadow-xl border border-outline-variant z-50 overflow-hidden">
     <ul class="max-h-60 overflow-y-auto">
       @for (suggestion of locationSuggestions(); track suggestion.name) {
-        <li class="px-4 py-3 hover:bg-surface-container cursor-pointer flex flex-col border-b border-outline-variant/30 last:border-0 transition-colors" (click)="selectLocation(suggestion)">
+        <li class="px-4 py-3 hover:bg-surface-container cursor-pointer flex flex-col border-b border-outline-variant/30 last:border-0 transition-colors" (mousedown)="selectLocation(suggestion); $event.preventDefault()">
           <span class="font-label-md text-on-surface">{{ suggestion.name }}</span>
           <span class="text-caption text-on-surface-variant truncate">{{ suggestion.display_name }}</span>
         </li>
@@ -33,11 +30,11 @@
 </div>
 <div class="flex-1 flex items-center px-4 py-3 lg:py-0 border-b border-outline-variant/30 lg:border-b-0 lg:border-r">
 <span class="material-symbols-outlined text-primary mr-3">calendar_month</span>
-<input class="w-full border-none focus:ring-0 bg-transparent text-body-md font-body-md outline-none" placeholder="When?" type="date" [min]="minDate" [value]="searchDate()" (input)="searchDate.set($any($event.target).value)">
+<input class="w-full border-none focus:ring-0 bg-transparent text-body-md font-body-md outline-none" placeholder="When?" type="date" [min]="minDate" [value]="searchDate()" (input)="searchDate.set($any($event.target).value)" (keyup.enter)="onSearch()">
 </div>
 <div class="flex-1 flex items-center px-4 py-3 lg:py-0 border-b border-outline-variant/30 lg:border-b-0 lg:border-r">
 <span class="material-symbols-outlined text-primary mr-3">storefront</span>
-<input class="w-full border-none focus:ring-0 bg-transparent text-body-md font-body-md outline-none" placeholder="Agency Name" type="text" [value]="searchPackager()" (input)="searchPackager.set($any($event.target).value)">
+<input class="w-full border-none focus:ring-0 bg-transparent text-body-md font-body-md outline-none" placeholder="Agency Name" type="text" [value]="searchPackager()" (input)="searchPackager.set($any($event.target).value)" (keyup.enter)="onSearch()">
 </div>
 
 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 px-4 py-3 lg:py-0 w-full lg:w-auto">
@@ -142,15 +139,20 @@
             <span class="material-symbols-outlined text-sm text-error">event_seat</span>
             <span class="text-caption text-error font-bold">Only {{ pkg.pendingSeats }} seats left!</span>
           </div>
-        } @else if (pkg.packageType === 'Family' || pkg.packageType === 'Private') {
+        } @else if (pkg.packageType === 'Family') {
           <div class="flex items-center gap-1 w-full mt-1">
-            <span class="material-symbols-outlined text-sm text-primary">event_seat</span>
-            <span class="text-caption text-primary font-medium">{{ pkg.maxCapacity }} bookable seats</span>
+            <span class="material-symbols-outlined text-sm text-primary">group</span>
+            <span class="text-caption text-primary font-medium">3 - 10 travelers per booking</span>
           </div>
-        } @else if (pkg.packageType !== 'Honeymoon') {
+        } @else if (pkg.packageType === 'Private') {
           <div class="flex items-center gap-1 w-full mt-1">
-            <span class="material-symbols-outlined text-sm text-primary">event_seat</span>
-            <span class="text-caption text-primary font-medium">{{ pkg.pendingSeats }} bookable seats</span>
+            <span class="material-symbols-outlined text-sm text-primary">group</span>
+            <span class="text-caption text-primary font-medium">1 - 4 travelers per booking</span>
+          </div>
+        } @else if (pkg.packageType === 'Honeymoon') {
+          <div class="flex items-center gap-1 w-full mt-1">
+            <span class="material-symbols-outlined text-sm text-primary">favorite</span>
+            <span class="text-caption text-primary font-medium">Exactly 2 travelers per booking</span>
           </div>
         }
         @if (pkg.availableUntil) {
@@ -171,6 +173,47 @@
       </div>
     }
   </div>
+  
+  <!-- Pagination Controls -->
+  @if (totalPages() > 0) {
+    <div class="mt-12 flex flex-col items-center justify-center space-y-4">
+      <div class="flex items-center gap-2">
+        <button 
+          (click)="prevPage()" 
+          [disabled]="currentPage() === 1"
+          class="w-10 h-10 rounded-full flex items-center justify-center border border-outline-variant text-on-surface-variant hover:bg-surface-container hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+          <span class="material-symbols-outlined text-sm">chevron_left</span>
+        </button>
+
+        @for (page of visiblePages(); track $index) {
+          @if (page === -1) {
+            <span class="w-10 h-10 flex items-center justify-center text-on-surface-variant font-label-md">...</span>
+          } @else {
+            <button 
+              (click)="goToPage(page)"
+              [class.bg-primary]="currentPage() === page"
+              [class.text-white]="currentPage() === page"
+              [class.border-primary]="currentPage() === page"
+              [class.border-outline-variant]="currentPage() !== page"
+              [class.text-on-surface-variant]="currentPage() !== page"
+              class="w-10 h-10 rounded-full flex items-center justify-center border font-label-md hover:bg-primary/10 hover:border-primary transition-all">
+              {{ page }}
+            </button>
+          }
+        }
+
+        <button 
+          (click)="nextPage()" 
+          [disabled]="currentPage() === totalPages()"
+          class="w-10 h-10 rounded-full flex items-center justify-center border border-outline-variant text-on-surface-variant hover:bg-surface-container hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+          <span class="material-symbols-outlined text-sm">chevron_right</span>
+        </button>
+      </div>
+      <p class="text-caption text-on-surface-variant">
+        Page {{ currentPage() }} of {{ totalPages() }}
+      </p>
+    </div>
+  }
 </section>
 <!-- Promotional Bento Section -->
 <section class="mt-24">
@@ -204,10 +247,8 @@
 </div>
 </div>
 </section>
-<!-- Become an Agency CTA -->
 <section class="max-w-7xl mx-auto px-6 md:px-12 lg:px-12 mt-24 mb-24">
 <div class="bg-primary text-on-primary rounded-3xl p-10 md:p-16 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10 shadow-2xl">
-  <!-- Decorative background elements -->
   <div class="absolute top-0 right-0 w-64 h-64 bg-secondary rounded-full mix-blend-multiply filter blur-3xl opacity-30 translate-x-1/2 -translate-y-1/2"></div>
   <div class="absolute bottom-0 left-0 w-64 h-64 bg-tertiary rounded-full mix-blend-multiply filter blur-3xl opacity-50 -translate-x-1/2 translate-y-1/2"></div>
   
@@ -292,8 +333,6 @@
     </div>
   </div>
 }
-
-<!-- Careers Modal -->
 @if (isCareersModalOpen()) {
   <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
     <div class="bg-surface rounded-3xl w-full max-w-2xl overflow-hidden shadow-xl shadow-black/20 transform transition-all">

@@ -25,6 +25,8 @@ export class PackageService {
       if (filters.TravelStartDate) params = params.set('TravelStartDate', filters.TravelStartDate);
       if (filters.SortBy) params = params.set('SortBy', filters.SortBy);
       if (filters.PackagerName) params = params.set('PackagerName', filters.PackagerName);
+      if (filters.PageNumber) params = params.set('PageNumber', filters.PageNumber);
+      if (filters.PageSize) params = params.set('PageSize', filters.PageSize);
     }
     return this.http.get<any>(this.apiUrl, { params });
   }

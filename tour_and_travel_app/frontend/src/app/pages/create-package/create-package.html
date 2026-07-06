@@ -304,13 +304,7 @@
                     <label class="font-label-md text-label-md text-on-surface">Discount (%)</label>
                     <input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-surface-container-lowest" type="number" formControlName="discountPercent" min="0" max="100">
                 </div>
-                @if (packageForm.get('type')?.value === 'Honeymoon') {
-                    <div class="flex flex-col gap-2">
-                        <label class="font-label-md text-label-md text-on-surface">Available Slots</label>
-                        <input class="w-full px-4 py-3 rounded-lg border border-outline-variant outline-none font-body-md text-body-md bg-surface-container-lowest text-on-surface-variant cursor-not-allowed" type="number" value="2" readonly>
-                        <span class="text-caption text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">info</span> Fixed to 2 for Honeymoon packages</span>
-                    </div>
-                } @else {
+                @if (!['Honeymoon', 'Private', 'Family'].includes(packageForm.get('type')?.value)) {
                     <div class="flex flex-col gap-2">
                         <label class="font-label-md text-label-md text-on-surface">Available Slots <span class="text-error">*</span></label>
                         <input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md bg-surface-container-lowest" type="number" formControlName="availableSlots" min="1">

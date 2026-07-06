@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, signal, DestroyRef, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal, DestroyRef, ChangeDetectorRef, computed } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { UserService } from '../../services/user.service';
 import { environment } from '../../../environments/environment';
 import { LocationService, LocationSuggestion } from '../../services/location.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -43,8 +43,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
   locationSuggestions = signal<LocationSuggestion[]>([]);
   showLocationDropdown = signal<boolean>(false);
   
+  private locationSearchSubject = new Subject<string>();
+
   isPolicyModalOpen = signal<boolean>(false);
   isCareersModalOpen = signal<boolean>(false);
+
+  currentPage = signal<number>(1);
+  totalPages = signal<number>(1);
+  pageSize = signal<number>(9);
+
+  visiblePages = computed(() => {
+    const current = this.currentPage();
+    const total = this.totalPages();
+    const pages: number[] = [];
+    
+    if (total <= 5) {
+      for (let i = 1; i <= total; i++) pages.push(i);
+    } else {
+      if (current <= 3) {
+        pages.push(1, 2, 3, 4, -1, total);
+      } else if (current >= total - 2) {
+        pages.push(1, -1, total - 3, total - 2, total - 1, total);
+      } else {
+        pages.push(1, -1, current - 1, current, current + 1, -1, total);
+      }
+    }
+    return pages;
+  });
 
   openPolicyModal(event: Event) {
     event.preventDefault();
@@ -86,7 +111,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.wishlistService.loadWishlists();
     }
 
-    toObservable(this.searchDestination).pipe(
+    this.locationSearchSubject.pipe(
       takeUntilDestroyed(this.destroyRef),
       debounceTime(400),
       distinctUntilChanged(),
@@ -103,6 +128,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.showLocationDropdown.set(suggestions.length > 0);
       this.cdr.detectChanges();
     });
+  }
+
+  onSearchDestinationInput(value: string) {
+    this.searchDestination.set(value);
+    this.locationSearchSubject.next(value);
   }
 
   selectLocation(suggestion: LocationSuggestion) {
@@ -134,11 +164,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.selectedPackageType()) filters.PackageType = this.selectedPackageType();
     if (this.searchDate().trim()) filters.TravelStartDate = this.searchDate().trim();
     if (this.selectedSortBy()) filters.SortBy = this.selectedSortBy();
+    filters.PageNumber = this.currentPage();
+    filters.PageSize = this.pageSize();
 
     this.packageService.getPackages(filters).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         const pkgs = res.items ? res.items : (res.data ? res.data : res);
         this.packages.set(pkgs || []);
+        if (res.pageNumber) this.currentPage.set(res.pageNumber);
+        if (res.totalPages !== undefined) this.totalPages.set(res.totalPages);
+        else if (res.totalCount !== undefined) this.totalPages.set(Math.ceil(res.totalCount / this.pageSize()) || 1);
         this.isLoading.set(false);
         this.cdr.detectChanges();
       },
@@ -152,6 +187,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   
   selectPackageType(type: string) {
     this.selectedPackageType.set(type);
+    this.currentPage.set(1);
     this.loadPackages();
   }
 
@@ -161,6 +197,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onSearch() {
+    this.currentPage.set(1);
     this.loadPackages();
   }
 
@@ -170,13 +207,35 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.searchPackager.set('');
     this.selectedPackageType.set('');
     this.selectedSortBy.set('');
+    this.currentPage.set(1);
     this.loadPackages();
   }
 
   onSortChange(event: Event) {
     const value = (event.target as HTMLSelectElement).value;
     this.selectedSortBy.set(value);
+    this.currentPage.set(1);
     this.loadPackages();
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages() && page !== this.currentPage()) {
+      this.currentPage.set(page);
+      this.loadPackages();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage() < this.totalPages()) {
+      this.goToPage(this.currentPage() + 1);
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage() > 1) {
+      this.goToPage(this.currentPage() - 1);
+    }
   }
 
   viewDetails(packageId: string) {

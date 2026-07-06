@@ -117,13 +117,13 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
     const locationName = suggestion.address.city || suggestion.address.town || suggestion.address.village || suggestion.name;
     this.packageForm.patchValue({
       destination: locationName
-    });
+    }, { emitEvent: false });
     
     // Automatically fill country if available
     if (suggestion.address.country) {
       this.packageForm.patchValue({
         country: suggestion.address.country
-      });
+      }, { emitEvent: false });
     }
 
     this.showLocationDropdown = false;
@@ -197,7 +197,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
           cancellationPolicy: pkg.cancellationPolicy,
           type: pkg.packageType,
           status: pkg.status
-        });
+        }, { emitEvent: false });
 
         if (this.isPublished) {
           ['title', 'description', 'destination', 'country', 'city', 'durationDays', 'durationNights', 'maxCapacity', 'minAge', 'cancellationPolicy', 'type'].forEach(field => {
@@ -710,8 +710,8 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
         if (p.basePrice == null) p.basePrice = 0.01;
         if (p.availableSlots == null) p.availableSlots = 10;
         
-        if (formValue.type === 'Honeymoon') {
-          p.availableSlots = 2;
+        if (['Honeymoon', 'Private', 'Family'].includes(formValue.type)) {
+          p.availableSlots = 9999;
         }
         
         return {
@@ -755,8 +755,8 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
         if (p.basePrice == null) p.basePrice = 0;
         if (p.availableSlots == null) p.availableSlots = 10;
         
-        if (packageData.type === 'Honeymoon') {
-          p.availableSlots = 2;
+        if (['Honeymoon', 'Private', 'Family'].includes(packageData.type)) {
+          p.availableSlots = 9999;
         }
       });
       

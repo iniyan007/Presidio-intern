@@ -88,6 +88,22 @@
                       <span class="text-caption">{{ pkg.packageType }}</span>
                     </div>
                   </div>
+                  @if (pkg.packageType === 'Family') {
+                    <div class="flex items-center gap-1 w-full mb-3 -mt-2">
+                      <span class="material-symbols-outlined text-sm text-primary">group</span>
+                      <span class="text-caption text-primary font-medium">3 - 10 travelers per booking</span>
+                    </div>
+                  } @else if (pkg.packageType === 'Private') {
+                    <div class="flex items-center gap-1 w-full mb-3 -mt-2">
+                      <span class="material-symbols-outlined text-sm text-primary">group</span>
+                      <span class="text-caption text-primary font-medium">1 - 4 travelers per booking</span>
+                    </div>
+                  } @else if (pkg.packageType === 'Honeymoon') {
+                    <div class="flex items-center gap-1 w-full mb-3 -mt-2">
+                      <span class="material-symbols-outlined text-sm text-primary">favorite</span>
+                      <span class="text-caption text-primary font-medium">Exactly 2 travelers per booking</span>
+                    </div>
+                  }
                   <div class="flex justify-between items-center pt-3 border-t border-outline-variant/30">
                     <div>
                       <p class="text-[10px] uppercase text-on-surface-variant">Starting from</p>

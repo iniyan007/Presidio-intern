@@ -42,9 +42,17 @@
           </div>
           <div class="p-5 flex-1 flex flex-col">
             <h3 class="font-title-md text-title-md text-primary mb-2 line-clamp-2">{{ pkg.title }}</h3>
-            <div class="flex items-center gap-4 text-outline font-label-md text-caption mb-4">
+            <div class="flex items-center gap-4 text-outline font-label-md text-caption mb-4 flex-wrap">
               <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> {{ pkg.durationDays }} Days</span>
-              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">group</span> {{ pkg.slotsLeft ? pkg.slotsLeft + ' Slots left' : 'No slots' }}</span>
+              @if (pkg.packageType === 'Family') {
+                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">group</span> 3 - 10 travelers/booking</span>
+              } @else if (pkg.packageType === 'Private') {
+                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">group</span> 1 - 4 travelers/booking</span>
+              } @else if (pkg.packageType === 'Honeymoon') {
+                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">favorite</span> 2 travelers/booking</span>
+              } @else {
+                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">group</span> {{ pkg.slotsLeft ? pkg.slotsLeft + ' Slots left' : 'No slots' }}</span>
+              }
             </div>
             <div class="mt-auto pt-4 border-t border-outline-variant flex items-center justify-between">
               <span class="text-secondary font-bold text-title-md">{{ pkg.price | currency:'INR':'symbol':'1.0-0' }} <span class="text-caption font-normal text-outline">/person</span></span>

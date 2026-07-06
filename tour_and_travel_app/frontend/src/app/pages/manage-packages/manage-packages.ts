@@ -48,6 +48,7 @@ export class ManagePackagesComponent {
             status: pkg.status || 'Active',
             slotsLeft: pkg.pendingSeats || 0,
             price: pkg.startingPrice,
+            packageType: pkg.packageType,
             imageUrl: imgUrl
           };
         });
