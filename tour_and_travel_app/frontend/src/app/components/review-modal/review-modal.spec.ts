@@ -1,17 +1,21 @@
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReviewModal } from './review-modal';
+import { ReviewModalComponent } from './review-modal';
 
-describe('ReviewModal', () => {
-  let component: ReviewModal;
-  let fixture: ComponentFixture<ReviewModal>;
+describe('ReviewModalComponent', () => {
+  let component: ReviewModalComponent;
+  let fixture: ComponentFixture<ReviewModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReviewModal],
-    }).compileComponents();
+      imports: [ReviewModalComponent],
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
+}).compileComponents();
 
-    fixture = TestBed.createComponent(ReviewModal);
+    fixture = TestBed.createComponent(ReviewModalComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
