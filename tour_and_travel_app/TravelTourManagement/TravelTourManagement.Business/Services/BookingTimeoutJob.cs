@@ -57,15 +57,20 @@ public class BookingTimeoutJob : IJob
 
             var seatConsumingTravelers = booking.AdultCount + booking.ChildCount;
 
+            var package = await packageRepository.GetByIdAsync(booking.PackageId, cancellationToken);
+            bool isUnlimitedSlotsType = package != null && 
+                                        (package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Honeymoon ||
+                                         package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Family ||
+                                         package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Private);
+
             var pricing = await pricingRepository.GetByIdAsync(booking.SeasonalPricingId, cancellationToken);
-            if (pricing != null)
+            if (pricing != null && !isUnlimitedSlotsType)
             {
                 pricing.AvailableSlots += seatConsumingTravelers;
                 await pricingRepository.UpdateAsync(pricing, cancellationToken);
             }
 
-            var package = await packageRepository.GetByIdAsync(booking.PackageId, cancellationToken);
-            if (package != null)
+            if (package != null && !isUnlimitedSlotsType)
             {
                 package.CurrentBookings -= seatConsumingTravelers;
                 if (package.CurrentBookings < 0) package.CurrentBookings = 0; 

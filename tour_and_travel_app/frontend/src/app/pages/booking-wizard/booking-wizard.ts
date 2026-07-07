@@ -66,16 +66,17 @@ export class BookingWizardComponent implements OnInit {
   maxAllowedTravelers = computed(() => {
     const season = this.selectedSeason();
     if (!season) return 0;
-    let slots = season.availableSlots;
+    
     const pkgType = this.pkg()?.packageType;
     if (pkgType === 'Honeymoon') {
-      slots = Math.min(slots, 2);
+      return 2;
     } else if (pkgType === 'Family') {
-      slots = Math.min(slots, 10);
+      return 10;
     } else if (pkgType === 'Private') {
-      slots = Math.min(slots, 4);
+      return 4;
     }
-    return slots;
+    
+    return season.availableSlots;
   });
 
   adultCount = computed(() => {

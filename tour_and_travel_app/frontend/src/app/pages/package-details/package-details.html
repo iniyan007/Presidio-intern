@@ -154,8 +154,12 @@
             } @else {
               <span></span>
             }
-            @if (season.availableSlots > 0) {
-              <span class="text-secondary font-medium">{{ season.availableSlots }} slots left</span>
+            @if (p.packageType !== 'Honeymoon' && p.packageType !== 'Family' && p.packageType !== 'Private') {
+              @if (season.availableSlots > 0) {
+                <span class="text-secondary font-medium">{{ season.availableSlots }} slots left</span>
+              } @else {
+                <span class="text-error font-medium">Sold Out</span>
+              }
             }
           </div>
         </div>

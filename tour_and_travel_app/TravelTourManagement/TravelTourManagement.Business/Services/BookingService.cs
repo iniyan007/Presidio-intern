@@ -188,11 +188,18 @@ public class BookingService : IBookingService
 
                 await _bookingRepository.AddAsync(booking, cancellationToken);
 
-                pricing.AvailableSlots -= seatConsumingTravelers;
-                await _seasonalPricingRepository.UpdateAsync(pricing, cancellationToken);
+                bool isUnlimitedSlotsType = package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Honeymoon ||
+                                            package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Family ||
+                                            package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Private;
 
-                package.CurrentBookings += seatConsumingTravelers;
-                await _packageRepository.UpdateAsync(package, cancellationToken);
+                if (!isUnlimitedSlotsType)
+                {
+                    pricing.AvailableSlots -= seatConsumingTravelers;
+                    await _seasonalPricingRepository.UpdateAsync(pricing, cancellationToken);
+                    
+                    package.CurrentBookings += seatConsumingTravelers;
+                    await _packageRepository.UpdateAsync(package, cancellationToken);
+                }
                 
                 await _cache.RemoveAsync($"Package_{package.Id}", cancellationToken);
 
@@ -274,10 +281,14 @@ public class BookingService : IBookingService
 
     private void ValidateCapacity(Package package, PackageSeasonalPricing pricing, int seatConsumingTravelers)
     {
-        if (seatConsumingTravelers > pricing.AvailableSlots)
+        bool isUnlimitedSlotsType = package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Honeymoon ||
+                                    package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Family ||
+                                    package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Private;
+
+        if (!isUnlimitedSlotsType && seatConsumingTravelers > pricing.AvailableSlots)
             throw new InvalidOperationException($"Not enough slots available. Requested: {seatConsumingTravelers}, Available: {pricing.AvailableSlots}");
         
-        if (package.CurrentBookings + seatConsumingTravelers > package.MaxCapacity)
+        if (!isUnlimitedSlotsType && package.CurrentBookings + seatConsumingTravelers > package.MaxCapacity)
             throw new InvalidOperationException("Package max capacity exceeded.");
     }
 
@@ -586,15 +597,19 @@ public class BookingService : IBookingService
     {
         var seatConsumingTravelers = booking.AdultCount + booking.ChildCount;
 
+        var package = await _packageRepository.GetByIdAsync(booking.PackageId, cancellationToken);
+        bool isUnlimitedSlotsType = package != null && 
+                                    (package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Honeymoon ||
+                                     package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Family ||
+                                     package.Type == TravelTourManagement.DataAccess.Enums.PackageType.Private);
+
         var pricing = await _seasonalPricingRepository.GetByIdAsync(booking.SeasonalPricingId, cancellationToken);
-        if (pricing != null)
+        if (pricing != null && !isUnlimitedSlotsType)
         {
             pricing.AvailableSlots += seatConsumingTravelers;
             await _seasonalPricingRepository.UpdateAsync(pricing, cancellationToken);
         }
-
-        var package = await _packageRepository.GetByIdAsync(booking.PackageId, cancellationToken);
-        if (package != null)
+        if (package != null && !isUnlimitedSlotsType)
         {
             package.CurrentBookings -= seatConsumingTravelers;
             if (package.CurrentBookings < 0) package.CurrentBookings = 0;
