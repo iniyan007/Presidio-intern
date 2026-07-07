@@ -135,7 +135,25 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
     }, 200);
   }
 
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    this.autoDraft();
+  }
+
   ngOnDestroy() {
+    this.autoDraft();
+  }
+
+  private autoDraft() {
+    if (this.isSubmitting || this.isPublished) return;
+    
+    const title = this.packageForm.get('title')?.value;
+    const dest = this.packageForm.get('destination')?.value;
+    
+    // Only draft if we have basic required info and the form is dirty
+    if (title && title.trim() && dest && dest.trim() && this.packageForm.dirty) {
+      this.onSubmit('Draft', true);
+    }
   }
 
 
@@ -687,12 +705,14 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
   }
 
   // Submission
-  onSubmit(status: 'Draft' | 'Published') {
-    if (this.isSubmitting) return;
+  onSubmit(status: 'Draft' | 'Published', isAutoDraft: boolean = false) {
+    if (this.isSubmitting && !isAutoDraft) return;
     this.packageForm.patchValue({ status });
 
     const formValue = this.packageForm.getRawValue();
-    this.isSubmitting = true;
+    if (!isAutoDraft) {
+      this.isSubmitting = true;
+    }
 
     // Prepare CreatePackageRequest JSON
     const mediaMetadata = this.mediaFiles.map((m, idx) => ({
@@ -734,7 +754,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
     packageData.highlights = packageData.highlights.filter((h: any) => h.highlightText && h.highlightText.trim() !== '');
     packageData.inclusions = packageData.inclusions.filter((i: any) => i.description && i.description.trim() !== '');
 
-    if (status === 'Draft') {
+    if (status === 'Draft' && !isAutoDraft) {
       if (!packageData.title || !packageData.title.trim()) {
         this.toastService.show('Please provide a Package Title to save a draft.', 'error');
         this.isSubmitting = false;
@@ -779,27 +799,43 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
     });
 
     if (this.isEditMode && this.packageId) {
-      this.packageService.updateFullPackage(this.packageId, formData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-        next: (res) => {
-          this.toastService.show(`Package ${status === 'Draft' ? 'draft updated' : 'published'} successfully!`, 'success');
-          this.router.navigate(['/agency/dashboard']);
-        },
-        error: (err) => {
-          this.toastService.show(err.error?.message || 'Failed to update package.', 'error');
-          this.isSubmitting = false;
-        }
-      });
+      const req = this.packageService.updateFullPackage(this.packageId, formData);
+      if (!isAutoDraft) {
+        req.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+          next: (res) => {
+            this.toastService.show(`Package ${status === 'Draft' ? 'draft updated' : 'published'} successfully!`, 'success');
+            this.router.navigate(['/agency/dashboard']);
+          },
+          error: (err) => {
+            this.toastService.show(err.error?.message || 'Failed to update package.', 'error');
+            this.isSubmitting = false;
+          }
+        });
+      } else {
+        req.subscribe({
+          next: () => console.log('Auto-draft saved successfully'),
+          error: (err) => console.error('Auto-draft failed', err)
+        });
+      }
     } else {
-      this.packageService.createPackage(formData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-        next: (res) => {
-          this.toastService.show(`Package ${status === 'Draft' ? 'saved as draft' : 'published'} successfully!`, 'success');
-          this.router.navigate(['/agency/dashboard']);
-        },
-        error: (err) => {
-          this.toastService.show(err.error?.message || 'Failed to create package.', 'error');
-          this.isSubmitting = false;
-        }
-      });
+      const req = this.packageService.createPackage(formData);
+      if (!isAutoDraft) {
+        req.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+          next: (res) => {
+            this.toastService.show(`Package ${status === 'Draft' ? 'saved as draft' : 'published'} successfully!`, 'success');
+            this.router.navigate(['/agency/dashboard']);
+          },
+          error: (err) => {
+            this.toastService.show(err.error?.message || 'Failed to create package.', 'error');
+            this.isSubmitting = false;
+          }
+        });
+      } else {
+        req.subscribe({
+          next: () => console.log('Auto-draft saved successfully'),
+          error: (err) => console.error('Auto-draft failed', err)
+        });
+      }
     }
   }
 }
