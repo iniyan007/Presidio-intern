@@ -141,7 +141,24 @@ public class AuthService : IAuthService
 
         var otp = await _otpService.GenerateAndStoreOtpAsync(email);
         
-        var body = $"Hello {user.FullName},\n\nYour email verification code is: {otp}\n\nThis code will expire in 10 minutes.";
+        var body = $@"
+        <html>
+        <body style='font-family: Arial, sans-serif; color: #333;'>
+            <div style='max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>
+                <h2 style='color: #4CAF50; text-align: center;'>Email Verification</h2>
+                <p>Hello <strong>{user.FullName}</strong>,</p>
+                <p>Thank you for registering with us! Your email verification code is:</p>
+                <div style='text-align: center; margin: 20px 0;'>
+                    <span style='font-size: 24px; font-weight: bold; background-color: #f4f4f4; padding: 10px 20px; border-radius: 5px; letter-spacing: 5px;'>{otp}</span>
+                </div>
+                <p style='color: #777; font-size: 14px; text-align: center;'>This code will expire in 10 minutes.</p>
+                <br/>
+                <p>If you did not request this, please ignore this email.</p>
+                <hr style='border: none; border-top: 1px solid #eee;' />
+                <p style='font-size: 12px; color: #aaa; text-align: center;'>Travel Tour Management &copy; {DateTime.UtcNow.Year}</p>
+            </div>
+        </body>
+        </html>";
         await _emailService.SendEmailAsync(user.Email, "Email Verification OTP", body, cancellationToken);
         
         Console.WriteLine($"\n========================================");
@@ -258,7 +275,24 @@ public class AuthService : IAuthService
 
         var otp = await _otpService.GenerateAndStoreOtpAsync(email);
         
-        var body = $"Hello {user.FullName},\n\nYour password reset code is: {otp}\n\nThis code will expire in 10 minutes.";
+        var body = $@"
+        <html>
+        <body style='font-family: Arial, sans-serif; color: #333;'>
+            <div style='max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>
+                <h2 style='color: #E53935; text-align: center;'>Password Reset</h2>
+                <p>Hello <strong>{user.FullName}</strong>,</p>
+                <p>We received a request to reset your password. Your password reset code is:</p>
+                <div style='text-align: center; margin: 20px 0;'>
+                    <span style='font-size: 24px; font-weight: bold; background-color: #f4f4f4; padding: 10px 20px; border-radius: 5px; letter-spacing: 5px;'>{otp}</span>
+                </div>
+                <p style='color: #777; font-size: 14px; text-align: center;'>This code will expire in 10 minutes.</p>
+                <br/>
+                <p>If you did not request a password reset, please secure your account immediately.</p>
+                <hr style='border: none; border-top: 1px solid #eee;' />
+                <p style='font-size: 12px; color: #aaa; text-align: center;'>Travel Tour Management &copy; {DateTime.UtcNow.Year}</p>
+            </div>
+        </body>
+        </html>";
         await _emailService.SendEmailAsync(user.Email, "Password Reset OTP", body, cancellationToken);
 
         Console.WriteLine($"\n========================================");

@@ -55,6 +55,8 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+      "allowedHosts": ["moon-comply-expansion-fallen.trycloudflare.com"]},
           "configurations": {
             "production": {
               "buildTarget": "frontend:build:production"

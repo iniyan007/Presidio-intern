@@ -445,7 +445,30 @@ public class BookingService : IBookingService
         try
         {
             var pdfBytes = _pdfService.GenerateBookingTicketPdf(booking);
-            var emailBody = $"Hello {booking.User.FullName},\n\nGreat news! Your booking ({booking.BookingReference}) for {booking.Package.Title} has been confirmed.\n\nPlease find your booking ticket attached to this email.\n\nSafe travels!\nTravel Tour Management";
+            var emailBody = $@"
+            <html>
+            <body style='font-family: Arial, sans-serif; color: #333;'>
+                <div style='max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;'>
+                    <div style='text-align: center; margin-bottom: 20px;'>
+                        <h2 style='color: #2196F3;'>Booking Confirmed! 🎉</h2>
+                    </div>
+                    <p>Hello <strong>{booking.User.FullName}</strong>,</p>
+                    <p>Great news! Your booking for <strong>{booking.Package.Title}</strong> has been successfully confirmed by the packager.</p>
+                    
+                    <div style='background-color: #fff; padding: 15px; border-left: 4px solid #2196F3; margin: 20px 0;'>
+                        <p style='margin: 0;'><strong>Booking Reference:</strong> {booking.BookingReference}</p>
+                    </div>
+
+                    <p>Please find your official booking ticket attached to this email as a PDF document. You can also view and download it at any time from the 'My Bookings' section in your account.</p>
+                    
+                    <p>Get ready for an amazing experience!</p>
+                    <br/>
+                    <p>Safe travels,<br/><strong>Travel Tour Management Team</strong></p>
+                    <hr style='border: none; border-top: 1px solid #eee; margin-top: 30px;' />
+                    <p style='font-size: 12px; color: #aaa; text-align: center;'>Travel Tour Management &copy; {DateTime.UtcNow.Year}</p>
+                </div>
+            </body>
+            </html>";
             await _emailService.SendEmailWithAttachmentAsync(
                 booking.User.Email, 
                 $"Booking Confirmed - Ticket {booking.BookingReference}", 
