@@ -463,9 +463,9 @@ public class BookingService : IBookingService
                     
                     <p>Get ready for an amazing experience!</p>
                     <br/>
-                    <p>Safe travels,<br/><strong>Travel Tour Management Team</strong></p>
+                    <p>Safe travels,<br/><strong>TourMate Team</strong></p>
                     <hr style='border: none; border-top: 1px solid #eee; margin-top: 30px;' />
-                    <p style='font-size: 12px; color: #aaa; text-align: center;'>Travel Tour Management &copy; {DateTime.UtcNow.Year}</p>
+                    <p style='font-size: 12px; color: #aaa; text-align: center;'>TourMate &copy; {DateTime.UtcNow.Year}</p>
                 </div>
             </body>
             </html>";

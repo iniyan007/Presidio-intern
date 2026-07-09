@@ -155,7 +155,7 @@ public class AuthService : IAuthService
                 <br/>
                 <p>If you did not request this, please ignore this email.</p>
                 <hr style='border: none; border-top: 1px solid #eee;' />
-                <p style='font-size: 12px; color: #aaa; text-align: center;'>Travel Tour Management &copy; {DateTime.UtcNow.Year}</p>
+                <p style='font-size: 12px; color: #aaa; text-align: center;'>TourMate &copy; {DateTime.UtcNow.Year}</p>
             </div>
         </body>
         </html>";
@@ -289,7 +289,7 @@ public class AuthService : IAuthService
                 <br/>
                 <p>If you did not request a password reset, please secure your account immediately.</p>
                 <hr style='border: none; border-top: 1px solid #eee;' />
-                <p style='font-size: 12px; color: #aaa; text-align: center;'>Travel Tour Management &copy; {DateTime.UtcNow.Year}</p>
+                <p style='font-size: 12px; color: #aaa; text-align: center;'>TourMate &copy; {DateTime.UtcNow.Year}</p>
             </div>
         </body>
         </html>";
