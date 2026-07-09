@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/TravelTourManagement.API.props" />
-</Project>
