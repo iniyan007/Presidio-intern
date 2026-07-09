@@ -356,7 +356,7 @@
           "Microsoft.EntityFrameworkCore.Abstractions": "8.0.11",
           "Microsoft.EntityFrameworkCore.Analyzers": "8.0.11",
           "Microsoft.Extensions.Caching.Memory": "8.0.1",
-          "Microsoft.Extensions.Logging": "10.0.0"
+          "Microsoft.Extensions.Logging": "10.0.8"
         },
         "runtime": {
           "lib/net8.0/Microsoft.EntityFrameworkCore.dll": {
@@ -477,14 +477,14 @@
           }
         }
       },
-      "Microsoft.Extensions.DependencyInjection/10.0.0": {
+      "Microsoft.Extensions.DependencyInjection/10.0.8": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.8"
         },
         "runtime": {
           "lib/net8.0/Microsoft.Extensions.DependencyInjection.dll": {
             "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.25.52411"
+            "fileVersion": "10.0.826.23019"
           }
         }
       },
@@ -505,6 +505,19 @@
           "lib/net8.0/Microsoft.Extensions.DependencyModel.dll": {
             "assemblyVersion": "10.0.0.0",
             "fileVersion": "10.0.25.52411"
+          }
+        }
+      },
+      "Microsoft.Extensions.Diagnostics/10.0.8": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "10.0.8",
+          "Microsoft.Extensions.Diagnostics.Abstractions": "10.0.8",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "10.0.8"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Diagnostics.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
           }
         }
       },
@@ -547,16 +560,32 @@
           }
         }
       },
-      "Microsoft.Extensions.Logging/10.0.0": {
+      "Microsoft.Extensions.Http/10.0.8": {
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.8",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.8",
+          "Microsoft.Extensions.Diagnostics": "10.0.8",
+          "Microsoft.Extensions.Logging": "10.0.8",
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.8",
+          "Microsoft.Extensions.Options": "10.0.8"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Http.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging/10.0.8": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "10.0.8",
           "Microsoft.Extensions.Logging.Abstractions": "10.0.8",
           "Microsoft.Extensions.Options": "10.0.8"
         },
         "runtime": {
           "lib/net8.0/Microsoft.Extensions.Logging.dll": {
             "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.25.52411"
+            "fileVersion": "10.0.826.23019"
           }
         }
       },
@@ -938,7 +967,7 @@
       },
       "Serilog.Extensions.Logging/10.0.0": {
         "dependencies": {
-          "Microsoft.Extensions.Logging": "10.0.0",
+          "Microsoft.Extensions.Logging": "10.0.8",
           "Serilog": "4.3.0"
         },
         "runtime": {
@@ -1221,6 +1250,7 @@
           "Microsoft.AspNetCore.Hosting.Abstractions": "2.3.10",
           "Microsoft.Extensions.Caching.StackExchangeRedis": "10.0.8",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.8",
+          "Microsoft.Extensions.Http": "10.0.8",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "10.0.8",
           "Quartz": "3.18.1",
           "QuestPDF": "2026.5.0",
@@ -1458,12 +1488,12 @@
       "path": "microsoft.extensions.configuration.binder/10.0.8",
       "hashPath": "microsoft.extensions.configuration.binder.10.0.8.nupkg.sha512"
     },
-    "Microsoft.Extensions.DependencyInjection/10.0.0": {
+    "Microsoft.Extensions.DependencyInjection/10.0.8": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-f0RBabswJq+gRu5a+hWIobrLWiUYPKMhCD9WO3sYBAdSy3FFH14LMvLVFZc2kPSCimBLxSuitUhsd6tb0TAY6A==",
-      "path": "microsoft.extensions.dependencyinjection/10.0.0",
-      "hashPath": "microsoft.extensions.dependencyinjection.10.0.0.nupkg.sha512"
+      "sha512": "sha512-daf62xHIrq8pnE709hgaZZN9tSam9TGGepWe1+bE6V3GEuVwJiMs6ib+38lfMCyAJAHiX0vapxBhsuMSV7U+cg==",
+      "path": "microsoft.extensions.dependencyinjection/10.0.8",
+      "hashPath": "microsoft.extensions.dependencyinjection.10.0.8.nupkg.sha512"
     },
     "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.8": {
       "type": "package",
@@ -1478,6 +1508,13 @@
       "sha512": "sha512-RFYJR7APio/BiqdQunRq6DB+nDB6nc2qhHr77mlvZ0q0BT8PubMXN7XicmfzCbrDE/dzhBnUKBRXLTcqUiZDGg==",
       "path": "microsoft.extensions.dependencymodel/10.0.0",
       "hashPath": "microsoft.extensions.dependencymodel.10.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Diagnostics/10.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uduyw9d3Fi+sbredO5drA1S44AQS2FRNFyn72UmB2vmQIO1qaXprpp1U/2lYhYi8yFdVERfY9sy/pxw/qPOU9w==",
+      "path": "microsoft.extensions.diagnostics/10.0.8",
+      "hashPath": "microsoft.extensions.diagnostics.10.0.8.nupkg.sha512"
     },
     "Microsoft.Extensions.Diagnostics.Abstractions/10.0.8": {
       "type": "package",
@@ -1500,12 +1537,19 @@
       "path": "microsoft.extensions.hosting.abstractions/10.0.8",
       "hashPath": "microsoft.extensions.hosting.abstractions.10.0.8.nupkg.sha512"
     },
-    "Microsoft.Extensions.Logging/10.0.0": {
+    "Microsoft.Extensions.Http/10.0.8": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-BStFkd5CcnEtarlcgYDBcFzGYCuuNMzPs02wN3WBsOFoYIEmYoUdAiU+au6opzoqfTYJsMTW00AeqDdnXH2CvA==",
-      "path": "microsoft.extensions.logging/10.0.0",
-      "hashPath": "microsoft.extensions.logging.10.0.0.nupkg.sha512"
+      "sha512": "sha512-/9LU/KWJOrtZJB9ymPjcARDyjp679BvBA/aSncv2Kt84WlSKz767HtxHg8EFsu8n21BMLZi+5XxlkKbLwfn4iA==",
+      "path": "microsoft.extensions.http/10.0.8",
+      "hashPath": "microsoft.extensions.http.10.0.8.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging/10.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-K60JhWC2hN/Gi7TP68tBxSzk5ACWOs7lkmPzsfA8Bcf/IXTajujt2ORMf9rSMk1bsng6Lv4Y3fuxp3bm1+15ug==",
+      "path": "microsoft.extensions.logging/10.0.8",
+      "hashPath": "microsoft.extensions.logging.10.0.8.nupkg.sha512"
     },
     "Microsoft.Extensions.Logging.Abstractions/10.0.8": {
       "type": "package",

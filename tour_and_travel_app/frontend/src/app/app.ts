@@ -2,12 +2,13 @@ import { Component, signal, OnInit, inject } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar';
 import { ToastComponent } from './components/toast/toast';
+import { AiChatComponent } from './components/ai-chat/ai-chat';
 import { AuthService } from './services/auth.service';
 import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, ToastComponent],
+  imports: [RouterOutlet, NavbarComponent, ToastComponent, AiChatComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
