@@ -28,6 +28,7 @@ public class PackagerServiceTests
     private Mock<IBookingRepository> _bookingRepoMock;
     private Mock<IRepository<PackageSeasonalPricing, Guid>> _seasonalPricingRepoMock;
     private Mock<Microsoft.Extensions.Caching.Distributed.IDistributedCache> _cacheMock;
+    private Mock<IBlobStorageService> _blobStorageServiceMock;
     private PackagerService _packagerService;
 
     [SetUp]
@@ -41,6 +42,7 @@ public class PackagerServiceTests
         _bookingRepoMock = new Mock<IBookingRepository>();
         _seasonalPricingRepoMock = new Mock<IRepository<PackageSeasonalPricing, Guid>>();
         _cacheMock = new Mock<Microsoft.Extensions.Caching.Distributed.IDistributedCache>();
+        _blobStorageServiceMock = new Mock<IBlobStorageService>();
 
         _packagerService = new PackagerService(
             _packagerRepoMock.Object,
@@ -50,7 +52,8 @@ public class PackagerServiceTests
             _packageRepoMock.Object,
             _bookingRepoMock.Object,
             _seasonalPricingRepoMock.Object,
-            _cacheMock.Object
+            _cacheMock.Object,
+            _blobStorageServiceMock.Object
         );
     }
 

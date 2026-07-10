@@ -23,14 +23,16 @@ public class PackageService : IPackageService
     private readonly IBookingRepository _bookingRepository;
     private readonly AutoMapper.IMapper _mapper;
     private readonly IDistributedCache _cache;
+    private readonly IBlobStorageService _blobStorageService;
 
-    public PackageService(IPackageRepository packageRepository, IPackagerRepository packagerRepository, IBookingRepository bookingRepository, AutoMapper.IMapper mapper, IDistributedCache cache)
+    public PackageService(IPackageRepository packageRepository, IPackagerRepository packagerRepository, IBookingRepository bookingRepository, AutoMapper.IMapper mapper, IDistributedCache cache, IBlobStorageService blobStorageService)
     {
         _packageRepository = packageRepository;
         _packagerRepository = packagerRepository;
         _bookingRepository = bookingRepository;
         _mapper = mapper;
         _cache = cache;
+        _blobStorageService = blobStorageService;
     }
 
     public async Task<Guid> CreatePackageAsync(Guid userId, CreatePackageRequest request, List<IFormFile>? mediaFiles = null, CancellationToken cancellationToken = default)
@@ -60,15 +62,6 @@ public class PackageService : IPackageService
 
         if (request.Media != null && mediaFiles != null)
         {
-            var currentDirectory = Directory.GetCurrentDirectory(); 
-            var solutionDirectory = Directory.GetParent(currentDirectory)?.FullName ?? currentDirectory;
-            var uploadDirectory = Path.Combine(solutionDirectory, "TravelTourManagement.DataAccess", "Uploads", "Packages");
-            
-            if (!Directory.Exists(uploadDirectory))
-            {
-                Directory.CreateDirectory(uploadDirectory);
-            }
-
             var availableFiles = mediaFiles.ToList();
 
             foreach (var mediaReq in request.Media)
@@ -80,20 +73,15 @@ public class PackageService : IPackageService
                     
                     if (file.OpenReadStream().CanSeek) file.OpenReadStream().Position = 0;
 
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(file.FileName);
-                    string filePath = Path.Combine(uploadDirectory, uniqueFileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream, cancellationToken);
-                    }
+                    using var stream = file.OpenReadStream();
+                    string fileUrl = await _blobStorageService.UploadFileAsync(stream, file.FileName, file.ContentType, "web-images", cancellationToken);
 
                     if (Enum.TryParse<TravelTourManagement.DataAccess.Enums.MediaCategory>(mediaReq.Category, true, out var category))
                     {
                         package.PackageMedia.Add(new PackageMedium
                         {
-                            FileName = uniqueFileName,
-                            FilePath = $"/api/Packages/media/{uniqueFileName}",
+                            FileName = Path.GetFileName(new Uri(fileUrl).LocalPath),
+                            FilePath = fileUrl,
                             Caption = mediaReq.Caption,
                             IsPrimary = mediaReq.IsPrimary,
                             Category = category,
@@ -144,25 +132,14 @@ public class PackageService : IPackageService
         if (package.PackagerId != packager.Id)
             throw new UnauthorizedAccessException("You do not have permission to modify this package.");
 
-        var uploadDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "TravelTourManagement.DataAccess", "Uploads", "Packages");
-        if (!System.IO.Directory.Exists(uploadDirectory))
-        {
-            System.IO.Directory.CreateDirectory(uploadDirectory);
-        }
-
-        var uniqueFileName = $"{Guid.NewGuid()}_{fileName}";
-        var filePath = System.IO.Path.Combine(uploadDirectory, uniqueFileName);
-
-        using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
-        {
-            await fileStream.CopyToAsync(stream, cancellationToken);
-        }
+        using var stream = fileStream;
+        string fileUrl = await _blobStorageService.UploadFileAsync(stream, fileName, contentType, "web-images", cancellationToken);
 
         var media = new PackageMedium
         {
             PackageId = packageId,
-            FileName = uniqueFileName,
-            FilePath = filePath,
+            FileName = Path.GetFileName(new Uri(fileUrl).LocalPath),
+            FilePath = fileUrl,
             MimeType = contentType,
             Category = Enum.Parse<TravelTourManagement.DataAccess.Enums.MediaCategory>(category, true),
             IsPrimary = isPrimary,
@@ -172,7 +149,7 @@ public class PackageService : IPackageService
         };
         await _packageRepository.AddPackageMediaAsync(media, cancellationToken);
 
-        return uniqueFileName;
+        return media.FilePath;
     }
 
     public async Task<IEnumerable<PackageSummaryResponse>> GetAllPublishedPackagesAsync(CancellationToken cancellationToken = default)
@@ -520,11 +497,6 @@ public class PackageService : IPackageService
         // Handle Media: retain existing if their file is not in mediaFiles, but replace order/caption etc.
         // For simplicity, we can remove old media and upload new ones, OR update existing based on FileName match.
         
-        var currentDirectory = Directory.GetCurrentDirectory(); 
-        var solutionDirectory = Directory.GetParent(currentDirectory)?.FullName ?? currentDirectory;
-        var uploadDirectory = Path.Combine(solutionDirectory, "TravelTourManagement.DataAccess", "Uploads", "Packages");
-        if (!Directory.Exists(uploadDirectory)) Directory.CreateDirectory(uploadDirectory);
-
         var availableFiles = mediaFiles?.ToList() ?? new List<IFormFile>();
 
         foreach (var mediaReq in request.Media ?? Enumerable.Empty<CreatePackageMediaRequest>())
@@ -536,19 +508,15 @@ public class PackageService : IPackageService
             {
                 availableFiles.Remove(file);
                 if (file.OpenReadStream().CanSeek) file.OpenReadStream().Position = 0;
-                // New file upload
-                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(file.FileName);
-                string filePath = Path.Combine(uploadDirectory, uniqueFileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream, cancellationToken);
-                }
+                
+                using var stream = file.OpenReadStream();
+                string fileUrl = await _blobStorageService.UploadFileAsync(stream, file.FileName, file.ContentType, "web-images", cancellationToken);
                 
                 package.PackageMedia.Add(new PackageMedium
                 {
                     PackageId = package.Id,
-                    FileName = uniqueFileName,
-                    FilePath = $"/api/Packages/media/{uniqueFileName}",
+                    FileName = Path.GetFileName(new Uri(fileUrl).LocalPath),
+                    FilePath = fileUrl,
                     Caption = mediaReq.Caption,
                     IsPrimary = mediaReq.IsPrimary,
                     Category = Enum.Parse<MediaCategory>(mediaReq.Category, true),
@@ -577,17 +545,13 @@ public class PackageService : IPackageService
             }
         }
 
-        // Clean up orphaned files from the physical disk
+        // Clean up orphaned files from Blob Storage
         var preservedFileNames = package.PackageMedia.Select(m => m.FileName).ToHashSet();
         foreach (var old in oldMedia)
         {
             if (!preservedFileNames.Contains(old.FileName))
             {
-                var fullPath = Path.Combine(uploadDirectory, old.FileName);
-                if (System.IO.File.Exists(fullPath))
-                {
-                    try { System.IO.File.Delete(fullPath); } catch { /* Ignore locked files */ }
-                }
+                await _blobStorageService.DeleteFileAsync(old.FilePath, "web-images", cancellationToken);
             }
         }
 

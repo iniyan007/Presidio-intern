@@ -36,6 +36,7 @@ public class BookingServiceTests
     private Mock<IPlatformConfigService> _platformConfigServiceMock;
     private Mock<IMapper> _mapperMock;
     private Mock<IDistributedCache> _cacheMock;
+    private Mock<TravelTourManagement.Business.Interface.IBlobStorageService> _blobStorageServiceMock;
     
     private ApplicationDbContext _dbContext;
     private BookingService _bookingService;
@@ -61,6 +62,7 @@ public class BookingServiceTests
         _platformConfigServiceMock = new Mock<IPlatformConfigService>();
         _mapperMock = new Mock<IMapper>();
         _cacheMock = new Mock<IDistributedCache>();
+        _blobStorageServiceMock = new Mock<TravelTourManagement.Business.Interface.IBlobStorageService>();
 
         _cacheMock.Setup(c => c.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((byte[]?)null);
@@ -89,7 +91,8 @@ public class BookingServiceTests
             _notificationServiceMock.Object,
             _emailServiceMock.Object,
             _dbContext,
-            _cacheMock.Object
+            _cacheMock.Object,
+            _blobStorageServiceMock.Object
         );
     }
 
