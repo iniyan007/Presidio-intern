@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:5082/api', // To be replaced in Docker/Production
-  baseUrl: 'http://localhost:5082'     // To be replaced in Docker/Production
+  apiUrl: 'https://tourmate-api-u42eqvqvidncw.azurewebsites.net/api',
+  baseUrl: 'https://tourmate-api-u42eqvqvidncw.azurewebsites.net'
 };

@@ -64,7 +64,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("FrontendPolicy",
         policy =>
         {
-            policy.WithOrigins("http://localhost:4200","https://moon-comply-expansion-fallen.trycloudflare.com")
+            policy.WithOrigins("http://localhost:4200", "https://moon-comply-expansion-fallen.trycloudflare.com", "https://tourmate-web-u42eqvqvidncw.azurewebsites.net")
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials(); // needed for SignalR and cookies if any

@@ -1,0 +1,18 @@
+                              Table "public.packager_documents"
+      Column       |            Type             | Collation | Nullable |      Default       
+-------------------+-----------------------------+-----------+----------+--------------------
+ id                | uuid                        |           | not null | uuid_generate_v4()
+ packager_id       | uuid                        |           | not null | 
+ document_type     | character varying(50)       |           | not null | 
+ file_path         | text                        |           | not null | 
+ file_name         | character varying(255)      |           | not null | 
+ original_filename | character varying(255)      |           |          | 
+ file_size_bytes   | bigint                      |           |          | 
+ mime_type         | character varying(100)      |           |          | 
+ uploaded_at       | timestamp without time zone |           | not null | CURRENT_TIMESTAMP
+Indexes:
+    "packager_documents_pkey" PRIMARY KEY, btree (id)
+    "IX_packager_documents_packager_id" btree (packager_id)
+Foreign-key constraints:
+    "packager_documents_packager_id_fkey" FOREIGN KEY (packager_id) REFERENCES packagers(id) ON DELETE CASCADE
+

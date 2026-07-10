@@ -31,8 +31,21 @@ export class ApplyAgencyComponent implements OnInit {
     companyName: ['', Validators.required],
     businessLicenseNo: ['', [Validators.required, Validators.minLength(5)]],
     contactEmail: ['', [Validators.required, Validators.email]],
-    contactPhone: ['', [Validators.required, Validators.pattern(/^\\d{10}$/)]],
-    websiteUrl: ['', [Validators.required, Validators.pattern('^(https?:\\\\/\\\\/)?([\\\\da-z.-]+)\\\\.([a-z.]{2,6})([\\\\/\\\\w .-]*)*\\\\/?$')]],
+    contactPhone: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(/^\d{10}$/)
+      ]
+    ],
+
+    websiteUrl: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i)
+      ]
+    ],
     description: ['', [Validators.required, Validators.minLength(20)]]
   });
 
