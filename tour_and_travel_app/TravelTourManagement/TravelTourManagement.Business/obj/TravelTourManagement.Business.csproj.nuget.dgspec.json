@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/TravelTourManagement.Business.csproj": {}
+    "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/TravelTourManagement.Business.csproj": {}
   },
   "projects": {
-    "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/TravelTourManagement.Business.csproj": {
+    "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/TravelTourManagement.Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/TravelTourManagement.Business.csproj",
+        "projectUniqueName": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/TravelTourManagement.Business.csproj",
         "projectName": "TravelTourManagement.Business",
-        "projectPath": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/TravelTourManagement.Business.csproj",
-        "packagesPath": "/Users/iniyan/.nuget/packages/",
-        "outputPath": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/",
+        "projectPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/TravelTourManagement.Business.csproj",
+        "packagesPath": "/Users/vaibhavgupta/.nuget/packages/",
+        "outputPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.Business/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/iniyan/.nuget/NuGet/NuGet.Config"
+          "/Users/vaibhavgupta/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -26,8 +26,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.DataAccess/TravelTourManagement.DataAccess.csproj": {
-                "projectPath": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.DataAccess/TravelTourManagement.DataAccess.csproj"
+              "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.DataAccess/TravelTourManagement.DataAccess.csproj": {
+                "projectPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.DataAccess/TravelTourManagement.DataAccess.csproj"
               }
             }
           }
@@ -41,7 +41,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -99,26 +100,36 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.26, 8.0.26]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.26, 8.0.26]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.DataAccess/TravelTourManagement.DataAccess.csproj": {
+    "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.DataAccess/TravelTourManagement.DataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.DataAccess/TravelTourManagement.DataAccess.csproj",
+        "projectUniqueName": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.DataAccess/TravelTourManagement.DataAccess.csproj",
         "projectName": "TravelTourManagement.DataAccess",
-        "projectPath": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.DataAccess/TravelTourManagement.DataAccess.csproj",
-        "packagesPath": "/Users/iniyan/.nuget/packages/",
-        "outputPath": "/Users/iniyan/Intern/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.DataAccess/obj/",
+        "projectPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.DataAccess/TravelTourManagement.DataAccess.csproj",
+        "packagesPath": "/Users/vaibhavgupta/.nuget/packages/",
+        "outputPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/tour_and_travel_app/TravelTourManagement/TravelTourManagement.DataAccess/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/iniyan/.nuget/NuGet/NuGet.Config"
+          "/Users/vaibhavgupta/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -141,7 +152,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -183,12 +195,22 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.26, 8.0.26]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.26, 8.0.26]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

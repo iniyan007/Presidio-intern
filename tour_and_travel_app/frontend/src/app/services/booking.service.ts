@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { BookingResponse, CancelBookingRequest, PlatformConfigResponse, ProcessPaymentRequest, VerifyDocumentRequest } from '../models/booking.model';
@@ -68,5 +68,14 @@ export class BookingService {
 
   verifyBooking(id: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}/verify`, {});
+  }
+
+  calculatePrice(packageId: string, seasonalPricingId: string, adultCount: number, childCount: number): Observable<any> {
+    let params = new HttpParams()
+      .set('packageId', packageId)
+      .set('seasonalPricingId', seasonalPricingId)
+      .set('adultCount', adultCount.toString())
+      .set('childCount', childCount.toString());
+    return this.http.get<any>(`${this.apiUrl}/calculate-price`, { params });
   }
 }

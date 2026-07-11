@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/iniyan/Intern/Presidio-intern/C-Sharp /exception_handling/exception_handling.csproj": {}
+    "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /exception_handling/exception_handling.csproj": {}
   },
   "projects": {
-    "/Users/iniyan/Intern/Presidio-intern/C-Sharp /exception_handling/exception_handling.csproj": {
+    "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /exception_handling/exception_handling.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /exception_handling/exception_handling.csproj",
+        "projectUniqueName": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /exception_handling/exception_handling.csproj",
         "projectName": "exception_handling",
-        "projectPath": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /exception_handling/exception_handling.csproj",
-        "packagesPath": "/Users/iniyan/.nuget/packages/",
-        "outputPath": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /exception_handling/obj/",
+        "projectPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /exception_handling/exception_handling.csproj",
+        "packagesPath": "/Users/vaibhavgupta/.nuget/packages/",
+        "outputPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /exception_handling/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/iniyan/.nuget/NuGet/NuGet.Config"
+          "/Users/vaibhavgupta/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"

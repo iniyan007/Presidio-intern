@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/iniyan/Intern/Presidio-intern/C-Sharp /console-app/console-app.csproj": {}
+    "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /console-app/console-app.csproj": {}
   },
   "projects": {
-    "/Users/iniyan/Intern/Presidio-intern/C-Sharp /console-app/console-app.csproj": {
+    "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /console-app/console-app.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /console-app/console-app.csproj",
+        "projectUniqueName": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /console-app/console-app.csproj",
         "projectName": "console-app",
-        "projectPath": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /console-app/console-app.csproj",
-        "packagesPath": "/Users/iniyan/.nuget/packages/",
-        "outputPath": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /console-app/obj/",
+        "projectPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /console-app/console-app.csproj",
+        "packagesPath": "/Users/vaibhavgupta/.nuget/packages/",
+        "outputPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /console-app/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/iniyan/.nuget/NuGet/NuGet.Config"
+          "/Users/vaibhavgupta/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"

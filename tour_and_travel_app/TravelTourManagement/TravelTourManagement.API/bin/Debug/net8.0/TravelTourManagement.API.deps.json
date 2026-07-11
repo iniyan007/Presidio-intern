@@ -1228,10 +1228,7 @@
           "TravelTourManagement.DataAccess": "1.0.0"
         },
         "runtime": {
-          "TravelTourManagement.Business.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "TravelTourManagement.Business.dll": {}
         }
       },
       "TravelTourManagement.DataAccess/1.0.0": {
@@ -1241,10 +1238,7 @@
           "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.11"
         },
         "runtime": {
-          "TravelTourManagement.DataAccess.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "TravelTourManagement.DataAccess.dll": {}
         }
       }
     }

@@ -1,85 +1,5 @@
 ﻿<Project>
   <ItemGroup>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\080b2468-c3eb-4b4d-b941-b739c450b3ed_kumar_aadhar.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/080b2468-c3eb-4b4d-b941-b739c450b3ed_kumar_aadhar.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\080b2468-c3eb-4b4d-b941-b739c450b3ed_kumar_aadhar.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\155ed0bb-301c-41a4-bb02-6db06ebfd3bc_swetha_passport.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/155ed0bb-301c-41a4-bb02-6db06ebfd3bc_swetha_passport.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\155ed0bb-301c-41a4-bb02-6db06ebfd3bc_swetha_passport.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\2b146ddc-17c2-451b-81f5-7ba5d60d9b3e_kumar_aadhar.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/2b146ddc-17c2-451b-81f5-7ba5d60d9b3e_kumar_aadhar.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\2b146ddc-17c2-451b-81f5-7ba5d60d9b3e_kumar_aadhar.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\2d6a4a2a-0760-4cfa-a34e-e4234628ade6_kumar_passport.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/2d6a4a2a-0760-4cfa-a34e-e4234628ade6_kumar_passport.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\2d6a4a2a-0760-4cfa-a34e-e4234628ade6_kumar_passport.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\3252ef39-e7b3-4a69-9d29-55c0530dce67_swetha_aadhar.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/3252ef39-e7b3-4a69-9d29-55c0530dce67_swetha_aadhar.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\3252ef39-e7b3-4a69-9d29-55c0530dce67_swetha_aadhar.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\3579d315-667b-464d-9f99-807efc34ab3d_iniyan_cm_Assignment_LibraryAPI.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TravelTourManagement.API</SourceId>
@@ -95,86 +15,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\3579d315-667b-464d-9f99-807efc34ab3d_iniyan_cm_Assignment_LibraryAPI.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\3a09fdb8-ae4b-4c4f-a95f-e1a0222a6cf3_kumar_passport.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/3a09fdb8-ae4b-4c4f-a95f-e1a0222a6cf3_kumar_passport.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\3a09fdb8-ae4b-4c4f-a95f-e1a0222a6cf3_kumar_passport.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\3b4bebe0-00c5-4a72-b9c0-a0ed801f7e06_kumar_aadhar.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/3b4bebe0-00c5-4a72-b9c0-a0ed801f7e06_kumar_aadhar.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\3b4bebe0-00c5-4a72-b9c0-a0ed801f7e06_kumar_aadhar.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\3c44d3d0-e33e-4d2e-911c-40c8d40045af_swetha_passport.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/3c44d3d0-e33e-4d2e-911c-40c8d40045af_swetha_passport.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\3c44d3d0-e33e-4d2e-911c-40c8d40045af_swetha_passport.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\40692acb-18b4-4f69-8818-60307c879130_kumar_passport.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/40692acb-18b4-4f69-8818-60307c879130_kumar_passport.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\40692acb-18b4-4f69-8818-60307c879130_kumar_passport.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\45ffcb36-7e96-4137-94d6-b2674cbd8c10_kumar_aadhar.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/45ffcb36-7e96-4137-94d6-b2674cbd8c10_kumar_aadhar.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\45ffcb36-7e96-4137-94d6-b2674cbd8c10_kumar_aadhar.pdf))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\49b6ab07-35ea-40e1-91d8-2923428ed7c9_priya_passport.pdf))">
       <SourceType>Package</SourceType>
@@ -224,22 +64,6 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\69f2626c-5ac4-4102-a4e2-e67a3d1ac8d3_rajesh_passport.pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\792bd161-181a-49b2-bfc6-9d08dd86201c_kumar_aadhar.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/792bd161-181a-49b2-bfc6-9d08dd86201c_kumar_aadhar.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\792bd161-181a-49b2-bfc6-9d08dd86201c_kumar_aadhar.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\7c36f547-a68f-4cff-9ed8-eba6f0baa406_aadhar_iniyan.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TravelTourManagement.API</SourceId>
@@ -255,38 +79,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\7c36f547-a68f-4cff-9ed8-eba6f0baa406_aadhar_iniyan.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\828e0e3c-1537-4445-af0f-c18f1fe6ba7b_swetha_passport.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/828e0e3c-1537-4445-af0f-c18f1fe6ba7b_swetha_passport.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\828e0e3c-1537-4445-af0f-c18f1fe6ba7b_swetha_passport.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\843494ef-b4df-417c-8106-f827c3c4fc2b_kumar_passport.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/843494ef-b4df-417c-8106-f827c3c4fc2b_kumar_passport.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\843494ef-b4df-417c-8106-f827c3c4fc2b_kumar_passport.pdf))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\8715020e-db52-4dd7-a6b5-df8bca4f5de3_aadhar_iniyan.pdf))">
       <SourceType>Package</SourceType>
@@ -304,22 +96,6 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\8715020e-db52-4dd7-a6b5-df8bca4f5de3_aadhar_iniyan.pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\87fc4810-46ef-41ad-8a7f-67741bca484c_swetha_aadhar.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/87fc4810-46ef-41ad-8a7f-67741bca484c_swetha_aadhar.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\87fc4810-46ef-41ad-8a7f-67741bca484c_swetha_aadhar.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\a08e34a7-594b-40be-aa09-cb96dcf2eeb1_rajesh_aadhar.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TravelTourManagement.API</SourceId>
@@ -336,54 +112,6 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\a08e34a7-594b-40be-aa09-cb96dcf2eeb1_rajesh_aadhar.pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\a157e79f-3fef-49e7-913c-ce7c277bca13_swetha_passport.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/a157e79f-3fef-49e7-913c-ce7c277bca13_swetha_passport.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\a157e79f-3fef-49e7-913c-ce7c277bca13_swetha_passport.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\b0f272c0-9399-4ccd-a0c4-cc919fcb94fe_swetha_passport.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/b0f272c0-9399-4ccd-a0c4-cc919fcb94fe_swetha_passport.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\b0f272c0-9399-4ccd-a0c4-cc919fcb94fe_swetha_passport.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\b1b2034b-222b-44fa-843a-0704c4cc02a8_kumar_passport.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/b1b2034b-222b-44fa-843a-0704c4cc02a8_kumar_passport.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\b1b2034b-222b-44fa-843a-0704c4cc02a8_kumar_passport.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\c0b0865c-960b-4808-91d8-f47f39a27242_priya_aadhar.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TravelTourManagement.API</SourceId>
@@ -399,22 +127,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\c0b0865c-960b-4808-91d8-f47f39a27242_priya_aadhar.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\c55eeb91-c558-4a22-a7ec-3690327db294_swetha_aadhar.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/c55eeb91-c558-4a22-a7ec-3690327db294_swetha_aadhar.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\c55eeb91-c558-4a22-a7ec-3690327db294_swetha_aadhar.pdf))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\c6909d17-b560-419d-a276-0f9688f326f3_punitha_aadhar.pdf))">
       <SourceType>Package</SourceType>
@@ -447,70 +159,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\c82d40a8-6785-48f4-a664-70f91719ae2f_iniyan_cm_joins_and_SPs_Assignment3.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\d07ac7ed-7b3c-4178-8d25-7b751ae12f82_swetha_aadhar.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/d07ac7ed-7b3c-4178-8d25-7b751ae12f82_swetha_aadhar.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\d07ac7ed-7b3c-4178-8d25-7b751ae12f82_swetha_aadhar.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\da32e12a-c37c-4ab1-a04d-db1139e5b7e8_kumar_aadhar.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/da32e12a-c37c-4ab1-a04d-db1139e5b7e8_kumar_aadhar.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\da32e12a-c37c-4ab1-a04d-db1139e5b7e8_kumar_aadhar.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\e778873e-452e-4368-94c5-d02a3f9f65f0_kumar_passport.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/e778873e-452e-4368-94c5-d02a3f9f65f0_kumar_passport.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\e778873e-452e-4368-94c5-d02a3f9f65f0_kumar_passport.pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\f2a0b700-ba9f-4e74-983b-82f132f4a304_kumar_aadhar.pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TravelTourManagement.API</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TravelTourManagement.API</BasePath>
-      <RelativePath>uploads/travel_documents/f2a0b700-ba9f-4e74-983b-82f132f4a304_kumar_aadhar.pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\f2a0b700-ba9f-4e74-983b-82f132f4a304_kumar_aadhar.pdf))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\travel_documents\f2af48a5-832b-4cee-9424-b9a3bce4c52a_aadhar_iniyan.pdf))">
       <SourceType>Package</SourceType>

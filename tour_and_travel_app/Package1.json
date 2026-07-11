@@ -1,0 +1,307 @@
+{
+  "title": "Dubai Family Fun Adventure",
+  "description": "Enjoy an unforgettable family vacation in Dubai featuring iconic landmarks, thrilling theme parks, desert adventures, luxury accommodation, and entertainment suitable for all ages.",
+  "destination": "Dubai",
+  "country": "United Arab Emirates",
+  "city": "Dubai",
+  "durationDays": 6,
+  "durationNights": 5,
+  "maxCapacity": 10,
+  "minAge": 2,
+  "cancellationPolicy": "Free cancellation up to 30 days before departure. 50% refund between 15 and 29 days before departure.",
+  "type": "Family",
+  "status": "Published",
+  "highlights": [
+    {
+      "highlightText": "Visit the Burj Khalifa Observation Deck",
+      "displayOrder": 1
+    },
+    {
+      "highlightText": "Desert Safari with BBQ Dinner",
+      "displayOrder": 2
+    },
+    {
+      "highlightText": "Full-day adventure at IMG Worlds of Adventure",
+      "displayOrder": 3
+    },
+    {
+      "highlightText": "Dubai Aquarium and Underwater Zoo",
+      "displayOrder": 4
+    }
+  ],
+  "inclusions": [
+    {
+      "description": "5 nights accommodation in a 4-star family hotel",
+      "displayOrder": 1,
+      "inclusionType": "included"
+    },
+    {
+      "description": "Daily breakfast",
+      "displayOrder": 2,
+      "inclusionType": "included"
+    },
+    {
+      "description": "Airport pickup and drop",
+      "displayOrder": 3,
+      "inclusionType": "included"
+    },
+    {
+      "description": "Private city sightseeing transportation",
+      "displayOrder": 4,
+      "inclusionType": "included"
+    },
+    {
+      "description": "Travel insurance",
+      "displayOrder": 5,
+      "inclusionType": "optional"
+    },
+    {
+      "description": "Visa fees and personal expenses",
+      "displayOrder": 6,
+      "inclusionType": "excluded"
+    }
+  ],
+  "media": [
+    {
+      "filePath": "/uploads/packages/dubai-family-cover.jpg",
+      "fileName": "dubai-family-cover.jpg",
+      "caption": "Dubai Family Vacation",
+      "displayOrder": 1,
+      "isPrimary": true,
+      "category": "destination"
+    }
+  ],
+  "seasonalPricing": [
+    {
+      "seasonName": "Year Round Family Package",
+      "startDate": null,
+      "endDate": null,
+      "basePrice": 95000,
+      "childPrice": 65000,
+      "discountPercent": 8,
+      "availableSlots": 80,
+      "isActive": true
+    }
+  ],
+  "itinerary": [
+    {
+      "dayNumber": 1,
+      "title": "Arrival in Dubai",
+      "description": "Airport pickup and hotel check-in.",
+      "location": "Dubai",
+      "activities": [
+        {
+          "sequenceOrder": 1,
+          "activityTitle": "Hotel Check-in & Relax",
+          "description": "Welcome refreshments and leisure time.",
+          "activityType": "leisure",
+          "location": "Hotel",
+          "durationMinutes": 90,
+          "isOptional": false,
+          "extraCost": 0,
+          "daySession": "afternoon"
+        }
+      ],
+      "meals": [
+        {
+          "venue": "Hotel Restaurant",
+          "description": "Welcome Dinner",
+          "isIncluded": true,
+          "mealType": "dinner"
+        }
+      ],
+      "accommodations": [
+        {
+          "hotelName": "Grand Excelsior Hotel Dubai",
+          "hotelAddress": "Al Barsha, Dubai",
+          "starRating": 4,
+          "roomType": "Family Deluxe Room",
+          "checkInTime": "15:00",
+          "checkOutTime": "12:00",
+          "amenities": "Swimming Pool, Kids Play Area, WiFi, Gym",
+          "notes": "Connecting rooms available for larger families."
+        }
+      ],
+      "transports": [
+        {
+          "segmentOrder": 1,
+          "vehicleDescription": "Private Luxury Van",
+          "pickupPoint": "Dubai International Airport",
+          "dropPoint": "Grand Excelsior Hotel",
+          "pickupTime": "13:00",
+          "dropTime": "14:00",
+          "distanceKm": 28,
+          "notes": "Private airport transfer.",
+          "transportMode": "van"
+        }
+      ]
+    },
+    {
+      "dayNumber": 2,
+      "title": "Dubai City Tour",
+      "description": "Explore Dubai's famous landmarks.",
+      "location": "Dubai",
+      "activities": [
+        {
+          "sequenceOrder": 1,
+          "activityTitle": "Burj Khalifa Visit",
+          "description": "Visit the observation deck on the 124th floor.",
+          "activityType": "sightseeing",
+          "location": "Downtown Dubai",
+          "durationMinutes": 120,
+          "isOptional": false,
+          "extraCost": 0,
+          "daySession": "morning"
+        },
+        {
+          "sequenceOrder": 2,
+          "activityTitle": "Dubai Aquarium",
+          "description": "Explore marine life with the family.",
+          "activityType": "family",
+          "location": "Dubai Mall",
+          "durationMinutes": 150,
+          "isOptional": false,
+          "extraCost": 0,
+          "daySession": "afternoon"
+        }
+      ],
+      "meals": [
+        {
+          "venue": "Hotel",
+          "description": "Breakfast",
+          "isIncluded": true,
+          "mealType": "breakfast"
+        }
+      ],
+      "accommodations": [],
+      "transports": []
+    },
+    {
+      "dayNumber": 3,
+      "title": "IMG Worlds of Adventure",
+      "description": "Full-day indoor theme park experience.",
+      "location": "Dubai",
+      "activities": [
+        {
+          "sequenceOrder": 1,
+          "activityTitle": "Theme Park Adventure",
+          "description": "Enjoy thrilling rides and attractions suitable for all ages.",
+          "activityType": "adventure",
+          "location": "IMG Worlds of Adventure",
+          "durationMinutes": 420,
+          "isOptional": false,
+          "extraCost": 0,
+          "daySession": "morning"
+        }
+      ],
+      "meals": [
+        {
+          "venue": "Theme Park Food Court",
+          "description": "Lunch",
+          "isIncluded": true,
+          "mealType": "lunch"
+        }
+      ],
+      "accommodations": [],
+      "transports": []
+    },
+    {
+      "dayNumber": 4,
+      "title": "Desert Safari Experience",
+      "description": "Experience Dubai's famous desert adventure.",
+      "location": "Dubai Desert",
+      "activities": [
+        {
+          "sequenceOrder": 1,
+          "activityTitle": "Desert Safari",
+          "description": "Dune bashing, camel rides, sandboarding, and live entertainment.",
+          "activityType": "adventure",
+          "location": "Dubai Desert",
+          "durationMinutes": 360,
+          "isOptional": false,
+          "extraCost": 0,
+          "daySession": "afternoon"
+        }
+      ],
+      "meals": [
+        {
+          "venue": "Desert Camp",
+          "description": "BBQ Dinner",
+          "isIncluded": true,
+          "mealType": "dinner"
+        }
+      ],
+      "accommodations": [],
+      "transports": []
+    },
+    {
+      "dayNumber": 5,
+      "title": "Beach & Shopping",
+      "description": "Relax at JBR Beach followed by shopping.",
+      "location": "Dubai",
+      "activities": [
+        {
+          "sequenceOrder": 1,
+          "activityTitle": "JBR Beach",
+          "description": "Family beach activities and relaxation.",
+          "activityType": "leisure",
+          "location": "Jumeirah Beach Residence",
+          "durationMinutes": 180,
+          "isOptional": false,
+          "extraCost": 0,
+          "daySession": "morning"
+        },
+        {
+          "sequenceOrder": 2,
+          "activityTitle": "Mall of the Emirates",
+          "description": "Shopping and entertainment.",
+          "activityType": "shopping",
+          "location": "Dubai",
+          "durationMinutes": 240,
+          "isOptional": true,
+          "extraCost": 0,
+          "daySession": "afternoon"
+        }
+      ],
+      "meals": [
+        {
+          "venue": "Hotel Restaurant",
+          "description": "Breakfast",
+          "isIncluded": true,
+          "mealType": "breakfast"
+        }
+      ],
+      "accommodations": [],
+      "transports": []
+    },
+    {
+      "dayNumber": 6,
+      "title": "Departure",
+      "description": "Checkout and airport transfer.",
+      "location": "Dubai",
+      "activities": [],
+      "meals": [
+        {
+          "venue": "Hotel",
+          "description": "Breakfast",
+          "isIncluded": true,
+          "mealType": "breakfast"
+        }
+      ],
+      "accommodations": [],
+      "transports": [
+        {
+          "segmentOrder": 1,
+          "vehicleDescription": "Private Luxury Van",
+          "pickupPoint": "Grand Excelsior Hotel",
+          "dropPoint": "Dubai International Airport",
+          "pickupTime": "09:00",
+          "dropTime": "09:45",
+          "distanceKm": 28,
+          "notes": "Departure transfer.",
+          "transportMode": "van"
+        }
+      ]
+    }
+  ]
+}

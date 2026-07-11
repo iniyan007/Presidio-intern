@@ -54,4 +54,8 @@ export class PackageService {
   updateFullPackage(id: string, formData: FormData): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/me/${id}`, formData);
   }
+
+  getItineraryChecklist(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}/itinerary-checklist`);
+  }
 }

@@ -201,7 +201,64 @@
   
   <!-- Itinerary -->
   <section class="mb-12">
-  <h3 class="font-title-md text-title-md text-primary mb-6">Detailed Itinerary</h3>
+  <div class="flex items-center justify-between mb-6">
+    <h3 class="font-title-md text-title-md text-primary mb-0">Detailed Itinerary</h3>
+    <button (click)="toggleChecklist()" class="px-4 py-2 bg-primary text-white font-label-md rounded-lg flex items-center gap-2 hover:bg-primary/95 transition-all">
+      <span class="material-symbols-outlined text-[18px]">checklist</span>
+      {{ showChecklist() ? 'Hide Checklist' : 'Generate Day-Wise Checklist' }}
+    </button>
+  </div>
+
+  <!-- Checklist Panel -->
+  @if (showChecklist()) {
+    <div class="bg-surface-container border border-outline-variant rounded-2xl p-6 mb-8 shadow-md">
+      <div class="flex items-center justify-between mb-4 border-b pb-3 border-outline-variant/30">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[24px]">task_alt</span>
+          <h4 class="font-title-sm text-primary">Day-Wise Travel Checklist (Auto-Generated)</h4>
+        </div>
+        <button (click)="toggleChecklist()" class="text-on-surface-variant hover:text-primary transition-colors">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      @if (checklistLoading()) {
+        <div class="flex justify-center items-center py-8 gap-2">
+          <span class="material-symbols-outlined animate-spin text-primary">sync</span>
+          <span class="font-body-md text-on-surface-variant">Generating travel checklist...</span>
+        </div>
+      } @else if (checklistError()) {
+        <div class="text-error font-body-md py-4 text-center">{{ checklistError() }}</div>
+      } @else {
+        <div class="space-y-6 max-h-[500px] overflow-y-auto pr-2">
+          @for (day of checklistData()?.days; track day.dayNumber) {
+            <div class="border border-outline-variant/50 rounded-xl p-4 bg-surface-container-lowest">
+              <h5 class="font-label-md text-primary mb-3">Day {{ day.dayNumber }}: {{ day.dayTitle }}</h5>
+              <div class="space-y-2">
+                @for (task of day.tasks; track task.task) {
+                  <label class="flex items-start gap-3 p-2 hover:bg-surface-container-low rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" [(ngModel)]="task.isCompleted" class="mt-1 w-4 h-4 text-primary rounded border-outline-variant focus:ring-primary">
+                    <div class="flex-1 flex justify-between items-center gap-4">
+                      <span [class.line-through]="task.isCompleted" [class.text-on-surface-variant]="task.isCompleted" class="font-body-md text-on-surface text-left">{{ task.task }}</span>
+                      <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded shrink-0" 
+                            [ngClass]="{
+                              'bg-primary/10 text-primary': task.category === 'Activity',
+                              'bg-secondary/10 text-secondary': task.category === 'Meal',
+                              'bg-tertiary/10 text-tertiary': task.category === 'Accommodation',
+                              'bg-error/10 text-error': task.category === 'Transport',
+                              'bg-neutral-variant/10 text-on-surface-variant': task.category === 'Preparation'
+                            }">{{ task.category }}</span>
+                    </div>
+                  </label>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
   <div class="space-y-0">
     @for (day of p.itineraryDays; track day.id) {
       <div class="itinerary-step relative pb-8">

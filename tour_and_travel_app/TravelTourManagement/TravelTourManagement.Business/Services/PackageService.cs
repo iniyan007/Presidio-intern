@@ -594,4 +594,145 @@ public class PackageService : IPackageService
         await _packageRepository.UpdateAsync(package, cancellationToken);
         await _cache.RemoveAsync($"Package_{packageId}", cancellationToken);
     }
+
+    public async Task<ItineraryChecklistResponse> GetItineraryChecklistAsync(Guid packageId, CancellationToken cancellationToken = default)
+    {
+        var package = await _packageRepository.GetWithFullDetailsAsync(packageId, cancellationToken);
+        if (package == null)
+            throw new KeyNotFoundException("Package not found.");
+
+        var response = new ItineraryChecklistResponse
+        {
+            PackageId = package.Id,
+            PackageTitle = package.Title,
+            Days = new List<ItineraryDayChecklistDto>()
+        };
+
+        var daysList = (package.ItineraryDays ?? Enumerable.Empty<ItineraryDay>())
+            .OrderBy(d => d.DayNumber)
+            .ToList();
+
+        foreach (var day in daysList)
+        {
+            var dayDto = new ItineraryDayChecklistDto
+            {
+                DayNumber = day.DayNumber,
+                DayTitle = day.Title ?? $"Day {day.DayNumber}",
+                Tasks = new List<ChecklistItemDto>()
+            };
+
+            if (day.DayNumber == 1)
+            {
+                dayDto.Tasks.Add(new ChecklistItemDto { Task = $"Pack baggage and check in for destination: {package.Destination}", Category = "Preparation" });
+                if (!string.IsNullOrEmpty(package.CancellationPolicy))
+                {
+                    dayDto.Tasks.Add(new ChecklistItemDto { Task = $"Review Cancellation Policy: {package.CancellationPolicy}", Category = "Preparation" });
+                }
+                if (package.MinAge.HasValue)
+                {
+                    dayDto.Tasks.Add(new ChecklistItemDto { Task = $"Verify age limit criteria (minimum age: {package.MinAge.Value} years)", Category = "Preparation" });
+                }
+            }
+
+            var activities = (day.ItineraryActivities ?? Enumerable.Empty<ItineraryActivity>())
+                .OrderBy(a => a.SequenceOrder)
+                .ToList();
+            foreach (var act in activities)
+            {
+                string suffix = act.IsOptional ? " (Optional)" : "";
+                if (act.ExtraCost > 0)
+                {
+                    suffix += $" [Extra Cost: {act.ExtraCost}]";
+                }
+                string taskDesc = $"Attend activity: {act.ActivityTitle}{suffix}";
+                if (!string.IsNullOrEmpty(act.Location))
+                {
+                    taskDesc += $" at {act.Location}";
+                }
+                if (act.DurationMinutes.HasValue)
+                {
+                    taskDesc += $" (Duration: {act.DurationMinutes.Value} mins)";
+                }
+                dayDto.Tasks.Add(new ChecklistItemDto
+                {
+                    Task = taskDesc,
+                    Category = "Activity"
+                });
+            }
+
+            var meals = (day.ItineraryDayMeals ?? Enumerable.Empty<ItineraryDayMeal>()).ToList();
+            foreach (var meal in meals)
+            {
+                string taskDesc = meal.IsIncluded 
+                    ? $"Enjoy included {meal.MealType}" 
+                    : $"Arrange own {meal.MealType}";
+                
+                if (!string.IsNullOrEmpty(meal.Venue))
+                {
+                    taskDesc += $" at {meal.Venue}";
+                }
+                if (!string.IsNullOrEmpty(meal.Description))
+                {
+                    taskDesc += $" ({meal.Description})";
+                }
+                dayDto.Tasks.Add(new ChecklistItemDto
+                {
+                    Task = taskDesc,
+                    Category = "Meal"
+                });
+            }
+
+            var accommodations = (day.PackageAccommodations ?? Enumerable.Empty<PackageAccommodation>()).ToList();
+            foreach (var acc in accommodations)
+            {
+                string taskDesc = $"Stay at: {acc.HotelName}";
+                if (!string.IsNullOrEmpty(acc.RoomType))
+                {
+                    taskDesc += $" ({acc.RoomType})";
+                }
+                if (acc.CheckInTime.HasValue)
+                {
+                    taskDesc += $", Check-in: {acc.CheckInTime.Value}";
+                }
+                if (!string.IsNullOrEmpty(acc.Amenities))
+                {
+                    taskDesc += $" [Amenities: {acc.Amenities}]";
+                }
+                dayDto.Tasks.Add(new ChecklistItemDto
+                {
+                    Task = taskDesc,
+                    Category = "Accommodation"
+                });
+            }
+
+            var transports = (day.PackageTransports ?? Enumerable.Empty<PackageTransport>())
+                .OrderBy(t => t.SegmentOrder)
+                .ToList();
+            foreach (var tr in transports)
+            {
+                string taskDesc = $"Board transport ({tr.TransportMode}) from {tr.PickupPoint} to {tr.DropPoint}";
+                if (tr.PickupTime.HasValue)
+                {
+                    taskDesc += $" at {tr.PickupTime.Value}";
+                }
+                if (tr.DistanceKm.HasValue)
+                {
+                    taskDesc += $" (Distance: {tr.DistanceKm.Value} km)";
+                }
+                if (!string.IsNullOrEmpty(tr.VehicleDescription))
+                {
+                    taskDesc += $" [{tr.VehicleDescription}]";
+                }
+                dayDto.Tasks.Add(new ChecklistItemDto
+                {
+                    Task = taskDesc,
+                    Category = "Transport"
+                });
+            }
+
+            response.Days.Add(dayDto);
+        }
+
+        return response;
+    }
 }

@@ -151,4 +151,17 @@ public class BookingsController : ControllerBase
         var pdfBytes = await _bookingService.DownloadBookingTicketAsync(userId, id, cancellationToken);
         return File(pdfBytes, "application/pdf", $"BookingTicket-{id}.pdf");
     }
+
+    [HttpGet("calculate-price")]
+    [Authorize(Roles = "Admin,Traveler")]
+    public async Task<IActionResult> CalculatePrice(
+        [FromQuery] Guid packageId,
+        [FromQuery] Guid seasonalPricingId,
+        [FromQuery] int adultCount,
+        [FromQuery] int childCount,
+        CancellationToken cancellationToken)
+    {
+        var result = await _bookingService.CalculateGroupBookingPriceAsync(packageId, seasonalPricingId, adultCount, childCount, cancellationToken);
+        return Ok(result);
+    }
 }

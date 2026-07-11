@@ -8608,19 +8608,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/iniyan/.nuget/packages/": {}
+    "/Users/vaibhavgupta/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /TodoApi/TodoApi.csproj",
+      "projectUniqueName": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /TodoApi/TodoApi.csproj",
       "projectName": "TodoApi",
-      "projectPath": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /TodoApi/TodoApi.csproj",
-      "packagesPath": "/Users/iniyan/.nuget/packages/",
-      "outputPath": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /TodoApi/obj/",
+      "projectPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /TodoApi/TodoApi.csproj",
+      "packagesPath": "/Users/vaibhavgupta/.nuget/packages/",
+      "outputPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /TodoApi/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/iniyan/.nuget/NuGet/NuGet.Config"
+        "/Users/vaibhavgupta/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -8643,7 +8643,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "10.0.200"
     },
     "frameworks": {
       "net8.0": {
@@ -8693,6 +8694,20 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.26, 8.0.26]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.osx-arm64",
+            "version": "[8.0.26, 8.0.26]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.26, 8.0.26]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -8701,7 +8716,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

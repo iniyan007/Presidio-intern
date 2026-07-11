@@ -191,19 +191,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/iniyan/.nuget/packages/": {}
+    "/Users/vaibhavgupta/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/UnderstandingOOPSApp.csproj",
+      "projectUniqueName": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /UnderstandingOOPSApp/UnderstandingOOPSApp.csproj",
       "projectName": "UnderstandingOOPSApp",
-      "projectPath": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/UnderstandingOOPSApp.csproj",
-      "packagesPath": "/Users/iniyan/.nuget/packages/",
-      "outputPath": "/Users/iniyan/Intern/Presidio-intern/C-Sharp /UnderstandingOOPSApp/obj/",
+      "projectPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /UnderstandingOOPSApp/UnderstandingOOPSApp.csproj",
+      "packagesPath": "/Users/vaibhavgupta/.nuget/packages/",
+      "outputPath": "/Users/vaibhavgupta/Desktop/Intern Work/tour_and_travel_app/Presidio-intern/C-Sharp /UnderstandingOOPSApp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/iniyan/.nuget/NuGet/NuGet.Config"
+        "/Users/vaibhavgupta/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
