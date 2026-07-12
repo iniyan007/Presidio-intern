@@ -26,7 +26,17 @@ public class BlobStorageService : IBlobStorageService
         }
 
         var blobServiceClient = new BlobServiceClient(_connectionString);
-        var blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+        var targetContainerName = containerName;
+        
+        var extension = Path.GetExtension(fileName).ToLowerInvariant();
+        bool isConvertibleImage = containerName == "web-images" && (extension == ".jpg" || extension == ".jpeg" || extension == ".png");
+
+        if (isConvertibleImage)
+        {
+            targetContainerName = "raw-images";
+        }
+
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient(targetContainerName);
 
         // Ensure container exists
         await blobContainerClient.CreateIfNotExistsAsync(PublicAccessType.Blob, cancellationToken: cancellationToken);
@@ -40,7 +50,18 @@ public class BlobStorageService : IBlobStorageService
         fileStream.Position = 0; // Ensure stream is at the beginning
         await blobClient.UploadAsync(fileStream, new BlobUploadOptions { HttpHeaders = blobHttpHeaders }, cancellationToken);
 
-        return blobClient.Uri.ToString();
+        string uploadedUrl = blobClient.Uri.ToString();
+
+        if (isConvertibleImage)
+        {
+            // Predict the converted WebP URL in the web-images container
+            var predictedFileName = Path.GetFileNameWithoutExtension(uniqueFileName) + ".webp";
+            var outputContainerClient = blobServiceClient.GetBlobContainerClient("web-images");
+            var predictedBlobClient = outputContainerClient.GetBlobClient(predictedFileName);
+            return predictedBlobClient.Uri.ToString();
+        }
+
+        return uploadedUrl;
     }
 
     public async Task DeleteFileAsync(string fileUrl, string containerName, CancellationToken cancellationToken = default)
