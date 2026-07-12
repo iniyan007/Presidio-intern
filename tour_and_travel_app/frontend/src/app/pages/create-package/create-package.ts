@@ -1,5 +1,5 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Component, inject, HostListener, OnInit, OnDestroy, DestroyRef } from '@angular/core';
+import { Component, inject, HostListener, OnInit, OnDestroy, DestroyRef, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -30,6 +30,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
   private toastService = inject(ToastService);
   private metadataService = inject(MetadataService);
   private locationService = inject(LocationService);
+  private cdr = inject(ChangeDetectorRef);
   
   locationSuggestions: LocationSuggestion[] = [];
   showLocationDropdown = false;
@@ -101,6 +102,8 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
       takeUntilDestroyed(this.destroyRef),
       debounceTime(400)
     ).subscribe(query => {
+      if (this.packageForm.get('destination')?.pristine) return;
+
       if (!query || query.length < 2) {
         this.locationSuggestions = [];
         this.showLocationDropdown = false;
@@ -376,6 +379,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
         if (this.itinerary.length === 0 && !this.isPublished) this.addItineraryDay();
         
         console.log('Final form value after loadPackageData:', this.packageForm.value);
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error loading package data', err);
@@ -809,6 +813,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
           error: (err) => {
             this.toastService.show(err.error?.message || 'Failed to update package.', 'error');
             this.isSubmitting = false;
+            this.cdr.detectChanges();
           }
         });
       } else {
@@ -828,6 +833,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
           error: (err) => {
             this.toastService.show(err.error?.message || 'Failed to create package.', 'error');
             this.isSubmitting = false;
+            this.cdr.detectChanges();
           }
         });
       } else {
