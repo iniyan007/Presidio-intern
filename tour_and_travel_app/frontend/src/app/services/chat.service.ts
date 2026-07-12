@@ -45,7 +45,7 @@ export class ChatService {
 
   // SignalR Hub Management
   public startConnection(token: string) {
-    if (this.hubConnection && this.hubConnection.state === signalR.HubConnectionState.Connected) {
+    if (this.hubConnection) {
       return;
     }
 

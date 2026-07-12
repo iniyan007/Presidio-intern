@@ -40,7 +40,7 @@ export class NotificationService {
   }
 
   startConnection() {
-    if (this.hubConnection?.state === signalR.HubConnectionState.Connected) {
+    if (this.hubConnection) {
       return;
     }
 
