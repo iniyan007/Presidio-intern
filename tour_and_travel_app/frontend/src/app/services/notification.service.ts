@@ -1,4 +1,4 @@
-import { Injectable, inject, signal, computed } from '@angular/core';
+import { Injectable, inject, signal, computed, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as signalR from '@microsoft/signalr';
 import { environment } from '../../environments/environment';
@@ -13,6 +13,7 @@ export class NotificationService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
   private toastService = inject(ToastService);
+  private zone = inject(NgZone);
   private hubConnection: signalR.HubConnection | null = null;
   
   notifications = signal<AppNotification[]>([]);
@@ -60,11 +61,13 @@ export class NotificationService {
       .catch(err => console.error('Error connecting to Notification Hub', err));
 
     this.hubConnection.on('ReceiveNotification', (notification: AppNotification) => {
-      this.notifications.update(current => {
-        if (current.some(n => n.id === notification.id)) return current;
-        return [notification, ...current];
+      this.zone.run(() => {
+        this.notifications.update(current => {
+          if (current.some(n => n.id === notification.id)) return current;
+          return [notification, ...current];
+        });
+        this.toastService.show(notification.title, 'success');
       });
-      this.toastService.show(notification.title, 'success');
     });
   }
 

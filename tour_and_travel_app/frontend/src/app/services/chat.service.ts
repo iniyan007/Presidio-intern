@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
@@ -10,6 +10,7 @@ import * as signalR from '@microsoft/signalr';
 })
 export class ChatService {
   private http = inject(HttpClient);
+  private zone = inject(NgZone);
   private apiUrl = `${environment.apiUrl}/Messages`;
   private hubUrl = `${environment.baseUrl}/hubs/chat`;
   private hubConnection: signalR.HubConnection | null = null;
@@ -60,40 +61,52 @@ export class ChatService {
       .catch(err => console.log('Error while starting Chat SignalR connection: ' + err));
 
     this.hubConnection.on('ReceiveMessage', (message: MessageResponse) => {
-      this.newMessageReceived.set(message);
-      
-      // If we are currently viewing this thread, append it to messages
-      if (this.activeThreadId() === message.threadId) {
-        const currentMessages = this.currentThreadMessages();
-        if (!currentMessages.find(m => m.id === message.id)) {
-          this.currentThreadMessages.set([...currentMessages, message]);
-          // Also auto-mark as read if active
-          this.markAsRead(message.threadId).subscribe();
+      this.zone.run(() => {
+        this.newMessageReceived.set(message);
+        
+        // If we are currently viewing this thread, append it to messages
+        if (this.activeThreadId() === message.threadId) {
+          const currentMessages = this.currentThreadMessages();
+          if (!currentMessages.find(m => m.id === message.id)) {
+            this.currentThreadMessages.set([...currentMessages, message]);
+            // Also auto-mark as read if active
+            this.markAsRead(message.threadId).subscribe();
+          }
         }
-      }
 
-      // Update thread list last message details
-      const currentThreads = this.threads();
-      const updatedThreads = currentThreads.map(t => {
-        if (t.id === message.threadId) {
-          return { 
-            ...t, 
-            lastMessageAt: message.sentAt,
-            // If not active thread, increment unread count
-            unreadCount: (this.activeThreadId() === message.threadId) ? t.unreadCount : t.unreadCount + 1
-          };
+        // Update thread list last message details
+        let currentThreads = this.threads();
+        const threadExists = currentThreads.some(t => t.id === message.threadId);
+        
+        if (!threadExists) {
+          // If the thread is entirely new (e.g., first message from a user), fetch all threads to refresh
+          this.getThreads().subscribe(threads => {
+            this.threads.set(threads);
+          });
+          return;
         }
-        return t;
+
+        const updatedThreads = currentThreads.map(t => {
+          if (t.id === message.threadId) {
+            return { 
+              ...t, 
+              lastMessageAt: message.sentAt,
+              // If not active thread, increment unread count
+              unreadCount: (this.activeThreadId() === message.threadId) ? t.unreadCount : t.unreadCount + 1
+            };
+          }
+          return t;
+        });
+        
+        // Move updated thread to top
+        const threadIndex = updatedThreads.findIndex(t => t.id === message.threadId);
+        if (threadIndex > 0) {
+          const t = updatedThreads.splice(threadIndex, 1)[0];
+          updatedThreads.unshift(t);
+        }
+        
+        this.threads.set(updatedThreads);
       });
-      
-      // Move updated thread to top
-      const threadIndex = updatedThreads.findIndex(t => t.id === message.threadId);
-      if (threadIndex > 0) {
-        const t = updatedThreads.splice(threadIndex, 1)[0];
-        updatedThreads.unshift(t);
-      }
-      
-      this.threads.set(updatedThreads);
     });
   }
 
