@@ -59,6 +59,11 @@ public class PackagesController : ControllerBase
         var context = new ValidationContext(packageData, serviceProvider: null, items: null);
         var results = new List<ValidationResult>();
         bool isValid = Validator.TryValidateObject(packageData, context, results, true);
+        if (packageData.MaxCapacity <= 0)
+        {
+            isValid = false;
+            results.Add(new ValidationResult("MaxCapacity must be between 1 and 1000", new[] { nameof(packageData.MaxCapacity) }));
+        }
         if (!isValid)
         {
             var errors = string.Join(" | ", results.Select(r => r.ErrorMessage));

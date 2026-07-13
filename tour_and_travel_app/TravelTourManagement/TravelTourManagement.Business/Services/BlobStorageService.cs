@@ -74,8 +74,15 @@ public class BlobStorageService : IBlobStorageService
         var blobServiceClient = new BlobServiceClient(_connectionString);
         var blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
-        var uri = new Uri(fileUrl);
-        var blobName = Path.GetFileName(uri.LocalPath);
+        string blobName;
+        if (Uri.TryCreate(fileUrl, UriKind.Absolute, out var uri))
+        {
+            blobName = Path.GetFileName(uri.LocalPath);
+        }
+        else
+        {
+            blobName = Path.GetFileName(fileUrl);
+        }
 
         var blobClient = blobContainerClient.GetBlobClient(blobName);
         await blobClient.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots, cancellationToken: cancellationToken);

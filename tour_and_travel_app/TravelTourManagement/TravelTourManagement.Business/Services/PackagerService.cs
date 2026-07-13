@@ -382,7 +382,7 @@ public class PackagerService : IPackagerService
             FileSizeBytes = doc.FileSizeBytes,
             MimeType = doc.MimeType,
             UploadedAt = doc.UploadedAt,
-            FileUrl = $"/api/Admin/packagers/documents/{doc.FileName}"
+            FileUrl = doc.FilePath // Return the absolute Blob Storage URL directly
         });
     }
 }
