@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { WishlistService } from './wishlist.service';
 import { ToastService } from './toast.service';
+import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment';
 import { vi } from 'vitest';
 
@@ -9,15 +10,18 @@ describe('WishlistService', () => {
   let service: WishlistService;
   let httpMock: HttpTestingController;
   let toastServiceSpy: any;
+  let authServiceSpy: any;
 
   beforeEach(() => {
     toastServiceSpy = { show: vi.fn() };
+    authServiceSpy = { getUserRole: vi.fn().mockReturnValue('Traveler') };
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
         WishlistService,
-        { provide: ToastService, useValue: toastServiceSpy }
+        { provide: ToastService, useValue: toastServiceSpy },
+        { provide: AuthService, useValue: authServiceSpy }
       ]
     });
     service = TestBed.inject(WishlistService);
