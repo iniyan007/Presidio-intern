@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
@@ -59,12 +61,19 @@ try
     };
 });
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendPolicy",
         policy =>
         {
-            policy.WithOrigins("http://localhost:4200", "https://moon-comply-expansion-fallen.trycloudflare.com", "https://tourmate-web-u42eqvqvidncw.azurewebsites.net")
+            policy.WithOrigins(
+                    "http://localhost:4200",
+                    "https://moon-comply-expansion-fallen.trycloudflare.com",
+                    "https://tourmate-web-u42eqvqvidncw.azurewebsites.net",
+                    "https://happy-pebble-0ca7f4d10.7.azurestaticapps.net"  // Azure Static Web Apps
+                  )
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials(); // needed for SignalR and cookies if any
@@ -223,6 +232,16 @@ app.UseCors("FrontendPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResultStatusCodes =
+    {
+        [HealthStatus.Healthy] = StatusCodes.Status200OK,
+        [HealthStatus.Degraded] = StatusCodes.Status200OK,
+        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+    }
+});
 
 app.MapControllers();
 app.MapHub<TravelTourManagement.API.Hubs.NotificationHub>("/hubs/notifications");
