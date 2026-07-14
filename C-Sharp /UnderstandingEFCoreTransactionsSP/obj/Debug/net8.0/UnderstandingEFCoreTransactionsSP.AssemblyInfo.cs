@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UnderstandingEFCoreTransactionsSP")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7be824a0e14f271ec70086dc7be201800c65bbf5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+31bf7f1daf59c8f18bb448b0c71ca9dbe489ae8b")]
 [assembly: System.Reflection.AssemblyProductAttribute("UnderstandingEFCoreTransactionsSP")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UnderstandingEFCoreTransactionsSP")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
