@@ -99,16 +99,27 @@ export class BookingWizardComponent implements OnInit {
     const season = this.selectedSeason();
     const config = this.platformConfig();
 
-    if (!season || !config) return { baseTotal: 0, discount: 0, platformFee: 0, gst: 0, grandTotal: 0 };
+    if (!season || !config) return { baseTotal: 0, discount: 0, groupDiscountPercent: 0, groupDiscount: 0, platformFee: 0, gst: 0, grandTotal: 0 };
 
     const baseTotal = (this.adultCount() * season.basePrice) + (this.childCount() * (season.childPrice || season.basePrice));
     const discount = season.discountPercent ? (baseTotal * season.discountPercent / 100) : 0;
     const afterDiscount = baseTotal - discount;
-    const platformFee = afterDiscount * (config.platformFeePercent / 100);
-    const gst = (afterDiscount + platformFee) * (config.gstPercent / 100);
-    const grandTotal = afterDiscount + platformFee + gst;
 
-    return { baseTotal, discount, platformFee, gst, grandTotal };
+    // Group booking discount based on headcount
+    const headcount = this.adultCount() + this.childCount();
+    let groupDiscountPercent = 0;
+    if (headcount >= 20) groupDiscountPercent = 15;
+    else if (headcount >= 10) groupDiscountPercent = 10;
+    else if (headcount >= 5) groupDiscountPercent = 5;
+
+    const groupDiscount = afterDiscount * (groupDiscountPercent / 100);
+    const afterGroupDiscount = afterDiscount - groupDiscount;
+
+    const platformFee = afterGroupDiscount * (config.platformFeePercent / 100);
+    const gst = (afterGroupDiscount + platformFee) * (config.gstPercent / 100);
+    const grandTotal = afterGroupDiscount + platformFee + gst;
+
+    return { baseTotal, discount, groupDiscountPercent, groupDiscount, platformFee, gst, grandTotal };
   });
 
   ngOnInit() {

@@ -27,4 +27,5 @@ public interface IPackageService
     Task<IEnumerable<TravelTourManagement.DataAccess.DTOs.Packages.PackageSummaryResponse>> GetMyPackagesAsync(Guid userId, CancellationToken cancellationToken = default);
     Task<TravelTourManagement.DataAccess.DTOs.Packages.PackageDetailResponse> GetMyPackageByIdAsync(Guid userId, Guid packageId, CancellationToken cancellationToken = default);
     Task UpdateFullPackageAsync(Guid userId, Guid packageId, CreatePackageRequest request, List<IFormFile>? mediaFiles = null, CancellationToken cancellationToken = default);
+    Task<ItineraryChecklistResponse> GetItineraryChecklistAsync(Guid packageId, CancellationToken cancellationToken = default);
 }

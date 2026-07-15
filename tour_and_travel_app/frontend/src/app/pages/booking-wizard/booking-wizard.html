@@ -350,6 +350,13 @@
               </div>
             }
 
+            @if (pricing().groupDiscount > 0) {
+              <div class="flex justify-between items-center text-[#10b981]">
+                <span class="flex items-center gap-1">Group Booking Discount <span class="text-xs">({{ pricing().groupDiscountPercent }}%)</span></span>
+                <span class="font-bold">- ₹{{ pricing().groupDiscount | number:'1.2-2' }}</span>
+              </div>
+            }
+
             @if (pricing().platformFee > 0 || pricing().gst > 0) {
               <div class="pt-2 border-t border-outline-variant/10 space-y-2 mt-2">
                 <div class="flex justify-between items-center text-xs">

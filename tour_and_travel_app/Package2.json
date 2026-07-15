@@ -1,0 +1,279 @@
+{
+    "title": "Sacred Tirupati Pilgrimage Tour",
+    "description": "Embark on a divine pilgrimage journey from Erode to Tirupati. Experience the blessings of Lord Venkateswara with comfortable transportation, accommodation, guided temple visits, and spiritual experiences.",
+    "destination": "Tirupati",
+    "country": "India",
+    "city": "Tirupati",
+    "durationDays": 3,
+    "durationNights": 2,
+    "maxCapacity": 40,
+    "minAge": 5,
+    "cancellationPolicy": "Cancellation allowed up to 15 days before departure for a full refund. 50% refund up to 7 days before departure.",
+    "type": "Pilgrimage",
+    "status": "Published",
+    "highlights": [
+        {
+            "highlightText": "Special Darshan at Tirumala Temple",
+            "displayOrder": 1
+        },
+        {
+            "highlightText": "Comfortable AC Coach Transportation",
+            "displayOrder": 2
+        },
+        {
+            "highlightText": "Visit to Padmavathi Ammavari Temple",
+            "displayOrder": 3
+        },
+        {
+            "highlightText": "Spiritual Guidance Throughout the Journey",
+            "displayOrder": 4
+        }
+    ],
+    "inclusions": [
+        {
+            "description": "Round-trip AC Bus Transportation from Erode",
+            "displayOrder": 1,
+            "inclusionType": "included"
+        },
+        {
+            "description": "2 Nights Hotel Accommodation",
+            "displayOrder": 2,
+            "inclusionType": "included"
+        },
+        {
+            "description": "Breakfast, Lunch and Dinner",
+            "displayOrder": 3,
+            "inclusionType": "included"
+        },
+        {
+            "description": "Tirumala Darshan Ticket",
+            "displayOrder": 4,
+            "inclusionType": "included"
+        },
+        {
+            "description": "Travel Insurance",
+            "displayOrder": 5,
+            "inclusionType": "optional"
+        },
+        {
+            "description": "Personal Expenses and Shopping",
+            "displayOrder": 6,
+            "inclusionType": "excluded"
+        }
+    ],
+    "media": [
+        {
+            "filePath": "/uploads/packages/tirupati-cover.jpg",
+            "fileName": "tirupati-cover.jpg",
+            "caption": "Tirumala Temple",
+            "displayOrder": 1,
+            "isPrimary": true,
+            "category": "temple"
+        }
+    ],
+    "seasonalPricing": [
+        {
+            "seasonName": "Year Round Pilgrimage Package",
+            "startDate": null,
+            "endDate": null,
+            "basePrice": 12500,
+            "childPrice": 8500,
+            "discountPercent": 5,
+            "availableSlots": 40,
+            "isActive": true
+        }
+    ],
+    "itinerary": [
+        {
+            "dayNumber": 1,
+            "title": "Departure from Erode",
+            "description": "Begin the spiritual journey towards Tirupati.",
+            "location": "Erode",
+            "activities": [
+                {
+                    "sequenceOrder": 1,
+                    "activityTitle": "Group Assembly and Departure",
+                    "description": "Participants gather and depart from Erode by luxury AC coach.",
+                    "activityType": "travel",
+                    "location": "Erode Bus Stand",
+                    "durationMinutes": 120,
+                    "isOptional": false,
+                    "extraCost": 0,
+                    "daySession": "morning"
+                }
+            ],
+            "meals": [
+                {
+                    "venue": "Highway Restaurant",
+                    "description": "Lunch During Journey",
+                    "isIncluded": true,
+                    "mealType": "lunch"
+                },
+                {
+                    "venue": "Hotel Restaurant",
+                    "description": "Dinner",
+                    "isIncluded": true,
+                    "mealType": "dinner"
+                }
+            ],
+            "accommodations": [
+                {
+                    "hotelName": "Tirupati Residency",
+                    "hotelAddress": "Tirupati, Andhra Pradesh",
+                    "starRating": 3,
+                    "roomType": "Deluxe Group Rooms",
+                    "checkInTime": "14:00",
+                    "checkOutTime": "11:00",
+                    "amenities": "WiFi, Restaurant, Hot Water",
+                    "notes": "Rooms allocated on twin/triple sharing basis."
+                }
+            ],
+            "transports": [
+                {
+                    "segmentOrder": 1,
+                    "vehicleDescription": "AC Luxury Coach",
+                    "pickupPoint": "Erode",
+                    "dropPoint": "Tirupati",
+                    "pickupTime": "06:00",
+                    "dropTime": "15:00",
+                    "distanceKm": 420,
+                    "notes": "Comfortable group transportation.",
+                    "transportMode": "bus"
+                }
+            ]
+        },
+        {
+            "dayNumber": 2,
+            "title": "Tirumala Darshan and Temple Visits",
+            "description": "Seek blessings at the sacred temples of Tirupati.",
+            "location": "Tirumala",
+            "activities": [
+                {
+                    "sequenceOrder": 1,
+                    "activityTitle": "Tirumala Temple Darshan",
+                    "description": "Special entry darshan at Lord Venkateswara Temple.",
+                    "activityType": "pilgrimage",
+                    "location": "Tirumala",
+                    "durationMinutes": 300,
+                    "isOptional": false,
+                    "extraCost": 0,
+                    "daySession": "morning"
+                },
+                {
+                    "sequenceOrder": 2,
+                    "activityTitle": "Padmavathi Ammavari Temple Visit",
+                    "description": "Visit the revered temple dedicated to Goddess Padmavathi.",
+                    "activityType": "pilgrimage",
+                    "location": "Tiruchanur",
+                    "durationMinutes": 120,
+                    "isOptional": false,
+                    "extraCost": 0,
+                    "daySession": "afternoon"
+                },
+                {
+                    "sequenceOrder": 3,
+                    "activityTitle": "Spiritual Discourse",
+                    "description": "Group spiritual session and bhajans.",
+                    "activityType": "spiritual",
+                    "location": "Hotel Hall",
+                    "durationMinutes": 90,
+                    "isOptional": true,
+                    "extraCost": 0,
+                    "daySession": "evening"
+                }
+            ],
+            "meals": [
+                {
+                    "venue": "Temple Dining Hall",
+                    "description": "Breakfast",
+                    "isIncluded": true,
+                    "mealType": "breakfast"
+                },
+                {
+                    "venue": "Local Vegetarian Restaurant",
+                    "description": "Lunch",
+                    "isIncluded": true,
+                    "mealType": "lunch"
+                },
+                {
+                    "venue": "Hotel Restaurant",
+                    "description": "Dinner",
+                    "isIncluded": true,
+                    "mealType": "dinner"
+                }
+            ],
+            "accommodations": [
+                {
+                    "hotelName": "Tirupati Residency",
+                    "hotelAddress": "Tirupati, Andhra Pradesh",
+                    "starRating": 3,
+                    "roomType": "Deluxe Group Rooms",
+                    "checkInTime": "14:00",
+                    "checkOutTime": "11:00",
+                    "amenities": "WiFi, Restaurant, Hot Water",
+                    "notes": "Second night stay."
+                }
+            ],
+            "transports": [
+                {
+                    "segmentOrder": 1,
+                    "vehicleDescription": "Local Tourist Bus",
+                    "pickupPoint": "Hotel",
+                    "dropPoint": "Tirumala",
+                    "pickupTime": "04:30",
+                    "dropTime": "05:30",
+                    "distanceKm": 22,
+                    "notes": "Temple transfer.",
+                    "transportMode": "bus"
+                }
+            ]
+        },
+        {
+            "dayNumber": 3,
+            "title": "Return to Erode",
+            "description": "Complete the pilgrimage and return home.",
+            "location": "Tirupati",
+            "activities": [
+                {
+                    "sequenceOrder": 1,
+                    "activityTitle": "Morning Temple Visit",
+                    "description": "Optional local temple visit before departure.",
+                    "activityType": "pilgrimage",
+                    "location": "Tirupati",
+                    "durationMinutes": 90,
+                    "isOptional": true,
+                    "extraCost": 0,
+                    "daySession": "morning"
+                }
+            ],
+            "meals": [
+                {
+                    "venue": "Hotel Restaurant",
+                    "description": "Breakfast",
+                    "isIncluded": true,
+                    "mealType": "breakfast"
+                },
+                {
+                    "venue": "Highway Restaurant",
+                    "description": "Lunch During Return Journey",
+                    "isIncluded": true,
+                    "mealType": "lunch"
+                }
+            ],
+            "accommodations": [],
+            "transports": [
+                {
+                    "segmentOrder": 1,
+                    "vehicleDescription": "AC Luxury Coach",
+                    "pickupPoint": "Tirupati",
+                    "dropPoint": "Erode",
+                    "pickupTime": "10:00",
+                    "dropTime": "19:00",
+                    "distanceKm": 420,
+                    "notes": "Return journey.",
+                    "transportMode": "bus"
+                }
+            ]
+        }
+    ]
+}

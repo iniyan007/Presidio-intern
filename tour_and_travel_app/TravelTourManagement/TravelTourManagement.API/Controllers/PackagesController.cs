@@ -74,7 +74,7 @@ public class PackagesController : ControllerBase
         return CreatedAtAction(nameof(CreatePackage), new { id = packageId }, new { id = packageId, message = "Package created successfully." });
     }
 
-
+    
 
     [HttpGet("media/{fileName}")]
     [AllowAnonymous]
@@ -208,5 +208,13 @@ public class PackagesController : ControllerBase
 
         await _packageService.UpdateFullPackageAsync(userId, id, packageData, request.MediaFiles, cancellationToken);
         return Ok(new { success = true, message = "Package fully updated successfully." });
+    }
+
+    [HttpGet("{id}/itinerary-checklist")]
+    [Authorize(Roles = "Admin,Traveler,Packager")]
+    public async Task<IActionResult> GetItineraryChecklist(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await _packageService.GetItineraryChecklistAsync(id, cancellationToken);
+        return Ok(result);
     }
 }

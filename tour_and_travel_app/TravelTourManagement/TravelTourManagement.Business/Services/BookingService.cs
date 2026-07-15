@@ -306,12 +306,28 @@ public class BookingService : IBookingService
         return reference;
     }
 
+    private decimal CalculateGroupDiscountPercent(int headcount)
+    {
+        if (headcount >= 20) return 15m;
+        if (headcount >= 10) return 10m;
+        if (headcount >= 5)  return 5m;
+        return 0m;
+    }
+
     private async Task<(decimal BaseAmount, decimal PlatformFeePercent, decimal PlatformFeeAmount, decimal TaxAmount, decimal TotalAmount)> CalculateBookingPricesAsync(PackageSeasonalPricing pricing, int adultCount, int childCount, CancellationToken cancellationToken)
     {
         decimal baseAmount = (adultCount * pricing.BasePrice) + (childCount * pricing.ChildPrice);
         if (pricing.DiscountPercent > 0)
         {
             baseAmount -= baseAmount * (pricing.DiscountPercent / 100m);
+        }
+
+        // Apply group discount based on headcount
+        int headcount = adultCount + childCount;
+        decimal groupDiscountPercent = CalculateGroupDiscountPercent(headcount);
+        if (groupDiscountPercent > 0)
+        {
+            baseAmount -= baseAmount * (groupDiscountPercent / 100m);
         }
 
         var platformConfig = await _platformConfigService.GetConfigAsync(cancellationToken);
@@ -635,5 +651,53 @@ public class BookingService : IBookingService
                 await _bookingRepository.UpdateAsync(fullBooking, cancellationToken);
             }
         }
+    }
+
+    public async Task<GroupBookingDiscountCalculationResponse> CalculateGroupBookingPriceAsync(
+        Guid packageId,
+        Guid seasonalPricingId,
+        int adultCount,
+        int childCount,
+        CancellationToken cancellationToken = default)
+    {
+        var package = await _packageRepository.GetByIdAsync(packageId, cancellationToken);
+        if (package == null)
+            throw new KeyNotFoundException("Package not found.");
+
+        var pricing = await _context.PackageSeasonalPricings
+            .FirstOrDefaultAsync(sp => sp.Id == seasonalPricingId && sp.PackageId == packageId, cancellationToken);
+        if (pricing == null)
+            throw new KeyNotFoundException("Seasonal pricing not found.");
+
+        decimal baseAmountBefore = (adultCount * pricing.BasePrice) + (childCount * pricing.ChildPrice);
+        decimal seasonalDiscountAmount = 0m;
+        if (pricing.DiscountPercent > 0)
+        {
+            seasonalDiscountAmount = baseAmountBefore * (pricing.DiscountPercent / 100m);
+        }
+        decimal afterSeasonalDiscount = baseAmountBefore - seasonalDiscountAmount;
+
+        int headcount = adultCount + childCount;
+        decimal groupDiscountPercent = CalculateGroupDiscountPercent(headcount);
+        decimal groupDiscountAmount = afterSeasonalDiscount * (groupDiscountPercent / 100m);
+        decimal baseAmountAfter = afterSeasonalDiscount - groupDiscountAmount;
+
+        var platformConfig = await _platformConfigService.GetConfigAsync(cancellationToken);
+        decimal platformFeePercent = platformConfig.PlatformFeePercent;
+        decimal platformFeeAmount = baseAmountAfter * (platformFeePercent / 100m);
+        decimal taxAmount = (baseAmountAfter + platformFeeAmount) * (platformConfig.GstPercent / 100m);
+        decimal totalAmount = baseAmountAfter + platformFeeAmount + taxAmount;
+
+        return new GroupBookingDiscountCalculationResponse
+        {
+            BaseAmountBeforeGroupDiscount = afterSeasonalDiscount,
+            GroupDiscountPercent = groupDiscountPercent,
+            GroupDiscountAmount = groupDiscountAmount,
+            BaseAmountAfterGroupDiscount = baseAmountAfter,
+            PlatformFeePercent = platformFeePercent,
+            PlatformFeeAmount = platformFeeAmount,
+            TaxAmount = taxAmount,
+            TotalAmount = totalAmount
+        };
     }
 }

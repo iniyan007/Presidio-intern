@@ -16,4 +16,5 @@ public interface IBookingService
     Task<IReadOnlyList<BookingResponse>> GetMyBookingsAsync(Guid userId, CancellationToken cancellationToken = default);
     Task<TravelDocumentResponse> VerifyDocumentAsync(Guid packagerUserId, Guid documentId, VerifyDocumentRequest request, CancellationToken cancellationToken = default);
     Task<TravelDocumentResponse> ReuploadDocumentAsync(Guid userId, Guid documentId, IFormFile file, CancellationToken cancellationToken = default);
+    Task<GroupBookingDiscountCalculationResponse> CalculateGroupBookingPriceAsync(Guid packageId, Guid seasonalPricingId, int adultCount, int childCount, CancellationToken cancellationToken = default);
 }

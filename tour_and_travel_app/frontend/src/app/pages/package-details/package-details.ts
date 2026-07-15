@@ -2,6 +2,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { PackageService } from '../../services/package.service';
 import { ToastService } from '../../services/toast.service';
 import { WishlistService } from '../../services/wishlist.service';
@@ -15,7 +16,7 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-package-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReviewModalComponent],
+  imports: [CommonModule, RouterModule, ReviewModalComponent, FormsModule],
   templateUrl: './package-details.html',
   styleUrl: './package-details.css'
 })
@@ -37,6 +38,10 @@ export class PackageDetailsComponent implements OnInit {
   showReviewModal = signal<boolean>(false);
   eligibleBookingId = signal<string | null>(null);
   selectedSeason = signal<PackageSeasonalPricing | null>(null);
+  showChecklist = signal<boolean>(false);
+  checklistLoading = signal<boolean>(false);
+  checklistError = signal<string>('');
+  checklistData = signal<any>(null);
 
   ngOnInit() {
     this.isLoggedIn.set(!!this.authService.getToken());
@@ -127,6 +132,27 @@ export class PackageDetailsComponent implements OnInit {
     const p = this.pkg();
     if (!p || !p.media) return [];
     return p.media.map(m => m.filePath.startsWith('http') ? m.filePath : `${environment.baseUrl}${m.filePath}`);
+  }
+
+  toggleChecklist() {
+    this.showChecklist.set(!this.showChecklist());
+    if (this.showChecklist() && !this.checklistData()) {
+      const p = this.pkg();
+      if (!p) return;
+      this.checklistLoading.set(true);
+      this.checklistError.set('');
+      this.packageService.getItineraryChecklist(p.id).subscribe({
+        next: (data) => {
+          this.checklistData.set(data);
+          this.checklistLoading.set(false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.checklistError.set('Failed to generate checklist.');
+          this.checklistLoading.set(false);
+        }
+      });
+    }
   }
 
   isReviewGalleryModalOpen = false;
