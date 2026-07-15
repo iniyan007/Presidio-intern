@@ -95,6 +95,36 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
         this.loadPackageData(this.packageId);
       } else {
         this.isEditMode = false;
+        this.loadDraftFromLocal();
+      }
+    });
+
+    this.packageForm.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef),
+      debounceTime(1000)
+    ).subscribe(val => {
+      if (!this.isEditMode && !this.isSubmitting && !this.isPublished && this.packageForm.dirty) {
+        localStorage.setItem('tourmate_package_draft', JSON.stringify(val));
+      }
+    });
+
+    this.packageForm.get('type')?.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(type => {
+      const capacityControl = this.packageForm.get('maxCapacity');
+      if (type === 'Honeymoon') {
+        capacityControl?.setValue(2, { emitEvent: false });
+        capacityControl?.disable({ emitEvent: false });
+      } else if (type === 'Private') {
+        capacityControl?.setValue(4, { emitEvent: false });
+        capacityControl?.disable({ emitEvent: false });
+      } else if (type === 'Family') {
+        capacityControl?.setValue(10, { emitEvent: false });
+        capacityControl?.disable({ emitEvent: false });
+      } else {
+        if (!this.isPublished) {
+          capacityControl?.enable({ emitEvent: false });
+        }
       }
     });
 
@@ -140,26 +170,51 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
-    this.autoDraft();
+    // Relying on valueChanges auto-save
   }
 
   ngOnDestroy() {
-    this.autoDraft();
+    // Relying on valueChanges auto-save
   }
 
-  private autoDraft() {
-    if (this.isSubmitting || this.isPublished) return;
-    
-    const title = this.packageForm.get('title')?.value;
-    const dest = this.packageForm.get('destination')?.value;
-    
-    // Only draft if we have basic required info and the form is dirty
-    if (title && title.trim() && dest && dest.trim() && this.packageForm.dirty) {
-      this.onSubmit('Draft', true);
+  loadDraftFromLocal() {
+    const draft = localStorage.getItem('tourmate_package_draft');
+    if (draft) {
+      try {
+        const parsed = JSON.parse(draft);
+        
+        // Reconstruct form arrays to match saved length
+        if (parsed.highlights) {
+          this.highlights.clear();
+          parsed.highlights.forEach(() => this.addHighlight());
+        }
+        if (parsed.inclusions) {
+          this.inclusions.clear();
+          parsed.inclusions.forEach(() => this.addInclusion());
+        }
+        if (parsed.seasonalPricing) {
+          this.seasonalPricing.clear();
+          parsed.seasonalPricing.forEach(() => this.addSeasonalPricing());
+        }
+        if (parsed.itinerary) {
+          this.itinerary.clear();
+          parsed.itinerary.forEach((day: any) => {
+            this.addItineraryDay();
+            const lastIndex = this.itinerary.length - 1;
+            day.activities?.forEach(() => this.addActivity(lastIndex));
+            day.meals?.forEach(() => this.addMeal(lastIndex));
+            day.accommodations?.forEach(() => this.addAccommodation(lastIndex));
+            day.transports?.forEach(() => this.addTransport(lastIndex));
+          });
+        }
+        
+        this.packageForm.patchValue(parsed, { emitEvent: false });
+        this.toastService.show('Recovered your unsaved draft.', 'info');
+      } catch (e) {
+        localStorage.removeItem('tourmate_package_draft');
+      }
     }
   }
-
-
   @HostListener('window:scroll')
   onWindowScroll() {
     let currentSection = this.sections[0];
@@ -808,6 +863,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
         req.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
           next: (res) => {
             this.toastService.show(`Package ${status === 'Draft' ? 'draft updated' : 'published'} successfully!`, 'success');
+            localStorage.removeItem('tourmate_package_draft');
             this.router.navigate(['/agency/dashboard']);
           },
           error: (err) => {
@@ -828,6 +884,7 @@ export class CreatePackageComponent implements OnInit, OnDestroy {
         req.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
           next: (res) => {
             this.toastService.show(`Package ${status === 'Draft' ? 'saved as draft' : 'published'} successfully!`, 'success');
+            localStorage.removeItem('tourmate_package_draft');
             this.router.navigate(['/agency/dashboard']);
           },
           error: (err) => {
