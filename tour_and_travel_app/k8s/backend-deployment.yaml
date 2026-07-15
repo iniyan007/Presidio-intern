@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tourmate-backend
+  namespace: tourmate
+  labels:
+    app: tourmate-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tourmate-backend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: tourmate-backend
+    spec:
+      imagePullSecrets:
+        - name: acr-secret
+      containers:
+        - name: backend
+          image: tourmateacru42eqvqvidncw.azurecr.io/tourmate-backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
+            - name: ASPNETCORE_URLS
+              value: "http://+:8080"
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: tourmate-secrets
+                  key: db-connection
+            - name: ConnectionStrings__AzureWebJobsStorage
+              valueFrom:
+                secretKeyRef:
+                  name: tourmate-secrets
+                  key: blob-storage-connection
+            - name: JwtOptions__Issuer
+              valueFrom:
+                secretKeyRef:
+                  name: tourmate-secrets
+                  key: jwt-issuer
+            - name: JwtOptions__Audience
+              valueFrom:
+                secretKeyRef:
+                  name: tourmate-secrets
+                  key: jwt-audience
+            - name: JwtOptions__SecretKey
+              valueFrom:
+                secretKeyRef:
+                  name: tourmate-secrets
+                  key: jwt-secret-key
+            - name: GeminiApiKey
+              valueFrom:
+                secretKeyRef:
+                  name: tourmate-secrets
+                  key: gemini-api-key
+            - name: EmailSettings__SmtpServer
+              valueFrom:
+                secretKeyRef:
+                  name: tourmate-secrets
+                  key: smtp-server
+            - name: EmailSettings__SmtpPort
+              valueFrom:
+                secretKeyRef:
+                  name: tourmate-secrets
+                  key: smtp-port
+            - name: EmailSettings__SenderName
+              valueFrom:
+                secretKeyRef:
+                  name: tourmate-secrets
+                  key: smtp-sender-name
+            - name: EmailSettings__SenderEmail
+              valueFrom:
+                secretKeyRef:
+                  name: tourmate-secrets
+                  key: smtp-sender-email
+            - name: EmailSettings__Password
+              valueFrom:
+                secretKeyRef:
+                  name: tourmate-secrets
+                  key: smtp-password
+            - name: Redis__ConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: tourmate-secrets
+                  key: redis-connection
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 3

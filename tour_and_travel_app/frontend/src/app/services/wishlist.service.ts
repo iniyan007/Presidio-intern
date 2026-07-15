@@ -1,9 +1,10 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, of } from 'rxjs';
 import { WishlistResponse } from '../models/package.model';
 import { environment } from '../../environments/environment';
 import { ToastService } from './toast.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +12,14 @@ import { ToastService } from './toast.service';
 export class WishlistService {
   private http = inject(HttpClient);
   private toastService = inject(ToastService);
+  private authService = inject(AuthService);
   private apiUrl = `${environment.apiUrl}/Wishlists`;
 
   wishlistedPackageIds = signal<Set<string>>(new Set());
 
   loadWishlists(): void {
+    if (this.authService.getUserRole() === 'Packager') return;
+
     this.http.get<{ success: boolean; data: WishlistResponse[] }>(this.apiUrl).subscribe({
       next: (res) => {
         const ids = res.data.map(w => w.packageId);
@@ -32,6 +36,9 @@ export class WishlistService {
   }
 
   getWishlists(): Observable<{ success: boolean; data: WishlistResponse[] }> {
+    if (this.authService.getUserRole() === 'Packager') {
+      return of({ success: true, data: [] });
+    }
     return this.http.get<{ success: boolean; data: WishlistResponse[] }>(this.apiUrl);
   }
 

@@ -22,13 +22,16 @@ public class UserServiceTests
     private UserService _userService;
     private string _uploadDirectory;
 
+    private Mock<TravelTourManagement.Business.Interface.IBlobStorageService> _blobStorageServiceMock;
+
     [SetUp]
     public void Setup()
     {
         _userRepoMock = new Mock<IUserRepository>();
         _mapperMock = new Mock<IMapper>();
+        _blobStorageServiceMock = new Mock<TravelTourManagement.Business.Interface.IBlobStorageService>();
 
-        _userService = new UserService(_userRepoMock.Object, _mapperMock.Object);
+        _userService = new UserService(_userRepoMock.Object, _mapperMock.Object, _blobStorageServiceMock.Object);
 
         // Determine upload directory based on the logic in UserService
         var currentDirectory = Directory.GetCurrentDirectory();

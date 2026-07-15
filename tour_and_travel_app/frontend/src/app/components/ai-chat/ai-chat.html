@@ -1,0 +1,73 @@
+<ng-container *ngIf="authService.isAuthenticated()">
+<!-- Floating Action Button -->
+<button 
+  (click)="toggleChat()"
+  class="fixed bottom-6 left-6 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container hover:scale-105 transition-all z-50 focus:outline-none">
+  <span class="material-symbols-outlined text-3xl transition-transform duration-300" [ngClass]="isOpen() ? 'rotate-90 opacity-0 absolute' : 'rotate-0 opacity-100'">
+    smart_toy
+  </span>
+  <span class="material-symbols-outlined text-3xl transition-transform duration-300" [ngClass]="isOpen() ? 'rotate-0 opacity-100' : '-rotate-90 opacity-0 absolute'">
+    close
+  </span>
+</button>
+
+<!-- Chat Window -->
+<div 
+  class="fixed bottom-24 left-6 w-80 md:w-96 h-[500px] max-h-[calc(100vh-120px)] bg-surface rounded-2xl shadow-2xl border border-outline-variant flex flex-col overflow-hidden transition-all duration-300 z-50 origin-bottom-left"
+  [ngClass]="isOpen() ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'">
+  
+  <!-- Header -->
+  <div class="bg-primary p-4 text-on-primary flex items-center gap-3 shrink-0">
+    <div class="w-10 h-10 bg-surface/20 rounded-full flex items-center justify-center shrink-0">
+      <span class="material-symbols-outlined">auto_awesome</span>
+    </div>
+    <div>
+      <h3 class="font-title-md font-bold m-0 leading-tight">TourMate Concierge</h3>
+      <p class="font-body-sm m-0 opacity-90 leading-tight">Always here to help</p>
+    </div>
+  </div>
+
+  <!-- Messages Area -->
+  <div class="flex-1 p-4 overflow-y-auto bg-surface-container-lowest" #chatScroll>
+    <div class="flex flex-col gap-4">
+      <ng-container *ngFor="let msg of messages()">
+        <div class="flex" [ngClass]="msg.role === 'user' ? 'justify-end' : 'justify-start'">
+          <div class="max-w-[85%] rounded-2xl px-4 py-2 shadow-sm text-sm whitespace-pre-wrap break-words"
+               [ngClass]="msg.role === 'user' 
+                  ? 'bg-primary text-on-primary rounded-tr-sm' 
+                  : 'bg-surface-container text-on-surface rounded-tl-sm'">
+            {{ msg.text }}
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Loading Indicator -->
+      <div *ngIf="isLoading()" class="flex justify-start">
+        <div class="bg-surface-container text-on-surface rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm flex items-center gap-1">
+          <div class="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+          <div class="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+          <div class="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input Area -->
+  <div class="p-3 bg-surface border-t border-outline-variant flex gap-2 shrink-0">
+    <textarea
+      [ngModel]="userInput()"
+      (ngModelChange)="userInput.set($event)"
+      (keydown)="onKeyDown($event)"
+      placeholder="Ask me anything..."
+      class="flex-1 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none h-[48px] overflow-hidden"
+      rows="1"
+    ></textarea>
+    <button 
+      (click)="sendMessage()"
+      [disabled]="isLoading() || !userInput().trim()"
+      class="w-12 h-12 rounded-xl bg-primary text-on-primary flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-container hover:text-on-primary-container transition-colors shrink-0">
+      <span class="material-symbols-outlined">send</span>
+    </button>
+  </div>
+</div>
+</ng-container>

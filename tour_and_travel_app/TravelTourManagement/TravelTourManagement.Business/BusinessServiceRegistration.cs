@@ -42,6 +42,7 @@ public static class BusinessServiceRegistration
         services.AddScoped<IOtpService, OtpService>();
         services.AddScoped<IPackageService, PackageService>();
         services.AddScoped<IBookingService, BookingService>();
+        services.AddScoped<IBlobStorageService, BlobStorageService>();
         services.AddScoped<IPlatformConfigService, PlatformConfigService>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IReviewService, ReviewService>();
@@ -49,6 +50,7 @@ public static class BusinessServiceRegistration
         services.AddScoped<IWishlistService, WishlistService>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IMessageService, MessageService>();
+        services.AddHttpClient<IAiService, AiService>();
 
         // Register AutoMapper
         services.AddAutoMapper(config => config.AddMaps(typeof(BusinessServiceRegistration).Assembly));

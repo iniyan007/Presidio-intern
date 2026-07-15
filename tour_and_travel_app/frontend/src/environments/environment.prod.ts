@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:5082/api', // To be replaced in Docker/Production
-  baseUrl: 'http://localhost:5082'     // To be replaced in Docker/Production
+  apiUrl: 'https://104.211.209.155.nip.io/api',
+  baseUrl: 'https://104.211.209.155.nip.io'
 };

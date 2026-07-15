@@ -83,7 +83,7 @@ export class AuthComponent implements OnInit {
         this.isLoading.set(false);
         this.toastService.show('Logged in successfully', 'success');
         if (!this.authService.isEmailVerified()) {
-          this.authService.sendOtp().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+          this.authService.sendOtp().subscribe();
           this.router.navigate(['/verify-email']);
         } else {
           if (this.authService.getUserRole() === 'Admin') {

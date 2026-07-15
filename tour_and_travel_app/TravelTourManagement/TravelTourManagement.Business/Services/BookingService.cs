@@ -32,6 +32,7 @@ public class BookingService : IBookingService
     private readonly IEmailService _emailService;
     private readonly ApplicationDbContext _context;
     private readonly IDistributedCache _cache;
+    private readonly IBlobStorageService _blobStorageService;
 
     public BookingService(
         IPlatformConfigService platformConfigService,
@@ -46,7 +47,8 @@ public class BookingService : IBookingService
         INotificationService notificationService,
         IEmailService emailService,
         ApplicationDbContext context,
-        IDistributedCache cache)
+        IDistributedCache cache,
+        IBlobStorageService blobStorageService)
     {
         _bookingRepository = bookingRepository;
         _packageRepository = packageRepository;
@@ -61,6 +63,7 @@ public class BookingService : IBookingService
         _emailService = emailService;
         _context = context;
         _cache = cache;
+        _blobStorageService = blobStorageService;
     }
 
     public async Task<byte[]> DownloadBookingTicketAsync(Guid userId, Guid bookingId, CancellationToken cancellationToken = default)
@@ -342,8 +345,6 @@ public class BookingService : IBookingService
         CancellationToken cancellationToken)
     {
         var travelers = new List<BookingTraveler>();
-        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "travel_documents");
-        if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
         foreach (var t in travelerRequests)
         {
@@ -366,18 +367,14 @@ public class BookingService : IBookingService
                 var file = documentFiles.FirstOrDefault(f => f.FileName == t.AadharCardFileName);
                 if (file != null && file.Length > 0)
                 {
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(fileStream, cancellationToken); 
-                    }
+                    using var stream = file.OpenReadStream();
+                    string fileUrl = await _blobStorageService.UploadFileAsync(stream, file.FileName, file.ContentType, "user-documents", cancellationToken);
                     traveler.TravelDocuments.Add(new TravelDocument
                     {
                         DocumentType = "Aadhar Card",
-                        FileName = uniqueFileName,
+                        FileName = Path.GetFileName(new Uri(fileUrl).LocalPath),
                         OriginalFilename = file.FileName,
-                        FilePath = $"/uploads/travel_documents/{uniqueFileName}",
+                        FilePath = fileUrl,
                         FileSizeBytes = file.Length,
                         MimeType = file.ContentType,
                         UploadedAt = DateTime.UtcNow
@@ -390,18 +387,14 @@ public class BookingService : IBookingService
                 var file = documentFiles.FirstOrDefault(f => f.FileName == t.PassportFileName);
                 if (file != null && file.Length > 0)
                 {
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(fileStream, cancellationToken);
-                    }
+                    using var stream = file.OpenReadStream();
+                    string fileUrl = await _blobStorageService.UploadFileAsync(stream, file.FileName, file.ContentType, "user-documents", cancellationToken);
                     traveler.TravelDocuments.Add(new TravelDocument
                     {
                         DocumentType = "Passport",
-                        FileName = uniqueFileName,
+                        FileName = Path.GetFileName(new Uri(fileUrl).LocalPath),
                         OriginalFilename = file.FileName,
-                        FilePath = $"/uploads/travel_documents/{uniqueFileName}",
+                        FilePath = fileUrl,
                         FileSizeBytes = file.Length,
                         MimeType = file.ContentType,
                         UploadedAt = DateTime.UtcNow
@@ -461,7 +454,30 @@ public class BookingService : IBookingService
         try
         {
             var pdfBytes = _pdfService.GenerateBookingTicketPdf(booking);
-            var emailBody = $"Hello {booking.User.FullName},\n\nGreat news! Your booking ({booking.BookingReference}) for {booking.Package.Title} has been confirmed.\n\nPlease find your booking ticket attached to this email.\n\nSafe travels!\nTravel Tour Management";
+            var emailBody = $@"
+            <html>
+            <body style='font-family: Arial, sans-serif; color: #333;'>
+                <div style='max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;'>
+                    <div style='text-align: center; margin-bottom: 20px;'>
+                        <h2 style='color: #2196F3;'>Booking Confirmed! 🎉</h2>
+                    </div>
+                    <p>Hello <strong>{booking.User.FullName}</strong>,</p>
+                    <p>Great news! Your booking for <strong>{booking.Package.Title}</strong> has been successfully confirmed by the packager.</p>
+                    
+                    <div style='background-color: #fff; padding: 15px; border-left: 4px solid #2196F3; margin: 20px 0;'>
+                        <p style='margin: 0;'><strong>Booking Reference:</strong> {booking.BookingReference}</p>
+                    </div>
+
+                    <p>Please find your official booking ticket attached to this email as a PDF document. You can also view and download it at any time from the 'My Bookings' section in your account.</p>
+                    
+                    <p>Get ready for an amazing experience!</p>
+                    <br/>
+                    <p>Safe travels,<br/><strong>TourMate Team</strong></p>
+                    <hr style='border: none; border-top: 1px solid #eee; margin-top: 30px;' />
+                    <p style='font-size: 12px; color: #aaa; text-align: center;'>TourMate &copy; {DateTime.UtcNow.Year}</p>
+                </div>
+            </body>
+            </html>";
             await _emailService.SendEmailWithAttachmentAsync(
                 booking.User.Email, 
                 $"Booking Confirmed - Ticket {booking.BookingReference}", 
@@ -573,27 +589,15 @@ public class BookingService : IBookingService
 
         if (file == null || file.Length == 0)
             throw new ArgumentException("Invalid file.");
-        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "travel_documents");
-        string oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", document.FilePath.TrimStart('/'));
-        if (File.Exists(oldFilePath))
-        {
-            File.Delete(oldFilePath);
-        }
 
-        if (!Directory.Exists(uploadsFolder))
-            Directory.CreateDirectory(uploadsFolder);
+        await _blobStorageService.DeleteFileAsync(document.FilePath, "user-documents", cancellationToken);
 
-        string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-        string newFilePath = Path.Combine(uploadsFolder, uniqueFileName);
+        using var stream = file.OpenReadStream();
+        string fileUrl = await _blobStorageService.UploadFileAsync(stream, file.FileName, file.ContentType, "user-documents", cancellationToken);
 
-        using (var stream = new FileStream(newFilePath, FileMode.Create))
-        {
-            await file.CopyToAsync(stream, cancellationToken);
-        }
-
-        document.FileName = uniqueFileName;
-        document.FilePath = $"/uploads/travel_documents/{uniqueFileName}";
+        document.FileName = Path.GetFileName(new Uri(fileUrl).LocalPath);
         document.OriginalFilename = file.FileName;
+        document.FilePath = fileUrl;
         document.FileSizeBytes = file.Length;
         document.MimeType = file.ContentType;
         document.UploadedAt = DateTime.UtcNow;

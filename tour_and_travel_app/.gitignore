@@ -1,8 +1,2 @@
-# macOS
 .DS_Store
-
-# .NET / C# build artifacts
-bin/
-obj/
-*.user
-*.userprefs
+**/.DS_Store

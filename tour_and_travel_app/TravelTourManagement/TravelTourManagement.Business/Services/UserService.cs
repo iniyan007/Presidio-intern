@@ -14,22 +14,13 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
-    private readonly string _uploadDirectory;
+    private readonly IBlobStorageService _blobStorageService;
 
-    public UserService(IUserRepository userRepository, IMapper mapper)
+    public UserService(IUserRepository userRepository, IMapper mapper, IBlobStorageService blobStorageService)
     {
         _userRepository = userRepository;
         _mapper = mapper;
-        
-        // Define path in DataAccess layer (as requested by user)
-        var currentDirectory = Directory.GetCurrentDirectory(); 
-        var solutionDirectory = Directory.GetParent(currentDirectory)?.FullName ?? currentDirectory;
-        _uploadDirectory = Path.Combine(solutionDirectory, "TravelTourManagement.DataAccess", "Uploads", "ProfilePictures");
-        
-        if (!Directory.Exists(_uploadDirectory))
-        {
-            Directory.CreateDirectory(_uploadDirectory);
-        }
+        _blobStorageService = blobStorageService;
     }
 
     public async Task<UserResponse> GetProfileAsync(Guid userId, CancellationToken cancellationToken = default)
@@ -62,28 +53,16 @@ public class UserService : IUserService
         if (user == null)
             throw new KeyNotFoundException("User not found.");
 
-        // Generate unique file name
-        var fileExtension = Path.GetExtension(fileName);
-        var uniqueFileName = $"{userId}_{Guid.NewGuid()}{fileExtension}";
-        var filePath = Path.Combine(_uploadDirectory, uniqueFileName);
-
         // Delete old picture if exists
         if (!string.IsNullOrEmpty(user.ProfilePicture))
         {
-            var oldFilePath = Path.Combine(_uploadDirectory, user.ProfilePicture);
-            if (File.Exists(oldFilePath))
-            {
-                File.Delete(oldFilePath);
-            }
+            await _blobStorageService.DeleteFileAsync(user.ProfilePicture, "web-images", cancellationToken);
         }
 
         // Save new picture
-        using (var stream = new FileStream(filePath, FileMode.Create))
-        {
-            await fileStream.CopyToAsync(stream, cancellationToken);
-        }
+        var fileUrl = await _blobStorageService.UploadFileAsync(fileStream, fileName, contentType, "web-images", cancellationToken);
 
-        user.ProfilePicture = uniqueFileName;
+        user.ProfilePicture = fileUrl;
         user.UpdatedAt = DateTime.UtcNow;
 
         await _userRepository.UpdateAsync(user, cancellationToken);
@@ -99,13 +78,10 @@ public class UserService : IUserService
 
         if (!string.IsNullOrEmpty(user.ProfilePicture))
         {
-            var oldFilePath = Path.Combine(_uploadDirectory, user.ProfilePicture);
-            if (File.Exists(oldFilePath))
-            {
-                File.Delete(oldFilePath);
-            }
+            await _blobStorageService.DeleteFileAsync(user.ProfilePicture, "web-images", cancellationToken);
             user.ProfilePicture = null;
             user.UpdatedAt = DateTime.UtcNow;
+
             await _userRepository.UpdateAsync(user, cancellationToken);
         }
 
