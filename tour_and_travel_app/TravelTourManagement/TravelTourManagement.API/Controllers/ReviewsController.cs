@@ -13,18 +13,12 @@ namespace TravelTourManagement.API.Controllers;
 public class ReviewsController : ControllerBase
 {
     private readonly IReviewService _reviewService;
-    private readonly string _uploadDirectory;
+    private readonly IBlobStorageService _blobStorageService;
 
-    public ReviewsController(IReviewService reviewService)
+    public ReviewsController(IReviewService reviewService, IBlobStorageService blobStorageService)
     {
         _reviewService = reviewService;
-        var currentDirectory = Directory.GetCurrentDirectory(); 
-        var solutionDirectory = Directory.GetParent(currentDirectory)?.FullName ?? currentDirectory;
-        _uploadDirectory = Path.Combine(solutionDirectory, "TravelTourManagement.DataAccess", "Uploads", "ReviewMedia");
-        if (!Directory.Exists(_uploadDirectory))
-        {
-            Directory.CreateDirectory(_uploadDirectory);
-        }
+        _blobStorageService = blobStorageService;
     }
 
     [HttpPost("api/Bookings/{bookingId}/reviews")]
@@ -81,13 +75,10 @@ public class ReviewsController : ControllerBase
             if (file.Length > 5 * 1024 * 1024) // 5 MB limit per file
                 return BadRequest(new { message = $"File {file.FileName} exceeds 5MB limit." });
 
-            var uniqueFileName = $"{Guid.NewGuid()}{extension}";
-            var filePath = Path.Combine(_uploadDirectory, uniqueFileName);
+            using var stream = file.OpenReadStream();
+            string fileUrl = await _blobStorageService.UploadFileAsync(stream, file.FileName, file.ContentType, "web-images", cancellationToken);
 
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await file.CopyToAsync(stream, cancellationToken);
-
-            uploadedPaths.Add($"/api/Reviews/media/{uniqueFileName}");
+            uploadedPaths.Add(fileUrl);
         }
 
         return Ok(new { success = true, paths = uploadedPaths });
@@ -97,20 +88,9 @@ public class ReviewsController : ControllerBase
     [AllowAnonymous]
     public IActionResult GetMedia(string fileName)
     {
-        if (fileName.Contains("..") || fileName.Contains("/") || fileName.Contains("\\"))
-            return BadRequest("Invalid file name.");
-
-        var filePath = Path.Combine(_uploadDirectory, fileName);
-        if (!System.IO.File.Exists(filePath))
-            return NotFound("File not found.");
-
-        var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
-        if (!provider.TryGetContentType(fileName, out var contentType))
-        {
-            contentType = "application/octet-stream";
-        }
-
-        var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-        return File(fileStream, contentType);
+        // Media is now served directly from Azure Blob Storage.
+        // This endpoint is kept for backwards compatibility with older reviews if necessary,
+        // but new reviews will use direct blob URLs.
+        return NotFound("File not found locally. It might be in blob storage.");
     }
 }

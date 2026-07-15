@@ -27,6 +27,7 @@ public class PackageServiceTests
     private Mock<IBookingRepository> _bookingRepoMock;
     private Mock<IMapper> _mapperMock;
     private Mock<IDistributedCache> _cacheMock;
+    private Mock<TravelTourManagement.Business.Interface.IBlobStorageService> _blobStorageServiceMock;
     private PackageService _packageService;
 
     [SetUp]
@@ -37,6 +38,7 @@ public class PackageServiceTests
         _bookingRepoMock = new Mock<IBookingRepository>();
         _mapperMock = new Mock<IMapper>();
         _cacheMock = new Mock<IDistributedCache>();
+        _blobStorageServiceMock = new Mock<TravelTourManagement.Business.Interface.IBlobStorageService>();
 
         // Mock GetAsync to return null by default so it falls back to DB
         _cacheMock.Setup(c => c.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -47,7 +49,8 @@ public class PackageServiceTests
             _packagerRepoMock.Object,
             _bookingRepoMock.Object,
             _mapperMock.Object,
-            _cacheMock.Object
+            _cacheMock.Object,
+            _blobStorageServiceMock.Object
         );
     }
 

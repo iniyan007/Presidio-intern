@@ -1,7 +1,7 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, Router, ActivatedRoute } from '@angular/router';
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 import { of } from 'rxjs';
 
@@ -108,31 +108,19 @@ describe('CreatePackageComponent', () => {
     expect(packageData.seasonalPricing[0].availableSlots).toBe(9999);
   });
 
-  it('should trigger auto-draft on window unload if form is valid and dirty', () => {
+  it('should trigger auto-draft to localStorage when form values change', () => {
+    vi.useFakeTimers();
+    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+    
     component.packageForm.patchValue({
       title: 'Auto Draft Test',
       destination: 'Paris'
     });
     component.packageForm.markAsDirty();
     
-    const onSubmitSpy = vi.spyOn(component, 'onSubmit');
+    vi.advanceTimersByTime(1500); // Wait for debounceTime
     
-    component.unloadNotification(new Event('beforeunload'));
-    
-    expect(onSubmitSpy).toHaveBeenCalledWith('Draft', true);
-  });
-  
-  it('should not trigger auto-draft if title or destination is missing', () => {
-    component.packageForm.patchValue({
-      title: 'Auto Draft Test',
-      destination: ''
-    });
-    component.packageForm.markAsDirty();
-    
-    const onSubmitSpy = vi.spyOn(component, 'onSubmit');
-    
-    component.unloadNotification(new Event('beforeunload'));
-    
-    expect(onSubmitSpy).not.toHaveBeenCalled();
+    expect(setItemSpy).toHaveBeenCalledWith('tourmate_package_draft', expect.any(String));
+    vi.useRealTimers();
   });
 });

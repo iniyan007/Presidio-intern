@@ -110,7 +110,8 @@ export class NavbarComponent {
   }
 
   getProfileImageUrl(fileName: string): string {
-    return `${environment.apiUrl}/Users/profile/picture/${fileName}`;
+    if (!fileName) return 'assets/default-profile.png';
+    return fileName.startsWith('http') ? fileName : `${environment.apiUrl}/Users/profile/picture/${fileName}`;
   }
 
   logout() {

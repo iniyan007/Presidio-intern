@@ -1,5 +1,5 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -13,7 +13,7 @@ import { ToastService } from '../../services/toast.service';
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './payment.html'
 })
-export class PaymentComponent implements OnInit {
+export class PaymentComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -24,6 +24,10 @@ export class PaymentComponent implements OnInit {
   isLoading = signal<boolean>(true);
   isProcessing = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
+
+  // Timer fields
+  timeLeft = signal<number>(300);
+  timerInterval: any;
 
   // Dummy payment fields
   paymentMethod = signal<string>('GPay');
@@ -36,7 +40,22 @@ export class PaymentComponent implements OnInit {
         next: (bookings) => {
           const found = bookings.find(b => b.id === id);
           if (found) {
+            let bookedAtStr = found.bookedAt;
+            if (!bookedAtStr.endsWith('Z')) {
+              bookedAtStr += 'Z';
+            }
+            const timePassed = Date.now() - new Date(bookedAtStr).getTime();
+            const timeRemaining = Math.floor((300000 - timePassed) / 1000);
+            
+            if (found.status === 'Cancelled' || timeRemaining <= 0) {
+              this.toastService.show('Your booking was cancelled due to timeout.', 'error');
+              this.router.navigate(['/package', found.packageId]);
+              return;
+            }
+
             this.booking.set(found);
+            this.timeLeft.set(timeRemaining);
+            this.startTimer();
           } else {
             this.errorMessage.set('Booking not found or you do not have permission to view it.');
           }
@@ -54,11 +73,36 @@ export class PaymentComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+  }
+
+  startTimer() {
+    this.timerInterval = setInterval(() => {
+      if (this.timeLeft() > 0) {
+        this.timeLeft.update(v => v - 1);
+      } else {
+        clearInterval(this.timerInterval);
+        this.toastService.show('Your booking was cancelled due to timeout.', 'error');
+        this.router.navigate(['/package', this.booking()?.packageId]);
+      }
+    }, 1000);
+  }
+
+  formatTime(seconds: number): string {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  }
+
   processPayment() {
     const b = this.booking();
     if (!b) return;
 
     this.isProcessing.set(true);
+    if (this.timerInterval) clearInterval(this.timerInterval);
 
     const request = {
       amount: b.totalAmount,
@@ -75,6 +119,7 @@ export class PaymentComponent implements OnInit {
         console.error(err);
         this.isProcessing.set(false);
         this.toastService.show(err.error?.message || 'Payment failed. Please try again.', 'error');
+        this.startTimer(); // resume timer on failure
       }
     });
   }

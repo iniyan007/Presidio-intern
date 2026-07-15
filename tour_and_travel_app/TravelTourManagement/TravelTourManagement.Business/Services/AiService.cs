@@ -328,7 +328,6 @@ IMPORTANT: Do NOT use any Markdown formatting (no asterisks for bold, no hash sy
         }
         catch
         {
-            // Fail closed for security if the intent classifier fails
             return false;
         }
 

@@ -24,6 +24,7 @@ public class PackagerService : IPackagerService
     private readonly IBookingRepository _bookingRepository;
     private readonly IRepository<PackageSeasonalPricing, Guid> _seasonalPricingRepository;
     private readonly IDistributedCache _cache;
+    private readonly IBlobStorageService _blobStorageService;
 
     public PackagerService(
         IPackagerRepository packagerRepository, 
@@ -33,7 +34,8 @@ public class PackagerService : IPackagerService
         IPackageRepository packageRepository,
         IBookingRepository bookingRepository,
         IRepository<PackageSeasonalPricing, Guid> seasonalPricingRepository,
-        IDistributedCache cache)
+        IDistributedCache cache,
+        IBlobStorageService blobStorageService)
     {
         _packagerRepository = packagerRepository;
         _userRepository = userRepository;
@@ -43,6 +45,7 @@ public class PackagerService : IPackagerService
         _bookingRepository = bookingRepository;
         _seasonalPricingRepository = seasonalPricingRepository;
         _cache = cache;
+        _blobStorageService = blobStorageService;
     }
 
     public async Task<PackagerResponse> ApplyToBecomePackagerAsync(Guid userId, ApplyPackagerRequest request, CancellationToken cancellationToken = default)
@@ -68,33 +71,18 @@ public class PackagerService : IPackagerService
             PackagerDocuments = new List<PackagerDocument>()
         };
 
-        var currentDirectory = Directory.GetCurrentDirectory(); 
-        var solutionDirectory = Directory.GetParent(currentDirectory)?.FullName ?? currentDirectory;
-        var uploadDirectory = Path.Combine(solutionDirectory, "TravelTourManagement.DataAccess", "Uploads", "Packagers", "Documents");
-        
-        if (!Directory.Exists(uploadDirectory))
-        {
-            Directory.CreateDirectory(uploadDirectory);
-        }
-
         async Task ProcessDocumentAsync(IFormFile file, string documentType)
         {
             if (file == null || file.Length == 0) return;
-            
-            var extension = Path.GetExtension(file.FileName);
-            var uniqueFileName = $"{Guid.NewGuid()}{extension}";
-            var filePath = Path.Combine(uploadDirectory, uniqueFileName);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream, cancellationToken);
-            }
+            using var stream = file.OpenReadStream();
+            var fileUrl = await _blobStorageService.UploadFileAsync(stream, file.FileName, file.ContentType, "user-documents", cancellationToken);
 
             packager.PackagerDocuments.Add(new PackagerDocument
             {
                 DocumentType = documentType,
-                FilePath = $"/uploads/packagers/documents/{uniqueFileName}",
-                FileName = uniqueFileName,
+                FilePath = fileUrl,
+                FileName = Path.GetFileName(new Uri(fileUrl).LocalPath),
                 OriginalFilename = file.FileName,
                 FileSizeBytes = file.Length,
                 MimeType = file.ContentType,
@@ -394,7 +382,7 @@ public class PackagerService : IPackagerService
             FileSizeBytes = doc.FileSizeBytes,
             MimeType = doc.MimeType,
             UploadedAt = doc.UploadedAt,
-            FileUrl = $"/api/Admin/packagers/documents/{doc.FileName}"
+            FileUrl = doc.FilePath // Return the absolute Blob Storage URL directly
         });
     }
 }

@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://tourmate-api-u42eqvqvidncw.azurewebsites.net/api',
-  baseUrl: 'https://tourmate-api-u42eqvqvidncw.azurewebsites.net'
+  apiUrl: 'https://104.211.209.155.nip.io/api',
+  baseUrl: 'https://104.211.209.155.nip.io'
 };

@@ -4,9 +4,6 @@ param location string = resourceGroup().location
 @description('A unique suffix to append to resource names to ensure global uniqueness.')
 param uniqueSuffix string = uniqueString(resourceGroup().id)
 
-@description('The Object ID of the user deploying this template (required for Key Vault Access Policy).')
-param deployerObjectId string
-
 @description('The administrator username for PostgreSQL.')
 param pgAdminUsername string = 'tourmateadmin'
 
@@ -16,20 +13,6 @@ param pgAdminPassword string
 
 @description('The name of the PostgreSQL database.')
 param pgDatabaseName string = 'tourmatedb'
-
-@secure()
-@description('The JWT Secret Key.')
-param jwtKey string
-
-@description('The JWT Issuer.')
-param jwtIssuer string = 'TourMate'
-
-@description('The JWT Audience.')
-param jwtAudience string = 'TourMateUsers'
-
-@secure()
-@description('The Gemini API Key.')
-param geminiApiKey string
 
 // ==========================================
 // 1. Azure Container Registry (ACR)
@@ -42,82 +25,6 @@ resource acr 'Microsoft.ContainerRegistry/registries@2023-01-01-preview' = {
   }
   properties: {
     adminUserEnabled: true
-  }
-}
-
-// ==========================================
-// 2. Azure Key Vault
-// ==========================================
-resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
-  name: 'tourmatekv-${uniqueSuffix}'
-  location: location
-  properties: {
-    enableRbacAuthorization: false
-    sku: {
-      family: 'A'
-      name: 'standard'
-    }
-    tenantId: subscription().tenantId
-    enabledForTemplateDeployment: true
-    accessPolicies: [
-      {
-        tenantId: subscription().tenantId
-        objectId: deployerObjectId
-        permissions: {
-          secrets: [
-            'get'
-            'list'
-            'set'
-            'delete'
-          ]
-        }
-      }
-    ]
-  }
-}
-
-// Store the DB Connection string in Key Vault automatically
-resource dbConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
-  parent: keyVault
-  name: 'DbConnectionString'
-  properties: {
-    value: 'Host=${postgresServer.name}.postgres.database.azure.com;Database=${pgDatabaseName};Username=${pgAdminUsername};Password=${pgAdminPassword};Ssl Mode=Require;'
-  }
-}
-
-// Store the JWT Key
-resource jwtKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
-  parent: keyVault
-  name: 'Jwt--Key'
-  properties: {
-    value: jwtKey
-  }
-}
-
-// Store the JWT Issuer
-resource jwtIssuerSecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
-  parent: keyVault
-  name: 'Jwt--Issuer'
-  properties: {
-    value: jwtIssuer
-  }
-}
-
-// Store the JWT Audience
-resource jwtAudienceSecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
-  parent: keyVault
-  name: 'Jwt--Audience'
-  properties: {
-    value: jwtAudience
-  }
-}
-
-// Store the Gemini API Key
-resource geminiApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
-  parent: keyVault
-  name: 'Gemini--ApiKey'
-  properties: {
-    value: geminiApiKey
   }
 }
 
@@ -206,124 +113,69 @@ resource postgresDatabase 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2
 }
 
 // ==========================================
-// 5. Azure App Service (Compute for Containers)
+// 5. Azure Kubernetes Service (AKS) for Backend
 // ==========================================
-resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
-  name: 'tourmate-asp-${uniqueSuffix}'
+resource aksCluster 'Microsoft.ContainerService/managedClusters@2023-08-01' = {
+  name: 'tourmate-aks'
   location: location
-  kind: 'linux'
-  properties: {
-    reserved: true // Required for Linux plans
-  }
-  sku: {
-    name: 'B1' // Basic tier for dev/test
-    tier: 'Basic'
-  }
-}
-
-// Backend Web App (Container)
-resource backendApp 'Microsoft.Web/sites@2022-09-01' = {
-  name: 'tourmate-api-${uniqueSuffix}'
-  location: location
-  kind: 'app,linux,container'
   identity: {
     type: 'SystemAssigned'
   }
   properties: {
-    serverFarmId: appServicePlan.id
-    siteConfig: {
-      linuxFxVersion: 'DOCKER|${acr.name}.azurecr.io/tourmate-backend:latest'
-      appSettings: [
-        {
-          name: 'WEBSITES_PORT'
-          value: '8080'
-        }
-        {
-          name: 'DOCKER_REGISTRY_SERVER_URL'
-          value: 'https://${acr.name}.azurecr.io'
-        }
-        {
-          name: 'DOCKER_REGISTRY_SERVER_USERNAME'
-          value: acr.listCredentials().username
-        }
-        {
-          name: 'DOCKER_REGISTRY_SERVER_PASSWORD'
-          value: acr.listCredentials().passwords[0].value
-        }
-        {
-          name: 'ConnectionStrings__DefaultConnection'
-          value: '@Microsoft.KeyVault(VaultName=${keyVault.name};SecretName=DbConnectionString)'
-        }
-        {
-          name: 'JwtOptions__SecretKey'
-          value: '@Microsoft.KeyVault(VaultName=${keyVault.name};SecretName=Jwt--Key)'
-        }
-        {
-          name: 'JwtOptions__Issuer'
-          value: jwtIssuer
-        }
-        {
-          name: 'JwtOptions__Audience'
-          value: jwtAudience
-        }
-        {
-          name: 'GeminiApiKey'
-          value: '@Microsoft.KeyVault(VaultName=${keyVault.name};SecretName=Gemini--ApiKey)'
-        }
-        {
-          name: 'Redis__ConnectionString'
-          value: '@Microsoft.KeyVault(VaultName=${keyVault.name};SecretName=Redis--ConnectionString)'
-        }
-      ]
-    }
+    dnsPrefix: 'tourmate-aks-${uniqueSuffix}'
+    agentPoolProfiles: [
+      {
+        name: 'agentpool'
+        count: 1
+        vmSize: 'Standard_D2s_v3'
+        osType: 'Linux'
+        mode: 'System'
+      }
+    ]
   }
 }
 
-// Frontend Web App (Container)
-resource frontendApp 'Microsoft.Web/sites@2022-09-01' = {
-  name: 'tourmate-web-${uniqueSuffix}'
-  location: location
-  kind: 'app,linux,container'
+
+// ==========================================
+// 6. Azure Static Web Apps for Frontend
+// ==========================================
+resource staticWebApp 'Microsoft.Web/staticSites@2022-09-01' = {
+  name: 'tourmate-swa'
+  location: 'eastasia' // Static web apps have specific regional availability, typically distinct from main resources. Use a generic valid one or location if supported.
+  sku: {
+    name: 'Free'
+    tier: 'Free'
+  }
   properties: {
-    serverFarmId: appServicePlan.id
-    siteConfig: {
-      linuxFxVersion: 'DOCKER|${acr.name}.azurecr.io/tourmate-frontend:latest'
-      appSettings: [
-        {
-          name: 'DOCKER_REGISTRY_SERVER_URL'
-          value: 'https://${acr.name}.azurecr.io'
-        }
-        {
-          name: 'DOCKER_REGISTRY_SERVER_USERNAME'
-          value: acr.listCredentials().username
-        }
-        {
-          name: 'DOCKER_REGISTRY_SERVER_PASSWORD'
-          value: acr.listCredentials().passwords[0].value
-        }
-        {
-          name: 'API_BASE_URL'
-          value: 'https://${backendApp.properties.defaultHostName}'
-        }
-      ]
-    }
+    repositoryUrl: 'https://github.com/iniyan007/Presidio-intern'
+    branch: 'main' // Or azure-deployment
   }
 }
 
 // ==========================================
-// 6. Azure Function App (Image Processing)
+// 7. Azure Function App (Serverless Consumption Plan)
 // ==========================================
+// Consumption plan for Azure Functions
+resource functionAppPlan 'Microsoft.Web/serverfarms@2022-09-01' = {
+  name: 'tourmate-func-plan-${uniqueSuffix}'
+  location: location
+  sku: {
+    name: 'Y1' // Consumption
+    tier: 'Dynamic'
+  }
+}
+
 resource functionApp 'Microsoft.Web/sites@2022-09-01' = {
   name: 'tourmate-func-${uniqueSuffix}'
   location: location
-  kind: 'functionapp,linux'
+  kind: 'functionapp' // Windows
   identity: {
-    type: 'SystemAssigned' // MSI to access blob storage and key vault
+    type: 'SystemAssigned'
   }
   properties: {
-    serverFarmId: appServicePlan.id // Can share the same plan to save costs
+    serverFarmId: functionAppPlan.id
     siteConfig: {
-      linuxFxVersion: 'DOTNET-ISOLATED|8.0' // For .NET 8 Isolated functions
+      netFrameworkVersion: 'v8.0'
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
@@ -337,13 +189,17 @@ resource functionApp 'Microsoft.Web/sites@2022-09-01' = {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'dotnet-isolated'
         }
+        {
+          name: 'WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED'
+          value: '1'
+        }
       ]
     }
   }
 }
 
 // ==========================================
-// 7. Azure Managed Redis (Enterprise)
+// 8. Azure Managed Redis (Enterprise)
 // ==========================================
 resource redisCache 'Microsoft.Cache/redisEnterprise@2025-04-01' = {
   name: 'tmtredis-${uniqueSuffix}'
@@ -364,51 +220,10 @@ resource redisDatabase 'Microsoft.Cache/redisEnterprise/databases@2025-04-01' = 
   }
 }
 
-// Store the Redis Connection string in Key Vault automatically
-resource redisConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
-  parent: keyVault
-  name: 'Redis--ConnectionString'
-  properties: {
-    value: '${redisCache.properties.hostName}:10000,abortConnect=false,ssl=true,password=${redisDatabase.listKeys().primaryKey}'
-  }
-}
-
-// ==========================================
-// 8. Key Vault Access Policies for Apps
-// ==========================================
-resource appAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2023-02-01' = {
-  name: 'add'
-  parent: keyVault
-  properties: {
-    accessPolicies: [
-      {
-        tenantId: subscription().tenantId
-        objectId: backendApp.identity.principalId
-        permissions: {
-          secrets: [
-            'get'
-            'list'
-          ]
-        }
-      }
-      {
-        tenantId: subscription().tenantId
-        objectId: functionApp.identity.principalId
-        permissions: {
-          secrets: [
-            'get'
-            'list'
-          ]
-        }
-      }
-    ]
-  }
-}
 
 // Outputs
-output backendUrl string = 'https://${backendApp.properties.defaultHostName}'
-output frontendUrl string = 'https://${frontendApp.properties.defaultHostName}'
+output frontendUrl string = 'https://${staticWebApp.properties.defaultHostname}'
 output acrLoginServer string = acr.properties.loginServer
 output postgresServerName string = postgresServer.name
-output keyVaultName string = keyVault.name
 output redisHostName string = redisCache.properties.hostName
+output aksClusterName string = aksCluster.name
