@@ -182,4 +182,9 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/auth']);
+  }
 }

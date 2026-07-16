@@ -1,4 +1,4 @@
-<ng-container *ngIf="authService.isAuthenticated()">
+<ng-container *ngIf="authService.isAuthenticated() && !isChatRoute()">
 <!-- Floating Action Button -->
 <button 
   (click)="toggleChat()"

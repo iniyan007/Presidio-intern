@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AiService, ChatMessage } from '../../services/ai.service';
 import { AuthService } from '../../services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ai-chat',
@@ -25,6 +26,11 @@ export class AiChatComponent {
 
   private aiService = inject(AiService);
   authService = inject(AuthService);
+  router = inject(Router);
+
+  isChatRoute(): boolean {
+    return this.router.url.startsWith('/chat');
+  }
 
   toggleChat() {
     this.isOpen.update(v => !v);
