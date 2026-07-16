@@ -65,11 +65,13 @@ spec:
                 secretKeyRef:
                   name: tourmate-secrets
                   key: jwt-secret-key
-            - name: GeminiApiKey
+            - name: AnthropicBaseUrl
+              value: "https://proxy.llm-gateway.ready.presidio.com"
+            - name: AnthropicApiKey
               valueFrom:
                 secretKeyRef:
                   name: tourmate-secrets
-                  key: gemini-api-key
+                  key: anthropic-api-key
             - name: EmailSettings__SmtpServer
               valueFrom:
                 secretKeyRef:
