@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -22,6 +23,7 @@ export class AdminAgenciesComponent implements OnInit {
   private toastService = inject(ToastService);
   private chatService = inject(ChatService);
   private router = inject(Router);
+  private http = inject(HttpClient);
 
   activeTab = signal<'active' | 'deactivated'>('active');
   packagers = signal<any[]>([]);
@@ -194,6 +196,14 @@ export class AdminAgenciesComponent implements OnInit {
 
   viewDocument(fileUrl: string) {
     const fullUrl = fileUrl.startsWith('http') ? fileUrl : `${environment.baseUrl}${fileUrl}`;
-    window.open(fullUrl, '_blank');
+    this.toastService.show('Opening document...', 'success');
+    this.http.get(fullUrl, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        setTimeout(() => window.URL.revokeObjectURL(url), 10000);
+      },
+      error: () => this.toastService.show('Failed to fetch document.', 'error')
+    });
   }
 }

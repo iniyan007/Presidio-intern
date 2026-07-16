@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, inject, OnInit, OnDestroy, signal, DestroyRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -19,6 +20,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   private adminService = inject(AdminService);
   private toastService = inject(ToastService);
+  private http = inject(HttpClient);
   private pollingInterval: any;
 
   pendingPackagers = signal<any[]>([]);
@@ -244,7 +246,16 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     updatedSet.add(docId);
     this.viewedDocumentIds.set(updatedSet);
     const fullUrl = fileUrl.startsWith('http') ? fileUrl : `${environment.baseUrl}${fileUrl}`;
-    window.open(fullUrl, '_blank');
+    
+    this.toastService.show('Opening document...', 'success');
+    this.http.get(fullUrl, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        setTimeout(() => window.URL.revokeObjectURL(url), 10000);
+      },
+      error: () => this.toastService.show('Failed to fetch document.', 'error')
+    });
   }
 
   canApprove(): boolean {
