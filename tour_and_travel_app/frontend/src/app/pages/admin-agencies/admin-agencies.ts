@@ -195,15 +195,21 @@ export class AdminAgenciesComponent implements OnInit {
   }
 
   viewDocument(fileUrl: string) {
-    const fullUrl = fileUrl.startsWith('http') ? fileUrl : `${environment.baseUrl}${fileUrl}`;
-    this.toastService.show('Opening document...', 'success');
-    this.http.get(fullUrl, { responseType: 'blob' }).subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        window.open(url, '_blank');
-        setTimeout(() => window.URL.revokeObjectURL(url), 10000);
-      },
-      error: () => this.toastService.show('Failed to fetch document.', 'error')
-    });
+    if (fileUrl) {
+      const fullUrl = fileUrl.startsWith('http') ? fileUrl : `${environment.baseUrl}${fileUrl}`;
+      if (!fullUrl.includes('/api/documents/proxy')) {
+         window.open(fullUrl, '_blank');
+         return;
+      }
+      this.toastService.show('Opening document...', 'success');
+      this.http.get(fullUrl, { responseType: 'blob' }).subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          window.open(url, '_blank');
+          setTimeout(() => window.URL.revokeObjectURL(url), 10000);
+        },
+        error: () => this.toastService.show('Failed to fetch secure document.', 'error')
+      });
+    }
   }
 }

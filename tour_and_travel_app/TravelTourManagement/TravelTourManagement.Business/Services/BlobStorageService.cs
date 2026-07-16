@@ -87,4 +87,34 @@ public class BlobStorageService : IBlobStorageService
         var blobClient = blobContainerClient.GetBlobClient(blobName);
         await blobClient.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots, cancellationToken: cancellationToken);
     }
+
+    public async Task<(Stream Content, string ContentType)> DownloadFileAsync(string fileUrl, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrEmpty(_connectionString) || string.IsNullOrEmpty(fileUrl))
+        {
+            throw new ArgumentException("Invalid file URL or connection string.");
+        }
+
+        if (!Uri.TryCreate(fileUrl, UriKind.Absolute, out var uri))
+        {
+            throw new ArgumentException("Invalid blob URL format.");
+        }
+
+        // uri.LocalPath looks like "/user-documents/filename.pdf"
+        var pathSegments = uri.LocalPath.TrimStart('/').Split('/', 2);
+        if (pathSegments.Length < 2)
+        {
+            throw new ArgumentException("Invalid blob URL format.");
+        }
+
+        var containerName = pathSegments[0];
+        var blobName = pathSegments[1];
+
+        var blobServiceClient = new BlobServiceClient(_connectionString);
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+        var blobClient = blobContainerClient.GetBlobClient(blobName);
+
+        var downloadResult = await blobClient.DownloadStreamingAsync(cancellationToken: cancellationToken);
+        return (downloadResult.Value.Content, downloadResult.Value.Details.ContentType);
+    }
 }

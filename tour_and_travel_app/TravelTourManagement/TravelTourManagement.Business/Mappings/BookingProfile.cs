@@ -13,12 +13,14 @@ public class BookingProfile : Profile
             .ConstructUsing(src => new TravelDocumentResponse(
                 src.Id,
                 src.DocumentType,
-                src.FilePath,
+                System.Uri.IsWellFormedUriString(src.FilePath, System.UriKind.Absolute) && src.FilePath.Contains("user-documents") ? $"/api/documents/proxy?url={System.Uri.EscapeDataString(src.FilePath)}" : src.FilePath,
                 src.FileName,
                 src.UploadedAt,
                 src.Status.ToString(),
                 src.RejectionReason
-            ));
+            ))
+            .ForMember(dest => dest.FilePath, opt => opt.MapFrom(src => 
+                System.Uri.IsWellFormedUriString(src.FilePath, System.UriKind.Absolute) && src.FilePath.Contains("user-documents") ? $"/api/documents/proxy?url={System.Uri.EscapeDataString(src.FilePath)}" : src.FilePath));
 
         CreateMap<BookingTraveler, BookingTravelerResponse>()
             .ConstructUsing((src, context) => new BookingTravelerResponse(

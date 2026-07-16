@@ -382,7 +382,7 @@ public class PackagerService : IPackagerService
             FileSizeBytes = doc.FileSizeBytes,
             MimeType = doc.MimeType,
             UploadedAt = doc.UploadedAt,
-            FileUrl = doc.FilePath // Return the absolute Blob Storage URL directly
+            FileUrl = $"/api/documents/proxy?url={Uri.EscapeDataString(doc.FilePath)}"
         });
     }
 }

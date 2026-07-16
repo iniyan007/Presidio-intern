@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -22,6 +23,7 @@ export class MyBookingsComponent implements OnInit {
   bookingService = inject(BookingService);
   packageService = inject(PackageService);
   toastService = inject(ToastService);
+  private http = inject(HttpClient);
 
   bookings = signal<BookingResponse[]>([]);
   packageTitles = signal<Record<string, string>>({});
@@ -174,5 +176,23 @@ export class MyBookingsComponent implements OnInit {
     if (status === 'Paid') return 'bg-emerald-100 text-emerald-800';
     if (status === 'Partial') return 'bg-blue-100 text-blue-800';
     return 'bg-error/10 text-error';
+  }
+
+  downloadDocument(fileUrl: string) {
+    if (!fileUrl) return;
+    const fullUrl = fileUrl.startsWith('http') ? fileUrl : `${environment.baseUrl}${fileUrl}`;
+    if (!fullUrl.includes('/api/documents/proxy')) {
+       window.open(fullUrl, '_blank');
+       return;
+    }
+    this.toastService.show('Opening document...', 'success');
+    this.http.get(fullUrl, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        setTimeout(() => window.URL.revokeObjectURL(url), 10000);
+      },
+      error: () => this.toastService.show('Failed to fetch secure document.', 'error')
+    });
   }
 }

@@ -247,6 +247,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.viewedDocumentIds.set(updatedSet);
     const fullUrl = fileUrl.startsWith('http') ? fileUrl : `${environment.baseUrl}${fileUrl}`;
     
+    if (!fullUrl.includes('/api/documents/proxy')) {
+      window.open(fullUrl, '_blank');
+      return;
+    }
+
     this.toastService.show('Opening document...', 'success');
     this.http.get(fullUrl, { responseType: 'blob' }).subscribe({
       next: (blob) => {

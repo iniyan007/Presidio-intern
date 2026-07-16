@@ -273,10 +273,19 @@
 
       <!-- Document Content -->
       <div class="flex-1 overflow-auto p-6 bg-surface-container-low flex items-center justify-center min-h-[300px]">
-        @if (selectedDocument()!.doc.filePath.toLowerCase().endsWith('.pdf')) {
-          <iframe [src]="getSafeDocumentUrl(selectedDocument()!.doc)" class="w-full h-[60vh] rounded-xl border border-outline-variant"></iframe>
+        @if (isFetchingDocument()) {
+          <div class="flex flex-col items-center justify-center py-8">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mb-4"></div>
+            <p class="text-on-surface-variant font-body-md">Loading secure document...</p>
+          </div>
+        } @else if (secureDocumentUrl()) {
+          @if (selectedDocument()!.doc.filePath.toLowerCase().endsWith('.pdf')) {
+            <iframe [src]="secureDocumentUrl()" class="w-full h-[60vh] rounded-xl border border-outline-variant"></iframe>
+          } @else {
+            <img [src]="secureDocumentUrl()" alt="Document" class="max-w-full max-h-[60vh] object-contain rounded-xl shadow-md border border-outline-variant/50">
+          }
         } @else {
-          <img [src]="getDocumentUrl(selectedDocument()!.doc)" alt="Document" class="max-w-full max-h-[60vh] object-contain rounded-xl shadow-md border border-outline-variant/50">
+          <p class="text-on-surface-variant font-body-md">Document unavailable.</p>
         }
       </div>
 

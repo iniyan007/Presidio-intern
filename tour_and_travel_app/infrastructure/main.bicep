@@ -199,24 +199,19 @@ resource functionApp 'Microsoft.Web/sites@2022-09-01' = {
 }
 
 // ==========================================
-// 8. Azure Managed Redis (Enterprise)
+// 8. Azure Cache for Redis (Basic)
 // ==========================================
-resource redisCache 'Microsoft.Cache/redisEnterprise@2025-04-01' = {
+resource redisCache 'Microsoft.Cache/Redis@2023-08-01' = {
   name: 'tmtredis-${uniqueSuffix}'
   location: location
-  sku: {
-    name: 'Balanced_B5'
-  }
-}
-
-resource redisDatabase 'Microsoft.Cache/redisEnterprise/databases@2025-04-01' = {
-  name: 'default'
-  parent: redisCache
   properties: {
-    clientProtocol: 'Encrypted'
-    clusteringPolicy: 'OSSCluster'
-    evictionPolicy: 'VolatileLRU'
-    port: 10000
+    sku: {
+      name: 'Basic'
+      family: 'C'
+      capacity: 0
+    }
+    enableNonSslPort: false
+    minimumTlsVersion: '1.2'
   }
 }
 

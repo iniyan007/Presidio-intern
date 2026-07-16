@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, effect, inject, signal, DestroyRef } from '@angular/core';
 import { forkJoin } from 'rxjs';
@@ -158,6 +159,7 @@ export class ManageBookingsComponent {
   }
 
   getDocumentUrl(doc: TravelDocumentResponse): string {
+    if (!doc?.filePath) return '';
     return doc.filePath.startsWith('http') ? doc.filePath : `${environment.baseUrl}${doc.filePath}`;
   }
 
@@ -165,9 +167,41 @@ export class ManageBookingsComponent {
     return this.sanitizer.bypassSecurityTrustResourceUrl(this.getDocumentUrl(doc));
   }
 
+  secureDocumentUrl = signal<SafeResourceUrl | null>(null);
+  isFetchingDocument = signal<boolean>(false);
+  private currentObjectUrl: string | null = null;
+  private http = inject(HttpClient);
+
   openDocumentViewer(doc: TravelDocumentResponse, travelerName: string) {
     this.selectedDocument.set({ doc, travelerName });
     this.rejectionReason.set('');
+    
+    // Revoke previous URL if exists
+    if (this.currentObjectUrl) {
+      window.URL.revokeObjectURL(this.currentObjectUrl);
+      this.currentObjectUrl = null;
+    }
+    this.secureDocumentUrl.set(null);
+
+    const fullUrl = this.getDocumentUrl(doc);
+    if (!doc?.filePath?.startsWith('/api/documents/proxy')) {
+      // Not a proxy URL (e.g. public media or old absolute URL)
+      this.secureDocumentUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(fullUrl));
+      return;
+    }
+
+    this.isFetchingDocument.set(true);
+    this.http.get(fullUrl, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        this.currentObjectUrl = window.URL.createObjectURL(blob);
+        this.secureDocumentUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(this.currentObjectUrl));
+        this.isFetchingDocument.set(false);
+      },
+      error: () => {
+        this.toastService.show('Failed to load secure document.', 'error');
+        this.isFetchingDocument.set(false);
+      }
+    });
   }
 
   closeDocumentViewer() {

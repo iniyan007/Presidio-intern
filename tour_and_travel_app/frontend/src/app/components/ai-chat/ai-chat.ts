@@ -28,8 +28,16 @@ export class AiChatComponent {
   authService = inject(AuthService);
   router = inject(Router);
 
-  isChatRoute(): boolean {
-    return this.router.url.startsWith('/chat');
+  isChatRoute = signal<boolean>(false);
+
+  constructor() {
+    this.router.events.subscribe(event => {
+      if (event && 'url' in event) {
+        this.isChatRoute.set(this.router.url.startsWith('/chat'));
+      }
+    });
+    // Set initial
+    setTimeout(() => this.isChatRoute.set(this.router.url.startsWith('/chat')), 0);
   }
 
   toggleChat() {
